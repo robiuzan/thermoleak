@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: "המלצות לקוחות",
   description:
     "מה הלקוחות שלנו מספרים על שירות איתור הנזילות והרטיבות של תרמולק — דיוק, מקצועיות ושירות אדיב בכל גוש דן והמרכז.",
-  alternates: { canonical: "/reviews" },
+  alternates: { canonical: "/reviews/" },
 };
 
 export default function ReviewsPage() {

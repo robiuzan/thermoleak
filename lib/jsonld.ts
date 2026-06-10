@@ -1,5 +1,5 @@
 // Structured data (JSON-LD) builders. Injected via the <JsonLd> component.
-import { site } from "./site";
+import { site, canonicalUrl } from "./site";
 import type { Service, ServiceFaq } from "./services";
 import { averageRating, reviewCount } from "./reviews";
 
@@ -14,7 +14,7 @@ export function localBusinessJsonLd() {
     name: site.nameHe,
     alternateName: site.name,
     description: site.description,
-    url: site.domain,
+    url: canonicalUrl("/"),
     telephone: site.phone.tel,
     email: site.email,
     image: `${site.domain}/icon.svg`,
@@ -62,7 +62,7 @@ export function webSiteJsonLd() {
     "@type": "WebSite",
     "@id": `${site.domain}/#website`,
     name: site.nameHe,
-    url: site.domain,
+    url: canonicalUrl("/"),
     inLanguage: "he-IL",
     publisher: { "@id": businessId },
   };
@@ -75,7 +75,7 @@ export function serviceJsonLd(service: Service) {
     name: service.title,
     serviceType: service.h1,
     description: service.summary,
-    url: `${site.domain}/services/${service.slug}`,
+    url: canonicalUrl(`/services/${service.slug}`),
     provider: { "@id": businessId },
     areaServed: { "@type": "AdministrativeArea", name: site.address.region },
     inLanguage: "he-IL",
@@ -107,7 +107,7 @@ export function breadcrumbJsonLd(items: Crumb[]) {
       "@type": "ListItem",
       position: index + 1,
       name: item.name,
-      item: `${site.domain}${item.url}`,
+      item: canonicalUrl(item.url),
     })),
   };
 }

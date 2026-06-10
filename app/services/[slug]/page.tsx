@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, CheckCircle2 } from "lucide-react";
 import { getService, services, serviceSlugs } from "@/lib/services";
-import { site } from "@/lib/site";
+import { site, canonicalUrl } from "@/lib/site";
 import {
   serviceJsonLd,
   faqPageJsonLd,
@@ -32,11 +32,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: service.h1,
     description: service.summary,
     keywords: service.keywords,
-    alternates: { canonical: `/services/${slug}` },
+    alternates: { canonical: `/services/${slug}/` },
     openGraph: {
       title: `${service.h1} | ${site.nameHe}`,
       description: service.summary,
-      url: `${site.domain}/services/${slug}`,
+      url: canonicalUrl(`/services/${slug}`),
     },
   };
 }

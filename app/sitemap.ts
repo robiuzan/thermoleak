@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { site } from "@/lib/site";
+import { canonicalUrl } from "@/lib/site";
 import { serviceSlugs } from "@/lib/services";
 
 // Required for `output: "export"` — emit a static sitemap.xml at build time.
@@ -19,14 +19,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   const staticEntries: MetadataRoute.Sitemap = staticRoutes.map((route) => ({
-    url: `${site.domain}${route.path}`,
+    url: canonicalUrl(route.path),
     lastModified,
     changeFrequency: route.freq,
     priority: route.priority,
   }));
 
   const serviceEntries: MetadataRoute.Sitemap = serviceSlugs.map((slug) => ({
-    url: `${site.domain}/services/${slug}`,
+    url: canonicalUrl(`/services/${slug}`),
     lastModified,
     changeFrequency: "monthly",
     priority: 0.8,

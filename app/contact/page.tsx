@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: "צור קשר",
   description:
     "צרו קשר עם תרמולק לאיתור נזילות, רטיבות ובדיקות תרמוגרפיה בגוש דן והמרכז. טלפון, וואטסאפ או טופס — מענה מהיר ושירות חירום.",
-  alternates: { canonical: "/contact" },
+  alternates: { canonical: "/contact/" },
 };
 
 export default function ContactPage() {

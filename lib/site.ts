@@ -102,3 +102,15 @@ export function whatsappHref(message?: string): string {
 
 export const defaultWhatsappMessage =
   "היי, הגעתי דרך האתר ואשמח לתאם בדיקת איתור נזילות / רטיבות. מתי אפשר?";
+
+// Normalize a path to a single trailing slash, to match next.config `trailingSlash: true`.
+// Root ("" or "/") stays "/". Used for canonicals, sitemap and JSON-LD so URLs match the served pages.
+export function withTrailingSlash(path: string): string {
+  if (path === "" || path === "/") return "/";
+  return path.endsWith("/") ? path : `${path}/`;
+}
+
+// Absolute canonical URL for a given path (e.g. "/services" -> "https://thermoleak.co.il/services/").
+export function canonicalUrl(path: string): string {
+  return `${site.domain}${withTrailingSlash(path)}`;
+}

@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   title: "שירותים — איתור נזילות, רטיבות ותרמוגרפיה",
   description:
     "השירותים של תרמולק: איתור נזילות מים, איתור רטיבות ובידוד, בדיקת לוחות חשמל ודו״ח תרמוגרפי לחברות ביטוח. הכול במצלמה תרמית, ללא הרס.",
-  alternates: { canonical: "/services" },
+  alternates: { canonical: "/services/" },
 };
 
 export default function ServicesPage() {

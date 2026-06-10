@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   title: "אודות תרמולק — מומחים לאיתור נזילות תרמי",
   description:
     "מעל עשור של ניסיון באיתור נזילות ורטיבות במצלמה תרמית. הכירו את הערכים, השיטה והמומחיות של תרמולק — דיוק, שקיפות וללא הרס.",
-  alternates: { canonical: "/about" },
+  alternates: { canonical: "/about/" },
 };
 
 const story = [
