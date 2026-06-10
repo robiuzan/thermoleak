@@ -15,7 +15,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-40 border-b border-ink/10 bg-white/90 backdrop-blur">
       <Container className="flex h-16 items-center justify-between gap-4">
         <Link href="/" aria-label={`${site.nameHe} — דף הבית`}>
-          <Logo idSuffix="nav" wordmarkClassName="text-brand text-lg" />
+          <Logo priority />
         </Link>
 
         <nav aria-label="ניווט ראשי" className="hidden items-center gap-1 md:flex">

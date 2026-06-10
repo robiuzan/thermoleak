@@ -16,7 +16,7 @@ export default function Footer() {
       <Container className="grid grid-cols-1 gap-10 py-12 sm:grid-cols-2 lg:grid-cols-4">
         {/* Brand + contact */}
         <div>
-          <Logo idSuffix="footer" wordmarkClassName="text-white text-xl" />
+          <Logo onDark />
           <p className="mt-3 text-sm leading-relaxed text-white/70">{site.tagline}</p>
           <ul className="mt-4 space-y-2 text-sm">
             <li>
