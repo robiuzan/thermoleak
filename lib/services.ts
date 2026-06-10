@@ -15,6 +15,7 @@ export interface ServiceFaq {
 export interface Service {
   slug: string;
   icon: LucideIcon;
+  image: string; // hero image for the service detail page (in /public)
   title: string; // short title (nav / cards)
   h1: string; // page heading
   tagline: string; // one-line value statement
@@ -32,6 +33,7 @@ export const services: Service[] = [
   {
     slug: "water-leak-detection",
     icon: Droplets,
+    image: "/images/services/water-leak-detection.svg",
     title: "איתור נזילות מים",
     h1: "איתור נזילות מים במצלמה תרמית",
     tagline: "מאתרים את מקור הנזילה במדויק — בלי לשבור קירות ורצפות.",
@@ -74,6 +76,7 @@ export const services: Service[] = [
   {
     slug: "moisture-detection",
     icon: ThermometerSun,
+    image: "/images/services/moisture-detection.svg",
     title: "איתור רטיבות ובידוד",
     h1: "איתור רטיבות, עובש וכשלי בידוד",
     tagline: "מזהים מוקדי רטיבות וגשרי קור לפני שהם הופכים לנזק יקר.",
@@ -116,6 +119,7 @@ export const services: Service[] = [
   {
     slug: "electrical-thermography",
     icon: Zap,
+    image: "/images/services/electrical-thermography.svg",
     title: "בדיקת לוחות חשמל",
     h1: "בדיקה תרמוגרפית ללוחות חשמל ונקודות חום",
     tagline: "מזהים עומסי יתר וחיבורים לקויים — לפני שהם גורמים לשריפה.",
@@ -157,6 +161,7 @@ export const services: Service[] = [
   {
     slug: "insurance-reports",
     icon: FileCheck2,
+    image: "/images/services/insurance-reports.svg",
     title: "דו״ח תרמוגרפי לביטוח",
     h1: "דו״ח תרמוגרפי מקצועי לחברות ביטוח",
     tagline: "דו״ח מסודר וקביל — שמקדם את תביעת הביטוח שלכם.",

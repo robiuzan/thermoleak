@@ -1,25 +1,9 @@
-import { Phone, ShieldCheck, Clock, BadgeCheck, Target } from "lucide-react";
+import Image from "next/image";
+import { Phone, ShieldCheck, Clock, BadgeCheck } from "lucide-react";
 import { site, telHref, whatsappHref, defaultWhatsappMessage } from "@/lib/site";
 import Container from "./Container";
 import CtaButton from "./CtaButton";
 import WhatsappIcon from "./WhatsappIcon";
-
-function ThermalVisual() {
-  return (
-    <div className="relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-3xl ring-1 ring-white/20">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_70%,#ff6a3d_0%,#c2410c_18%,#1e88a8_48%,#0b3d5c_78%)]" />
-      <div className="absolute inset-0 bg-[repeating-linear-gradient(0deg,rgba(255,255,255,0.06)_0,rgba(255,255,255,0.06)_1px,transparent_1px,transparent_10px)]" />
-      <div className="absolute end-6 top-6 flex items-center gap-2 rounded-full bg-black/40 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
-        <span className="size-2 rounded-full bg-[#ff6a3d]" />
-        סריקה תרמית
-      </div>
-      <div className="absolute bottom-6 start-6 flex items-center gap-2 rounded-xl bg-white/95 px-3 py-2 text-sm font-bold text-brand shadow-lg">
-        <Target className="size-5 text-accent-strong" aria-hidden="true" />
-        מוקד נזילה אותר
-      </div>
-    </div>
-  );
-}
 
 export default function Hero() {
   return (
@@ -65,7 +49,16 @@ export default function Hero() {
             </li>
           </ul>
         </div>
-        <ThermalVisual />
+        <div className="relative mx-auto w-full max-w-md">
+          <Image
+            src="/images/hero.svg"
+            alt="הדמיית סריקה תרמית המאתרת מוקד נזילה נסתר בקיר"
+            width={800}
+            height={800}
+            priority
+            className="h-auto w-full rounded-3xl ring-1 ring-white/20"
+          />
+        </div>
       </Container>
     </section>
   );

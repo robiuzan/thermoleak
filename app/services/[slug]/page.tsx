@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ArrowLeft, CheckCircle2 } from "lucide-react";
 import { getService, services, serviceSlugs } from "@/lib/services";
@@ -73,6 +74,13 @@ export default async function ServiceDetailPage({ params }: PageProps) {
       <section className="py-14 md:py-20">
         <Container className="grid gap-12 lg:grid-cols-3">
           <div className="lg:col-span-2">
+            <Image
+              src={service.image}
+              alt={service.h1}
+              width={600}
+              height={400}
+              className="mb-8 h-auto w-full rounded-2xl border border-ink/10"
+            />
             {service.intro.map((paragraph) => (
               <p key={paragraph.slice(0, 24)} className="mb-4 leading-relaxed text-ink/80">
                 {paragraph}

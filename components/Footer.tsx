@@ -3,6 +3,7 @@ import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import { navLinks, site, telHref, mailHref } from "@/lib/site";
 import { services } from "@/lib/services";
 import Container from "./Container";
+import Logo from "./Logo";
 import WhatsappIcon from "./WhatsappIcon";
 import FacebookIcon from "./FacebookIcon";
 import InstagramIcon from "./InstagramIcon";
@@ -15,7 +16,7 @@ export default function Footer() {
       <Container className="grid grid-cols-1 gap-10 py-12 sm:grid-cols-2 lg:grid-cols-4">
         {/* Brand + contact */}
         <div>
-          <p className="text-xl font-extrabold text-white">{site.name}</p>
+          <Logo idSuffix="footer" wordmarkClassName="text-white text-xl" />
           <p className="mt-3 text-sm leading-relaxed text-white/70">{site.tagline}</p>
           <ul className="mt-4 space-y-2 text-sm">
             <li>
