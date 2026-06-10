@@ -52,7 +52,7 @@ export default function Hero() {
         <div className="relative mx-auto w-full max-w-md">
           <Image
             src="/images/hero.webp"
-            alt="טכנאי תרמולק מבצעים איתור נזילה בדירה בעזרת מצלמה תרמית וציוד אקוסטי"
+            alt="טכנאי טרמוליק מבצעים איתור נזילה בדירה בעזרת מצלמה תרמית וציוד אקוסטי"
             width={828}
             height={670}
             priority

@@ -6,7 +6,7 @@ import Container from "@/components/Container";
 export const metadata: Metadata = {
   title: "מדיניות פרטיות",
   description:
-    "מדיניות הפרטיות של תרמולק — איזה מידע נאסף באתר, כיצד נעשה בו שימוש, וכיצד אנו שומרים על פרטיותכם.",
+    "מדיניות הפרטיות של טרמוליק — איזה מידע נאסף באתר, כיצד נעשה בו שימוש, וכיצד אנו שומרים על פרטיותכם.",
   alternates: { canonical: "/privacy/" },
   robots: { index: true, follow: true },
 };

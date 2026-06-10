@@ -6,7 +6,7 @@ import Container from "@/components/Container";
 export const metadata: Metadata = {
   title: "הצהרת נגישות",
   description:
-    "הצהרת הנגישות של אתר תרמולק — האתר עומד ברמת AA של תקן ישראלי 5568 ובהנחיות WCAG 2.0. פרטי רכז הנגישות ואפשרות לדיווח.",
+    "הצהרת הנגישות של אתר טרמוליק — האתר עומד ברמת AA של תקן ישראלי 5568 ובהנחיות WCAG 2.0. פרטי רכז הנגישות ואפשרות לדיווח.",
   alternates: { canonical: "/accessibility/" },
 };
 
