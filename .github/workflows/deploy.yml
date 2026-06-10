@@ -1,13 +1,14 @@
 name: Deploy to cPanel (static export)
 
 # Auto-deploy: every push to main builds the Next.js static export and mirrors it
-# to the thermoleak.co.il docroot on the cPanel server (websquadinc account) over
-# FTPS, then purges the Cloudflare cache.
+# to the thermoleak.co.il docroot on the cPanel server (websquadinc account) via
+# rsync over SSH, then purges the Cloudflare cache.
 #
-# Transport note: the cPanel account is `noshell`, so SSH/rsync is unavailable.
-# We use lftp over FTPS (explicit TLS) with a deploy-only FTP account scoped to the
-# thermoleak docroot. `mirror --delete` makes the remote match ./out exactly, so the
-# first run also clears the old WordPress files that lived there.
+# Transport: FTP is disabled on this server, so we use rsync over SSH. The
+# websquadinc account has a jailed shell + an authorized deploy key (private key
+# in the SSH_PRIVATE_KEY secret). `rsync --delete` makes the docroot match ./out
+# exactly, so the first run also clears the old WordPress files that lived there.
+# `.well-known` is preserved so cPanel AutoSSL/ACME keeps working.
 
 on:
   push:
@@ -40,26 +41,20 @@ jobs:
       - name: Build static export
         run: npm run build # -> ./out
 
-      - name: Install lftp
-        run: sudo apt-get update && sudo apt-get install -y lftp
-
-      - name: Deploy to cPanel via FTPS (mirror, replaces remote)
+      - name: Deploy via rsync over SSH
         env:
-          FTP_HOST: ${{ secrets.FTP_HOST }}
-          FTP_USER: ${{ secrets.FTP_USER }}
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
         run: |
-          lftp -c "
-          set ftp:ssl-force true;
-          set ftp:ssl-protect-data true;
-          set ssl:verify-certificate no;
-          set net:max-retries 3;
-          set net:timeout 20;
-          open -u '$FTP_USER','$FTP_PASSWORD' '$FTP_HOST';
-          mirror -R --delete --parallel=4 --verbose \
-            --exclude-glob .well-known/ --exclude-glob .ftpquota \
-            ./out/ ;
-          "
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p 22 -H "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null || true
+          rsync -rltzv --delete --chmod=D755,F644 \
+            --exclude='.well-known' \
+            -e "ssh -p 22 -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new" \
+            ./out/ "$SSH_USER@$SSH_HOST:thermoleak.co.il/"
 
       - name: Purge Cloudflare cache
         if: env.CF_API_TOKEN != ''
