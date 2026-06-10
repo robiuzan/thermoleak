@@ -53,7 +53,7 @@ export default function Hero() {
           <Image
             src="/images/hero.webp"
             alt="טכנאי תרמולק מבצעים איתור נזילה בדירה בעזרת מצלמה תרמית וציוד אקוסטי"
-            width={1200}
+            width={828}
             height={670}
             priority
             className="h-auto w-full rounded-3xl ring-1 ring-white/20"
