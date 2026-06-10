@@ -51,10 +51,10 @@ export default function Hero() {
         </div>
         <div className="relative mx-auto w-full max-w-md">
           <Image
-            src="/images/hero.svg"
-            alt="הדמיית סריקה תרמית המאתרת מוקד נזילה נסתר בקיר"
-            width={800}
-            height={800}
+            src="/images/hero.webp"
+            alt="טכנאי תרמולק מבצעים איתור נזילה בדירה בעזרת מצלמה תרמית וציוד אקוסטי"
+            width={1200}
+            height={670}
             priority
             className="h-auto w-full rounded-3xl ring-1 ring-white/20"
           />
