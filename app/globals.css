@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+/* ---- Design tokens (Tailwind v4 @theme → utilities like bg-brand, text-accent) ---- */
+@theme {
+  --color-brand: #0b3d5c;
+  --color-brand-dark: #082a40;
+  --color-brand-light: #1e88a8;
+  --color-accent: #ff6a3d;
+  --color-accent-strong: #c2410c;
+  --color-ink: #1b2733;
+  --color-paper: #f7f9fb;
+
+  --font-sans: var(--font-assistant), system-ui, sans-serif;
+  --font-heading: var(--font-heebo), system-ui, sans-serif;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: #ffffff;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  text-wrap: pretty;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  text-wrap: balance;
+}
+
+/* Accessible, visible focus ring for keyboard users */
+:focus-visible {
+  outline: 3px solid var(--color-brand-light);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: #ffffff;
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
