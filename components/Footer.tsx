@@ -3,6 +3,7 @@ import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import { navLinks, site, telHref, mailHref } from "@/lib/site";
 import { services } from "@/lib/services";
 import Container from "./Container";
+import EmailOff from "./EmailOff";
 import Logo from "./Logo";
 import WhatsappIcon from "./WhatsappIcon";
 import FacebookIcon from "./FacebookIcon";
@@ -37,10 +38,12 @@ export default function Footer() {
               </a>
             </li>
             <li>
-              <a href={mailHref} className="inline-flex items-center gap-2 hover:text-white">
-                <Mail className="size-4" aria-hidden="true" />
-                {site.email}
-              </a>
+              <EmailOff>
+                <a href={mailHref} className="inline-flex items-center gap-2 hover:text-white">
+                  <Mail className="size-4" aria-hidden="true" />
+                  {site.email}
+                </a>
+              </EmailOff>
             </li>
             <li className="inline-flex items-center gap-2 text-white/70">
               <MapPin className="size-4" aria-hidden="true" />

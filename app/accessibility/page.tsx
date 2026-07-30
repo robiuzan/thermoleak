@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { site, telHref, mailHref } from "@/lib/site";
 import PageHero from "@/components/PageHero";
 import Container from "@/components/Container";
+import EmailOff from "@/components/EmailOff";
 
 export const metadata: Metadata = {
   title: "הצהרת נגישות",
@@ -57,9 +58,11 @@ export default function AccessibilityPage() {
             </li>
             <li>
               אימייל:{" "}
-              <a href={mailHref} dir="ltr" className="font-semibold text-brand underline">
-                {site.email}
-              </a>
+              <EmailOff>
+                <a href={mailHref} dir="ltr" className="font-semibold text-brand underline">
+                  {site.email}
+                </a>
+              </EmailOff>
             </li>
           </ul>
 

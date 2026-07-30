@@ -8,6 +8,7 @@ import {
 } from "@/lib/site";
 import Container from "./Container";
 import ContactForm from "./ContactForm";
+import EmailOff from "./EmailOff";
 import WhatsappIcon from "./WhatsappIcon";
 
 export default function ContactCTA() {
@@ -55,20 +56,22 @@ export default function ContactCTA() {
               </span>
             </a>
 
-            <a
-              href={mailHref}
-              className="flex items-center gap-4 rounded-xl border border-ink/10 bg-white p-4 transition-colors hover:border-brand/30"
-            >
-              <span className="inline-flex size-11 items-center justify-center rounded-lg bg-brand/10 text-brand">
-                <Mail className="size-5" aria-hidden="true" />
-              </span>
-              <span>
-                <span className="block text-sm text-ink/60">אימייל</span>
-                <span className="block font-bold text-brand" dir="ltr">
-                  {site.email}
+            <EmailOff>
+              <a
+                href={mailHref}
+                className="flex items-center gap-4 rounded-xl border border-ink/10 bg-white p-4 transition-colors hover:border-brand/30"
+              >
+                <span className="inline-flex size-11 items-center justify-center rounded-lg bg-brand/10 text-brand">
+                  <Mail className="size-5" aria-hidden="true" />
                 </span>
-              </span>
-            </a>
+                <span>
+                  <span className="block text-sm text-ink/60">אימייל</span>
+                  <span className="block font-bold text-brand" dir="ltr">
+                    {site.email}
+                  </span>
+                </span>
+              </a>
+            </EmailOff>
 
             <div className="grid gap-3 sm:grid-cols-2">
               <div className="rounded-xl border border-ink/10 bg-white p-4">
