@@ -56,11 +56,26 @@ jobs:
             -e "ssh -p 22 -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new" \
             ./out/ "$SSH_USER@$SSH_HOST:thermoleak.co.il/"
 
-      - name: Purge Cloudflare cache
+      # Best-effort: the site is already live once rsync finishes. Cloudflare serves this HTML
+      # cf-cache-status: DYNAMIC (uncached) and every static asset is content-hashed, so a failed
+      # purge does not leave anything stale. It must therefore never fail the deploy - a red run
+      # here would hide a genuinely broken build or rsync, which is exactly what happened while
+      # CF_API_TOKEN sat expired and every deploy reported failure.
+      - name: Purge Cloudflare cache (best effort)
         if: env.CF_API_TOKEN != ''
+        continue-on-error: true
         run: |
-          curl -fsS -X POST \
+          code=$(curl -s -o /tmp/purge.json -w '%{http_code}' -X POST \
             "https://api.cloudflare.com/client/v4/zones/${{ secrets.CF_ZONE_ID }}/purge_cache" \
             -H "Authorization: Bearer ${{ secrets.CF_API_TOKEN }}" \
             -H "Content-Type: application/json" \
-            --data '{"purge_everything":true}'
+            --data '{"purge_everything":true}')
+          if [ "$code" = "200" ]; then
+            echo "Cache purged."
+          else
+            echo "::warning::Cache purge returned HTTP $code - deploy still succeeded."
+            echo "::warning::A 401/403 means the CF_API_TOKEN secret is expired or under-scoped."
+            echo "::warning::Fix: mint a token with Zone > Cache Purge > Purge on zone CF_ZONE_ID,"
+            echo "::warning::then 'gh secret set CF_API_TOKEN --repo robiuzan/thermoleak'."
+            cat /tmp/purge.json || true
+          fi
