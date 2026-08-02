@@ -2,13 +2,24 @@ name: Deploy to cPanel (static export)
 
 # Auto-deploy: every push to main builds the Next.js static export and mirrors it
 # to the thermoleak.co.il docroot on the cPanel server (websquadinc account) via
-# rsync over SSH, then purges the Cloudflare cache.
+# rsync over SSH. The site is live the moment rsync finishes.
 #
 # Transport: FTP is disabled on this server, so we use rsync over SSH. The
 # websquadinc account has a jailed shell + an authorized deploy key (private key
 # in the SSH_PRIVATE_KEY secret). `rsync --delete` makes the docroot match ./out
 # exactly, so the first run also clears the old WordPress files that lived there.
 # `.well-known` is preserved so cPanel AutoSSL/ACME keeps working.
+#
+# There is deliberately NO Cloudflare cache-purge step. Cloudflare serves this
+# site's HTML with cf-cache-status: DYNAMIC (uncached) and every static asset is
+# content-hashed, so a purge has nothing to clear - which is why deploys landed
+# correctly on all 11 pages during the months its CF_API_TOKEN sat expired and the
+# purge returned 401. Keeping a step that could only ever fail meant every run
+# reported failure, which camouflaged the runs that failed for real reasons.
+#
+# Reinstate a purge ONLY if a Cache Rule is later added that caches HTML. If so,
+# mint a token scoped to Zone > Cache Purge > Purge on this zone alone - do NOT
+# reuse the fleet-wide Sys Admin token: this repo is PUBLIC.
 
 on:
   push:
@@ -18,9 +29,6 @@ on:
 concurrency:
   group: deploy-prod
   cancel-in-progress: true
-
-env:
-  CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
 
 jobs:
   build-deploy:
@@ -56,26 +64,11 @@ jobs:
             -e "ssh -p 22 -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new" \
             ./out/ "$SSH_USER@$SSH_HOST:thermoleak.co.il/"
 
-      # Best-effort: the site is already live once rsync finishes. Cloudflare serves this HTML
-      # cf-cache-status: DYNAMIC (uncached) and every static asset is content-hashed, so a failed
-      # purge does not leave anything stale. It must therefore never fail the deploy - a red run
-      # here would hide a genuinely broken build or rsync, which is exactly what happened while
-      # CF_API_TOKEN sat expired and every deploy reported failure.
-      - name: Purge Cloudflare cache (best effort)
-        if: env.CF_API_TOKEN != ''
-        continue-on-error: true
+      - name: Verify the deploy landed
         run: |
-          code=$(curl -s -o /tmp/purge.json -w '%{http_code}' -X POST \
-            "https://api.cloudflare.com/client/v4/zones/${{ secrets.CF_ZONE_ID }}/purge_cache" \
-            -H "Authorization: Bearer ${{ secrets.CF_API_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            --data '{"purge_everything":true}')
-          if [ "$code" = "200" ]; then
-            echo "Cache purged."
-          else
-            echo "::warning::Cache purge returned HTTP $code - deploy still succeeded."
-            echo "::warning::A 401/403 means the CF_API_TOKEN secret is expired or under-scoped."
-            echo "::warning::Fix: mint a token with Zone > Cache Purge > Purge on zone CF_ZONE_ID,"
-            echo "::warning::then 'gh secret set CF_API_TOKEN --repo robiuzan/thermoleak'."
-            cat /tmp/purge.json || true
-          fi
+          # rsync exiting 0 does not prove the origin is serving the new build, so assert it.
+          for path in / /contact/ /services/; do
+            code=$(curl -sL -o /dev/null -w '%{http_code}' --max-time 20 "https://thermoleak.co.il$path")
+            echo "  $path -> HTTP $code"
+            [ "$code" = "200" ] || { echo "::error::https://thermoleak.co.il$path returned $code"; exit 1; }
+          done
