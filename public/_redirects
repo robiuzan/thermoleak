@@ -1,0 +1,5 @@
+# Cloudflare Pages redirects (the origin since the 2026-08-02 cutover).
+# /reviews/ removed 2026-08-17 — it carried six fabricated testimonials (docs/business-facts.md §B).
+# Returns as a real page once verifiable reviews exist.
+/reviews /about/ 301
+/reviews/* /about/ 301
