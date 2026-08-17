@@ -28,6 +28,7 @@ export default function ContactCTA() {
           <div className="mt-6 space-y-3">
             <a
               href={telHref}
+              data-cta="finalcta-call"
               className="flex items-center gap-4 rounded-xl border border-ink/10 bg-white p-4 transition-colors hover:border-brand/30"
             >
               <span className="inline-flex size-11 items-center justify-center rounded-lg bg-brand/10 text-brand">
@@ -45,6 +46,7 @@ export default function ContactCTA() {
               href={whatsappHref(defaultWhatsappMessage)}
               target="_blank"
               rel="noopener noreferrer"
+              data-cta="finalcta-whatsapp"
               className="flex items-center gap-4 rounded-xl border border-ink/10 bg-white p-4 transition-colors hover:border-brand/30"
             >
               <span className="inline-flex size-11 items-center justify-center rounded-lg bg-[#25D366]/15 text-[#0e7468]">
@@ -59,6 +61,7 @@ export default function ContactCTA() {
             <EmailOff>
               <a
                 href={mailHref}
+                data-cta="finalcta-email"
                 className="flex items-center gap-4 rounded-xl border border-ink/10 bg-white p-4 transition-colors hover:border-brand/30"
               >
                 <span className="inline-flex size-11 items-center justify-center rounded-lg bg-brand/10 text-brand">

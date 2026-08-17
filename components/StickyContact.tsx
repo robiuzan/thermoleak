@@ -8,6 +8,7 @@ export default function StickyContact() {
     <div className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 border-t border-ink/10 bg-white shadow-[0_-4px_16px_rgba(0,0,0,0.08)] md:hidden">
       <a
         href={telHref}
+        data-cta="sticky-call"
         className="flex items-center justify-center gap-2 bg-brand py-4 text-base font-bold text-white"
         aria-label={`התקשרו אלינו: ${site.phone.display}`}
       >
@@ -18,6 +19,7 @@ export default function StickyContact() {
         href={whatsappHref(defaultWhatsappMessage)}
         target="_blank"
         rel="noopener noreferrer"
+        data-cta="sticky-whatsapp"
         className="flex items-center justify-center gap-2 bg-[#25D366] py-4 text-base font-bold text-ink"
         aria-label="שליחת הודעת וואטסאפ"
       >

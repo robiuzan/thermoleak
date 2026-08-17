@@ -25,11 +25,22 @@ export default function Hero() {
             {site.pitch}
           </p>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-            <CtaButton href={telHref} variant="accent" size="lg" ariaLabel={`התקשרו אלינו: ${site.phone.display}`}>
+            <CtaButton
+              href={telHref}
+              variant="accent"
+              size="lg"
+              dataCta="hero-call"
+              ariaLabel={`התקשרו אלינו: ${site.phone.display}`}
+            >
               <Phone className="size-5" aria-hidden="true" />
               חייגו עכשיו: {site.phone.display}
             </CtaButton>
-            <CtaButton href={whatsappHref(defaultWhatsappMessage)} variant="whatsapp" size="lg">
+            <CtaButton
+              href={whatsappHref(defaultWhatsappMessage)}
+              variant="whatsapp"
+              size="lg"
+              dataCta="hero-whatsapp"
+            >
               <WhatsappIcon className="size-5" />
               שליחת וואטסאפ
             </CtaButton>
