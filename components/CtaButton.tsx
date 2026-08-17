@@ -28,6 +28,9 @@ export interface CtaButtonProps {
   size?: Size;
   className?: string;
   ariaLabel?: string;
+  // Conversion-tracking hook, `{location}-{action}` (e.g. "hero-call"). GTM click triggers
+  // match on this attribute — no JS ships for it (see the tracking-analytics skill).
+  dataCta?: string;
 }
 
 export default function CtaButton({
@@ -37,6 +40,7 @@ export default function CtaButton({
   size = "md",
   className = "",
   ariaLabel,
+  dataCta,
 }: CtaButtonProps) {
   const classes = `${base} ${sizes[size]} ${variants[variant]} ${className}`;
   const isHttp = href.startsWith("http");
@@ -48,6 +52,7 @@ export default function CtaButton({
         href={href}
         className={classes}
         aria-label={ariaLabel}
+        data-cta={dataCta}
         {...(isHttp ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       >
         {children}
@@ -56,7 +61,7 @@ export default function CtaButton({
   }
 
   return (
-    <Link href={href} className={classes} aria-label={ariaLabel}>
+    <Link href={href} className={classes} aria-label={ariaLabel} data-cta={dataCta}>
       {children}
     </Link>
   );

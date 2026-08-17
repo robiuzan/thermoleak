@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import { site } from "@/lib/site";
-import { breadcrumbJsonLd } from "@/lib/jsonld";
 import PageHero from "@/components/PageHero";
 import ContactCTA from "@/components/ContactCTA";
 import Container from "@/components/Container";
-import JsonLd from "@/components/JsonLd";
 
 export const metadata: Metadata = {
   title: "צור קשר",
@@ -16,12 +14,6 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <>
-      <JsonLd
-        data={breadcrumbJsonLd([
-          { name: "בית", url: "/" },
-          { name: "צור קשר", url: "/contact" },
-        ])}
-      />
       <PageHero
         title="צרו איתנו קשר"
         subtitle="נשמח לעזור לכם לאתר את מקור הבעיה. זמינים בטלפון, בוואטסאפ ובטופס."

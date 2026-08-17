@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
 import { ShieldCheck, Target, Wallet, Sparkles, BadgeCheck } from "lucide-react";
 import { site } from "@/lib/site";
-import { breadcrumbJsonLd } from "@/lib/jsonld";
 import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
 import TrustBar from "@/components/TrustBar";
 import ContactCTA from "@/components/ContactCTA";
-import JsonLd from "@/components/JsonLd";
 
 export const metadata: Metadata = {
-  title: "אודות טרמוליק — מומחים לאיתור נזילות תרמי",
+  // Bare subject only — the layout template appends "| טרמוליק". The previous title contained
+  // the brand too and rendered it twice (docs/optimization-backlog.md §2.1).
+  title: "אודות",
   description:
     "מעל עשור של ניסיון באיתור נזילות ורטיבות במצלמה תרמית. הכירו את הערכים, השיטה והמומחיות של טרמוליק — דיוק, שקיפות וללא הרס.",
   alternates: { canonical: "/about/" },
 };
 
 const story = [
-  "טרמוליק הוקמה מתוך אמונה פשוטה: אפשר לאתר נזילות ורטיבות בצורה מדויקת — בלי לשבור חצי בית בדרך. כבר מעל עשור אנחנו עושים בדיוק את זה, עם מצלמות תרמיות מקצועיות וניסיון של אלפי בדיקות.",
+  "טרמוליק הוקמה מתוך אמונה פשוטה: אפשר לאתר נזילות ורטיבות בצורה מדויקת — בלי לשבור חצי בית בדרך. מאז 2015 אנחנו עושים בדיוק את זה, עם מצלמות תרמיות מקצועיות וניסיון מצטבר בשטח.",
   "כל בדיקה אצלנו מתחילה בהקשבה ללקוח ומסתיימת בממצא ברור ובדו״ח מסודר. אנחנו מאמינים בשקיפות מלאה במחירים, בעבודה נקייה ובליווי עד לפתרון — לא רק באיתור הבעיה.",
   "אנחנו נותנים שירות לבעלי בתים, ועדי בית, עסקים, מנהלי נכסים ושמאי ביטוח בכל גוש דן והמרכז, עם זמינות מהירה גם למקרי חירום.",
 ];
@@ -31,12 +31,6 @@ const values = [
 export default function AboutPage() {
   return (
     <>
-      <JsonLd
-        data={breadcrumbJsonLd([
-          { name: "בית", url: "/" },
-          { name: "אודות", url: "/about" },
-        ])}
-      />
       <PageHero
         title="קצת עלינו"
         subtitle="מומחים לאיתור נזילות ורטיבות במצלמה תרמית — עם דיוק, שקיפות והרבה ניסיון."

@@ -2,14 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { ArrowLeft, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Eye } from "lucide-react";
 import { getService, services, serviceSlugs } from "@/lib/services";
-import { site, canonicalUrl } from "@/lib/site";
-import {
-  serviceJsonLd,
-  faqPageJsonLd,
-  breadcrumbJsonLd,
-} from "@/lib/jsonld";
+import { site, telHref, canonicalUrl } from "@/lib/site";
+import { serviceJsonLd, faqPageJsonLd } from "@/lib/jsonld";
 import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
 import ContactCTA from "@/components/ContactCTA";
@@ -48,18 +44,13 @@ export default async function ServiceDetailPage({ params }: PageProps) {
   if (!service) notFound();
 
   const related = services.filter((item) => item.slug !== service.slug);
+  // The visible answer block is genuine on-page Q&A, so it legitimately joins the FAQPage graph.
+  const faqEntities = [service.answer, ...service.faqs];
 
   return (
     <>
       <JsonLd data={serviceJsonLd(service)} />
-      <JsonLd data={faqPageJsonLd(service.faqs)} />
-      <JsonLd
-        data={breadcrumbJsonLd([
-          { name: "בית", url: "/" },
-          { name: "שירותים", url: "/services" },
-          { name: service.title, url: `/services/${service.slug}` },
-        ])}
-      />
+      <JsonLd data={faqPageJsonLd(faqEntities)} />
 
       <PageHero
         title={service.h1}
@@ -74,6 +65,13 @@ export default async function ServiceDetailPage({ params }: PageProps) {
       <section className="py-14 md:py-20">
         <Container className="grid gap-12 lg:grid-cols-3">
           <div className="lg:col-span-2">
+            {/* The AEO answer block: question-form heading, complete in the first sentence,
+                extractable as-is (docs/content-standards.md §5). Keep it first in the DOM. */}
+            <div className="mb-8 rounded-2xl border-s-4 border-brand bg-paper p-6">
+              <h2 className="text-xl font-bold text-brand">{service.answer.q}</h2>
+              <p className="mt-3 leading-relaxed text-ink/80">{service.answer.a}</p>
+            </div>
+
             <Image
               src={service.image}
               alt={service.h1}
@@ -115,6 +113,43 @@ export default async function ServiceDetailPage({ params }: PageProps) {
               ))}
             </ol>
 
+            {/* Honest limits — deliberate positioning, not hedging (content-standards §7). */}
+            <div className="mt-10 rounded-2xl border border-ink/10 bg-white p-6">
+              <h2 className="flex items-center gap-2 text-xl font-bold text-brand">
+                <Eye className="size-5 text-accent-strong" aria-hidden="true" />
+                {service.limits.title}
+              </h2>
+              {service.limits.intro ? (
+                <p className="mt-3 text-sm leading-relaxed text-ink/75">{service.limits.intro}</p>
+              ) : null}
+              <ul className="mt-4 space-y-3">
+                {service.limits.items.map((item) => (
+                  <li key={item.slice(0, 24)} className="flex items-start gap-2 text-sm leading-relaxed text-ink/75">
+                    <span aria-hidden="true" className="mt-1.5 size-1.5 shrink-0 rounded-full bg-accent-strong" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              {service.limits.outro ? (
+                <p className="mt-4 text-sm font-semibold leading-relaxed text-brand">
+                  {service.limits.outro}
+                </p>
+              ) : null}
+            </div>
+
+            {/* Contextual cross-links with descriptive anchors (backlog §9.3). */}
+            <p className="mt-8 leading-relaxed text-ink/80">
+              {service.related.lead}{" "}
+              {service.related.links.map((link, index) => (
+                <span key={link.href}>
+                  {index > 0 ? " · " : ""}
+                  <Link href={link.href} className="font-semibold text-brand underline underline-offset-2">
+                    {link.label}
+                  </Link>
+                </span>
+              ))}
+            </p>
+
             <h2 className="mt-10 text-xl font-bold text-brand">שאלות נפוצות על {service.title}</h2>
             <div className="mt-4 divide-y divide-ink/10 overflow-hidden rounded-2xl border border-ink/10 bg-white">
               {service.faqs.map((faq) => (
@@ -135,10 +170,10 @@ export default async function ServiceDetailPage({ params }: PageProps) {
               <h2 className="text-lg font-bold text-brand">{service.title}</h2>
               <p className="mt-2 text-sm leading-relaxed text-ink/75">{service.priceModel}</p>
               <div className="mt-5 flex flex-col gap-3">
-                <CtaButton href={`tel:${site.phone.tel}`} variant="accent" size="lg">
+                <CtaButton href={telHref} variant="accent" size="lg" dataCta="service-call">
                   חייגו עכשיו
                 </CtaButton>
-                <CtaButton href="#contact" variant="outline" size="lg">
+                <CtaButton href="#contact" variant="outline" size="lg" dataCta="service-form">
                   השארת פרטים
                 </CtaButton>
               </div>
@@ -158,7 +193,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
               return (
                 <Link
                   key={item.slug}
-                  href={`/services/${item.slug}`}
+                  href={`/services/${item.slug}/`}
                   className="group flex items-center gap-3 rounded-2xl border border-ink/10 bg-white p-5 transition hover:border-brand/30 hover:shadow-md"
                 >
                   <span className="inline-flex size-11 items-center justify-center rounded-xl bg-brand/10 text-brand">

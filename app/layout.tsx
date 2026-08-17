@@ -28,7 +28,8 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: site.nameHe }],
   creator: site.nameHe,
-  alternates: { canonical: "/" },
+  // No layout-level canonical: every indexable page sets its own, and a layout default would
+  // leak a homepage canonical onto pages that deliberately omit one (e.g. the noindex /thank-you/).
   verification: { google: "BxQI2a7Ich4zF5TWYlTsXPCi7iAueoYlddQLGxW62p0" },
   openGraph: {
     type: "website",

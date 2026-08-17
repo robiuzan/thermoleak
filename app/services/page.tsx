@@ -3,12 +3,10 @@ import Link from "next/link";
 import { ArrowLeft, CheckCircle2 } from "lucide-react";
 import { services } from "@/lib/services";
 import { site } from "@/lib/site";
-import { breadcrumbJsonLd } from "@/lib/jsonld";
 import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
 import Process from "@/components/Process";
 import ContactCTA from "@/components/ContactCTA";
-import JsonLd from "@/components/JsonLd";
 
 export const metadata: Metadata = {
   title: "שירותים — איתור נזילות, רטיבות ותרמוגרפיה",
@@ -20,12 +18,6 @@ export const metadata: Metadata = {
 export default function ServicesPage() {
   return (
     <>
-      <JsonLd
-        data={breadcrumbJsonLd([
-          { name: "בית", url: "/" },
-          { name: "שירותים", url: "/services" },
-        ])}
-      />
       <PageHero
         title="השירותים שלנו"
         subtitle="פתרונות איתור תרמי מקיפים לבית, לעסק ולחברות הביטוח — מדויקים, מהירים וללא הרס מיותר."
@@ -61,7 +53,7 @@ export default function ServicesPage() {
                     </ul>
                   </div>
                   <Link
-                    href={`/services/${service.slug}`}
+                    href={`/services/${service.slug}/`}
                     className="inline-flex items-center justify-center gap-1 rounded-xl border-2 border-brand px-5 py-2.5 text-sm font-semibold text-brand transition-colors hover:bg-brand hover:text-white"
                   >
                     פרטים נוספים
