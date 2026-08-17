@@ -21,18 +21,19 @@ Google-Extended: Disallow: /  CCBot: Disallow: /
 Bytespider, Amazonbot, Applebot-Extended, meta-externalagent: Disallow: /
 ```
 
-**No repo change overrides that** — it is injected at the edge, and it is exactly what a sibling zone in
-this fleet is currently serving. Whether it is on **here** is an empirical question:
+**No repo change overrides that** — it is injected at the edge. **Status here: the block was live
+until 2026-08-17, when the owner turned the toggle off; the live file now serves the repo's blanket
+allow (verified against production).** Gate 1 is open — but it is a dashboard toggle that can flip
+back without any deploy, so re-verify at the start of every AEO pass:
 
 ```bash
 curl -sS https://thermoleak.co.il/robots.txt
 diff <(curl -sS https://thermoleak.co.il/robots.txt) out/robots.txt
 ```
 
-If a managed block is present, every AEO recommendation below is capped until the zone setting changes
-(Cloudflare dashboard → the zone → AI Crawl Control / managed robots.txt). It is the owner's call and
-the owner's action — document it, never assume it was done. If it is **absent**, say so plainly; that
-is a real advantage over the fleet siblings and worth knowing before investing in answer content.
+If a managed block ever reappears, every AEO recommendation below is capped until the zone setting
+changes again (Cloudflare dashboard → the zone → AI Crawl Control / managed robots.txt). It is the
+owner's call and the owner's action — document it, never assume.
 
 Understand the three permissions separately, because they have different consequences:
 
@@ -114,9 +115,10 @@ identical across the schema, the visible copy, and every off-site profile once t
 
 ## llms.txt
 
-A plain-language map at `public/llms.txt` — who the business is, what it does, the service list, the
-service area, canonical URLs for the key answers, and contact. Keep it short and factual; it is a
-pointer file, not a second website. Only useful once Gate 1 is confirmed open.
+`public/llms.txt` exists (added 2026-08-17, the day Gate 1 opened) — who the business is, the
+service list, canonical URLs for the key answers, contact, and the service area. Keep it short,
+factual and in sync with `lib/site.ts` when facts change; it is a pointer file, not a second
+website.
 
 ## Checklist
 

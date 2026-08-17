@@ -216,11 +216,12 @@ site that shows none. It must be a service-area profile with the address hidden.
 
 ## §6 AEO / GEO
 
-**6.1 🟠 The live AI-crawler stance is unverified.** `app/robots.ts` emits a blanket allow, but the zone
-is behind Cloudflare, which can prepend a managed `robots.txt` that `Disallow: /`s every major AI bot —
-as it currently does on a sibling fleet zone. **No repo change overrides that.** Fetch
-`https://thermoleak.co.il/robots.txt` and diff it against `out/robots.txt` before any other AEO work.
-Verify; do not inherit the sibling's finding.
+**6.1 ✅ (2026-08-17) AI crawlers unblocked.** The Cloudflare managed `robots.txt` was confirmed
+live-blocking in the morning (Disallow for ClaudeBot, GPTBot, Google-Extended, CCBot, Bytespider,
+Amazonbot, Applebot-Extended, meta-externalagent + `ai-train=no`); the owner turned the toggle off
+the same day, and the live file now serves the repo's blanket allow — **verified against
+production**. Gate 1 of the AEO work is open. Standing rule: re-fetch the live `robots.txt` at the
+start of any AEO audit — it is edge state a dashboard change can flip back without a deploy.
 
 **6.2 🟠 No answer blocks anywhere.** Every service page opens with two narrative `intro` paragraphs
 that set context before answering. The information is often present — just in the third sentence.
@@ -233,7 +234,8 @@ both this and §4 rule 3.
 
 **6.4 🟡 No freshness or authorship signals.** No `datePublished`, `dateModified` or author anywhere.
 
-**6.5 🟡 No `public/llms.txt`.**
+**6.5 ✅ (2026-08-17) `public/llms.txt` written** — a short factual pointer map (services, key
+answers, contact, service area), added the moment §6.1 opened. Live on the next deploy.
 
 **6.6 🟠 Nothing uniquely citable.** The site explains what it does but never what the method's limits
 are. A thermal camera images surface temperature, not water — so it cannot see a deep slab leak under

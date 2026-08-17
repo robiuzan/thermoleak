@@ -39,9 +39,9 @@ Next.js 16 static export (`output: "export"`, `trailingSlash: true`). You audit 
    Expect 11 `<url>` entries against 14 emitted `index.html` files — `/404/`, `/_not-found/` and the
    noindex `/thank-you/` are correctly excluded (the double 404 emission remains finding §1.1).
    `staticRoutes` is still hand-maintained (§1.2); `lastModified` now uses real per-route dates —
-   flag any regression to `new Date()`. **Also fetch the live `/robots.txt`** — confirmed 2026-08-17:
-   Cloudflare prepends a managed block Disallowing ClaudeBot, GPTBot, Google-Extended, CCBot and
-   others. The repo cannot override it; the owner toggle is the fix (§6.1).
+   flag any regression to `new Date()`. **Also fetch the live `/robots.txt`** — the Cloudflare
+   managed AI-crawler block was live until 2026-08-17, when the owner toggled it off (verified);
+   it is edge state that can return without a deploy, so measure it every audit (§6.1).
 6. **Thin content.** Strip tags and scripts, subtract the ~110 words of site chrome, and count unique
    body words per route against the `docs/content-standards.md` §1 floors. Measured at the last audit:
    `/` 704 · service pages 432–469 · `/services/` 450 · `/reviews/` 385 · `/about/` 383 ·

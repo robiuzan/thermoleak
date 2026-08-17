@@ -22,14 +22,13 @@ never change Cloudflare settings — you document the exact toggle and hand it t
 ## What to audit
 
 1. **Reachability — check this first, it gates everything else.** Fetch the live `/robots.txt` and
-   compare it to `out/robots.txt`. The zone sits behind Cloudflare, and Cloudflare can prepend a
-   **managed robots.txt** at the edge that sends `Disallow: /` to ClaudeBot, GPTBot, Google-Extended,
-   CCBot, Bytespider, Amazonbot, Applebot-Extended and meta-externalagent, plus
-   `Content-Signal: ai-train=no`. **No repo change overrides that** — it is injected at the edge. This
-   has been observed on a sibling zone in the same fleet, so it is a live risk here, **but you must
-   verify it on this domain rather than inheriting the finding.** If a managed block is present, say so
-   as the first finding and note that every other AEO recommendation is capped until it changes. If it
-   is absent, say that plainly too — it is good news worth stating.
+   compare it to `out/robots.txt`. History on this zone: Cloudflare's **managed robots.txt** was
+   live-blocking every major AI bot (ClaudeBot, GPTBot, Google-Extended, CCBot and others, with
+   `Content-Signal: ai-train=no`) until **2026-08-17**, when the owner turned the toggle off — the
+   live file then matched the repo's blanket allow, verified. **No repo change controls this** — it
+   is a dashboard toggle that can flip back without any deploy, so re-verify on every audit and
+   open your report with the measured stance, quoting the fetched bytes. If a block has returned,
+   every other AEO recommendation is capped until the zone setting changes again.
 2. **Answer blocks.** Does each service page open with a 40–60 word self-contained answer under a
    question-form heading? Today: **none do.** Every service page opens with two narrative `intro`
    paragraphs from `lib/services.ts` that set context before answering anything.
