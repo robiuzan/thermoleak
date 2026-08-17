@@ -1,6 +1,8 @@
 // Central business configuration & site-wide content.
-// ⚠️ PLACEHOLDER DATA — phone, whatsapp, email, prices, stats and addresses are invented
-// (see docs/thermoleak-brief.md). Replace with the real business details before launch.
+// Phone, WhatsApp and email are REAL (confirmed fleet values — see the roster manifest and
+// docs/business-facts.md). Still unverified: prices (₪450), the certifications, the guarantee's
+// exact scope, and the trust figures beyond the 2015 founding year. Never present an unconfirmed
+// value as fact — mark it `// 🔶 confirm` and add a row to docs/business-facts.md.
 
 export interface NavLink {
   href: string;
@@ -10,6 +12,11 @@ export interface NavLink {
 export interface BusinessHours {
   days: string;
   time: string;
+}
+
+export interface TrustStat {
+  value: string;
+  label: string;
 }
 
 export const site = {
@@ -57,36 +64,39 @@ export const site = {
   emergencyNote: "שירות חירום לנזילות פעילות — זמינים גם מעבר לשעות הפעילות",
 
   founded: 2015,
-  geo: { lat: 32.0853, lng: 34.7818 },
 
-  priceFrom: 450,
+  priceFrom: 450, // 🔶 confirm — unverified starting price (docs/business-facts.md §C)
   currency: "₪",
-  guarantee: "לא מצאנו — לא שילמתם",
+  guarantee: "לא מצאנו — לא שילמתם", // 🔶 confirm — scope and exclusions undefined (§C)
 
+  // Trust figures shown in TrustBar and the hero. Only values that are verified (founded 2015 →
+  // the roster) or that restate claims already made elsewhere on the site. The previous
+  // "3,000+ jobs / 97% first-visit / 4.9 rating" figures were unverifiable and were removed
+  // 2026-08-17 — do not reintroduce a number without a source (docs/business-facts.md §D).
   stats: {
     years: { value: "10+", label: "שנות ניסיון בשטח" },
-    jobs: { value: "3,000+", label: "בתים ועסקים" },
-    firstVisit: { value: "97%", label: "איתור כבר בביקור הראשון" },
-    rating: { value: "4.9", label: "דירוג לקוחות ממוצע" },
-  },
+    duration: { value: "כשעה", label: "משך בדיקה ברוב הדירות" },
+    method: { value: "ללא הרס", label: "איתור במצלמה תרמית, בלי לשבור" },
+    report: { value: "דו״ח", label: "מסודר ומקובל בחברות הביטוח" },
+  } satisfies Record<string, TrustStat>,
 
   certifications: [
+    // 🔶 confirm — no issuing body or certificate number on file (docs/business-facts.md §B)
     "טכנאי תרמוגרפיה מוסמך (Thermography Level 1)",
     "עבודה עם מצלמות תרמיות מקצועיות מסוג FLIR",
     "אחריות מלאה ושקיפות מחירים",
   ],
 
-  social: {
-    facebook: "https://www.facebook.com/",
-    instagram: "https://www.instagram.com/",
-  },
+  // Social profiles were removed 2026-08-17: the previous values were the platforms' homepages
+  // (facebook.com / instagram.com), which asserted entity links that don't exist — in the footer
+  // AND in JSON-LD sameAs. Restore only with real profile URLs (docs/business-facts.md §B).
 };
 
 export const navLinks: NavLink[] = [
   { href: "/", label: "בית" },
   { href: "/services", label: "שירותים" },
+  { href: "/pricing", label: "מחירון" },
   { href: "/about", label: "אודות" },
-  { href: "/reviews", label: "המלצות" },
   { href: "/contact", label: "צור קשר" },
 ];
 

@@ -1,7 +1,10 @@
 import { site } from "@/lib/site";
 import Container from "./Container";
 
-const stats = [site.stats.years, site.stats.jobs, site.stats.firstVisit, site.stats.rating];
+// Only verifiable figures ship here. The previous "3,000+ jobs / 97% first-visit / 4.9 rating"
+// tiles were removed 2026-08-17 — unverifiable numbers presented as measurements
+// (docs/business-facts.md §D). Do not add a number without a source.
+const stats = [site.stats.years, site.stats.duration, site.stats.method, site.stats.report];
 
 export default function TrustBar() {
   return (

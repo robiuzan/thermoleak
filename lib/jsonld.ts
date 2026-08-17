@@ -1,7 +1,12 @@
 // Structured data (JSON-LD) builders. Injected via the <JsonLd> component.
+//
+// Gating rules (docs/schema-graph.md §4): `aggregateRating`/`Review` ship ONLY with real,
+// publicly verifiable reviews — the fabricated 4.9/6 rating was removed 2026-08-17 and must not
+// return without a source. `sameAs` ships only with real profile URLs. `geo` ships only with the
+// real operating base, never a city-centre placeholder. All three are blocked on
+// docs/business-facts.md §B/§E.
 import { site, canonicalUrl } from "./site";
 import type { Service, ServiceFaq } from "./services";
-import { averageRating, reviewCount } from "./reviews";
 
 const businessId = `${site.domain}/#business`;
 
@@ -26,11 +31,6 @@ export function localBusinessJsonLd() {
       addressRegion: site.address.region,
       addressCountry: site.address.country,
     },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: site.geo.lat,
-      longitude: site.geo.lng,
-    },
     areaServed: site.serviceAreas.map((name) => ({ "@type": "City", name })),
     openingHoursSpecification: [
       {
@@ -46,13 +46,6 @@ export function localBusinessJsonLd() {
         closes: "13:00",
       },
     ],
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: String(averageRating),
-      reviewCount: String(reviewCount),
-      bestRating: "5",
-    },
-    sameAs: [site.social.facebook, site.social.instagram],
   };
 }
 
@@ -72,6 +65,7 @@ export function serviceJsonLd(service: Service) {
   return {
     "@context": "https://schema.org",
     "@type": "Service",
+    "@id": `${canonicalUrl(`/services/${service.slug}`)}#service`,
     name: service.title,
     serviceType: service.h1,
     description: service.summary,
