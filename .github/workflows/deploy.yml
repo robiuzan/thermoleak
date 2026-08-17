@@ -49,6 +49,14 @@ jobs:
       - name: Build static export
         run: npm run build # -> ./out
 
+      - name: Stamp the build
+        # The verify step fetches this file from the LIVE site and compares it to the commit
+        # being deployed. rsync exiting 0 and a 200 on old routes prove nothing: on 2026-08-17 a
+        # deploy "succeeded" while the public origin kept serving a weeks-old build, because the
+        # rsync target and the Cloudflare origin had drifted apart. This stamp turns that
+        # failure mode from silently green into loudly red.
+        run: printf '%s' "$GITHUB_SHA" > out/build-id.txt
+
       - name: Deploy via rsync over SSH
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -67,8 +75,21 @@ jobs:
       - name: Verify the deploy landed
         run: |
           # rsync exiting 0 does not prove the origin is serving the new build, so assert it.
-          for path in / /contact/ /services/; do
+          # Status codes alone are not enough either — old routes return 200 from an old build —
+          # so the build stamp is the authoritative check: the live origin must serve the exact
+          # commit this run just built, or the rsync target and the origin have drifted apart.
+          for path in / /contact/ /services/ /pricing/; do
             code=$(curl -sL -o /dev/null -w '%{http_code}' --max-time 20 "https://thermoleak.co.il$path")
             echo "  $path -> HTTP $code"
             [ "$code" = "200" ] || { echo "::error::https://thermoleak.co.il$path returned $code"; exit 1; }
           done
+          stamp=$(curl -sL --max-time 20 "https://thermoleak.co.il/build-id.txt" || true)
+          echo "  live build-id: '$stamp'"
+          echo "  this build:    '$GITHUB_SHA'"
+          if [ "$stamp" != "$GITHUB_SHA" ]; then
+            echo "::error::ORIGIN DRIFT — the live site is not serving this build. rsync succeeded"
+            echo "::error::against \$SSH_HOST, but the Cloudflare origin serves different content."
+            echo "::error::Fix is infrastructure-side: point the SSH_HOST secret at the server the"
+            echo "::error::Cloudflare origin record actually resolves to (or vice versa)."
+            exit 1
+          fi
