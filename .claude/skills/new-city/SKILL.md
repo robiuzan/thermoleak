@@ -109,8 +109,9 @@ a route that skips this works in dev and 404s in production.
 
 ## Gotchas
 
-- **Every push to `main` deploys.** A doorway cluster committed here is live within minutes — there is
-  no staging gate. Get the gate right before you commit, not after.
+- **A doorway cluster deployed here is a domain-level risk.** Get the content gate right before
+  anything ships — `/deploy-thermoleak` is the production mutation, and there is no staging
+  environment between the ops script and the live site.
 - Never invent a neighbourhood, a landmark, or a local job. Unverified → `// 🔶 confirm` +
   `docs/business-facts.md` §E.
 - Twelve pages in one commit is not a coverage strategy. Three good ones beat twelve thin ones, and the

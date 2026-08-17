@@ -8,8 +8,9 @@ description: The release gate before any push to main — clean build and lint, 
 Everything here runs against `out/` — the artifact that actually ships. A passing `npm run build` is the
 start of this gate, not the end of it.
 
-**On this repo the gate matters more than usual: pushing to `main` deploys to production.** There is no
-staging environment and no manual approval step. Run this *before* you commit.
+Pushing to `main` does **not** deploy (build-only CI); production ships via `/deploy-thermoleak`
+(wrangler → Cloudflare Pages). Run this gate before every deploy — and still before commits, since
+CI runs the same build.
 
 ## 1. Clean build
 
@@ -32,7 +33,8 @@ afterwards is not the fix.
 find out -name index.html | wc -l          # expect 14 (11 indexable + /thank-you/ + /404/ + /_not-found/)
 grep -c '<url>' out/sitemap.xml            # expect 11 (/thank-you/ is noindex and excluded)
 test -f out/robots.txt && echo ok
-test -f out/404.html && echo ok            # .htaccess ErrorDocument points here
+test -f out/404.html && echo ok            # Cloudflare Pages serves this as the custom 404
+test -f out/_headers && test -f out/_redirects && echo ok   # Pages headers/redirects shipped
 ```
 
 If the counts move, something was added or dropped. Reconcile before shipping — `staticRoutes` in
@@ -168,5 +170,6 @@ For a substantive change, run the relevant agents against the fresh `out/`:
 
 ## Then
 
-`/deploy-thermoleak` — and remember the deploy **is** the push. Nothing else stands between this gate
-and production.
+`/deploy-thermoleak` — dry run first, `-Confirm` only when asked. **Pushing to `main` does not
+deploy**; the wrangler upload is the production mutation, and this gate is the last thing that runs
+before it.

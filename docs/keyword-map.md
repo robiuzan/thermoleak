@@ -159,5 +159,5 @@ A cell exists when there is something true and specific to say in it. Not before
 
 **Slug rule:** every route on this site uses **ASCII English path segments** with Hebrew content. Keep
 it that way — introducing Hebrew slugs now would split the taxonomy and add a percent-encoding matcher
-requirement for no gain. Renaming an existing slug requires a 301 in `public/.htaccess`, or the ranking
-signal is discarded.
+requirement for no gain. Renaming an existing slug requires a 301 in `public/_redirects` (Cloudflare
+Pages), or the ranking signal is discarded.

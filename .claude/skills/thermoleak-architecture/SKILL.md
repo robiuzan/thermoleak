@@ -1,6 +1,6 @@
 ---
 name: thermoleak-architecture
-description: Start-here orientation for thermoleak.co.il — the lib/site.ts → lib/services.ts → routes data flow, the flat file map, static-export constraints (no headers, redirects, middleware or API routes), Next 16 async params, the npm scripts, and the deploy truth that every push to main ships to production. Use at the start of any task in this repo, or when unsure where content, routes, metadata or business facts come from. Triggers "where does X live", "how is this site built", "orient me", "architecture", "why is this not working in production".
+description: Start-here orientation for thermoleak.co.il — the lib/site.ts → lib/services.ts → routes data flow, the flat file map, static-export constraints (no headers, redirects, middleware or API routes), Next 16 async params, the npm scripts, and the deploy truth that production is Cloudflare Pages via the fleet ops script while pushing to main deploys nothing. Use at the start of any task in this repo, or when unsure where content, routes, metadata or business facts come from. Triggers "where does X live", "how is this site built", "orient me", "architecture", "why is this not working in production".
 ---
 
 # thermoleak.co.il architecture
@@ -20,15 +20,15 @@ anything.
 
 ```ts
 // next.config.ts
-output: "export",              // emit a static ./out site (no Node server on cPanel)
-trailingSlash: true,           // /services/ -> /services/index.html (Apache-friendly)
+output: "export",              // emit a static ./out site — deployed to Cloudflare Pages
+trailingSlash: true,           // /services/ -> /services/index.html (directory-style URLs)
 images: { unoptimized: true },
 ```
 
 `output: "export"` **forbids** `headers()`, `redirects()`, `rewrites()`, middleware, API routes, server
-actions and ISR. Response headers come from **`public/.htaccess`** at the Apache origin, with Cloudflare
-in front. If a task seems to need one of the forbidden APIs, the answer is in `.htaccess` or at the
-edge, not in Next.
+actions and ISR. Response headers come from **`public/_headers`** and redirects from
+**`public/_redirects`** — Cloudflare Pages is the origin (since 2026-08-02). If a task seems to need
+one of the forbidden APIs, the answer is in those two files or at the edge, not in Next.
 
 `app/sitemap.ts` and `app/robots.ts` each carry `export const dynamic = "force-static"` — that line is
 what makes them emit at build time under `output: "export"`. Don't delete it as noise.
@@ -53,29 +53,30 @@ app/**/page.tsx  →  components/**
 lives in components.** A phone number, email or service name typed into a component is a bug — the repo
 is currently clean of them, so any new one is a regression, not a precedent.
 
-**The roster manifest is a reference, not an upstream build input.** Unlike the Cloudflare-Pages sites
-in the same fleet, nothing here is generated from `thermoleak.json`. Read it to learn what the fleet
-believes is true (its `_needsConfirmation` array is the honest list), then edit `lib/site.ts` by hand.
+**The roster is not a build input here** — content is never generated from `thermoleak.json`. But the
+roster **is** the deploy authority: `roster.json` carries `localPath` and `pagesProject`, which the
+fleet ops script resolves when shipping. Read the manifest to learn what the fleet believes is true
+(its `_needsConfirmation` array is the honest list), then edit `lib/site.ts` by hand.
 
-## Routes — 11 content routes, 13 emitted files
+## Routes — 12 content routes, 14 emitted files
 
-| Route                                                              | Source                          | Count |
-| ------------------------------------------------------------------ | ------------------------------- | ----- |
-| `/`                                                                | `app/page.tsx`                  | 1     |
-| `/services/`                                                       | `app/services/page.tsx`         | 1     |
-| `/services/{slug}/`                                                | `app/services/[slug]/page.tsx`  | 4     |
-| `/about/` `/reviews/` `/contact/` `/accessibility/` `/privacy/`    | one dir each under `app/`       | 5     |
-| `/404/` + `/_not-found/`                                           | `app/not-found.tsx`             | 2     |
-| `/sitemap.xml` `/robots.txt`                                       | `app/sitemap.ts` `app/robots.ts`| —     |
+| Route                                                          | Source                          | Count |
+| -------------------------------------------------------------- | ------------------------------- | ----- |
+| `/`                                                            | `app/page.tsx`                  | 1     |
+| `/services/`                                                   | `app/services/page.tsx`         | 1     |
+| `/services/{slug}/`                                            | `app/services/[slug]/page.tsx`  | 4     |
+| `/pricing/` `/about/` `/contact/` `/accessibility/` `/privacy/`| one dir each under `app/`       | 5     |
+| `/thank-you/`                                                  | noindex, post-form conversion   | 1     |
+| `/404/` + `/_not-found/`                                       | `app/not-found.tsx`             | 2     |
+| `/sitemap.xml` `/robots.txt`                                   | `app/sitemap.ts` `app/robots.ts`| —     |
 
-The export emits **13** `index.html` files; the sitemap lists **11**. The two extras are the 404
-artifacts, correctly excluded — but note the route **emits twice**, as `/404/` and `/_not-found/`, and
-`public/.htaccess` points `ErrorDocument 404` at `/404.html`. See backlog §1.1.
+The export emits **14** `index.html` files; the sitemap lists **11** (`/thank-you/` is noindex, the
+404s are excluded — the double 404 emission is backlog §1.1; Pages serves the root `404.html`
+natively). `/reviews/` was removed 2026-08-17 and 301s to `/about/` via `public/_redirects`.
 
 The URL taxonomy is **all-English paths with Hebrew content** (`/services/water-leak-detection/`), which
 is the opposite of the Hebrew-slug fleet sites. That is the live scheme and it stays — renaming a slug
-without a 301 discards its ranking signal, and a static export on Apache means that 301 lives in
-`public/.htaccess`.
+without a 301 in `public/_redirects` discards its ranking signal.
 
 ## The four services
 
@@ -138,11 +139,12 @@ npx tsc --noEmit          # there is no `typecheck` script
 Build gate: **`npm run lint && npm run build`** — `next build` type-checks the whole app. See
 `/qa-build-gate` for the assertions on `out/` that a green build does not cover.
 
-## Deploy — the opposite of the rest of the fleet
+## Deploy — same as the rest of the fleet since 2026-08-02
 
-**Every push to `main` deploys to production.** `.github/workflows/deploy.yml` builds the export and
-rsyncs `./out/` over SSH to the cPanel docroot (`websquadinc` account), then asserts three URLs return
-200. Committing to `main` *is* the production action here. See `/deploy-thermoleak`.
+**Production is Cloudflare Pages (project `thermoleak`), direct upload via the fleet ops script.
+Pushing to `main` deploys nothing** — `.github/workflows/deploy.yml` is build-only CI. The old
+rsync-on-push path was retired by the 2026-08-02 DNS cutover and ran green-but-useless for 15 days
+before that was caught; the full story and the deploy commands live in `/deploy-thermoleak`.
 
 ## Where to go next
 

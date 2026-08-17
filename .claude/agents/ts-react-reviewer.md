@@ -27,8 +27,8 @@ authority — not recollection. Check them before flagging or endorsing any fram
 
 1. **Static-export compatibility.** `output: "export"` forbids `headers()`, `redirects()`, `rewrites()`,
    middleware, API routes, ISR and server actions. Any of these appearing is **Critical** — it fails the
-   build or silently produces nothing. Response headers come from `public/.htaccess` at the Apache
-   origin. Note that `app/sitemap.ts` and `app/robots.ts` both carry
+   build or silently produces nothing. Response headers come from `public/_headers` and redirects from
+   `public/_redirects` (Cloudflare Pages). Note that `app/sitemap.ts` and `app/robots.ts` both carry
    `export const dynamic = "force-static"`, which is what makes them emit at build time — don't let that
    line get deleted as noise.
 2. **Next 16 async params.** Dynamic route params are a **Promise**:

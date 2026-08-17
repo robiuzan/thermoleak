@@ -123,7 +123,7 @@ claim in `serviceAreaText` is broader than `areaServed`.
 | **Analytics decision**             | The site collects **zero** analytics — no GTM, no GA4. Join the shared fleet container `GTM-KWGGH438` (GA4 resolved by hostname inside it) or stand alone? Owner call, blocks all tracking | `app/layout.tsx` |       | 🔶     |
 | GA4 measurement ID                 | Needed either way once the decision is made                                                                                                                                            | container / repo |       | 🔶     |
 | **AI-crawler stance**              | Cloudflare can prepend a managed `robots.txt` blocking every major AI bot, as it does on a sibling zone. **Verify on this domain**, then decide. Dashboard → zone → AI Crawl Control    | Cloudflare       |       | 🔶     |
-| Security headers approval          | HSTS `max-age` (and whether `preload` is acceptable — near-irreversible)                                                                                                                | `public/.htaccess` |     | 🔶     |
+| Security headers approval          | HSTS shipped 2026-08-17 without `preload`/`includeSubDomains`; escalating either needs sign-off (near-irreversible)                                                                     | `public/_headers`  |     | 🔶     |
 | Roster sync                        | `thermoleak.json` records `googleSiteVerification: null` while the site ships a real token — update the roster                                                                          | roster           |       | 🔶     |
 
 ---
@@ -139,20 +139,27 @@ claim in `serviceAreaText` is broader than `areaServed`.
 - **Added:** `/pricing/` (money-intent page), `/thank-you/` (noindex conversion URL), answer blocks +
   honest-limits sections on all four service pages, a homepage method explainer, three new general
   FAQs, in-copy cross-links, 18 `data-cta` attributes, form failure-path handling with focus
-  management, Navbar Escape/focus-return, security headers in `public/.htaccess`, real sitemap
+  management, Navbar Escape/focus-return, security headers in `public/_headers`, real sitemap
   `lastModified` dates, and the logo no longer preloads against the hero.
+- **Deployed to production 2026-08-17 via Cloudflare Pages** — which exposed that the repo's
+  rsync-on-push pipeline had been retired by the 2026-08-02 DNS cutover and ran green against a
+  dead server for 15 days. The workflow is now build-only CI; the deploy path is the fleet ops
+  script; `.htaccess` is deleted in favour of `public/_headers` + `public/_redirects`.
 - **Still owner-blocked:** GBP + real reviews (§B), named person + credentials (§A), analytics
   decision (§F), AI-crawler toggle and HTML cache rule (Cloudflare, §F), guarantee scope + price
   confirmation (§C).
 
-## Verified during the 2026-08-16 environment build — no action needed
+## Verified during the 2026-08-16 environment build — with one major 2026-08-17 correction
 
-- **Deploy path:** GitHub Actions → `npm run build` → `rsync --delete` over SSH to the cPanel docroot
-  (`websquadinc`), then a three-URL HTTP 200 assertion. **Pushing to `main` is the deploy.** FTP is
-  disabled on the server; SSH with a deploy key is the only transport.
-- **No Cloudflare cache purge, deliberately.** HTML is served `cf-cache-status: DYNAMIC` and assets are
-  content-hashed, so a purge has nothing to clear. The step was removed because it could only ever fail
-  and was masking real failures. Documented in `.github/workflows/deploy.yml`.
+- ~~**Deploy path:** GitHub Actions rsync to cPanel; pushing to `main` is the deploy.~~
+  **WRONG — corrected 2026-08-17.** That was the repo's belief, and it had been false since the
+  2026-08-02 DNS cutover to **Cloudflare Pages** (project `thermoleak`; apex + www are proxied
+  CNAMEs to `thermoleak.pages.dev` — see the Sys Admin `inventory/domains.json`). The rsync
+  workflow kept running green against the retired cPanel server for 15 days. Now: pushing to `main`
+  is build-only CI; deploys go through the fleet ops script with a Pages-API drift check
+  (CLAUDE.md §10). The old SSH Actions secrets are unused — delete them (owner action).
+- **No cache purge needed:** Pages serves HTML `DYNAMIC` from the edge, fresh per deploy; assets
+  are content-hashed and cached immutable via `public/_headers`.
 - **Cloudflare Scrape Shield email obfuscation is ON** for this zone — it rewrites `mailto:` into a
   404-ing `/cdn-cgi/l/email-protection#…`. `components/EmailOff.tsx` works around it with real
   `<!--email_off-->` markers. Do not remove that component.

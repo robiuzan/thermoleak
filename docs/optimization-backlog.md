@@ -45,15 +45,24 @@ resolved:** §2.1 (both title bugs), §4.1/§7.1 (fabricated rating + testimonia
 link), §8.5 (focus management), §9.3 (in-copy cross-links on all four service pages), §9.5
 (trailing slashes), §10.3 (logo `priority` dropped), §11.1/§11.2 (`ink/50` → `ink/70`; the
 statement is true again), §11.3 partial (Escape + focus return; focus trap/scroll lock still open),
-§12.1 (baseline headers in `.htaccess`), §1.3 (real `lastModified` dates), §13.4 pre-wired.
+§12.1 (baseline headers via `public/_headers`, verified live), §1.3 (real `lastModified` dates),
+§13.4 pre-wired.
 **New surfaces:** `/pricing/` (targets כמה עולה איתור נזילות), `/thank-you/` (noindex conversion
 URL), answer blocks + honest-limits sections on all four service pages, homepage method explainer,
 generalFaqs 6 → 9. Emitted routes 13 → 14; sitemap stays 11.
 
+**Deployed 2026-08-17 to Cloudflare Pages** — which surfaced the biggest infrastructure finding of
+the audit: the repo's rsync-on-push pipeline had been retired by a 2026-08-02 DNS cutover to Pages
+(project `thermoleak`) and ran **green against a dead server for 15 days**. The workflow is now
+build-only CI, headers/redirects moved to `public/_headers`/`public/_redirects`, `.htaccess` is
+deleted, and the deploy path is the fleet ops script with its Pages-API drift check (CLAUDE.md §10).
+The earlier "HTML not edge-cached / TTFB 1.3–15.2 s" concern is withdrawn: Pages serves from the
+edge, and those TTFB samples were polluted by local network flakiness.
+
 **Still open and owner-blocked:** §5.3 (GBP), §7.3/§7.5 (credentials, named person), §13.1
 (analytics decision), §6.1 (Cloudflare AI-crawler toggle — **confirmed live-blocking on
 2026-08-17**: the managed robots.txt Disallows ClaudeBot, GPTBot, Google-Extended, CCBot and
-others), plus the HTML edge-cache rule (measured TTFB 1.3–15.2 s on DYNAMIC HTML). Still open,
+others). Still open,
 not blocked: §3 depth floors (service pages now ~450+, homepage larger, `/about/` and `/contact/`
 still short), §9.2 (header dropdown), §10.2/§10.4 (image variants, font preload), §3.4/§3.5
 (location + guides silos).
@@ -63,10 +72,10 @@ still short), §9.2 (header dropdown), §10.2/§10.4 (image variants, font prelo
 ## §1 Technical SEO
 
 **1.1 🟡 The 404 route emits twice.** `out/` contains `/404/index.html`, `/_not-found/index.html` **and**
-`/404.html` — three artifacts for one route. `public/.htaccess` points `ErrorDocument 404` at
-`/404.html`, so the served 404 is correct, but the two directory variants are crawlable URLs with
-identical thin content. Confirm they are excluded from the sitemap (they are) and consider a
-`.htaccess` 410/301 for the directory forms.
+`/404.html` — three artifacts for one route. Cloudflare Pages serves the root `/404.html` natively as
+the custom 404, so the served behaviour is correct, but the two directory variants are crawlable URLs
+with identical thin content. Confirm they stay excluded from the sitemap (they are) and consider a
+`public/_redirects` 301 for the directory forms.
 
 **1.2 🟠 `staticRoutes` in `app/sitemap.ts` is a hand-maintained array of 7.** Service entries derive
 from `serviceSlugs` automatically; static pages don't. Add a route and it builds fine while being
@@ -321,8 +330,8 @@ costs a redirect hop under `trailingSlash: true`.
 
 **10.1 ✅ The baseline is healthy.** `out/` measures **3.9 MB** with **no JS chunk over 500 KB** and no
 dev-only artifacts. Only two client components (`ContactForm`, `Navbar`), four runtime dependencies, and
-a FAQ built on `<details>` with zero JS. `public/.htaccess` sets a one-year immutable `Cache-Control` on
-fingerprinted assets and Cloudflare caches at the edge.
+a FAQ built on `<details>` with zero JS. `public/_headers` sets a one-year immutable `Cache-Control` on
+`/_next/static/*` and Cloudflare Pages serves everything from the edge.
 
 **10.2 🟡 `images: { unoptimized: true }` means no `srcset`.** Smaller than it looks here — three of the
 four service illustrations are SVGs. What matters is `public/images/hero.webp`. Either pre-generate
@@ -378,10 +387,12 @@ phone and email.
 
 ## §12 Security
 
-**12.1 🟠 No security headers.** `public/.htaccess` sets `ErrorDocument`, `mod_expires` and
-`Cache-Control` and nothing else. Missing HSTS, `X-Frame-Options`, `X-Content-Type-Options`,
-`Referrer-Policy`, `Permissions-Policy` and CSP. **Verify against the live response first** — Cloudflare
-may supply some. Note this is Apache: `public/_headers` does nothing here.
+**12.1 ✅ (2026-08-17) Security headers shipped via `public/_headers`.** HSTS (no
+preload/includeSubDomains — deliberate, business-facts §F), `X-Frame-Options: SAMEORIGIN`,
+`nosniff`, `Referrer-Policy`, `Permissions-Policy`, plus immutable caching on `/_next/static/*`.
+Verified in the live response post-deploy. Still missing: CSP (see 12.2). Historical note: this
+item originally targeted `.htaccess`, written when the repo believed Apache was the origin — it
+wasn't (see the shipped block above).
 
 **12.2 🟡 No CSP — but it is unusually cheap to add.** The site ships **no analytics and no third-party
 script of any kind**, and the only `dangerouslySetInnerHTML` (`EmailOff`) injects build-time constant
@@ -393,17 +404,19 @@ WhatsApp client. No endpoint, no access key, no server-side store. The roster re
 `formAccessKey: null` **by design** — this site is deliberately not on Web3Forms like its nine fleet
 siblings.
 
-**12.4 🟡 The deploy chain has no manual gate.** Every push to `main` builds and rsyncs `--delete` to
-the production docroot. A bad merge is live in minutes. This is a process control, not a code fix — but
-it is the most consequential security property of the repo.
+**12.4 ✅ (2026-08-17) The deploy chain now has a manual gate.** Pushing to `main` runs build-only
+CI; production ships via the fleet ops script (wrangler → Pages) with a Cloudflare-API drift check,
+an output gate, `out.prev/` rollback and a deploy log — and it always asks before `-Confirm`. The
+prior state (push = unreviewed production rsync) is gone, and so is its silent-drift failure mode.
 
-**12.5 ✅ Secret hygiene is sound.** The repo is public and knows it (`deploy.yml` says so and warns
-against reusing the fleet-wide token). The only key-shaped string in the repo is the Google Search
-Console verification token, which is public by design. Real secrets live in Actions
-(`SSH_PRIVATE_KEY`, `SSH_HOST`, `SSH_USER`) and are never echoed.
+**12.5 ✅ Secret hygiene is sound — and improved.** The repo is public. The only key-shaped string
+in it is the Google Search Console verification token, which is public by design. Deploy
+credentials now live solely in the Sys Admin control plane; the old `SSH_PRIVATE_KEY` /
+`SSH_HOST` / `SSH_USER` Actions secrets are unused and should be deleted from the GitHub repo
+settings (owner action — secrets can't be removed from here).
 
-**12.6 🔵 Do not add an origin HTTPS redirect.** `public/.htaccess` warns about this in its own header:
-Cloudflare forces HTTPS and an origin-side rule can loop behind the proxy.
+**12.6 ✅ Obsolete.** The "no origin-side HTTPS redirect in `.htaccess`" rule died with the Apache
+origin. `.htaccess` is deleted; redirects live in `public/_redirects`.
 
 ---
 

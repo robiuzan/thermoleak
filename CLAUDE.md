@@ -44,11 +44,13 @@
    literals; a new one is a regression, not a precedent.
 3. **No reviews, ratings or testimonials without a verifiable public source.** The six fabricated
    testimonials, the `/reviews/` page and the 4.9 `aggregateRating` they fed were **removed
-   2026-08-17** (`/reviews/` now 301s to `/about/` via `public/.htaccess`). Reintroducing any of
+   2026-08-17** (`/reviews/` now 301s to `/about/` via `public/_redirects`). Reintroducing any of
    them — including "sample data" — without real, sourced reviews is a stop-ship. The legitimate
    source is a Google Business Profile: see [docs/business-facts.md](docs/business-facts.md) §B.
-4. **Pushing to `main` deploys to production.** No staging, no manual gate — GitHub Actions builds and
-   rsyncs `./out/` to the cPanel docroot within minutes. **Never commit to `main` unless asked.** See §10.
+4. **Pushing to `main` does NOT deploy.** Production is **Cloudflare Pages** (project `thermoleak`),
+   direct upload via wrangler, since the 2026-08-02 fleet cutover. `.github/workflows/deploy.yml`
+   is build-only CI. The old rsync path ran green for 15 days while deploying to a retired server —
+   see §10 before believing anything about deployment.
 5. **No page ships under the content bar in [docs/content-standards.md](docs/content-standards.md).**
    A service or location page a find-and-replace could regenerate is a doorway page.
 6. **The FAQ stays `<details>`-based.** Native `<details>/<summary>` keeps every answer in the DOM with
@@ -56,8 +58,9 @@
    Converting it to client state breaks both.
 7. **Wrap every visible email in `<EmailOff>`.** Cloudflare Scrape Shield rewrites bare `mailto:` links
    into a URL that **404s**. `components/EmailOff.tsx` exists solely to prevent that — don't "clean it up".
-8. **Never add an origin-side HTTPS redirect** to `public/.htaccess`. Cloudflare forces HTTPS; an origin
-   rule behind the proxy can loop. The file says so in its own header.
+8. **Headers and redirects live in `public/_headers` and `public/_redirects`** (Cloudflare Pages
+   format). There is no `.htaccess` — this stopped being an Apache/cPanel site at the 2026-08-02
+   cutover, and adding one does nothing.
 9. **Read `AGENTS.md`.** This is Next.js **16** — breaking changes from earlier majors. Check
    `node_modules/next/dist/docs/` before using a framework API from memory. Dynamic route `params` are a
    **Promise**.
@@ -75,15 +78,15 @@ Next.js **16.2.9** App Router · React **19.2.4** · TypeScript strict · Tailwi
 **`next.config.ts` — the constraints that shape everything:**
 
 ```ts
-output: "export",              // emit a static ./out site (no Node server on cPanel)
-trailingSlash: true,           // /services/ -> /services/index.html (Apache-friendly)
+output: "export",              // emit a static ./out site — deployed to Cloudflare Pages
+trailingSlash: true,           // /services/ -> /services/index.html (directory-style URLs)
 images: { unoptimized: true }, // next/image works without a server
 ```
 
 **Static export forbids** `headers()`, `redirects()`, `rewrites()`, middleware, API routes, server
-actions and ISR. Response headers and redirects come from **`public/.htaccess`** at the Apache origin,
-with Cloudflare in front. There is no `public/_headers` file and adding one does nothing — that is a
-Cloudflare Pages mechanism, and this is not a Pages site.
+actions and ISR. Response headers come from **`public/_headers`** and redirects from
+**`public/_redirects`** — Cloudflare Pages mechanisms, because Pages **is** the origin since the
+2026-08-02 cutover. There is no `.htaccess`; the Apache/cPanel origin is retired.
 
 `app/sitemap.ts` and `app/robots.ts` each carry `export const dynamic = "force-static"`. That line is
 what makes them emit at build time; don't delete it as noise.
@@ -120,7 +123,7 @@ docs/           # the acceptance bars every agent cites
 ```
 
 `/reviews/` and `lib/reviews.ts` were **removed 2026-08-17** (fabricated testimonials — golden rule
-3); the URL 301s to `/about/` in `public/.htaccess` until real reviews exist.
+3); the URL 301s to `/about/` in `public/_redirects` until real reviews exist.
 
 Sibling components import each other **relatively** (`./Container`); anything from `lib/` uses the `@/`
 alias. Match that.
@@ -229,24 +232,35 @@ Fonts: **Heebo** (headings, `font-heading`) + **Assistant** (body, `font-sans`) 
 
 ---
 
-## 10. Deploy — read this before committing
+## 10. Deploy — read this before shipping
 
-**Pushing to `main` deploys to production. The push *is* the deploy.**
+**Production is Cloudflare Pages (project `thermoleak`), direct upload via wrangler. Pushing to
+`main` deploys nothing** — `.github/workflows/deploy.yml` is build-only CI.
 
-`.github/workflows/deploy.yml` runs on every push to `main`: `npm ci` → `npm run build` →
-`rsync -rltzv --delete --exclude='.well-known'` over SSH to the cPanel docroot (`websquadinc`) →
-a `curl` assertion that `/`, `/contact/` and `/services/` all return **200**.
+```powershell
+# preview — safe, changes nothing
+powershell -File "c:/Users/robiu/antigravity/Projects/Israeli services sites/ops/deploy-site.ps1" -Domain thermoleak.co.il -DryRun
+# execute — only after the user asks
+powershell -File "c:/Users/robiu/antigravity/Projects/Israeli services sites/ops/deploy-site.ps1" -Domain thermoleak.co.il -Confirm
+```
 
-- FTP is disabled on the server; SSH with a deploy key is the only transport.
-- `--delete` makes the docroot exactly match the build. `.well-known` is preserved so AutoSSL works.
-- **There is deliberately no Cloudflare cache-purge step** — HTML is served `DYNAMIC` (uncached) and
-  assets are content-hashed, so a purge had nothing to clear and its failures were masking real ones.
-  The workflow's comment block explains this; don't reinstate it without a caching rule, and never with
-  the fleet-wide token — **this repo is public**.
-- **Rollback is `git revert` + push.** There is no `out.prev/`, and `--delete` removed the old files.
-  Keep commits small enough to revert cleanly.
+The ops script resolves the Pages project from the fleet roster, runs a **drift check** (asks the
+Cloudflare API whether the project actually serves this domain), busts the npm/`.next` staleness
+traps, builds, gates `out/`, preserves `out.prev/` for rollback, deploys, and logs to
+`logs/deploys.csv`. Credentials come from the Sys Admin control plane, never this repo.
 
-Run `/qa-build-gate` before committing. **Deploying is a production mutation — always ask first.**
+**The cautionary tale (2026-08-02 → 2026-08-17):** the DNS was cut over to Pages on 2026-08-02, but
+this repo's rsync workflow kept running — green — against the retired cPanel server for fifteen
+days. Every "successful deploy" in that window never reached production. That is why the drift
+check exists and why this section must never be edited from memory: **verify the origin, then
+believe it.**
+
+- **Rollback:** `out.prev/` + `npx wrangler pages deploy .\out.prev --project-name thermoleak
+  --branch main`, or the Pages dashboard's previous-deployment rollback.
+- HTML is served `DYNAMIC` by Pages; assets are content-hashed and cached immutable via
+  `public/_headers`. There is nothing to purge on deploy.
+
+Run `/qa-build-gate` before shipping. **Deploying is a production mutation — always ask first.**
 See the `deploy-thermoleak` skill.
 
 ---

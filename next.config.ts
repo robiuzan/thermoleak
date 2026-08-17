@@ -1,8 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "export", // emit a static ./out site (no Node server needed on cPanel)
-  trailingSlash: true, // /services/ -> /services/index.html (Apache-friendly)
+  output: "export", // emit a static ./out site — deployed to Cloudflare Pages (project 'thermoleak')
+  trailingSlash: true, // /services/ -> /services/index.html (directory-style URLs)
   images: { unoptimized: true }, // next/image works without a server
 };
 

@@ -1,13 +1,13 @@
 ---
 name: performance-web-vitals
-description: Core Web Vitals for a static export on cPanel behind Cloudflare — the healthy 3.9 MB baseline, what images.unoptimized actually costs on a site whose service art is SVG, the hero and logo preload competition, font preloads, CLS reserves, and the two-client-component INP budget. Use before shipping or when LCP, CLS or INP regress. Triggers "perf pass", "Core Web Vitals", "LCP slow", "image optimization", "bundle size", "srcset".
+description: Core Web Vitals for a static export on Cloudflare Pages — the healthy ~4 MB baseline, what images.unoptimized actually costs on a site whose service art is SVG, the hero preload, font preloads, CLS reserves, and the lean client-JS budget. Use before shipping or when LCP, CLS or INP regress. Triggers "perf pass", "Core Web Vitals", "LCP slow", "image optimization", "bundle size", "srcset".
 ---
 
 # Core Web Vitals
 
-Static HTML on an Apache origin behind Cloudflare, with long-cache headers on fingerprinted assets in
-`public/.htaccess`. **The baseline here is genuinely healthy** — measure before you optimise, and don't
-manufacture findings to fill a section.
+Static HTML served from **Cloudflare Pages** (edge-served worldwide), with immutable caching on
+fingerprinted assets via `public/_headers`. **The baseline here is genuinely healthy** — measure before
+you optimise, and don't manufacture findings to fill a section.
 
 ## The measured baseline
 
@@ -99,10 +99,10 @@ Preserve all three when adding sections. Any new above-the-fold image needs its 
 
 ## Caching
 
-`public/.htaccess` sets `Cache-Control: public, max-age=31536000, immutable` on `css|js|woff2|svg` plus
-`mod_expires` rules, and Cloudflare caches at the edge. HTML is served `DYNAMIC` (uncached) — which is
-why the deploy workflow deliberately has **no cache-purge step**, and why deploys land immediately.
-Don't add a purge without first adding a rule that caches HTML.
+`public/_headers` sets `Cache-Control: public, max-age=31536000, immutable` on `/_next/static/*`,
+which is safe because those filenames are content-hashed. Pages serves HTML `DYNAMIC` from the edge —
+a fresh copy per deploy, nothing to purge, deploys land immediately. Don't add per-request caching
+for HTML; a stale page after a deploy costs more than the milliseconds saved.
 
 ## Measuring
 

@@ -1,37 +1,37 @@
-name: Deploy to cPanel (static export)
+name: CI (build gate only — pushing does NOT deploy)
 
-# Auto-deploy: every push to main builds the Next.js static export and mirrors it
-# to the thermoleak.co.il docroot on the cPanel server (websquadinc account) via
-# rsync over SSH. The site is live the moment rsync finishes.
+# ── THIS WORKFLOW DOES NOT DEPLOY ─────────────────────────────────────────────
+# Production is CLOUDFLARE PAGES (project 'thermoleak'), direct upload via
+# wrangler, since the 2026-08-02 fleet cutover. Deploys run from a workstation:
 #
-# Transport: FTP is disabled on this server, so we use rsync over SSH. The
-# websquadinc account has a jailed shell + an authorized deploy key (private key
-# in the SSH_PRIVATE_KEY secret). `rsync --delete` makes the docroot match ./out
-# exactly, so the first run also clears the old WordPress files that lived there.
-# `.well-known` is preserved so cPanel AutoSSL/ACME keeps working.
+#   powershell -File "c:/Users/robiu/antigravity/Projects/Israeli services sites/ops/deploy-site.ps1" -Domain thermoleak.co.il -DryRun
+#   powershell -File "c:/Users/robiu/antigravity/Projects/Israeli services sites/ops/deploy-site.ps1" -Domain thermoleak.co.il -Confirm
 #
-# There is deliberately NO Cloudflare cache-purge step. Cloudflare serves this
-# site's HTML with cf-cache-status: DYNAMIC (uncached) and every static asset is
-# content-hashed, so a purge has nothing to clear - which is why deploys landed
-# correctly on all 11 pages during the months its CF_API_TOKEN sat expired and the
-# purge returned 401. Keeping a step that could only ever fail meant every run
-# reported failure, which camouflaged the runs that failed for real reasons.
+# History, so nobody resurrects the old path: until 2026-08-02 this workflow
+# rsynced ./out to a cPanel docroot over SSH. The DNS cutover to Pages retired
+# that origin — but this workflow kept running and kept reporting green while
+# writing to a server the public site no longer read from. Fifteen days of
+# "successful" deploys never reached production; the drift was caught on
+# 2026-08-17 only when a build-stamp assertion was added. The rsync steps and
+# their secrets (SSH_PRIVATE_KEY / SSH_HOST / SSH_USER) were removed with the
+# cutover acknowledged. Headers/redirects live in public/_headers and
+# public/_redirects (Pages format); .htaccess is gone with the Apache origin.
 #
-# Reinstate a purge ONLY if a Cache Rule is later added that caches HTML. If so,
-# mint a token scoped to Zone > Cache Purge > Purge on this zone alone - do NOT
-# reuse the fleet-wide Sys Admin token: this repo is PUBLIC.
+# What remains is the useful part: an independent build gate on every push, so
+# a broken build is caught even when nobody ran the gate locally.
 
 on:
   push:
     branches: [main]
+  pull_request:
   workflow_dispatch:
 
 concurrency:
-  group: deploy-prod
+  group: ci-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -46,50 +46,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Lint
+        run: npm run lint
+
       - name: Build static export
-        run: npm run build # -> ./out
-
-      - name: Stamp the build
-        # The verify step fetches this file from the LIVE site and compares it to the commit
-        # being deployed. rsync exiting 0 and a 200 on old routes prove nothing: on 2026-08-17 a
-        # deploy "succeeded" while the public origin kept serving a weeks-old build, because the
-        # rsync target and the Cloudflare origin had drifted apart. This stamp turns that
-        # failure mode from silently green into loudly red.
-        run: printf '%s' "$GITHUB_SHA" > out/build-id.txt
-
-      - name: Deploy via rsync over SSH
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-          SSH_USER: ${{ secrets.SSH_USER }}
-        run: |
-          mkdir -p ~/.ssh
-          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -p 22 -H "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null || true
-          rsync -rltzv --delete --chmod=D755,F644 \
-            --exclude='.well-known' \
-            -e "ssh -p 22 -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new" \
-            ./out/ "$SSH_USER@$SSH_HOST:thermoleak.co.il/"
-
-      - name: Verify the deploy landed
-        run: |
-          # rsync exiting 0 does not prove the origin is serving the new build, so assert it.
-          # Status codes alone are not enough either — old routes return 200 from an old build —
-          # so the build stamp is the authoritative check: the live origin must serve the exact
-          # commit this run just built, or the rsync target and the origin have drifted apart.
-          for path in / /contact/ /services/ /pricing/; do
-            code=$(curl -sL -o /dev/null -w '%{http_code}' --max-time 20 "https://thermoleak.co.il$path")
-            echo "  $path -> HTTP $code"
-            [ "$code" = "200" ] || { echo "::error::https://thermoleak.co.il$path returned $code"; exit 1; }
-          done
-          stamp=$(curl -sL --max-time 20 "https://thermoleak.co.il/build-id.txt" || true)
-          echo "  live build-id: '$stamp'"
-          echo "  this build:    '$GITHUB_SHA'"
-          if [ "$stamp" != "$GITHUB_SHA" ]; then
-            echo "::error::ORIGIN DRIFT — the live site is not serving this build. rsync succeeded"
-            echo "::error::against \$SSH_HOST, but the Cloudflare origin serves different content."
-            echo "::error::Fix is infrastructure-side: point the SSH_HOST secret at the server the"
-            echo "::error::Cloudflare origin record actually resolves to (or vice versa)."
-            exit 1
-          fi
+        run: npm run build # -> ./out (build-gate only; wrangler ships from the workstation)

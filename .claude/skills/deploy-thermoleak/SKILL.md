@@ -1,107 +1,102 @@
 ---
 name: deploy-thermoleak
-description: Ship thermoleak to production — pushing to main IS the deploy, the GitHub Actions rsync-over-SSH pipeline to the cPanel docroot, why there is deliberately no Cloudflare purge step, the rsync --delete semantics, post-deploy verification, and how to roll back when there is no out.prev. Use when publishing. Triggers "deploy", "ship it", "publish the site", "go live", "roll back", "why isn't my change live".
+description: Ship thermoleak to production — Cloudflare Pages (project 'thermoleak') via the fleet ops script, dry-run then -Confirm, why pushing to main deploys NOTHING, the 15-day silent-drift incident that proves it, the out.prev rollback, and post-deploy verification against the live site. Use when publishing. Triggers "deploy", "ship it", "publish the site", "go live", "roll back", "why isn't my change live".
 ---
 
 # Deploy
 
 ## The one thing to know
 
-**Pushing to `main` deploys to production.** There is no separate deploy command, no staging
-environment, and no manual approval gate. `git push` is the production mutation.
+**Production is Cloudflare Pages (project `thermoleak`), direct upload via wrangler. Pushing to
+`main` deploys nothing.** `.github/workflows/deploy.yml` is build-only CI.
 
-This is the **opposite** of the Cloudflare Pages sites in the same fleet, where pushing to `main`
-deploys nothing and a `wrangler` script does the work. Don't carry that assumption over.
+Verified from the Cloudflare API (the Pages project serves `thermoleak.pages.dev`,
+`thermoleak.co.il` and `www.thermoleak.co.il`) and from the fleet inventory: the DNS was **cut over
+to Pages on 2026-08-02** — apex + www are proxied CNAMEs to `thermoleak.pages.dev`; the old apex A
+record pointed at the cPanel server the retired rsync pipeline used to target.
 
-## The pipeline
+## The incident this section exists to prevent
 
-`.github/workflows/deploy.yml`, on every push to `main` (and on `workflow_dispatch`):
+From 2026-08-02 to 2026-08-17 the repo's old rsync workflow **kept deploying, green, to the retired
+cPanel server** — SSH succeeded, `--delete` synced, the status-only verify got 200s from routes that
+existed in the old build too. Fifteen days of "successful" deploys never reached the public site.
+It was caught only when a build-stamp assertion was added and went red.
 
-1. Checkout, Node 22, `npm ci`.
-2. `npm run build` → `./out`.
-3. **rsync over SSH** to the cPanel docroot (`websquadinc` account):
-   ```
-   rsync -rltzv --delete --chmod=D755,F644 --exclude='.well-known' \
-     ./out/ "$SSH_USER@$SSH_HOST:thermoleak.co.il/"
-   ```
-4. **Verify the deploy landed** — `curl` `/`, `/contact/` and `/services/` and fail the job on anything
-   that isn't HTTP 200.
+Lessons encoded here:
 
-`concurrency: deploy-prod` with `cancel-in-progress: true`, so a rapid second push supersedes the first
-rather than racing it.
+- **A green pipeline is not a deploy.** Verify a content marker of the new build on the live
+  domain, not a status code.
+- **The origin is what Cloudflare says it is** — never what the repo believes. The ops script's
+  drift check asks the Pages API before every upload; never bypass it to make a deploy pass.
 
-Transport is SSH because **FTP is disabled on this server**. The `websquadinc` account has a jailed
-shell and an authorized deploy key; the private key is the `SSH_PRIVATE_KEY` repo secret.
+## The command
 
-## Things in that workflow that look wrong and are not
+Deploying is a **production mutation**. It runs dry first, and it always asks.
 
-- **`--delete`** makes the docroot match `./out` exactly. That is deliberate — the first run also
-  cleared the old WordPress files that used to live there. `.well-known` is excluded so cPanel
-  AutoSSL/ACME keeps working.
-- **There is no Cloudflare cache-purge step, on purpose.** Cloudflare serves this site's HTML with
-  `cf-cache-status: DYNAMIC` (uncached) and every static asset is content-hashed, so a purge has nothing
-  to clear. Deploys landed correctly on all pages during the months its `CF_API_TOKEN` sat expired and
-  the purge returned 401 — a step that could only ever fail was marking every run red and camouflaging
-  the runs that failed for real reasons.
-  **Reinstate a purge only if a Cache Rule is later added that caches HTML.** If so, mint a token scoped
-  to Zone → Cache Purge on this zone alone — **do not** reuse the fleet-wide Sys Admin token: this repo
-  is **public**.
-- **The verify step is not redundant.** `rsync` exiting 0 proves bytes moved, not that the origin serves
-  the new build. The three-URL assertion is what makes a green check mean something.
+```powershell
+# preview — safe, changes nothing
+powershell -File "c:/Users/robiu/antigravity/Projects/Israeli services sites/ops/deploy-site.ps1" -Domain thermoleak.co.il -DryRun
 
-## Before you push
-
-Run `/qa-build-gate` end to end. Its stop-ship list applies — in particular:
-
-- no `aggregateRating` in the export without a verifiable public source (currently on all 13 pages);
-- no `<title>` with the brand zero times or twice;
-- no missing canonical, no route absent from the sitemap.
-
-Because the push *is* the deploy, "I'll fix it after I see it live" costs a second production deploy and
-a window of broken pages.
-
-## Deploying is a production mutation — always ask
-
-**Never commit to `main` as the last step of a task unless you were asked to.** Not "while I'm here",
-not "to test the pipeline". Build, gate, report, and let the user decide when it ships.
-
-If work needs to land without deploying, use a branch and open a PR — the workflow only fires on `main`.
-
-## After a deploy
-
-```bash
-curl -sSI https://thermoleak.co.il/ | head -20
-curl -sS https://thermoleak.co.il/services/water-leak-detection/ | grep -o '<title>[^<]*</title>'
-curl -sS https://thermoleak.co.il/robots.txt
-curl -sS https://thermoleak.co.il/sitemap.xml | grep -c '<url>'      # expect 11
-curl -sL -o /dev/null -w '%{http_code}\n' https://thermoleak.co.il/some-missing-page/   # expect 404
+# execute — only after the user asks
+powershell -File "c:/Users/robiu/antigravity/Projects/Israeli services sites/ops/deploy-site.ps1" -Domain thermoleak.co.il -Confirm
 ```
 
-Check: the page is the new build; the title carries the brand exactly once; `robots.txt` matches what
-`app/robots.ts` intends (**Cloudflare can prepend a managed block** — see `/aeo-answer-content`); the
-sitemap lists 11 URLs; the 404 actually returns 404 via the `.htaccess` `ErrorDocument`; and any new
-`public/.htaccess` header entries actually appear in the response (`/web-security-headers`).
+Other flags: `-BuildOnly` (build + output gate, no upload), `-DeployOnly` (ship the existing `out/`
+as-is), `-SkipDriftCheck` (only when the roster is knowingly ahead of DNS — never to silence a
+failing check).
+
+## What the script does, and why each step exists
+
+1. Resolves the Pages project from the fleet roster (`thermoleak`).
+2. **Drift check** — asks the Cloudflare API whether that project actually serves this domain.
+3. Installs dependencies and clears `.next/` when needed (the staleness traps that produce a
+   successful build of the wrong code).
+4. `npm run build`.
+5. **Output gate** on `out/` — refuses to ship a broken or truncated export.
+6. Preserves the previous `out/` as `out.prev/` so a rollback is one command.
+7. `npx wrangler pages deploy .\out --project-name thermoleak --branch main`.
+8. Appends the result to the hub's `logs/deploys.csv`.
+
+Credentials (`CLOUDFLARE_TOKEN_main`, `CLOUDFLARE_ACCOUNT_main`) come from the Sys Admin control
+plane's `secrets/.env` — never from this repo, which is **public**.
+
+## Before you deploy
+
+Run `/qa-build-gate` end to end. Its stop-ship list applies — in particular, no `aggregateRating`
+or `Review` in the export without a verifiable public source, no title with the brand zero times or
+twice, no missing canonical on an indexable route.
+
+`public/_headers` and `public/_redirects` ship inside `out/` — a deploy is what activates changes
+to them. There is no `.htaccess`; that file died with the Apache origin.
+
+## After you deploy
+
+```bash
+curl -sI  https://thermoleak.co.il/pricing/ | head -5          # 200 — a new-build route
+curl -s   https://thermoleak.co.il/ | grep -o '<title>[^<]*</title>'
+curl -sI  https://thermoleak.co.il/reviews/ | grep -iE '^HTTP|location'   # 301 -> /about/
+curl -s   https://thermoleak.co.il/sitemap.xml | grep -c '<url>'          # 11
+curl -sI  https://thermoleak.co.il/ | grep -iE 'strict-transport|x-frame' # _headers live
+curl -s   https://thermoleak.co.il/robots.txt                             # managed block state
+```
+
+Check: a **new-build** route answers (not just old ones); the title carries the brand exactly once;
+the `_headers` entries actually appear; `robots.txt` reflects the intended AI-crawler stance
+(**Cloudflare prepends a managed block** — see `/aeo-answer-content`).
 
 ## Rollback
 
-There is **no `out.prev/`** on this pipeline, and `--delete` means the previous docroot contents are
-gone. Rollback options, in order:
-
-1. **`git revert` the offending commit and push.** The pipeline rebuilds and re-syncs. This is the
-   normal path and takes one deploy cycle.
-2. **`workflow_dispatch`** the workflow from an earlier commit if you need a specific known-good build.
-3. Cloudflare cannot roll you back — it isn't serving cached HTML.
-
-Because reverting is the rollback, keep commits small enough to revert cleanly.
+`out.prev/` holds the previous export: `npx wrangler pages deploy .\out.prev --project-name
+thermoleak --branch main`. Cloudflare Pages also keeps prior deployments in its dashboard and can
+roll back there, which is often faster — offer both and let the user choose. `git revert` fixes the
+source but does **not** touch production until someone deploys.
 
 ## Rules
 
-- **Never push to `main` without being asked.** The push is the deploy.
-- Never deploy with `/qa-build-gate` stop-ship items outstanding.
-- Never add an origin-side HTTPS redirect to `public/.htaccess` — Cloudflare already forces HTTPS and
-  the origin rule loops.
-- Never reinstate the cache purge without a caching rule that justifies it, and never with the
-  fleet-wide token in a public repo.
-- Zone settings (AI crawler policy, cache rules, Scrape Shield) are the owner's to change; a deploy does
-  not touch them. Note Scrape Shield's email obfuscation **is** on — that's what `EmailOff` works
-  around, so don't "clean up" that component.
+- **Never deploy without being asked.** Not as the last step of a task, not "while I'm here".
+- Never use `-SkipDriftCheck` to make a failing deploy pass — a drift failure means the upload
+  would go somewhere nobody can see, which is exactly the 15-day incident.
+- Never verify a deploy by status codes on old routes; assert content only the new build has.
+- Zone settings (AI crawler policy, Scrape Shield, cache rules) are the owner's to change; a deploy
+  does not touch them. Scrape Shield email obfuscation applies to Pages responses too — `EmailOff`
+  stays.

@@ -132,5 +132,5 @@ page needs inbound links from the footer, from `/services/`, and from at least o
 - **Never** a `LocalBusiness` node per city. This business has no premises at all; one node is the
   honest count.
 - Never invent a review, rating, neighbourhood or coordinate to fill a local-SEO checkbox.
-- Adding twelve city pages in one commit is not a local-SEO strategy; it is a doorway cluster with a
-  deploy attached — and here every push to `main` ships straight to production.
+- Adding twelve city pages in one batch is not a local-SEO strategy; it is a doorway cluster waiting
+  for a deploy — and there is no staging environment between the ops script and production.

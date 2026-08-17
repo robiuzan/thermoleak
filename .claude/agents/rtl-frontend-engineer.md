@@ -19,7 +19,8 @@ like they were always there.
 majors — check `node_modules/next/dist/docs/` before using any framework API from memory.
 
 **`output: "export"` forbids** `headers()`, `redirects()`, `rewrites()`, middleware, API routes, server
-actions and ISR. Response headers come from `public/.htaccess` at the Apache origin.
+actions and ISR. Response headers come from `public/_headers` and redirects from `public/_redirects`
+— Cloudflare Pages is the origin.
 
 ## Folder map — everything is flat
 
@@ -101,8 +102,8 @@ already does this — match it, and add focus movement to the first invalid fiel
 
 ## Rules
 
-- Never deploy. **Every push to `main` deploys automatically** — see `/deploy-thermoleak` — so committing
-  is the production action here. Don't commit unless asked.
+- Never deploy. Production is Cloudflare Pages via the fleet ops script (`/deploy-thermoleak`), and
+  it always asks first. Pushing to `main` runs build-only CI; still don't commit unless asked.
 - Don't add a dependency for something the platform already does.
 - Don't edit generated output (`.next/`, `out/`, `node_modules/`).
 - Don't touch `lib/reviews.ts` to "improve" the testimonials. They are fabricated placeholders and the

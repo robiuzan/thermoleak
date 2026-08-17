@@ -1,112 +1,94 @@
 ---
 name: web-security-headers
-description: Security posture for a static export on cPanel behind Cloudflare — public/.htaccess for HSTS, X-Frame-Options and Permissions-Policy, why the CSP is unusually cheap on a site with no third-party scripts, the no-origin-redirect rule, the WhatsApp-only form and its PII surface, the EmailOff markers, and secret hygiene in a PUBLIC repo. Use when adding headers, planning a CSP, or auditing security. Triggers "security headers", "CSP", "HSTS", ".htaccess", "is the form safe", "clickjacking".
+description: Security posture for a static export on Cloudflare Pages — public/_headers for HSTS, X-Frame-Options and Permissions-Policy, why the CSP is unusually cheap on a site with no third-party scripts, public/_redirects, the WhatsApp-only form and its PII surface, the EmailOff markers, and secret hygiene in a PUBLIC repo. Use when adding headers, planning a CSP, or auditing security. Triggers "security headers", "CSP", "HSTS", "_headers", "is the form safe", "clickjacking".
 ---
 
 # Security headers & posture
 
-`output: "export"` means Next's `headers()` is unavailable. Headers here come from
-**`public/.htaccess`**, read by Apache on the cPanel origin, with Cloudflare proxying in front.
+`output: "export"` means Next's `headers()` is unavailable. **Cloudflare Pages is the origin**
+(since the 2026-08-02 cutover) and reads **`public/_headers`**, so headers are one file.
 
-> ⚠️ This is **not** a Cloudflare Pages site. There is no `public/_headers` file and adding one does
-> nothing. The fleet's Pages sites use `_headers`; this one uses `.htaccess`.
+> ⚠️ There is no `.htaccess` — the Apache/cPanel origin is retired. An `.htaccess` in `public/`
+> would deploy as a plain downloadable file and do nothing. The old rsync pipeline ran green
+> against the retired server for 15 days (see `/deploy-thermoleak`), so **always verify headers
+> against the live response, never against the repo's intent.**
 
-## What `public/.htaccess` currently does
+## What ships today (`public/_headers`, verified live 2026-08-17)
 
-```apache
-ErrorDocument 404 /404.html
-# mod_expires rules for css/js/svg/webp/woff2
-# Cache-Control: public, max-age=31536000, immutable  on (css|js|woff2|svg)
+```
+/*
+  Strict-Transport-Security: max-age=31536000
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
 ```
 
-That's all. **No HSTS, no X-Frame-Options, no Permissions-Policy, no X-Content-Type-Options, no
-Referrer-Policy, no CSP.** Some of these may be supplied by Cloudflare — **verify against the live
-response before declaring anything missing:**
+Notes on the choices:
+
+- **HSTS is deliberately without `includeSubDomains`** (mail/webmail service subdomains are not
+  guaranteed HTTPS) and **without `preload`** (near-irreversible — owner's call, business-facts §F).
+- `SAMEORIGIN` over `DENY` leaves room for a future embed of the site itself.
+- Cloudflare Pages merges `_headers` with its own defaults (`nosniff`, `referrer-policy`); it does
+  not replace them. Duplicates are harmless.
+
+Verify after any deploy:
 
 ```bash
-curl -sSI https://thermoleak.co.il/ | grep -iE 'strict-transport|content-security|x-frame|permissions|x-content-type|referrer|access-control'
+curl -sSI https://thermoleak.co.il/ | grep -iE 'strict-transport|content-security|x-frame|permissions|x-content-type|referrer'
 ```
-
-## The rule that must not be broken
-
-`public/.htaccess` opens with its own warning:
-
-> HTTPS redirect is handled by Cloudflare ("Always Use HTTPS"); do **NOT** add one here or it can loop.
-
-Any header work must preserve that. An origin-side HTTPS rewrite behind an orange-cloud proxy is a
-classic redirect loop.
-
-## The `.htaccess` baseline to propose
-
-```apache
-<IfModule mod_headers.c>
-  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
-  Header always set X-Frame-Options "SAMEORIGIN"
-  Header always set X-Content-Type-Options "nosniff"
-  Header always set Referrer-Policy "strict-origin-when-cross-origin"
-  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()"
-</IfModule>
-```
-
-Notes before shipping this:
-
-- **HSTS `preload` is close to irreversible.** Ship `max-age` first, without the `preload` token, and
-  only add it if the owner accepts that the domain and every subdomain must stay HTTPS indefinitely.
-- `SAMEORIGIN` over `DENY` leaves room for a future Business Profile or map embed of the site itself.
-- Wrap everything in `<IfModule mod_headers.c>` — the existing file already does, because a missing
-  module on a shared host turns a bare `Header` directive into a 500.
-- Cloudflare may already add some of these. Adding a duplicate is usually harmless but check for
-  conflicting values, not just presence.
 
 ## CSP — unusually cheap here, so don't waste it
 
 Most sites can't ship a tight CSP because an inline analytics snippet needs a nonce a static export
-can't generate. **This site has no analytics, no GTM, and no third-party script of any kind.** The only
-`dangerouslySetInnerHTML` is `components/EmailOff.tsx`, injecting two build-time constant HTML comments
-(`<!--email_off-->` / `<!--email_on-->`) — never user input, and comments carry no script.
+can't generate. **This site has no analytics, no GTM, and no third-party script of any kind.** The
+only `dangerouslySetInnerHTML` is `components/EmailOff.tsx`, injecting two build-time constant HTML
+comments — never user input, and comments carry no script.
 
-So a genuinely strict policy is achievable:
+So a genuinely strict policy is achievable, in `public/_headers`:
 
-```apache
-Header always set Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self'; connect-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
+```
+/*
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self'; connect-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
 ```
 
-- `'unsafe-inline'` in `style-src` stays — Next emits inline styles, and removing it costs more than
-  it's worth here.
-- No `script-src` allowlist is needed **today**. The moment GTM is installed (`/tracking-analytics`)
-  this needs `https://www.googletagmanager.com`, `https://www.google-analytics.com`, a `frame-src` for
-  the `<noscript>` iframe, and either a hash or `'unsafe-inline'` for the bootstrap snippet. Do that
-  work in the same pass as the install, not as a later audit.
-- The form posts nowhere, so `form-action 'self'` is accurate — it does not need `api.web3forms.com`
-  like the fleet siblings.
+- `'unsafe-inline'` in `style-src` stays — Next emits inline styles.
+- No `script-src` allowlist is needed **today**. The moment GTM is installed
+  (`/tracking-analytics`), this needs `googletagmanager.com`, `google-analytics.com`, a
+  `frame-src` for the `<noscript>` iframe, and a hash or `'unsafe-inline'` for the bootstrap
+  snippet. Do that work in the same pass as the install.
+- The form posts nowhere, so `form-action 'self'` is accurate — no `api.web3forms.com` needed,
+  unlike the fleet siblings.
 
-**Process:** ship report-only → observe real traffic for at least a week → then tighten and enforce.
-Shipping an enforcing CSP untested breaks something silently, and on a lead-gen site that is a revenue
-bug.
+**Process:** ship report-only → observe real traffic for at least a week → then tighten and
+enforce. An untested enforcing CSP breaks something silently, and on a lead-gen site that is a
+revenue bug.
+
+## `public/_redirects`
+
+Carries the `/reviews/` → `/about/` 301 (the page was removed 2026-08-17 with the fabricated
+testimonials). Any future slug rename needs its 301 here — Pages format, one rule per line.
 
 ## The lead form
 
-- `components/ContactForm.tsx` **does not POST anywhere.** It builds a Hebrew message from the field
-  values and hands it to `window.open(whatsappHref(...))` — the visitor's own data going to the
-  visitor's own WhatsApp client. No endpoint, no access key, no server-side store.
-- The roster records `formAccessKey: null` **by design** — this site is deliberately not on Web3Forms
-  like its nine fleet siblings. Don't "fix" that without a decision.
-- There is **no honeypot** and no rate limiting, which matters far less with no endpoint to abuse.
-- **Consent:** the form collects name, phone, area and free text. `/privacy/` exists and is substantive
-  but the form never links to it. Add the link (see `/conversion-cro`).
-- **No PII anywhere else.** There is no `dataLayer` today; when analytics lands, keep it that way — the
-  form has name and phone in scope at submit time, so this is a real risk, not a theoretical one.
+- `components/ContactForm.tsx` **does not POST anywhere.** It hands the visitor's own data to the
+  visitor's own WhatsApp client via a deep link, then routes to `/thank-you/`. No endpoint, no
+  access key, no server-side store.
+- The roster records `formAccessKey: null` **by design** — this site is deliberately not on
+  Web3Forms like its fleet siblings. Don't "fix" that without a decision.
+- **Consent:** the form links to `/privacy/` and states the data isn't stored — keep both true.
+- **No PII in any future `dataLayer`** — the form has name and phone in scope at submit time.
 
 ## Secret hygiene — the repo is PUBLIC
 
-`.github/workflows/deploy.yml` states it outright and warns against reusing the fleet-wide Sys Admin
-token here. Two things that look like secrets and are not:
-
-- The Google Search Console verification token in `app/layout.tsx:32` — **public by design**.
-- There is no form access key at all.
-
-The real secrets live in GitHub Actions: `SSH_PRIVATE_KEY`, `SSH_HOST`, `SSH_USER`. They are never
-echoed by the workflow. Verify that stays true of any workflow edit.
+- The only key-shaped string in the repo is the Google Search Console verification token in
+  `app/layout.tsx` — **public by design**, not a leak.
+- Deploy credentials (`CLOUDFLARE_TOKEN_main` / `CLOUDFLARE_ACCOUNT_main`) live in the Sys Admin
+  control plane's `secrets/.env`, consumed by the fleet ops script. **Nothing in this repo or its
+  CI holds a credential** — the old SSH secrets were removed with the rsync path.
 
 ```bash
 npm audit --omit=dev    # runtime — matters
@@ -115,38 +97,21 @@ npm audit               # includes dev — usually informational for a static ex
 
 Report the two separately. A devDependency advisory does not ship to users here.
 
-## The deploy chain as attack surface
-
-Every push to `main` builds and rsyncs `./out/` to the docroot with `--delete` over SSH. Assess honestly:
-
-- `--delete` makes the docroot exactly match the build; `.well-known` is excluded so cPanel AutoSSL
-  keeps working. Both correct.
-- `StrictHostKeyChecking=accept-new` trusts the host on first contact — acceptable for a fixed known
-  host, worth noting.
-- **There is no manual gate.** A bad merge or a compromised branch ships straight to production. That is
-  the single most consequential security property of this repo, and it is a process control, not a code
-  fix.
-- The workflow deliberately has **no Cloudflare cache-purge step**, and its comment block explains why
-  (HTML is served uncached; a purge that could only ever fail was masking real failures). Don't
-  reinstate it without a caching rule to justify it, and if you do, mint a token scoped to
-  Zone → Cache Purge on this zone alone.
-
 ## Checklist
 
-- [ ] Headers verified with `curl -sSI` against the **live** site, before and after any change.
-- [ ] `public/.htaccess` additions wrapped in `<IfModule mod_headers.c>`.
-- [ ] **No** origin-side HTTPS redirect added.
-- [ ] HSTS without `preload` unless the owner has explicitly accepted it.
-- [ ] CSP is **report-only** and has been observed for a full week including a real form submit.
-- [ ] Form links to `/privacy/`.
-- [ ] No PII in any future `dataLayer`.
+- [ ] `public/_headers` changes verified with `curl -sSI` against the **live** site after deploy —
+      a header edit does nothing until the site is redeployed (`/deploy-thermoleak`).
+- [ ] HSTS without `preload`/`includeSubDomains` unless the owner has explicitly accepted them.
+- [ ] CSP is **report-only** and observed for a full week (including a real form submit) before
+      enforcing.
+- [ ] No PII in `dataLayer`.
 - [ ] `npm audit --omit=dev` clean or triaged.
-- [ ] No secrets in a public repo; workflow never echoes them.
+- [ ] No credentials anywhere in this public repo.
 
 ## Gotchas
 
-- Never verify a header from the repo. Cloudflare adds, merges and sometimes overrides.
-- `_headers` files do nothing here. This is Apache, not Cloudflare Pages.
+- Never verify a header from the repo. Pages merges its defaults, and a stale deploy serves stale
+  headers.
+- A CSP that blocks `googletagmanager.com` after GTM lands silently kills every conversion signal.
 - Zone-level settings (Scrape Shield, AI Crawl Control, cache rules) are the **owner's** to change.
-  Document the toggle; never assume it was flipped. Note that Scrape Shield's email obfuscation **is**
-  active on this zone — that's what `EmailOff` exists to work around.
+  Scrape Shield's email obfuscation applies to Pages responses too — `EmailOff` stays.
