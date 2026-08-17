@@ -1,9 +1,11 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
-import { Send, CheckCircle2 } from "lucide-react";
+import { useRef, useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Send } from "lucide-react";
 import { services } from "@/lib/services";
-import { site, whatsappHref } from "@/lib/site";
+import { whatsappHref } from "@/lib/site";
 
 interface FormState {
   name: string;
@@ -14,6 +16,10 @@ interface FormState {
 }
 
 type Errors = Partial<Record<keyof FormState, string>>;
+
+// Handoff to /thank-you/: the composed message plus whether window.open succeeded, so the
+// thank-you page can offer a manual re-open when a popup blocker swallowed the first attempt.
+export const LEAD_HANDOFF_KEY = "tl-lead";
 
 const initialState: FormState = {
   name: "",
@@ -39,9 +45,12 @@ const fieldClasses =
   "w-full rounded-xl border bg-white px-4 py-3 text-ink placeholder:text-ink/40 focus:border-brand focus:outline-none";
 
 export default function ContactForm() {
+  const router = useRouter();
   const [values, setValues] = useState<FormState>(initialState);
   const [errors, setErrors] = useState<Errors>({});
-  const [submitted, setSubmitted] = useState(false);
+  const nameRef = useRef<HTMLInputElement>(null);
+  const phoneRef = useRef<HTMLInputElement>(null);
+  const areaRef = useRef<HTMLInputElement>(null);
 
   function update<K extends keyof FormState>(key: K, value: string) {
     setValues((prev) => ({ ...prev, [key]: value }));
@@ -51,7 +60,13 @@ export default function ContactForm() {
     event.preventDefault();
     const nextErrors = validate(values);
     setErrors(nextErrors);
-    if (Object.keys(nextErrors).length > 0) return;
+    if (Object.keys(nextErrors).length > 0) {
+      // Move focus to the first invalid field so the error is reachable and announced.
+      if (nextErrors.name) nameRef.current?.focus();
+      else if (nextErrors.phone) phoneRef.current?.focus();
+      else areaRef.current?.focus();
+      return;
+    }
 
     const lines = [
       "שלום, פנייה חדשה מהאתר:",
@@ -61,35 +76,19 @@ export default function ContactForm() {
       `שירות: ${values.service}`,
     ];
     if (values.message.trim()) lines.push(`פרטים: ${values.message}`);
+    const message = lines.join("\n");
 
-    window.open(whatsappHref(lines.join("\n")), "_blank", "noopener,noreferrer");
-    setSubmitted(true);
-  }
-
-  if (submitted) {
-    return (
-      <div
-        role="status"
-        className="rounded-2xl border border-[#25D366]/50 bg-[#25D366]/10 p-6 text-center"
-      >
-        <CheckCircle2 className="mx-auto mb-3 size-10 text-[#0e7468]" aria-hidden="true" />
-        <h3 className="text-lg font-bold text-brand">הפנייה מוכנה לשליחה בוואטסאפ</h3>
-        <p className="mt-2 text-sm leading-relaxed text-ink/70">
-          אם חלון הוואטסאפ לא נפתח אוטומטית, אפשר להתקשר אלינו ישירות בטלפון {site.phone.display}.
-        </p>
-        <button
-          type="button"
-          onClick={() => {
-            setSubmitted(false);
-            setValues(initialState);
-            setErrors({});
-          }}
-          className="mt-4 text-sm font-semibold text-brand underline"
-        >
-          שליחת פנייה נוספת
-        </button>
-      </div>
-    );
+    // window.open inside the submit gesture is normally allowed; a popup blocker returns null.
+    // Either way we continue to /thank-you/, which reads this handoff and offers a manual
+    // re-open — so a blocked popup can never silently lose the lead (backlog §8.1).
+    const win = window.open(whatsappHref(message), "_blank");
+    if (win) win.opener = null;
+    try {
+      sessionStorage.setItem(LEAD_HANDOFF_KEY, JSON.stringify({ message, opened: win !== null }));
+    } catch {
+      // Storage unavailable (private mode) — the thank-you page falls back to a generic link.
+    }
+    router.push("/thank-you/");
   }
 
   return (
@@ -103,6 +102,7 @@ export default function ContactForm() {
           name="name"
           type="text"
           autoComplete="name"
+          ref={nameRef}
           value={values.name}
           onChange={(event) => update("name", event.target.value)}
           aria-invalid={errors.name ? true : undefined}
@@ -128,6 +128,7 @@ export default function ContactForm() {
           autoComplete="tel"
           dir="ltr"
           placeholder="050-0000000"
+          ref={phoneRef}
           value={values.phone}
           onChange={(event) => update("phone", event.target.value)}
           aria-invalid={errors.phone ? true : undefined}
@@ -151,6 +152,7 @@ export default function ContactForm() {
           type="text"
           autoComplete="address-level2"
           placeholder="לדוגמה: תל אביב"
+          ref={areaRef}
           value={values.area}
           onChange={(event) => update("area", event.target.value)}
           aria-invalid={errors.area ? true : undefined}
@@ -200,13 +202,17 @@ export default function ContactForm() {
 
       <button
         type="submit"
+        data-cta="form-whatsapp"
         className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-accent-strong px-6 py-3.5 text-base font-bold text-white transition-colors hover:bg-[#9a3412] focus-visible:outline-none"
       >
         <Send className="size-5" aria-hidden="true" />
         שליחת פנייה בוואטסאפ
       </button>
-      <p className="text-center text-xs text-ink/50">
-        בלחיצה על הכפתור תיפתח שיחת וואטסאפ עם הפרטים שמילאתם. לא נשמור פרטים ללא הסכמתכם.
+      <p className="text-center text-xs leading-relaxed text-ink/70">
+        בלחיצה על הכפתור תיפתח שיחת וואטסאפ עם הפרטים שמילאתם — הם אינם נשמרים אצלנו.{" "}
+        <Link href="/privacy" className="font-semibold text-brand underline">
+          מדיניות פרטיות
+        </Link>
       </p>
     </form>
   );
