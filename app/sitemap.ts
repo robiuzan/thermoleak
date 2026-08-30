@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { canonicalUrl } from "@/lib/site";
 import { serviceSlugs } from "@/lib/services";
 import { articles } from "@/lib/articles";
+import { locations } from "@/lib/locations";
 
 // Required for `output: "export"` — emit a static sitemap.xml at build time.
 export const dynamic = "force-static";
@@ -51,5 +52,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticEntries, ...serviceEntries, ...guideEntries];
+  // The /locations/ index ships only once at least one city has passed the doorway gate — an
+  // index page pointing at nothing is worse than no index (docs/content-standards.md §2).
+  const locationEntries: MetadataRoute.Sitemap =
+    locations.length === 0
+      ? []
+      : [
+          {
+            url: canonicalUrl("/locations"),
+            lastModified: "2026-08-24",
+            changeFrequency: "monthly" as const,
+            priority: 0.8,
+          },
+          ...locations.map((location) => ({
+            url: canonicalUrl(`/locations/${location.slug}`),
+            lastModified: "2026-08-24",
+            changeFrequency: "monthly" as const,
+            priority: 0.7,
+          })),
+        ];
+
+  return [...staticEntries, ...serviceEntries, ...guideEntries, ...locationEntries];
 }

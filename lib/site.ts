@@ -119,6 +119,7 @@ export const navLinks: NavLink[] = [
   { href: "/", label: "בית" },
   { href: "/services", label: "שירותים" },
   { href: "/pricing", label: "מחירון" },
+  { href: "/locations", label: "אזורי שירות" },
   { href: "/guides", label: "מדריכים" },
   { href: "/about", label: "אודות" },
   { href: "/contact", label: "צור קשר" },

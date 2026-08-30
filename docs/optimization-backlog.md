@@ -147,10 +147,13 @@ reality. `/contact/` 248 unique (floor 200) — what happens after you make cont
 ready. Note `/about/` remains short of its POTENTIAL until §7.3/§7.5 land: it was thin because
 nobody is named on it.
 
-**3.4 🟠 No location silo.** `site.serviceAreas` names 12 cities rendered as plain text chips with no
-routes. The entire Tier-2 local layer is unexpressed. **This is an opportunity, not yet a defect** —
-and building it badly (12 find-and-replace pages) would be far worse than leaving it. Gate:
-content-standards §2, procedure: `/new-city`.
+**3.4 🟠 Location silo — 3 of 12 shipped (2026-08-24).** `/locations/` is live with תל אביב,
+חולון and בת ים. Gated by an adversarially-verified assessment (49 agents) that found ALL 12 areas
+have qualifying claims — the cap to three is a deliberate depth/doorway decision, not a claim
+shortage. Each page: 674–745 unique words (floor 350), a 40–60 word answer block, 6–7 city-specific
+claims, 2 local FAQs, bidirectional `nearby`, and `Service` + `City` areaServed (never a
+per-city `LocalBusiness`). Doorway test verified in the export — the three pages share no proper
+nouns. The other 9 are queued with claims intact in business-facts §E.
 
 **3.5 🟠 Shipped, two of three under floor (2026-08-24).** `/guides/` is live with three articles
 built on a typed block model (`lib/articles.ts`) so `FAQPage` is DERIVED from the copy and cannot
@@ -208,7 +211,9 @@ questions all match visible rendered text.
 roster) and appear only via `lib/site.ts` — no literals anywhere. The address-free `PostalAddress`
 (region + country) is the right shape for a service-area business.
 
-**5.2 🟠 No local landing pages.** See §3.4. Largest local opportunity on the site.
+**5.2 🟠 Tier-2 layer opened (2026-08-24).** Three location pages ship, replacing the plain-text
+chips that previously left every `{service} ב{city}` query unexpressed. Expansion is gated on
+depth being sustained, and on the one thing research cannot supply: a real job reference per city.
 
 **5.3 🔴 No Google Business Profile link anywhere.** For a service-area trade business this is the top
 local lever: the map pack, the review surface, and the only legitimate source for the rating in §4.1.

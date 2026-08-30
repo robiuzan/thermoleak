@@ -153,6 +153,39 @@ claim in `serviceAreaText` is broader than `areaServed`.
 | Realistic same-day radius                          | "זמינות מהירה" is claimed sitewide                                    | `lib/site.ts`           |       | 🔶     |
 | Is there a Google Business Profile address to hide? | Service-area profiles must not contradict the site                   | GBP                     |       | 🔶     |
 
+### 🔶 Location silo — 3 built, 9 deferred (gate run 2026-08-24)
+
+An adversarially-verified gate (49 agents: 12 assessments, 36 refutation passes across three
+lenses, 1 synthesis) found that **all 12 service areas have 3+ true, publicly verifiable,
+city-specific claims available.** That answered *could we* — not *should we*.
+
+**Built:** תל אביב-יפו · חולון · בת ים — chosen as a geographically contiguous cluster (so the
+`nearby` edges are honest), zero unverifiable claims each, and the largest combined market in
+the core service area.
+
+**Deferred, with verified claims preserved** so the next batch is a data edit, not a re-run.
+Order is by strength of verified claim set:
+
+| City | km | Verified claims | Strongest local angle |
+| --- | --- | --- | --- |
+| רמת גן | 6 | 13 | רמת גן היא מהערים המובילות בישראל בהיקף פרויקטי תמ״א 38 והתחדשות עירונית. זה מייצר כאן שני סוגי קריאות שונים ל… |
+| גבעתיים | 5 | 11 | גבעתיים בנויה על ארבע גבעות — בורוכוב, קוזלובסקי, גבעת רמב״ם וגבעת פועלי הרכבת — וגבעת קוזלובסקי מתנשאת לכ-87 … |
+| הרצליה | 14 | 6 | בשכונת יד התשעה שבהרצליה עומדים כ-94 ״בנייני רכבת״ ישנים, בני שתיים־שלוש כניסות, שהוקמו ברובם בסוף שנות ה-50. … |
+| פתח תקווה | 12 | 9 | אם המושבות החדשה, בצפון-מערב פתח תקווה, החלה להיבנות ב-2003, ואופי הבנייה בה הוא בנייני מגורים בני 9–23 קומות … |
+| ראשון לציון | 20 | 4 | רמת אליהו נמצאת בתוך אחת מתכניות הפינוי־בינוי הגדולות בישראל, המשתרעת על כ־633 דונם — כך שבאותה שכונה עומדים ז… |
+| רעננה | 20 | 9 | שכונת קריית שרת שבצפון רעננה הוקמה בשנות ה־50 כשכונת עולים, וחלק ניכר ממנה עדיין בנוי מ״בנייני רכבת״ בני שלוש … |
+| כפר סבא | 23 | 11 | בכפר סבא המים אינם מסופקים על ידי תאגיד מים עירוני רגיל, אלא על ידי מפעל המים כפר סבא — אגודה חקלאית שיתופית ה… |
+| ראש העין | 25 | 11 | ראש העין הוקמה ב-1949 כמעברה לעולי תימן, ובתי הקבע הראשונים נבנו החל מ-1951 — כלומר חלק ניכר מהמלאי הוותיק במע… |
+| מודיעין | 40 | 10 | מודיעין היא עיר מתוכננת חדשה: הבנייה בה החלה ב-1994 והאכלוס הראשון היה ביולי 1996. משמעות הדבר היא שכל בנייני … |
+
+**⚠️ EVERY claim in this silo — built and deferred — needs owner confirmation.** They are
+adversarially checked against public sources, not sourced by someone who has worked in those
+buildings. Verification is not truth. Correct anything wrong.
+
+**The one thing that would most strengthen every page:** a real job reference per city. That is
+the strongest doorway-test item and the only one research cannot supply.
+
+
 ## F. Infrastructure — owner-only changes
 
 | Field                              | Why it's needed                                                                                                                                                                        | Lands in         | Value | Status |

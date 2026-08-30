@@ -77,6 +77,35 @@ export function serviceJsonLd(service: Service) {
   };
 }
 
+// Service node for a location page. NOTE what this deliberately is NOT: a `LocalBusiness` per city.
+// This business has NO premises at all, so one node is the honest count — a LocalBusiness per city
+// implies premises that do not exist and is a recognised local-spam pattern (docs/schema-graph.md §5).
+export function locationServiceJsonLd(location: {
+  slug: string;
+  name: string;
+  kind: "city" | "region";
+  prefixed: string;
+  answer: string;
+}) {
+  const url = canonicalUrl(`/locations/${location.slug}`);
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${url}#service`,
+    name: `איתור נזילות ${location.prefixed}`,
+    serviceType: "איתור נזילות",
+    description: location.answer,
+    url,
+    provider: { "@id": businessId },
+    // A region typed as a City is a factual error in the graph, which is why `kind` exists.
+    areaServed: {
+      "@type": location.kind === "region" ? "AdministrativeArea" : "City",
+      name: location.name,
+    },
+    inLanguage: "he-IL",
+  };
+}
+
 export function faqPageJsonLd(faqs: ServiceFaq[]) {
   return {
     "@context": "https://schema.org",
