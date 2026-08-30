@@ -91,8 +91,17 @@ export default function ContactForm() {
     router.push("/thank-you/");
   }
 
+  const errorCount = Object.keys(errors).length;
+
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-4" aria-label="טופס פנייה מהירה">
+      {/* WCAG 4.1.3 Status Messages: focus moves to the first invalid field, but that alone does
+          not tell the user HOW MANY fields failed — and on a phone the others are off-screen.
+          A polite live region announces the count without stealing focus. */}
+      <p role="status" aria-live="polite" className="sr-only">
+        {errorCount > 0 ? `נמצאו ${errorCount} שגיאות בטופס. נא לתקן ולשלוח שוב.` : ""}
+      </p>
+
       <div>
         <label htmlFor="name" className="mb-1 block text-sm font-semibold text-ink">
           שם מלא <span className="text-accent-strong">*</span>

@@ -88,6 +88,42 @@ export function faqPageJsonLd(faqs: ServiceFaq[]) {
   };
 }
 
+// Page-type nodes (docs/schema-graph.md §2). Each ties the page to the business node so the graph
+// is connected rather than a set of orphans. `Offer`/`PriceSpecification` is deliberately NOT here:
+// it is blocked on price confirmation (docs/business-facts.md §C) and must never ship a guessed
+// value.
+interface PageNodeOptions {
+  path: string;
+  name: string;
+  description: string;
+}
+
+function pageNode(type: string, { path, name, description }: PageNodeOptions) {
+  return {
+    "@context": "https://schema.org",
+    "@type": type,
+    "@id": `${canonicalUrl(path)}#page`,
+    url: canonicalUrl(path),
+    name,
+    description,
+    inLanguage: "he-IL",
+    isPartOf: { "@id": `${site.domain}/#website` },
+    about: { "@id": businessId },
+  };
+}
+
+export function aboutPageJsonLd(options: PageNodeOptions) {
+  return pageNode("AboutPage", options);
+}
+
+export function contactPageJsonLd(options: PageNodeOptions) {
+  return pageNode("ContactPage", options);
+}
+
+export function collectionPageJsonLd(options: PageNodeOptions) {
+  return pageNode("CollectionPage", options);
+}
+
 export interface Crumb {
   name: string;
   url: string;

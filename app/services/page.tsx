@@ -7,6 +7,8 @@ import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
 import Process from "@/components/Process";
 import ContactCTA from "@/components/ContactCTA";
+import JsonLd from "@/components/JsonLd";
+import { collectionPageJsonLd } from "@/lib/jsonld";
 
 export const metadata: Metadata = {
   title: "שירותים — איתור נזילות, רטיבות ותרמוגרפיה",
@@ -18,6 +20,13 @@ export const metadata: Metadata = {
 export default function ServicesPage() {
   return (
     <>
+      <JsonLd
+        data={collectionPageJsonLd({
+          path: "/services",
+          name: "השירותים של טרמוליק",
+          description: metadata.description as string,
+        })}
+      />
       <PageHero
         title="השירותים שלנו"
         subtitle="פתרונות איתור תרמי מקיפים לבית, לעסק ולחברות הביטוח — מדויקים, מהירים וללא הרס מיותר."

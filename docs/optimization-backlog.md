@@ -71,16 +71,15 @@ still short), §9.2 (header dropdown), §10.2/§10.4 (image variants, font prelo
 
 ## §1 Technical SEO
 
-**1.1 🟡 The 404 route emits twice.** `out/` contains `/404/index.html`, `/_not-found/index.html` **and**
-`/404.html` — three artifacts for one route. Cloudflare Pages serves the root `/404.html` natively as
-the custom 404, so the served behaviour is correct, but the two directory variants are crawlable URLs
-with identical thin content. Confirm they stay excluded from the sitemap (they are) and consider a
-`public/_redirects` 301 for the directory forms.
+**1.1 ✅ (2026-08-24) Resolved.** `/404/` and `/_not-found/` now 301 to `/` via
+`public/_redirects`; `/404.html` is untouched because Cloudflare Pages serves it natively as the
+custom 404. The two thin crawlable duplicates are gone.
 
-**1.2 🟠 `staticRoutes` in `app/sitemap.ts` is a hand-maintained array of 7.** Service entries derive
-from `serviceSlugs` automatically; static pages don't. Add a route and it builds fine while being
-silently absent from `sitemap.xml`. Fix: export one `staticRoutes` const the pages themselves reference,
-or derive from the filesystem at build time.
+**1.2 ✅ (2026-08-24) Closed by assertion rather than derivation.** `scripts/check-sitemap-parity.mjs`
+(`npm run check:sitemap`) fails the build gate if any emitted route is absent from `sitemap.xml`
+without sitting on an explicit, reasoned exclusion list. Filesystem-walking to auto-derive the array
+was rejected as fragile for an 11-route site; the assertion catches the actual failure mode — a page
+added and the sitemap forgotten.
 
 **1.3 🟡 `lastModified: new Date()` stamps build time on all 11 URLs.** Every deploy tells search engines
 every page changed. The signal is worthless — worse than omitting it. Use a real per-route date.
@@ -181,8 +180,10 @@ from `PageHero` using the array it already receives. Target 7.
 **4.4 🟡 `geo` is a placeholder.** `32.0853, 34.7818` is Tel Aviv city centre, emitted as
 `GeoCoordinates` for a business with no premises. Set the real base or drop the field.
 
-**4.5 🟡 Missing node types.** `Offer`/`PriceSpecification` (blocked on business-facts §C),
-`AboutPage` + `Person` (§A), `ContactPage` and `CollectionPage` (**not blocked — ship them**).
+**4.5 🟠 Partially shipped (2026-08-24).** `AboutPage`, `ContactPage` and `CollectionPage` now emit
+via `pageNode()` in `lib/jsonld.ts`, each tied to the business node with `about` and to the site with
+`isPartOf`. **Still open:** `Offer`/`PriceSpecification` — deliberately withheld, blocked on price
+confirmation (business-facts §C). Never ship a guessed price in schema.
 
 **4.6 🔵 `Service` nodes have no `@id`.** Prevents anything referencing them later.
 
@@ -365,17 +366,18 @@ text has no large-text exemption. `text-ink/70` (≈5.7:1) is the nearest passin
 "שמירה על ניגודיות צבעים תקינה בין הטקסט לרקע". While 11.1 stands, that sentence is false. Fix the
 contrast rather than editing the statement down.
 
-**11.3 🟡 Mobile menu is incomplete.** `Navbar.tsx` has `aria-expanded`, `aria-controls` and a
-state-dependent `aria-label` — better than most — but **no Escape handler, no focus trap, no scroll
-lock, and no focus return** to the trigger.
+**11.3 ✅ (2026-08-24) Complete.** The menu now has a focus trap (Tab wraps within the panel, both
+directions), a scroll lock that restores the previous `overflow` value, focus moved into the panel on
+open, and focus returned to the trigger on Escape.
 
 **11.4 🟡 No form focus management.** See §8.5.
 
-**11.5 🔵 Redundant image alt.** `app/services/[slug]/page.tsx` uses `service.h1` as the image `alt`, so
-a screen-reader user hears the heading twice.
+**11.5 ✅ (2026-08-24) Fixed.** The service illustration now carries `alt=""`. It is decorative — an
+abstract graphic directly under an H1 that already states the service name — so an empty alt is
+correct and stops the heading being announced twice.
 
-**11.6 🔵 Tap-target measurement.** The mobile menu button is `p-2` around a 24px icon — close to the
-44px minimum. Measure rather than assume.
+**11.6 ✅ (2026-08-24) Fixed.** The mobile menu button was `p-2` around a 24px icon = 40px, under the
+44px floor. Now `size-11` (exactly 44px).
 
 **✅ Verified good and worth protecting:** the token palette is deliberately split and correct —
 `brand` on white ≈11.4:1, `accent-strong` + white ≈5.2:1 (the CTA colour), with `accent` (≈2.8:1)
@@ -396,10 +398,12 @@ Verified in the live response post-deploy. Still missing: CSP (see 12.2). Histor
 item originally targeted `.htaccess`, written when the repo believed Apache was the origin — it
 wasn't (see the shipped block above).
 
-**12.2 🟡 No CSP — but it is unusually cheap to add.** The site ships **no analytics and no third-party
-script of any kind**, and the only `dangerouslySetInnerHTML` (`EmailOff`) injects build-time constant
-HTML comments. A strict report-only policy needs almost no allowlist today. Installing GTM (§13.1)
-spends that advantage — do the CSP in the same pass.
+**12.2 🟠 Report-only CSP shipped (2026-08-24).** `public/_headers` now carries a strict
+`Content-Security-Policy-Report-Only` (`default-src self`, `script-src self`, `object-src none`,
+`frame-ancestors self`), deliberately written **before** any analytics lands — the policy is free to
+state while the site has zero third-party scripts, and it establishes the baseline. **Still open:**
+promote to enforcing after a full week of real traffic including a form submit. Installing a tag
+manager will require widening `script-src` and adding `frame-src` **in the same commit**.
 
 **12.3 ✅ Minimal data surface.** The form POSTs nowhere; it hands the user's own data to the user's own
 WhatsApp client. No endpoint, no access key, no server-side store. The roster records

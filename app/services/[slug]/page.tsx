@@ -72,9 +72,13 @@ export default async function ServiceDetailPage({ params }: PageProps) {
               <p className="mt-3 leading-relaxed text-ink/80">{service.answer.a}</p>
             </div>
 
+            {/* Decorative: an abstract illustration of the service, sitting directly under an H1
+                that already states the service name. `alt={service.h1}` made a screen reader
+                announce the heading twice (backlog §11.5); an empty alt is the correct choice for
+                an image carrying no information the surrounding text lacks. */}
             <Image
               src={service.image}
-              alt={service.h1}
+              alt=""
               width={600}
               height={400}
               className="mb-8 h-auto w-full rounded-2xl border border-ink/10"

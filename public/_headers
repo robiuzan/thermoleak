@@ -1,13 +1,22 @@
 # Cloudflare Pages headers (the origin since the 2026-08-02 cutover — .htaccess is dead here).
-# Security baseline per docs/optimization-backlog.md §12.1.
+# Security baseline per docs/optimization-backlog.md §12.1 and docs/ux-cro-security.md §5.
 # HSTS deliberately WITHOUT includeSubDomains (mail/webmail subdomains not guaranteed HTTPS)
 # and WITHOUT preload (near-irreversible — owner's call, docs/business-facts.md §F).
+#
+# CSP is REPORT-ONLY on purpose. Shipping it now, BEFORE any analytics lands, is deliberate:
+# the site currently has zero third-party scripts, so the strictest possible policy costs nothing
+# to state and establishes the baseline. Installing a tag manager later will require widening
+# script-src (and adding frame-src) — do that in the SAME commit as the tag, never after.
+# Promote to enforcing (drop "-Report-Only") only after a full week of real traffic, including a
+# real form submission, produces no legitimate violations.
+#   'unsafe-inline' in style-src: Next emits inline styles; removing it costs more than it returns.
 /*
   Strict-Transport-Security: max-age=31536000
   X-Frame-Options: SAMEORIGIN
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self'; connect-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
 
 # Fingerprinted build assets are immutable by construction.
 /_next/static/*

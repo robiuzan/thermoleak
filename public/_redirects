@@ -1,5 +1,13 @@
 # Cloudflare Pages redirects (the origin since the 2026-08-02 cutover).
+
 # /reviews/ removed 2026-08-17 — it carried six fabricated testimonials (docs/business-facts.md §B).
 # Returns as a real page once verifiable reviews exist.
 /reviews /about/ 301
 /reviews/* /about/ 301
+
+# The 404 route emits three ways: /404.html (which Pages serves natively as the custom 404) plus
+# two crawlable directory forms with identical thin content (backlog §1.1). Collapse them onto the
+# homepage so they cannot be indexed as near-duplicates. /404.html itself is NOT redirected — Pages
+# needs it to serve real 404 responses.
+/404/ / 301
+/_not-found/ / 301

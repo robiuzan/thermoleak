@@ -3,6 +3,8 @@ import { site } from "@/lib/site";
 import PageHero from "@/components/PageHero";
 import ContactCTA from "@/components/ContactCTA";
 import Container from "@/components/Container";
+import JsonLd from "@/components/JsonLd";
+import { contactPageJsonLd } from "@/lib/jsonld";
 
 export const metadata: Metadata = {
   title: "צור קשר",
@@ -14,6 +16,13 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <>
+      <JsonLd
+        data={contactPageJsonLd({
+          path: "/contact",
+          name: "צור קשר — טרמוליק",
+          description: metadata.description as string,
+        })}
+      />
       <PageHero
         title="צרו איתנו קשר"
         subtitle="נשמח לעזור לכם לאתר את מקור הבעיה. זמינים בטלפון, בוואטסאפ ובטופס."

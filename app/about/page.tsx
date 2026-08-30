@@ -5,6 +5,8 @@ import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
 import TrustBar from "@/components/TrustBar";
 import ContactCTA from "@/components/ContactCTA";
+import JsonLd from "@/components/JsonLd";
+import { aboutPageJsonLd } from "@/lib/jsonld";
 
 export const metadata: Metadata = {
   // Bare subject only — the layout template appends "| טרמוליק". The previous title contained
@@ -31,6 +33,13 @@ const values = [
 export default function AboutPage() {
   return (
     <>
+      <JsonLd
+        data={aboutPageJsonLd({
+          path: "/about",
+          name: "אודות טרמוליק",
+          description: metadata.description as string,
+        })}
+      />
       <PageHero
         title="קצת עלינו"
         subtitle="מומחים לאיתור נזילות ורטיבות במצלמה תרמית — עם דיוק, שקיפות והרבה ניסיון."

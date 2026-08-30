@@ -25,13 +25,10 @@ export default function Hero() {
             {site.pitch}
           </p>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-            <CtaButton
-              href={telHref}
-              variant="accent"
-              size="lg"
-              dataCta="hero-call"
-              ariaLabel={`התקשרו אלינו: ${site.phone.display}`}
-            >
+            {/* No ariaLabel: the visible text already reads "חייגו עכשיו: 055-660-1006", which is a
+                complete accessible name. An aria-label of "התקשרו אלינו…" would REPLACE it and drop
+                the visible words — a WCAG 2.5.3 (Label in Name) failure. */}
+            <CtaButton href={telHref} variant="accent" size="lg" dataCta="hero-call">
               <Phone className="size-5" aria-hidden="true" />
               חייגו עכשיו: {site.phone.display}
             </CtaButton>

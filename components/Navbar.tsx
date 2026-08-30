@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Menu, X, Phone } from "lucide-react";
 import { navLinks, site, telHref } from "@/lib/site";
@@ -8,24 +8,65 @@ import Container from "./Container";
 import CtaButton from "./CtaButton";
 import Logo from "./Logo";
 
+const FOCUSABLE = 'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
-  // Escape closes the mobile menu and returns focus to the toggle, so a keyboard user is never
-  // stranded inside a closed disclosure (WCAG 2.1.2-adjacent; backlog §11.3).
-  function handleKeyDown(event: React.KeyboardEvent<HTMLElement>) {
-    if (event.key === "Escape" && open) {
-      setOpen(false);
-      menuButtonRef.current?.focus();
+  // Scroll lock while the menu is open, so the page behind it cannot be scrolled away
+  // (backlog §11.3). Restores the previous value rather than assuming it was "".
+  useEffect(() => {
+    if (!open) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [open]);
+
+  // Focus management: move focus into the panel on open, trap Tab inside it while open, and
+  // return focus to the trigger on close. Without this a keyboard user tabs straight out of an
+  // open menu into the page behind it (backlog §11.3).
+  useEffect(() => {
+    if (!open) return;
+    const panel = menuRef.current;
+    if (!panel) return;
+
+    const first = panel.querySelector<HTMLElement>(FOCUSABLE);
+    first?.focus();
+
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setOpen(false);
+        menuButtonRef.current?.focus();
+        return;
+      }
+      if (event.key !== "Tab") return;
+
+      const items = Array.from(panel!.querySelectorAll<HTMLElement>(FOCUSABLE));
+      if (items.length === 0) return;
+      const firstItem = items[0];
+      const lastItem = items[items.length - 1];
+      const active = document.activeElement;
+
+      // The trigger sits outside the panel, so wrap in both directions explicitly.
+      if (event.shiftKey && (active === firstItem || !panel!.contains(active))) {
+        event.preventDefault();
+        lastItem.focus();
+      } else if (!event.shiftKey && active === lastItem) {
+        event.preventDefault();
+        firstItem.focus();
+      }
     }
-  }
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [open]);
 
   return (
-    <header
-      className="sticky top-0 z-40 border-b border-ink/10 bg-white/90 backdrop-blur"
-      onKeyDown={handleKeyDown}
-    >
+    <header className="sticky top-0 z-40 border-b border-ink/10 bg-white/90 backdrop-blur">
       <Container className="flex h-16 items-center justify-between gap-4">
         <Link href="/" aria-label={`${site.nameHe} — דף הבית`}>
           {/* No `priority`: the hero image is the LCP candidate, and a second high-priority
@@ -46,6 +87,7 @@ export default function Navbar() {
         </nav>
 
         <div className="hidden md:block">
+          {/* Visible text is the phone number, which the accessible name contains — WCAG 2.5.3. */}
           <CtaButton
             href={telHref}
             variant="primary"
@@ -57,11 +99,13 @@ export default function Navbar() {
           </CtaButton>
         </div>
 
+        {/* size-11 is exactly 44px — the WCAG 2.5.5 / platform minimum tap target. The previous
+            `p-2` around a 24px icon measured 40px (backlog §11.6). */}
         <button
           type="button"
           ref={menuButtonRef}
           onClick={() => setOpen((value) => !value)}
-          className="inline-flex items-center justify-center rounded-lg p-2 text-brand md:hidden"
+          className="inline-flex size-11 items-center justify-center rounded-lg text-brand md:hidden"
           aria-expanded={open}
           aria-controls="mobile-menu"
           aria-label={open ? "סגירת תפריט הניווט" : "פתיחת תפריט הניווט"}
@@ -71,7 +115,7 @@ export default function Navbar() {
       </Container>
 
       {open ? (
-        <div id="mobile-menu" className="border-t border-ink/10 bg-white md:hidden">
+        <div id="mobile-menu" ref={menuRef} className="border-t border-ink/10 bg-white md:hidden">
           <Container className="flex flex-col gap-1 py-3">
             {navLinks.map((link) => (
               <Link
