@@ -71,7 +71,19 @@ export const site = {
 
   priceFrom: 450, // 🔶 confirm — unverified starting price (docs/business-facts.md §C)
   currency: "₪",
-  guarantee: "לא מצאנו — לא שילמתם", // 🔶 confirm — scope and exclusions undefined (§C)
+  guarantee: "לא מצאנו — לא שילמתם",
+  // Scope CONFIRMED 2026-08-24 (docs/business-facts.md §C). A precisely bounded promise converts
+  // better than a vague one — it removes the suspicion of a catch — and the boundary is what
+  // prevents disputes. Do not soften these into marketing copy; they are the terms.
+  guaranteeTerms: {
+    whatCounts:
+      "איתור נחשב זיהוי וסימון של מקור הרטיבות או הנזילה, מאומת במדידה משלימה ולא בממצא תרמי בלבד. איתור הוא קביעת המקור — לא ביצוע התיקון.",
+    ifNotFound: "אם לא אותר מקור — לא תחויבו על הביקור. אין דמי ביקור.",
+    excluded:
+      "לא נכללים: תיקון, פתיחת קירות או ריצוף, ועבודות איטום. אלה מבוצעים על ידי בעל מקצוע ומתומחרים בנפרד.",
+    exceptions:
+      "האחריות אינה חלה כאשר לא ניתנה גישה לאזור הנדרש, כאשר התבקשנו שלא להפעיל מערכת שנדרשה לבדיקה, או כאשר הנזילה אינה פעילה במועד הבדיקה ולא ניתן היה לתאם מועד חלופי.",
+  },
 
   // Trust figures shown in TrustBar and the hero. Only values that are verified (founded 2015 →
   // the roster) or that restate claims already made elsewhere on the site. The previous

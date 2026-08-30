@@ -11,6 +11,7 @@ import CtaButton from "@/components/CtaButton";
 import ContactCTA from "@/components/ContactCTA";
 import JsonLd from "@/components/JsonLd";
 import WhatsappIcon from "@/components/WhatsappIcon";
+import GuaranteeTerms from "@/components/GuaranteeTerms";
 
 export const metadata: Metadata = {
   title: "מחירון איתור נזילות",
@@ -119,6 +120,7 @@ export default function PricingPage() {
         </Container>
       </section>
 
+      <GuaranteeTerms />
       <ContactCTA />
     </>
   );

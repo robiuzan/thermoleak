@@ -82,10 +82,11 @@ strongest conversion asset on the site and its largest undefined liability.
 `site.priceFrom` is `450` and three of the four services state "החל מ-₪450"; the fourth
 (`insurance-reports`) and `electrical-thermography` quote per job. The roster marks prices unverified.
 
-### 🔶 PROPOSED guarantee wording — awaiting owner approval (drafted 2026-08-24)
+### ✅ APPROVED guarantee wording — confirmed by the owner 2026-08-24, now PUBLISHED
 
-**Nothing below is published.** It is a concrete draft to approve, amend or reject, because "what do
-you recommend?" deserves an answer rather than another open question. The recommendation is to
+**All three decisions below were confirmed and this is now live** on `/pricing/` via
+`components/GuaranteeTerms.tsx`, sourced from `site.guaranteeTerms`. It also resolved the 🔶 in the
+pricing guide FAQ. The recommendation is to
 **define the guarantee narrowly and state the exclusions plainly** — a precisely bounded promise
 converts better than a vague one, because it removes the suspicion of a catch, and it is the
 boundary that prevents disputes.
@@ -103,7 +104,7 @@ boundary that prevents disputes.
 > **מתי האחריות אינה חלה:** כאשר לא ניתנה גישה לאזור הנדרש; כאשר התבקשנו שלא להפעיל מערכת שנדרשה
 > לבדיקה; וכאשר הנזילה אינה פעילה במועד הבדיקה ולא ניתן היה לתאם מועד חלופי.
 
-**Three decisions this draft assumes — confirm or correct each:**
+**The three decisions, all CONFIRMED:**
 
 1. **No call-out fee on a no-find.** Simplest to state and strongest commercially. The alternative
    (a reduced fee covering travel) is defensible but weakens the promise — pick one.
@@ -121,8 +122,8 @@ opacity is a conversion tax on a crisis purchase. Confirm ₪450 is current and 
 | -------------------------------------------- | -------------------------------------------------------- | --------------------------- | ----- | ------ |
 | Is ₪450 the current starting price?          | Stated on the homepage and three service pages           | `lib/site.ts` `priceFrom`   |       | 🔶     |
 | What the ₪450 visit includes / excludes      | The #1 pre-purchase question; AEO answer-block material  | `lib/services.ts`           |       | 🔶     |
-| Guarantee: what counts as "מצאנו"            | Defines the entire promise                               | `lib/site.ts` + services    |       | 🔶     |
-| Guarantee: exclusions and call-out fee       | Reduces post-sale disputes                               | `lib/services.ts`           |       | 🔶     |
+| Guarantee: what counts as "מצאנו"            | Defines the entire promise                               | `lib/site.ts` + services    | ✅ published | ✅ |
+| Guarantee: exclusions and call-out fee       | Reduces post-sale disputes                               | `lib/services.ts`           | ✅ no call-out fee | ✅ |
 | Report turnaround ("מספר ימי עסקים")         | Stated in the insurance-reports FAQ                      | `lib/services.ts`           |       | 🔶     |
 | Payment methods / invoice terms              | Conversion friction                                      | `lib/site.ts`               |       | 🔶     |
 
