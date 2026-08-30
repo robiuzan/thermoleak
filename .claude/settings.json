@@ -29,7 +29,8 @@
       "Skill(new-service)",
       "Skill(new-article)",
       "Skill(qa-build-gate)",
-      "Skill(deploy-thermoleak)"
+      "Skill(deploy-thermoleak)",
+      "Skill(i18n-bilingual)"
     ]
   },
   "hooks": {

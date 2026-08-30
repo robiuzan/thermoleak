@@ -299,15 +299,27 @@ A `Stop` hook at `.claude/hooks/format-changed.ps1` formats changed files with P
 
 **Agents** (`.claude/agents/`) — `seo-auditor`, `schema-auditor`, `eeat-trust-auditor`,
 `local-seo-strategist`, `aeo-geo-strategist`, `perf-a11y-auditor`, `security-auditor`,
-`ts-react-reviewer` (all read-only), plus `rtl-frontend-engineer` and `hebrew-copywriter` (which edit).
+`ts-react-reviewer`, `cro-conversion-auditor` (all read-only), plus `rtl-frontend-engineer` and `hebrew-copywriter` (which edit).
 
 **Skills** (`.claude/skills/`) — start with `thermoleak-architecture`. Then `seo-metadata`,
 `schema-structured-data`, `hebrew-rtl`, `local-seo-il`, `aeo-answer-content`, `internal-linking`,
 `conversion-cro`, `tracking-analytics`, `performance-web-vitals`, `responsive-accessibility`,
-`web-security-headers`, `new-service`, `new-city`, `new-article`, `qa-build-gate`, `deploy-thermoleak`.
+`web-security-headers`, `i18n-bilingual`, `new-service`, `new-city`, `new-article`, `qa-build-gate`,
+`deploy-thermoleak`.
 
-**The acceptance bars** live in `docs/` and every agent cites them by section number:
-[optimization-backlog.md](docs/optimization-backlog.md) (the ranked register — **keep its numbering
-stable**), [content-standards.md](docs/content-standards.md),
-[keyword-map.md](docs/keyword-map.md), [schema-graph.md](docs/schema-graph.md),
-[business-facts.md](docs/business-facts.md) (**the one file an agent may not fill in**).
+**The acceptance bars** live in `docs/` — start at [docs/README.md](docs/README.md), which maps them.
+Every agent cites them by section number.
+
+*State* — what is true now: [optimization-backlog.md](docs/optimization-backlog.md) (the ranked
+register — **keep its numbering stable**) · [business-facts.md](docs/business-facts.md) (**the one
+file an agent may not fill in**).
+
+*Specification* — the concrete target: [content-standards.md](docs/content-standards.md) ·
+[keyword-map.md](docs/keyword-map.md) · [schema-graph.md](docs/schema-graph.md).
+
+*Strategy* — why and in what order: [seo-geo-aeo-strategy.md](docs/seo-geo-aeo-strategy.md) ·
+[eeat-and-trust.md](docs/eeat-and-trust.md) · [ux-cro-security.md](docs/ux-cro-security.md) ·
+[performance-guidelines.md](docs/performance-guidelines.md) ·
+[accessibility-and-i18n.md](docs/accessibility-and-i18n.md) ·
+[mobile-ux-and-personalization.md](docs/mobile-ux-and-personalization.md) ·
+[data-tracking-infrastructure.md](docs/data-tracking-infrastructure.md).
