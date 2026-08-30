@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { canonicalUrl } from "@/lib/site";
 import { serviceSlugs } from "@/lib/services";
+import { articles } from "@/lib/articles";
 
 // Required for `output: "export"` — emit a static sitemap.xml at build time.
 export const dynamic = "force-static";
@@ -18,6 +19,7 @@ const staticRoutes: {
   { path: "", lastModified: "2026-08-17", priority: 1, freq: "weekly" },
   { path: "/services", lastModified: "2026-08-17", priority: 0.9, freq: "monthly" },
   { path: "/pricing", lastModified: "2026-08-17", priority: 0.9, freq: "monthly" },
+  { path: "/guides", lastModified: "2026-08-24", priority: 0.8, freq: "weekly" },
   { path: "/about", lastModified: "2026-08-17", priority: 0.7, freq: "monthly" },
   { path: "/contact", lastModified: "2026-08-17", priority: 0.8, freq: "monthly" },
   { path: "/accessibility", lastModified: "2026-08-02", priority: 0.3, freq: "yearly" },
@@ -41,5 +43,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  return [...staticEntries, ...serviceEntries];
+  // Articles carry their own real dateModified — the whole point of §1.3.
+  const guideEntries: MetadataRoute.Sitemap = articles.map((article) => ({
+    url: canonicalUrl(`/guides/${article.slug}`),
+    lastModified: article.dateModified,
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
+
+  return [...staticEntries, ...serviceEntries, ...guideEntries];
 }

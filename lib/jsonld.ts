@@ -124,6 +124,34 @@ export function collectionPageJsonLd(options: PageNodeOptions) {
   return pageNode("CollectionPage", options);
 }
 
+// Article for /guides/{slug}/. `author` is omitted entirely when no real person is on file —
+// docs/business-facts.md §A. An absent author costs an Article rich result; an INVENTED one is a
+// fabricated E-E-A-T signal, which this project has already paid for once. Absent wins.
+export function articleJsonLd(article: {
+  slug: string;
+  title: string;
+  description: string;
+  datePublished: string;
+  dateModified: string;
+  author?: string;
+}) {
+  const url = canonicalUrl(`/guides/${article.slug}`);
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "@id": `${url}#article`,
+    headline: article.title,
+    description: article.description,
+    url,
+    datePublished: article.datePublished,
+    dateModified: article.dateModified,
+    inLanguage: "he-IL",
+    mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    publisher: { "@id": businessId },
+    ...(article.author ? { author: { "@type": "Person", name: article.author } } : {}),
+  };
+}
+
 export interface Crumb {
   name: string;
   url: string;

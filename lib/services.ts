@@ -57,6 +57,61 @@ export const methodExplainer = {
   ],
 };
 
+// Homepage decision aid — symptom-first, because that is how the visitor arrives. Each entry maps
+// a real symptom to the service that addresses it, including the honest "this might not be us" case.
+export const serviceChooser = {
+  eyebrow: "לא בטוחים מה צריך?",
+  title: "מהסימפטום לשירות המתאים",
+  intro:
+    "רוב הפניות אלינו מתחילות בסימפטום, לא בשם של שירות. כך זה מתורגם — ואם מה שאתם מתארים לא מופיע כאן, פשוט תתקשרו ונכוון אתכם.",
+  cases: [
+    {
+      symptom: "כתם רטיבות שחוזר גם אחרי צביעה",
+      explanation:
+        "צביעה חוזרת מטפלת בסימפטום. כל עוד מקור הלחות פעיל הכתם יחזור — צריך קודם לקבוע אם מדובר בנזילה מצנרת, בחדירת מים מבחוץ או בעיבוי.",
+      serviceLabel: "איתור רטיבות ובידוד",
+      href: "/services/moisture-detection/",
+    },
+    {
+      symptom: "חשבון מים שקפץ בלי סיבה",
+      explanation:
+        "קפיצה בצריכה בלי שינוי בהרגלים מצביעה כמעט תמיד על נזילה נסתרת בצנרת — לרוב מתחת לריצוף או בתוך קיר, במקום שלא רואים.",
+      serviceLabel: "איתור נזילות מים",
+      href: "/services/water-leak-detection/",
+    },
+    {
+      symptom: "חברת הביטוח מבקשת הוכחה למקור הנזק",
+      explanation:
+        "תביעה על נזקי מים דורשת תיעוד אובייקטיבי של המקור ושל היקף הנזק. חשוב לתעד לפני שמתקנים — תיקון מוקדם מוחק את הראיות.",
+      serviceLabel: "דו״ח תרמוגרפי לביטוח",
+      href: "/services/insurance-reports/",
+    },
+    {
+      symptom: "ריח שרוף או מפסק שקופץ בלוח החשמל",
+      explanation:
+        "חיבור רופף או עומס יתר מתחממים הרבה לפני שנגרמת תקלה. סריקה תרמית של הלוח תחת עומס מזהה את נקודות החום בזמן.",
+      serviceLabel: "בדיקת לוחות חשמל",
+      href: "/services/electrical-thermography/",
+    },
+    {
+      symptom: "לפני קנייה או שיפוץ של דירה",
+      explanation:
+        "סריקה לפני רכישה מגלה רטיבות נסתרת, כשלי בידוד וסימנים לנזילות ישנות — מידע שמשפיע על ההחלטה ועל המשא ומתן, בלי לפגוע בנכס.",
+      serviceLabel: "איתור רטיבות ובידוד",
+      href: "/services/moisture-detection/",
+    },
+    {
+      symptom: "לא בטוחים שזו בכלל נזילה",
+      explanation:
+        "לפעמים זה עיבוי, ולפעמים אין בעיה בכלל. עדיף לברר בטלפון לפני שמזמינים בדיקה — אם מה שאתם מתארים לא דורש סריקה, נגיד לכם את זה.",
+      serviceLabel: "דברו איתנו",
+      href: "/contact/",
+    },
+  ],
+  outro:
+    "בכל המקרים הבדיקה עצמה זהה בעקרונות שלה: סריקה תרמית לצמצום אזור החשד, ואז אימות נקודתי לפני שנקבע מקור. מה שמשתנה הוא מה מחפשים ואיפה.",
+};
+
 export const services: Service[] = [
   {
     slug: "water-leak-detection",

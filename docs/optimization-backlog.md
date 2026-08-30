@@ -131,26 +131,34 @@ verification tag live.
 Floors are in [content-standards.md](content-standards.md) §1. Chrome is **~110 words** per page —
 subtract it from the raw counts below.
 
-**3.1 🟡 Homepage: 704 raw ≈ 594 unique, floor 800.** The composition is right (Hero → TrustBar →
-ServicePillars → Process → Testimonials → Faq → ContactCTA); it is the per-section copy that is short.
+**3.1 ✅ (2026-08-24) Floor cleared — 949 unique (floor 800).** Added the MethodExplainer and a
+symptom-first ServiceChooser that maps what the visitor actually arrives with (a recurring stain, a
+jumped water bill, an insurer asking for proof) to the right service — including an honest "this
+might not be us" route to /contact/.
 
 **3.2 🟠 Service pages: 432–469 raw ≈ 322–359 unique, floor 450.** The four pages **pass the doorway
 test** — each has its own `intro`, `benefits`, `steps` and FAQs, which is better than most competitors —
 but they stop before the depth that ranks. Missing from all four: what the method **cannot** detect,
 what the visit includes, what changes the price, and what happens after the leak is found.
 
-**3.3 🟡 `/about/` 383 raw ≈ 273 unique (floor 500); `/contact/` 229 raw ≈ 119 unique (floor 200).**
-`/about/` is the natural home for the credentials, the named owner and the company history that §7
-says are missing — so its word count and its trust gap are the same problem.
+**3.3 ✅ (2026-08-24) Both floors cleared.** `/about/` 552 unique (floor 500) — added how-we-work
+sections covering method, the deliberate detect-but-do-not-repair separation, and service-area
+reality. `/contact/` 248 unique (floor 200) — what happens after you make contact, and what to have
+ready. Note `/about/` remains short of its POTENTIAL until §7.3/§7.5 land: it was thin because
+nobody is named on it.
 
 **3.4 🟠 No location silo.** `site.serviceAreas` names 12 cities rendered as plain text chips with no
 routes. The entire Tier-2 local layer is unexpressed. **This is an opportunity, not yet a defect** —
 and building it badly (12 find-and-replace pages) would be far worse than leaving it. Gate:
 content-standards §2, procedure: `/new-city`.
 
-**3.5 🟠 No editorial silo.** No blog, no guides, no route. Every Tier-3 question in
-[keyword-map.md](keyword-map.md) §2 — including the ones this business is uniquely able to answer — has
-no page. Procedure: `/new-article`.
+**3.5 🟠 Shipped, two of three under floor (2026-08-24).** `/guides/` is live with three articles
+built on a typed block model (`lib/articles.ts`) so `FAQPage` is DERIVED from the copy and cannot
+drift. Word counts: what-a-thermal-camera-sees **912 ✅**, find-leak-without-breaking **819**,
+leak-detection-cost **744** — against a 900 floor. Deliberately NOT padded further: the honest way
+to close the remaining gap is real case-study material (worked jobs, thermal image pairs), which is
+blocked on imagery + consent, not more prose. **Bylines are absent by design** — `author` is
+omitted from the Article node entirely until a real person exists (§7.5). Never invent one.
 
 **✅ Verified good:** `/services/` at 450 raw ≈ 340 unique clears its 250 floor; the legal pages are
 substantive and well written; no page is a template clone of another.

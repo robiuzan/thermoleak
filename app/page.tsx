@@ -3,6 +3,7 @@ import Hero from "@/components/Hero";
 import TrustBar from "@/components/TrustBar";
 import MethodExplainer from "@/components/MethodExplainer";
 import ServicePillars from "@/components/ServicePillars";
+import ServiceChooser from "@/components/ServiceChooser";
 import Process from "@/components/Process";
 import Faq from "@/components/Faq";
 import ContactCTA from "@/components/ContactCTA";
@@ -28,6 +29,7 @@ export default function HomePage() {
       <TrustBar />
       <MethodExplainer />
       <ServicePillars />
+      <ServiceChooser />
       <Process />
       <Faq faqs={generalFaqs} eyebrow="שאלות נפוצות" title="שאלות שחשוב שתדעו" />
       <ContactCTA />
