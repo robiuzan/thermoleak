@@ -312,7 +312,8 @@ Every agent cites them by section number.
 
 *State* — what is true now: [optimization-backlog.md](docs/optimization-backlog.md) (the ranked
 register — **keep its numbering stable**) · [business-facts.md](docs/business-facts.md) (**the one
-file an agent may not fill in**).
+file an agent may not fill in**) · [implementation-roadmap.md](docs/implementation-roadmap.md) (the
+sprint sequence and what each is blocked on).
 
 *Specification* — the concrete target: [content-standards.md](docs/content-standards.md) ·
 [keyword-map.md](docs/keyword-map.md) · [schema-graph.md](docs/schema-graph.md).

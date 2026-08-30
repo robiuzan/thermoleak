@@ -25,6 +25,10 @@ SPECIFICATION — the concrete target for this codebase
 STATE — what is true right now
   optimization-backlog.md      the ranked register (§1–§13). KEEP THE NUMBERING STABLE.
   business-facts.md            the intake sheet. THE ONE FILE AN AGENT MAY NOT FILL IN.
+        │
+        ▼
+SEQUENCE — the order we fix it in
+  implementation-roadmap.md    sprints, gates, blockers, definition of done
 ```
 
 **Reading order for a new agent:** `optimization-backlog.md` (what is broken) → the strategy doc
@@ -45,6 +49,7 @@ for your discipline → the specification file it points to.
 | How do I add English without breaking Hebrew? | accessibility-and-i18n.md |
 | What fires into the data layer? | data-tracking-infrastructure.md |
 | What is already known broken? | optimization-backlog.md |
+| What do we do next, and in what order? | implementation-roadmap.md |
 
 ## Ground rules that override everything else
 
