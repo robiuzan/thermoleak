@@ -64,6 +64,10 @@ export const site = {
   emergencyNote: "שירות חירום לנזילות פעילות — זמינים גם מעבר לשעות הפעילות",
 
   founded: 2015,
+  // Owner/founder. Confirmed 2026-08-24 (docs/business-facts.md §A). This unlocks Person schema
+  // and article bylines. Role detail, years in trade, certification number, insurance and ח.פ.
+  // remain UNCONFIRMED — do not infer them from the name.
+  founder: "רונן דהן",
 
   priceFrom: 450, // 🔶 confirm — unverified starting price (docs/business-facts.md §C)
   currency: "₪",
@@ -86,6 +90,13 @@ export const site = {
     "עבודה עם מצלמות תרמיות מקצועיות מסוג FLIR",
     "אחריות מלאה ושקיפות מחירים",
   ],
+
+  // Shared Israeli-fleet GTM container (10 of 12 fleet sites carry it). Verified HTTP 200 on
+  // 2026-08-24 — a snippet in the HTML proves nothing, so re-assert with:
+  //   curl -o /dev/null -w '%{http_code}' "https://www.googletagmanager.com/gtm.js?id=GTM-KWGGH438"
+  // ⚠️ GA4 for this domain is resolved INSIDE the container by a hostname RegEx table. The snippet
+  // alone does not route thermoleak.co.il to a GA4 property — that needs a container-side entry.
+  analytics: { gtmId: "GTM-KWGGH438" },
 
   // Social profiles were removed 2026-08-17: the previous values were the platforms' homepages
   // (facebook.com / instagram.com), which asserted entity links that don't exist — in the footer

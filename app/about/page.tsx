@@ -91,6 +91,22 @@ export default function AboutPage() {
 
       <TrustBar />
 
+      {/* Founder. Only what is confirmed: the name (business-facts §A) and the 2015 founding year.
+          Role detail, years in the trade, certification number, insurance and ח.פ. are still 🔶 —
+          do not infer them from the name. */}
+      <section className="py-12">
+        <Container className="max-w-3xl">
+          <div id="founder" className="rounded-2xl border border-ink/10 bg-white p-6">
+            <p className="text-sm font-bold tracking-wide text-accent-strong">מי עומד מאחורי טרמוליק</p>
+            <p className="mt-2 leading-relaxed text-ink/80">
+              טרמוליק נוסדה ב-{site.founded} ומובלת על ידי{" "}
+              <span className="font-bold text-brand">{site.founder}</span>. כל בדיקה מבוצעת באותה
+              שיטה שמתוארת כאן — סריקה, אימות, ואז מסקנה — ולא בסדר ההפוך.
+            </p>
+          </div>
+        </Container>
+      </section>
+
       <section className="py-16 md:py-20">
         <Container className="max-w-3xl">
           <h2 className="text-2xl font-extrabold text-brand sm:text-3xl">איך אנחנו עובדים</h2>

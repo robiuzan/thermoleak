@@ -4,11 +4,10 @@
 // `faq` blocks, so the schema cannot drift from the copy as it is edited. That is the same property
 // the <details>-based service FAQs already have.
 //
-// 🔶 AUTHOR IS BLOCKED. `author` is intentionally optional and currently unset on every article
-// (docs/business-facts.md §A — nobody is named anywhere on the site). Articles publish unattributed
-// rather than not at all: an unattributed useful answer still ranks and still gets cited, it just
-// underperforms an attributed one. NEVER invent a byline — set `author` once a real person exists
-// and the Article schema picks it up automatically.
+// AUTHOR: confirmed 2026-08-24 as רונן דהן (docs/business-facts.md §A), so every article now
+// carries a real byline and the Article node emits a Person. `author` stays OPTIONAL by design —
+// a future article by someone else must set its own, and an article with no known author publishes
+// unattributed rather than borrowing a name. NEVER invent a byline.
 
 export type Block =
   | { kind: "paragraph"; text: string }
@@ -38,6 +37,7 @@ export const articles: Article[] = [
       "מצלמה תרמית מצלמת טמפרטורת פני שטח, לא מים. המדריך המלא למה השיטה מזהה, איפה היא מגיעה לגבול שלה, ואיך מאמתים ממצא לפני שקובעים מקור.",
     datePublished: "2026-08-24",
     dateModified: "2026-08-24",
+    author: "רונן דהן",
     blocks: [
       {
         kind: "answer",
@@ -152,6 +152,7 @@ export const articles: Article[] = [
       "השוואה עניינית בין תרמוגרפיה, איתור אקוסטי ומד לחות: מה כל שיטה מזהה, כמה היא עולה, מתי היא נכשלת ואיך בוחרים את השילוב הנכון לנכס שלכם.",
     datePublished: "2026-08-24",
     dateModified: "2026-08-24",
+    author: "רונן דהן",
     blocks: [
       {
         kind: "answer",
@@ -276,6 +277,7 @@ export const articles: Article[] = [
       "פירוט שקוף של עלות איתור נזילות: ממה מורכב המחיר, מה מייקר ומה לא, מתי נדרש דו״ח לביטוח, ולמה מחיר שנמסר רק בסוף הביקור הוא סימן אזהרה.",
     datePublished: "2026-08-24",
     dateModified: "2026-08-24",
+    author: "רונן דהן",
     blocks: [
       {
         kind: "answer",

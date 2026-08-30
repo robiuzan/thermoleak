@@ -7,6 +7,7 @@ import JsonLd from "@/components/JsonLd";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import StickyContact from "@/components/StickyContact";
+import Analytics from "@/components/Analytics";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.domain),
@@ -82,6 +83,7 @@ export default function RootLayout({
         >
           דלג לתוכן המרכזי
         </a>
+        <Analytics />
         <Navbar />
         <main id="main" className="flex-1 pb-20 md:pb-0">
           {children}

@@ -39,15 +39,16 @@ matching agent or skill will wire it into the right place.
 
 ---
 
-## A. Identity & people — nobody is named anywhere
+## A. Identity & people — founder confirmed, credentials still open
 
-No owner, founder or technician is named on the site. The About story is written entirely in the
-corporate "we", there is no `Person` in the schema, and no article can carry a byline until this is
-filled. `site.legalName` claims a registered company (`בע״מ`) whose number is never given.
+**Resolved 2026-08-24: the founder is רונן דהן.** He now appears on `/about/` (`#founder`), as a
+`Person` node on the business, and as the byline on all three `/guides/` articles. What is STILL
+unconfirmed is everything that would turn a name into demonstrated expertise — years in the trade, a
+certification number, insurance, ח.פ. **Do not infer any of those from the name.** `site.legalName` claims a registered company (`בע״מ`) whose number is never given.
 
 | Field                            | Why it's needed                                                     | Lands in                  | Value | Status |
 | -------------------------------- | ------------------------------------------------------------------- | ------------------------- | ----- | ------ |
-| Owner / founder name             | `Person` schema, author bylines, the About story                    | `lib/site.ts` + `/about/` |       | 🔶     |
+| Owner / founder name             | `Person` schema, author bylines, the About story                    | `lib/site.ts` + `/about/` | **רונן דהן** | ✅ |
 | Owner's years in the trade       | The "experience" half of E-E-A-T                                    | `lib/site.ts`             |       | 🔶     |
 | ח.פ. / ע.מ. number               | Standard IL trust signal; `בע״מ` is claimed without one             | `lib/site.ts` + `/about/` |       | 🔶     |
 | Technician count / team shape    | "צוות" is implied but never quantified                              | `lib/site.ts`             |       | 🔶     |
@@ -80,6 +81,41 @@ strongest conversion asset on the site and its largest undefined liability.
 
 `site.priceFrom` is `450` and three of the four services state "החל מ-₪450"; the fourth
 (`insurance-reports`) and `electrical-thermography` quote per job. The roster marks prices unverified.
+
+### 🔶 PROPOSED guarantee wording — awaiting owner approval (drafted 2026-08-24)
+
+**Nothing below is published.** It is a concrete draft to approve, amend or reject, because "what do
+you recommend?" deserves an answer rather than another open question. The recommendation is to
+**define the guarantee narrowly and state the exclusions plainly** — a precisely bounded promise
+converts better than a vague one, because it removes the suspicion of a catch, and it is the
+boundary that prevents disputes.
+
+> **לא מצאנו — לא שילמתם**
+>
+> **מה נחשב איתור:** זיהוי וסימון של מקור הרטיבות או הנזילה, מאומת במדידה משלימה ולא בממצא תרמי
+> בלבד. איתור הוא קביעת המקור — לא ביצוע התיקון.
+>
+> **אם לא אותר מקור:** לא תחויבו על הביקור.
+>
+> **מה לא נכלל:** תיקון, פתיחת קירות או ריצוף, ועבודות איטום. אלה מבוצעים על ידי בעל מקצוע
+> ומתומחרים בנפרד.
+>
+> **מתי האחריות אינה חלה:** כאשר לא ניתנה גישה לאזור הנדרש; כאשר התבקשנו שלא להפעיל מערכת שנדרשה
+> לבדיקה; וכאשר הנזילה אינה פעילה במועד הבדיקה ולא ניתן היה לתאם מועד חלופי.
+
+**Three decisions this draft assumes — confirm or correct each:**
+
+1. **No call-out fee on a no-find.** Simplest to state and strongest commercially. The alternative
+   (a reduced fee covering travel) is defensible but weakens the promise — pick one.
+2. **"Found" means the source is identified and verified**, not that the customer agrees with the
+   finding. Without this line, "we didn't find it" becomes arguable after the fact.
+3. **An inconclusive visit where the leak was not running counts as a no-find** (so: not charged),
+   unless a return visit was offered and declined. This is the honest reading and it matches what
+   the guides already tell readers.
+
+**On pricing:** the recommendation is to keep ₪450 as a stated *starting* price with the factors that
+move it published (as `/pricing/` already does), rather than moving to "call for a quote". Price
+opacity is a conversion tax on a crisis purchase. Confirm ₪450 is current and this needs no change.
 
 | Field                                        | Why it's needed                                          | Lands in                    | Value | Status |
 | -------------------------------------------- | -------------------------------------------------------- | --------------------------- | ----- | ------ |
@@ -120,7 +156,7 @@ claim in `serviceAreaText` is broader than `areaServed`.
 
 | Field                              | Why it's needed                                                                                                                                                                        | Lands in         | Value | Status |
 | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ----- | ------ |
-| **Analytics decision**             | The site collects **zero** analytics — no GTM, no GA4. Join the shared fleet container `GTM-KWGGH438` (GA4 resolved by hostname inside it) or stand alone? Owner call, blocks all tracking | `app/layout.tsx` |       | 🔶     |
+| **Analytics decision**             | ✅ RESOLVED 2026-08-24 — join the shared fleet container. 10 of 12 fleet sites carry it; id verified HTTP 200. Installed via `components/Analytics.tsx` (`afterInteractive`). Accepted trade: ~90 KB exceeds the 50 KB tag budget; Zaraz stays the lighter option if that is ever enforced | `app/layout.tsx` | `GTM-KWGGH438` | ✅ |
 | GA4 measurement ID                 | Needed either way once the decision is made                                                                                                                                            | container / repo |       | 🔶     |
 | **AI-crawler stance**              | **✅ RESOLVED 2026-08-17.** The managed block (ClaudeBot/GPTBot/Google-Extended/CCBot Disallow) was confirmed live in the morning, the owner turned the toggle off, and the live `robots.txt` now serves the repo's blanket allow — verified. Re-verify after any Cloudflare plan/setting change | Cloudflare       | open  | ✅     |
 | Security headers approval          | HSTS shipped 2026-08-17 without `preload`/`includeSubDomains`; escalating either needs sign-off (near-irreversible)                                                                     | `public/_headers`  |     | 🔶     |

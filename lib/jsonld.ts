@@ -32,6 +32,7 @@ export function localBusinessJsonLd() {
       addressCountry: site.address.country,
     },
     areaServed: site.serviceAreas.map((name) => ({ "@type": "City", name })),
+    founder: { "@type": "Person", "@id": `${site.domain}/about/#founder`, name: site.founder },
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
