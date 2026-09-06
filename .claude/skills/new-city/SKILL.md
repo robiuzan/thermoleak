@@ -1,21 +1,25 @@
 ---
 name: new-city
-description: Build the location-page silo that does not exist yet — the lib/locations.ts data model with kind and prefixed, the doorway gate that decides which of the 12 service areas earn a page at all, the route, the link mesh, the schema, and the sitemap. Use when expanding local coverage. Triggers "add a city", "new location page", "cover <city>", "local landing page", "doorway".
+description: Append a city to the location silo that already ships — the lib/locations.ts data model with kind, prefixed and typed claims, the doorway gate that decides which of the nine remaining service areas earn a page at all, the route and schema that already exist, and the nearby edges you must still set by hand. Use when expanding local coverage. Triggers "add a city", "new location page", "cover <city>", "local landing page", "doorway".
 ---
 
 # Add a location page
 
-**Read this first: this site has no location pages, and that is currently an advantage.**
+**Read this first: the silo exists. Three of the twelve service areas ship a page — תל אביב, חולון and
+בת ים, live since sprint 3. Your task is to append a fourth entry to `lib/locations.ts`, not to build
+a silo.**
 
-`site.serviceAreas` names twelve cities — תל אביב-יפו, רמת גן, גבעתיים, הרצליה, פתח תקווה, ראשון לציון,
-חולון, בת ים, רעננה, כפר סבא, ראש העין, מודיעין — rendered as plain text chips with no route behind
-them. So the entire Tier-2 `{service} ב{city}` layer is unexpressed.
+`site.serviceAreas` names twelve cities, and `/locations/` renders all twelve as plain text chips. Nine
+of them — רמת גן, גבעתיים, הרצליה, פתח תקווה, ראשון לציון, רעננה, כפר סבא, ראש העין, מודיעין — have
+nothing but that chip: no route, no page, no `Service` node. Their verified claim sets are preserved in
+`docs/business-facts.md` §E, so the next batch is a data edit rather than a fresh research pass.
 
-Sibling sites in this fleet answered that by generating a page per city from one shared paragraph. All
-of them now fail the doorway test, and the penalty for a doorway cluster lands on the **domain**, not
-the page. **Do not repeat that here.** Build few, build deep.
+Sibling sites in this fleet answered the same gap by generating a page per city from one shared
+paragraph. All of them now fail the doorway test, and the penalty for a doorway cluster lands on the
+**domain**, not the page. **Do not repeat that here.** Build few, build deep — the reason only three of
+twelve shipped is the gate below, not a shortage of material.
 
-## The gate — before you write any code
+## The gate — before you write any data
 
 > Replace the city name with a different city name. Is the page now correct and publishable for that
 > other city? **If yes, it does not ship.**
@@ -33,35 +37,57 @@ To pass, a location page needs **three or more** true, specific items:
 - A city-specific FAQ that would read oddly anywhere else.
 - Local pricing reality if it differs.
 
-**If none of those can be said truthfully about a city, that city does not warrant a page.** Record that
-in `docs/business-facts.md` §E rather than padding. Realistically this yields **3–5 cities**, not 12 —
-start with the ones where the business actually works most.
+**A verified claim set is not a decision to publish.** The adversarial gate run on 2026-08-24 found
+that **all twelve** service areas have three or more true, publicly verifiable, city-specific claims
+available. That answered _could we_ — not _should we_. The three reasons the list stayed at three are
+written into the header of `lib/locations.ts` and still hold: the claims are **research, not job
+history**; twelve pages launched from one research pass is the doorway **pattern** even when each page
+is individually defensible; and depth has to be **sustained**, so three pages that stay current beat
+twelve that rot. Read that header before you decide anything — CLAUDE.md §4 makes it the mandatory
+pre-flight for a fourth city.
 
-## The data model — define it before the first page
+**Choosing which city is next.** `docs/business-facts.md` §E lists the nine deferred cities with a
+claim count and a distance each. Its rows have not matched the ordering its intro line declares, so
+**read the two columns yourself rather than taking the top row on trust.** Weigh three things together:
 
-There is no `lib/locations.ts` yet. Create it in the shape the schema and the copy will both need,
-rather than discovering the fields on page three:
+1. Claim count — how much true, specific material actually exists.
+2. **Contiguity** with a city that already has a page, so the `nearby` edges are honest geography and
+   not a link ring.
+3. Whether the distance lets you write **honest availability copy**. The realistic same-day radius is
+   still 🔶 in §E; do not promise at 25 km what is only true at 6 km.
+
+**If none of the gate items can be said truthfully about a city, that city does not warrant a page.**
+Record that in `docs/business-facts.md` §E rather than padding.
+
+## The data model — read it, do not redesign it
+
+`lib/locations.ts` already defines the shape, and every field on it is required:
 
 ```ts
-// lib/locations.ts
+export interface LocationClaim {
+  text: string; // one specific, true statement
+  category: "housing-stock" | "neighbourhood" | "travel" | "infrastructure";
+}
+
 export interface Location {
-  slug: string;          // ASCII kebab-case, matching the /services/ convention: "tel-aviv"
-  name: string;          // תל אביב
+  slug: string; // ASCII kebab-case, matching the /services/ convention: "tel-aviv"
+  name: string; // תל אביב
   kind: "city" | "region";
-  prefixed: string;      // בתל אביב  — carries the preposition so no template guesses
-  answer: string;        // 40–60 words, the AEO block
-  intro: string[];       // 2–3 paragraphs, genuinely city-specific
-  localNotes: string[];  // the substance — three or more items from the gate above
-  neighborhoods?: string[];
-  travel?: string;       // realistic scheduling for this distance
-  faqs: { q: string; a: string }[];   // 2–3, city-specific
-  nearby: readonly string[];          // 2–4 adjacent location slugs
+  prefixed: string; // בתל אביב — carries the preposition so no template guesses
+  answer: string; // 40–60 words, the AEO block, complete in the first sentence
+  intro: string[]; // 2–3 paragraphs, genuinely city-specific
+  claims: LocationClaim[]; // the substance — three or more, or the city does not ship
+  travel: string; // realistic scheduling at this distance
+  faqs: { q: string; a: string }[]; // city-specific; should read oddly anywhere else
+  nearby: string[]; // adjacent location slugs — the edge is BIDIRECTIONAL
 }
 ```
 
 `kind` drives `City` vs `AdministrativeArea` in the schema. `prefixed` exists because `בתל אביב-יפו`
 reads badly and any future region (`השרון`, `צפון`) needs `באזור השרון` / `בצפון הארץ`, not a bare
-preposition.
+preposition. `category` on a claim is not decoration: it is there so an auditor can see **why** an item
+was considered city-specific. `travel` is required — a city whose travel reality you cannot state
+honestly is a city that failed the gate.
 
 **Keep slugs ASCII.** Every existing route on this site is ASCII (`/services/water-leak-detection/`).
 If you choose Hebrew slugs instead, the dynamic route **must** match with
@@ -70,42 +96,45 @@ a route that skips this works in dev and 404s in production.
 
 ## Steps
 
-1. **Apply the gate.** Decide which cities have three true, specific items. Write them down before
-   writing prose.
-2. Create `lib/locations.ts` with the model above and the first 3–5 entries.
-3. Create `app/locations/[city]/page.tsx`. Copy the structure of
-   `app/services/[slug]/page.tsx` — including `generateStaticParams`, the **`params: Promise<…>`**
-   signature (Next 16), `notFound()` narrowing, `PageHero` with crumbs, and `ContactCTA` at the end.
-4. Create `app/locations/page.tsx` as the index, with real hub prose — not just a list of chips.
-5. Render in this order: answer block → intro → local notes → the full service list with links →
-   nearby locations → city FAQ → CTA.
-6. Meet the **350-word floor** (`docs/content-standards.md` §1) with genuine local substance.
-7. Set `nearby` from real geography, and add the new city to the `nearby` of its neighbours — **the
+1. **Apply the gate.** Decide whether this city has three true, specific items you can source. Write
+   them down before writing prose. If the answer is no, stop and record it in §E.
+2. **Append the entry to the `locations` array in `lib/locations.ts`.** Order the array the way you
+   want the hub to list it. Every claim is 🔶 until the owner confirms it — the header says so, and it
+   applies to your entry too.
+3. **Nothing else needs creating.** `app/locations/[city]/page.tsx` builds the page from
+   `generateStaticParams()` over `locationSlugs`; `app/locations/page.tsx` lists every entry on the
+   hub; `generateMetadata` composes the title from `prefixed` and the description from `answer`;
+   `locationServiceJsonLd()` emits `Service` with `areaServed` typed off `kind`; `PageHero` emits the
+   `BreadcrumbList`; `faqPageJsonLd()` covers `faqs`. Adding a route by hand duplicates all of it.
+4. **Order `claims` deliberately.** `app/locations/page.tsx` renders `claims[0].text` verbatim as the
+   city's card blurb on `/locations/`, so the first claim doubles as the hub description and appears on
+   two pages.
+5. **Write `answer` so its opening stands alone.** `generateMetadata` slices the first 155 characters
+   of it for the meta description, with no ellipsis and no word-boundary handling.
+6. Set `nearby` from real geography, and add the new city to the `nearby` of its neighbours — **the
    edge is bidirectional**; a one-way link is a modelling error.
-8. Wire the mesh **before shipping**: footer column, links from `/services/`, links from each service
-   page. Do not ship a page nothing links to — the site currently has zero orphans.
-9. Add the routes to `app/sitemap.ts`. `staticRoutes` there is hand-maintained (backlog §1.2), so a new
-   silo is silently absent from the sitemap unless you add it — derive it instead if you're touching
-   that file.
-10. Emit `Service` with `areaServed` (`City` or `AdministrativeArea` per `kind`) plus `BreadcrumbList`.
-    **Never a `LocalBusiness` node per city** — this business has no premises at all.
-11. Metadata per `docs/keyword-map.md` §3: `איתור נזילות ב{prefixed}`, **no second brand token**,
-    canonical with a trailing slash.
-12. `npm run lint && npm run build`, then verify each route exists in `out/` **and** in
-    `out/sitemap.xml`.
+7. Meet the **350-word floor** (`docs/content-standards.md` §1) with genuine local substance. For
+   calibration, the three shipped city pages emit 784–855 raw words each (measured 2026-09-06 with the
+   §1 command; site chrome measures 116 words on `out/404.html`, and the shared `ContactCTA` a further
+   ~113, so subtract before comparing).
+8. **The sitemap is derived, not hand-maintained, for this silo.** `app/sitemap.ts` maps over
+   `locations`, so a new entry appears automatically — there is nothing to add. See Gotchas for the
+   date it stamps.
+9. `npm run lint && npm run build`, then `npm run check:sitemap`, then confirm the route exists in
+   `out/` **and** in `out/sitemap.xml`.
 
 ## Checklist
 
-- [ ] Every city that ships passes the doorway substitution test.
+- [ ] Every city that ships passes the doorway substitution test, and the _should we_ question was
+      answered separately from the _could we_ one.
 - [ ] `kind` and `prefixed` set; no template interpolates a bare `ב${name}`.
-- [ ] ≥350 unique words; three or more genuinely local items.
-- [ ] Opens with a 40–60 word answer block.
+- [ ] ≥350 unique words; three or more genuinely local `claims`, each with a `category`.
+- [ ] `answer` is 40–60 words and its first 155 characters read as a standalone description.
+- [ ] `claims[0]` is the item you want on the hub card.
+- [ ] `travel` states real availability at this distance — no borrowed same-day promise.
 - [ ] `nearby` set on both sides.
-- [ ] Inbound links exist from the footer, `/services/` and at least one service page.
-- [ ] Added to `app/sitemap.ts`.
 - [ ] `Service` + `areaServed` + `BreadcrumbList` emitted; no per-city `LocalBusiness`.
-- [ ] Title carries the brand exactly once; canonical has a trailing slash.
-- [ ] Present in `out/` and `out/sitemap.xml`.
+- [ ] Present in `out/` and `out/sitemap.xml`; `npm run check:sitemap` passes.
 
 ## Gotchas
 
@@ -113,7 +142,21 @@ a route that skips this works in dev and 404s in production.
   anything ships — `/deploy-thermoleak` is the production mutation, and there is no staging
   environment between the ops script and the live site.
 - Never invent a neighbourhood, a landmark, or a local job. Unverified → `// 🔶 confirm` +
-  `docs/business-facts.md` §E.
+  `docs/business-facts.md` §E. Every claim already in the file is adversarially checked against public
+  sources, **not** sourced by someone who has worked in those buildings — verification is not truth.
+- **Open code defect — the sitemap stamps a hardcoded date on locations.** `app/sitemap.ts` writes
+  `lastModified: "2026-08-24"` for the hub and for every city, so a city added later ships a
+  `lastModified` older than itself. `Location` has no date field to derive one from — unlike
+  `Article`, whose real `dateModified` the same file reads. Raise it as a code change (a `lastModified`
+  field on `Location`, read in `app/sitemap.ts`); do not just retype the literal to today's date and
+  leave the next city with the same problem.
+- **Open code defect — the same city is named two ways in two schema nodes.** `site.serviceAreas` gives
+  the `LocalBusiness` node `areaServed: "תל אביב-יפו"` while `locations[].name` gives the page's
+  `Service` node `areaServed: "תל אביב"`, and both ship on the same page (finding LOC-11). If your new
+  city's `site.serviceAreas` spelling differs from its `name`, you are adding another instance.
 - Twelve pages in one commit is not a coverage strategy. Three good ones beat twelve thin ones, and the
   thin twelve can cost you the three.
 - Adding links to a thin page doesn't fix the thin page. Depth first, then the mesh.
+- `/locations/` is already in `navLinks`, so the hub is in the header and the footer on every route —
+  but **no service page links into a city page today**. That is an open mesh gap in the silo as a
+  whole, not something your entry creates; fixing it is an `/internal-linking` task.

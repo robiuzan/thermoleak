@@ -1,56 +1,55 @@
 # Data and tracking infrastructure
 
-A measurement plan for a site that currently measures **nothing**, and a hard constraint that it
-must stay fast while it starts. `/tracking-analytics` holds the operational steps; this file is the
-architecture and the contracts.
+The measurement architecture and its contracts, for a site where the plumbing is installed and
+almost nothing runs through it yet. `/tracking-analytics` holds the operational steps; this file is
+the architecture and the contracts.
 
 ---
 
-## 1. Current state: zero
+## 1. Current state: `page_view` only
 
-No GTM, no GA4, no pixel, no third-party script of any kind. The fleet roster records it plainly:
+**GTM-KWGGH438 ships on every page.** `components/Analytics.tsx` is mounted from the root layout,
+so all 23 emitted HTML files carry the container (verified in the fresh export and against the live
+origin), and the container resolves `thermoleak.co.il` → GA4 **G-5YWLZ07PEC** through its hostname
+RegEx table. Installed in `f06aab8`, 2026-08-30.
 
-> `analytics.gtmId is null` — this site carries **NO GTM snippet at all** and collects zero
-> analytics, unlike the rest of the fleet (shared container `GTM-KWGGH438`). Deliberate gap, not
-> yet closed.
+**Exactly one event flows: `page_view`.** The container holds a single tag — the GA4 config tag,
+firing on `gtm.init`. There are no click triggers and no event tags. In the repo there are **zero
+`dataLayer` pushes**: the only `dataLayer` reference across `app/`, `components/` and `lib/` is the
+bootstrap snippet at `components/Analytics.tsx:33`. Therefore **every event in §4's schema fires
+zero times** — the seven conversion events and the generic `cta_click` alike. That includes
+`call_click`, the site's primary conversion goal, and one GA4 cannot recover on its own because
+Enhanced Measurement never tracks `tel:` links.
 
-**Every other improvement on this project is currently unverifiable.** That is why this ranks as
-critical despite breaking nothing.
+> **Triage rule.** The old answer to "why isn't this conversion firing?" was "nothing is measuring
+> anything." That answer is now wrong and it stops the investigation one step short. Work §9's
+> order instead: is the event pushed in code → is there a trigger in the container → is it a Key
+> event in GA4?
 
-One measurement surface does exist: a Google **Search Console** verification token ships in
-`app/layout.tsx`. Confirm the property is verified and the sitemap submitted — free signal,
-already paid for.
+Search Console: the verification token ships in `app/layout.tsx` and is recorded in the roster.
+Confirm the property is verified and the sitemap submitted — free signal, already paid for.
 
 ---
 
-## 2. The decision that comes first
+## 2. Decision record: the shared fleet container
 
-**Join the shared fleet container, or stand alone?** Owner call, recorded in business-facts §F.
+Decided and shipped 2026-08-30 (`f06aab8`); recorded in business-facts §F. **This is a record, not
+an open question.** The comparison table and the "my recommendation: Zaraz" verdict that used to
+fill this section were deleted for a reason: read cold, months after the install, they send the next
+agent to rip out working instrumentation.
 
-| | Shared `GTM-KWGGH438` | Standalone container | **Cloudflare Zaraz** |
-| --- | --- | --- | --- |
-| Setup | None — fleet-standard | New container | New config, no GTM |
-| Client JS cost | ~90 KB gzipped GTM runtime | Same | **~0 KB** — runs at the edge |
-| Blast radius of a mistake | **Fleet-wide outage** | This site only | This site only |
-| GA4 routing | Hostname RegEx table inside the container | Direct | Direct |
-| Fleet consistency | ✅ | ✗ | ✗ |
-| CWV impact | Real (see §5) | Real | **Minimal** |
+- **Chosen: the shared fleet container `GTM-KWGGH438`**, with GA4 `G-5YWLZ07PEC` resolved inside it
+  by hostname. Rationale: 10 of the 12 fleet sites carry it, and fleet-wide tag changes would
+  otherwise skip this domain. The rationale is restated at `components/Analytics.tsx:5-14`.
+- **Accepted cost:** classic GTM is ~90 KB gzipped, which is over the 50 KB tag budget in §5. That
+  is an explicit, accepted trade — not an oversight to "fix" later.
+- **Retained fallback: Cloudflare Zaraz** (edge tag manager, ~0 KB client JS), if that budget is
+  ever enforced strictly or if the fleet-wide blast radius of a shared container becomes a problem.
 
-**My recommendation: Zaraz**, and it is not a close call for *this* site.
-
-Zaraz is Cloudflare's edge tag manager. The zone is already Cloudflare, the site is already Pages,
-and Zaraz executes third-party tags **on Cloudflare's edge instead of in the browser** — which
-directly satisfies the "lightweight, server-side analytics that does not harm Core Web Vitals"
-requirement. The site currently has **no third-party JS at all**, and installing classic GTM would
-spend that advantage permanently (see §5 and the CSP note in
-[ux-cro-security.md](ux-cro-security.md) §5).
-
-**The counter-argument, stated fairly:** the fleet standardises on GTM-KWGGH438, and one site
-diverging costs cross-site consistency and means fleet-wide tag changes skip this domain. If fleet
-uniformity outranks this site's performance, use the shared container — but then hold the §5 budget
-strictly.
-
-Either way: **thermoleak needs its own GA4 property.**
+The container is **shared and edited by ten other fleet sites**, and nothing in this repo controls
+its configuration. Two consequences that matter downstream: a container change can break or leak
+here without a commit landing (§4), and any enforcing CSP on this domain is a standing dependency
+on a config this repo cannot see (see [ux-cro-security.md](ux-cro-security.md) §5).
 
 ---
 
@@ -74,7 +73,9 @@ whenever an ID is set or changed, and again after deploy.
 ### Naming: `{location}-{action}` on `data-cta`
 
 Click tracking reads the `data-cta` attribute — **no JS ships for it**, which is why the attribute
-is load-bearing. All CTAs already carry one (shipped 2026-08-17):
+is load-bearing. **This list is the single inventory**; [ux-cro-security.md](ux-cro-security.md) §1
+points here rather than keeping a second copy. Nineteen distinct values ship — eleven written
+literally in `components/`, eight passed through `CtaButton`'s `dataCta` prop:
 
 `header-call` · `menu-call` · `hero-call` · `hero-whatsapp` · `sticky-call` · `sticky-whatsapp` ·
 `service-call` · `service-form` · `pricing-call` · `pricing-whatsapp` · `finalcta-call` ·
@@ -83,18 +84,28 @@ is load-bearing. All CTAs already carry one (shipped 2026-08-17):
 
 Any new CTA without one is an incomplete CTA — the click becomes permanently invisible.
 
+⚠️ **Nothing consumes these attributes yet.** They are hooks with no consumer: the container has no
+click trigger, so GTM does not even attach its click listeners. A complete `data-cta` inventory is
+therefore _not_ evidence that clicks are measured — it is evidence that they _could_ be.
+
 ### Event schema
 
-| Event | Fires when | Parameters | Notes |
-| --- | --- | --- | --- |
-| `cta_click` | Any `[data-cta]` clicked | `cta_id`, `page_type` | Generic click capture |
-| `call_click` | `tel:` link clicked | `cta_id`, `page_type` | **Key event** in GA4 |
-| `whatsapp_click` | `wa.me` link clicked | `cta_id`, `page_type` | **Key event** |
-| `lead_whatsapp_open` | Form submitted **and** handoff attempted | `service`, `area`, `handoff_ok` | See naming rule below |
-| `lead_handoff_blocked` | `window.open` returned `null` | `service` | Popup blocked — a real, measurable loss |
-| `thank_you_view` | `/thank-you/` page view | `service` | Cleanest Ads conversion target |
-| `faq_open` | A `<details>` opened | `question_id` | Reveals real objections |
-| `pricing_view` | `/pricing/` reached | `referrer_page` | Buying-intent signal |
+**Every row below is a specification, not a description. All of them currently fire zero times**
+(§1). Keep that in mind when reading the "Fires when" column.
+
+| Event                  | Fires when                               | Parameters              | Notes                                                                                         |
+| ---------------------- | ---------------------------------------- | ----------------------- | --------------------------------------------------------------------------------------------- |
+| `cta_click`            | Any `[data-cta]` clicked                 | `cta_id`, `page_type`   | Generic click capture                                                                         |
+| `call_click`           | `tel:` link clicked                      | `cta_id`, `page_type`   | **Key event** in GA4. GA4 alone never sees `tel:` clicks — this needs a container trigger     |
+| `whatsapp_click`       | `wa.me` link clicked                     | `cta_id`, `page_type`   | **Key event.** Must not read Click URL on `/thank-you/` — see the PII boundary below          |
+| `lead_whatsapp_open`   | Form submitted **and** handoff attempted | `service`, `handoff_ok` | Container-side impossible: the outcome exists only in `ContactForm`. Needs a `dataLayer` push |
+| `lead_handoff_blocked` | `window.open` returned `null`            | `service`               | Same — a push, not a trigger. Popup blocked is a real, measurable loss                        |
+| `thank_you_view`       | `/thank-you/` reached                    | `service`               | Cleanest Ads conversion target. **Reached only by client-side navigation — see §6**           |
+| `faq_open`             | A `<details>` opened                     | `question_id`           | Reveals real objections. Costs a fourth client component if pushed in code — weigh it         |
+| `pricing_view`         | `/pricing/` reached                      | `referrer_page`         | Buying-intent signal. Also mostly client-side navigation (§6)                                 |
+
+Note the `area` parameter has been dropped from `lead_whatsapp_open`: the field is free text, and
+the PII boundary below forbids forwarding it.
 
 ### The honest naming rule
 
@@ -113,9 +124,32 @@ is a genuine, fixable loss.
 **Never put name, phone, email or message text in the data layer.** The form has all four in scope
 at submit time, so this is a live risk, not a theoretical one.
 
-Allowed: the selected `service` (a fixed enum) and coarse `area` **only if** normalised to a known
-city list. A free-text area field must **not** be forwarded — it is user-typed and may contain
-anything.
+Allowed: the selected `service` (a fixed enum). The `area` field is **free text** and must not be
+forwarded — it is user-typed and may contain anything, including a full street address. If a coarse
+area is ever wanted, it has to be normalised against a known city list first.
+
+#### No PII in the data layer **and** no PII in any `href`
+
+**Click URL is a data-layer variable.** GTM's built-in `gtm.elementUrl` is populated with the
+clicked element's complete href, and GA4 Enhanced Measurement's outbound-click event sends that
+whole URL — query string included — as `link_url`. So an href is not a safe hiding place: putting
+personal data in one is the same violation as pushing it, with the added problem that it happens
+without anyone writing a push.
+
+**The live case, still open (`SEC-3` / `AN-2` — code fix required, not made in this pass):**
+`components/ThankYouContent.tsx:57` builds `whatsappHref(handoff?.message)` and renders it at :84-93
+as `<a href={waHref} … data-cta="thankyou-whatsapp">`. After a real submit that href is
+`https://wa.me/…?text=` + the URL-encoded lead — **full name, phone number, area and free text** —
+sitting in the DOM of a page the container runs on, on an element tagged as a deliberate trigger
+target. The static HTML is clean (the fallback href is a generic prefill), so this only appears in a
+real post-submit session, which is exactly why it survived review.
+
+It also contradicts what the form promises the visitor at `components/ContactForm.tsx:221`
+("הם אינם נשמרים אצלנו").
+
+**The rule for anyone wiring `whatsapp_click`:** do not read Click URL. Read `data-cta`. And when
+the code fix lands, the re-open control on `/thank-you/` should carry a PII-free href (or be a
+`<button>`), passing the composed message to `window.open` at click time instead.
 
 ---
 
@@ -124,39 +158,81 @@ anything.
 Tags are the single highest-risk change to Core Web Vitals on this project. Budgets from
 [performance-guidelines.md](performance-guidelines.md), applied to tagging:
 
-| Rule | Threshold |
-| --- | --- |
-| Added JS from all tags | **≤ 50 KB gzipped** (Zaraz ≈ 0; classic GTM alone ≈ 90 KB — over budget) |
-| Added INP | ≤ 20 ms |
-| CLS from tags | **0** — no tag may inject visible DOM |
-| Load timing | After paint, `async`/`defer`. Never render-blocking |
-| Consent dialogs | Must reserve space or overlay without shifting layout |
+| Rule                   | Threshold                                             | State                                                             |
+| ---------------------- | ----------------------------------------------------- | ----------------------------------------------------------------- |
+| Added JS from all tags | **≤ 50 KB gzipped**                                   | ⚠️ **breached by design** — classic GTM is ~90 KB. Accepted in §2 |
+| Added INP              | ≤ 20 ms                                               | Unmeasured — no field data yet                                    |
+| CLS from tags          | **0** — no tag may inject visible DOM                 | ✅ nothing visible is injected                                    |
+| Load timing            | After paint, `async`/`defer`. Never render-blocking   | ✅ `afterInteractive`                                             |
+| Consent dialogs        | Must reserve space or overlay without shifting layout | N/A — none ships (§8)                                             |
 
-**If classic GTM is chosen, the 50 KB budget is already breached on arrival.** That must be an
-explicit, accepted trade — not discovered in a later audit.
+**The 50 KB row is over budget and stays over budget.** That was decided knowingly (§2). It is
+recorded here so a later audit reads it as an accepted trade rather than a fresh discovery — and so
+that the _next_ tag is weighed against a budget already spent, not against a clean sheet.
 
-Placement: container script in `<head>`, `<noscript>` iframe in `<body>`. Verify the Next 16
-script-placement API in `node_modules/next/dist/docs/` before writing it — `AGENTS.md` warns this
-is not the Next.js you know.
+**Actual placement — not what an earlier draft of this file prescribed.** `components/Analytics.tsx`
+wraps the bootstrap in `next/script` with `strategy="afterInteractive"`, and on a static export that
+means the initializer is **not serialized into the HTML at all**: `out/index.html` contains zero
+`<script id="gtm-init">` markup, and the snippet appears only inside the RSC flight payload. React
+creates it after hydration. The `<noscript>` iframe _is_ real markup in `<body>`.
+
+The cost of that, stated plainly: the container fetch cannot begin until the route's JS has
+downloaded and hydrated, so **a visitor who taps a call or WhatsApp button before hydration
+completes is not measured**. On this site that is a small population and it protects LCP, which is
+why the trade was taken (`components/Analytics.tsx:12-14`). If early-tap measurement ever matters
+more than the LCP margin, the alternative is a plain inline `<script>` in the layout body — decide
+it deliberately, do not drift into it.
 
 ---
 
-## 6. Server-side / edge tagging
+## 6. Client-side routing — the trap that zeroes the conversion
 
-The goal is fewer bytes and less main-thread work in the browser, plus resilience to ad blockers.
+> ⚠️ **An earlier version of this section said the opposite of what follows, and following it makes
+> the site's only URL-based conversion record zero. Read this before configuring any page-based
+> trigger.**
 
-**Option A — Cloudflare Zaraz (recommended).** Tags execute at the edge; the browser gets a tiny
-loader. Native to the existing platform, no extra vendor, no server to run.
+**A static export is still the App Router.** `output: "export"` removes the server; it does not
+remove client-side navigation. Every `<Link>` and every `router.push()` does a `pushState`
+navigation and fetches an RSC payload — no document load, no `gtm.js` re-run, **no `page_view`**.
+The 158 `.txt` payload files in `out/` are that mechanism's on-disk footprint.
+
+Two direct consequences:
+
+1. **`/thank-you/` is reached _only_ by client-side navigation.** It has exactly one inbound path in
+   the entire repo — `components/ContactForm.tsx:91`, `router.push("/thank-you/")` — and no link
+   anywhere points at it. So **100% of legitimate thank-you views are pushState navigations.** A GTM
+   All Pages / initial-load trigger sees none of them, and `thank_you_view` — this file's own
+   "cleanest Ads conversion target" — records zero.
+2. **Internal navigation is undercounted everywhere else too.** A visitor who lands on
+   `/guides/leak-detection-cost/`, clicks through to `/pricing/` and then to a service page
+   registers **one** `page_view`, not three. `pricing_view` is unreliable for the same reason, and
+   so is every landing-page and path report built on `page_view`.
+
+**What to configure instead:**
+
+- Drive GA4 `page_view` from a **History Change trigger** (or an explicit `page_view` push on route
+  change) **in addition to** the initial container load. Guard against the double-fire on first
+  load — History Change must not also fire for the initial page.
+- Build `thank_you_view` on a **History Change matching `/thank-you/`**, never on an All Pages
+  trigger. Same for `pricing_view` on `/pricing/`.
+- Anything that depends on knowing _why_ a route changed — the handoff outcome, for instance —
+  cannot be recovered from a history event at all. That belongs in a `dataLayer` push from the code
+  that observed it (§4).
+
+### Server-side / edge tagging, if it ever comes back
+
+The goal would be fewer bytes and less main-thread work, plus resilience to ad blockers. The shared
+container (§2) is what ships; these remain the alternatives if that decision is ever reopened.
+
+**Option A — Cloudflare Zaraz.** Tags execute at the edge; the browser gets a tiny loader. Native
+to the existing platform, no extra vendor, no server to run. The retained fallback per §2.
 
 **Option B — GA4 Measurement Protocol from a Pages Function.** Full control, but it puts a function
 on the request path and requires managing an API secret. Only justified if a CRM handoff needs
 server-side reliability.
 
-**Option C — classic client-side GTM.** Fleet-consistent, heaviest, most ad-blocked.
-
-Whichever is chosen, **`page_view` must not depend on client JS to be correct** — a static export
-has no client-side routing, so every navigation is a real page load. A History Change trigger is
-unnecessary here and will not fire.
+**Option C — classic client-side GTM.** Fleet-consistent, heaviest, most ad-blocked. **This is what
+ships.**
 
 ---
 
@@ -191,13 +267,29 @@ Mitigations, cheapest first:
 
 ## 8. Consent and privacy
 
+> 🔴 **Open, and nobody else's file owns it.** `/privacy/` was written before analytics shipped and
+> still hedges. `app/privacy/page.tsx` says the site _"ייתכן"_ (may) use cookies and analytics tools
+> "כגון Google Analytics". Since `f06aab8` that is not a maybe: GTM and GA4 load on every route, on
+> every visitor, with no consent gate anywhere — `grep -rn "consent" app components lib` returns
+> **zero hits**. A hedge that has become a fact is a false privacy notice, and this is an Israeli
+> site under Privacy Protection Law Amendment 13.
+>
+> **What to do (code change, not made in this pass):** rewrite that paragraph to state definitively
+> that the site uses Google Analytics 4 via Google Tag Manager, name what it collects (usage and
+> device data, not the form's contents), and give a real opt-out route (browser settings plus the
+> Google opt-out add-on). Keep it truthful about the form: its contents go to the visitor's own
+> WhatsApp client, not to a server here. Do not write a retention period, a data-processor name or a
+> legal basis that nobody has confirmed — see [business-facts.md](business-facts.md).
+
 - **Israeli Privacy Protection Law Amendment 13** materially raised obligations around personal data
   handling. The form collects name, phone, area and free text. `/privacy/` must accurately describe
   what is collected, where it goes (currently: the visitor's own WhatsApp client, not our servers),
   and retention. The form links to it ✅.
 - **Google Consent Mode v2** is required for EEA traffic. Traffic here is overwhelmingly Israeli, so
   the pragmatic position is: implement Consent Mode defaults if any measurable EEA traffic exists;
-  do not bolt a full CMP onto an Israeli local-services site by reflex.
+  do not bolt a full CMP onto an Israeli local-services site by reflex. **Decide this before the
+  event layer lands, not after** — retrofitting consent onto live conversion tags is how a signal
+  gets silently dropped, and the tags are the next thing due to ship.
 - **A cookie banner is not free.** It costs conversions and risks CLS. Only ship one if a legal
   obligation actually applies.
 - Any IP-derived geo (see [mobile-ux-and-personalization.md](mobile-ux-and-personalization.md) §4)
@@ -207,28 +299,47 @@ Mitigations, cheapest first:
 
 ## 9. Verification protocol
 
-1. Live source contains the container/loader in `<head>`.
+1. The container loads on the live page (it is created at hydration, so check the network panel, not
+   `view-source` — see §5).
 2. `gtm.js?id=…` returns **200** (§3).
 3. Preview/debug mode on the live domain: fire a call click, a WhatsApp click, a form submit, and a
    FAQ open — each trigger fires **exactly once**.
-4. GA4 Realtime shows the events with hostname `thermoleak.co.il`.
-5. **No PII in any payload** — inspect the actual network request, not the config.
-6. Re-run Lighthouse and compare against the pre-tag baseline. A regression beyond §5 is a rollback,
+4. **Walk a client-side navigation** (`/guides/…` → `/pricing/` → a service page, then a real form
+   submit through to `/thank-you/`) and confirm a `page_view` for **each** step and exactly one
+   `thank_you_view`. This is the check that catches the §6 trap; an initial-load-only test passes
+   while the conversion records zero.
+5. GA4 Realtime shows the events with hostname `thermoleak.co.il`.
+6. **No PII in any payload** — inspect the actual network request, not the config. Specifically: on
+   `/thank-you/` after a **real submit**, confirm no `click` event carries a `link_url` containing
+   `text=`, and no `/g/collect` request carries the submitted name or phone (§4).
+7. Re-run Lighthouse and compare against the pre-tag baseline. A regression beyond §5 is a rollback,
    not a follow-up ticket.
-7. Mark `call_click`, `whatsapp_click` and `thank_you_view` as **Key events** in GA4, or they never
+8. Mark `call_click`, `whatsapp_click` and `thank_you_view` as **Key events** in GA4, or they never
    appear as conversions.
+
+**Before promoting the CSP from report-only to enforcing** (see
+[ux-cro-security.md](ux-cro-security.md) §5): check the violation reports for
+`google-analytics.com` specifically — `connect-src` currently lists
+`https://www.google-analytics.com` and `https://*.analytics.google.com`, and a CSP host wildcard
+requires at least one label, so it covers neither the `analytics.google.com` apex nor GA4's regional
+`region1.google-analytics.com` collect endpoint. Then confirm a GA4 Realtime hit from a browser
+**after** the switch, not only before it. The policy has no `report-uri` and no `report-to`, so
+today "check the reports" means a DevTools console on a preview deploy, not a collector.
 
 ---
 
 ## 10. Checklist
 
-- [ ] Container decision recorded in business-facts §F, with the CWV trade-off stated.
-- [ ] GA4 property exists for this domain.
-- [ ] `gtm.js` (or Zaraz) verified 200 / loading.
-- [ ] Every CTA carries `data-cta`; no orphan CTAs.
+- [x] Container decision recorded (§2 + business-facts §F), with the CWV trade-off stated.
+- [x] GA4 property exists for this domain — resolved inside the container by hostname.
+- [x] `gtm.js` verified 200.
+- [x] Every CTA carries `data-cta`; no orphan CTAs — 19 values, §4.
+- [ ] **At least one event beyond `page_view` reaches GA4.** Nothing does today (§1).
+- [ ] `page_view` and `thank_you_view` driven by History Change, verified across a real
+      client-side navigation (§6).
 - [ ] Event names describe what was **observed** — no `lead_submit` on an unconfirmed handoff.
-- [ ] Zero PII in the data layer, verified on the wire.
-- [ ] Added JS ≤ 50 KB gzipped; CLS from tags = 0.
-- [ ] CSP updated in the **same commit** as the tag install.
-- [ ] `/privacy/` accurate before any new collection begins.
+- [ ] Zero PII in the data layer **and in every tagged `href`**, verified on the wire (§4).
+- [x] CSP updated in the same commit as the tag install (`f06aab8`).
+- [ ] `connect-src` covers GA4's apex and regional collect endpoints before enforcing (§9).
+- [ ] `/privacy/` states the analytics that actually ship (§8).
 - [ ] Search Console verified; sitemap submitted; Key events marked.

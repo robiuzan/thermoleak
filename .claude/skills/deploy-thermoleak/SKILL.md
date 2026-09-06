@@ -55,16 +55,24 @@ failing check).
 5. **Output gate** on `out/` — refuses to ship a broken or truncated export.
 6. Preserves the previous `out/` as `out.prev/` so a rollback is one command.
 7. `npx wrangler pages deploy .\out --project-name thermoleak --branch main`.
-8. Appends the result to the hub's `logs/deploys.csv`.
+8. Appends the result to the **fleet hub's** deploy log — `Israeli services sites/logs/deploys.csv`,
+   columns `timestampUtc,domain,project,outFiles`.
+
+> **Where the deploy log is not.** There is **no `logs/` directory in this repo** and there never was.
+> CLAUDE.md §10's bare `logs/deploys.csv` is relative to the fleet ops hub, not to
+> `thermoleak.co.il/`. Verified 2026-09-06: the file exists at
+> `c:/Users/robiu/antigravity/Projects/Israeli services sites/logs/deploys.csv` and carries thermoleak
+> rows, the most recent dated 2026-08-30. If you are asked "when did this last deploy", read that file —
+> don't conclude from a missing `logs/` here that nothing was logged.
 
 Credentials (`CLOUDFLARE_TOKEN_main`, `CLOUDFLARE_ACCOUNT_main`) come from the Sys Admin control
 plane's `secrets/.env` — never from this repo, which is **public**.
 
 ## Before you deploy
 
-Run `/qa-build-gate` end to end. Its stop-ship list applies — in particular, no `aggregateRating`
-or `Review` in the export without a verifiable public source, no title with the brand zero times or
-twice, no missing canonical on an indexable route.
+Run `/qa-build-gate` end to end, and `npm run check:sitemap` with it. Its stop-ship list applies — in
+particular, no `aggregateRating` or `Review` in the export without a verifiable public source, no
+title with the brand zero times or twice, no missing canonical on an indexable route.
 
 `public/_headers` and `public/_redirects` ship inside `out/` — a deploy is what activates changes
 to them. There is no `.htaccess`; that file died with the Apache origin.
@@ -75,14 +83,26 @@ to them. There is no `.htaccess`; that file died with the Apache origin.
 curl -sI  https://thermoleak.co.il/pricing/ | head -5          # 200 — a new-build route
 curl -s   https://thermoleak.co.il/ | grep -o '<title>[^<]*</title>'
 curl -sI  https://thermoleak.co.il/reviews/ | grep -iE '^HTTP|location'   # 301 -> /about/
-curl -s   https://thermoleak.co.il/sitemap.xml | grep -c '<url>'          # 11
+curl -s   https://thermoleak.co.il/sitemap.xml | grep -c '<url>'          # 19
+curl -sI  https://thermoleak.co.il/guides/what-a-thermal-camera-sees/ | head -1  # 200 — sprint-2 silo
+curl -sI  https://thermoleak.co.il/locations/tel-aviv/ | head -1                 # 200 — sprint-3 silo
 curl -sI  https://thermoleak.co.il/ | grep -iE 'strict-transport|x-frame' # _headers live
 curl -s   https://thermoleak.co.il/robots.txt                             # managed block state
 ```
 
 Check: a **new-build** route answers (not just old ones); the title carries the brand exactly once;
 the `_headers` entries actually appear; `robots.txt` reflects the intended AI-crawler stance
-(**Cloudflare prepends a managed block** — see `/aeo-answer-content`).
+(**Cloudflare can prepend a managed block** — see `/aeo-answer-content`).
+
+For reference, the export currently emits **22** `index.html` files and the sitemap lists **19**
+(`/thank-you/` is noindex and deliberately excluded, and the two 404 forms are not routes). Those two
+numbers move whenever a silo grows — `npm run check:sitemap` asserts they agree before you deploy, so
+treat the curl count as a live-site confirmation of what the gate already checked, not as a fixed
+constant to trust forever.
+
+A stronger check than any of the above: pick a string that **only this build** contains — a sentence
+you just wrote — and grep the live page for it. A status code proves a file exists; only content proves
+it is the file you shipped.
 
 ## Rollback
 

@@ -3,8 +3,11 @@
 Enforceable numbers, not aspirations. A change that breaks a budget here does not ship.
 `perf-a11y-auditor` audits against this file; `/performance-web-vitals` holds the technique.
 
-**Measure before optimising.** This site's baseline is genuinely healthy — do not manufacture
-findings to fill a report.
+**Measure before optimising.** The user-facing baseline is genuinely healthy — static HTML on a
+global edge, one 33 KB raster, four SVGs — so do not manufacture findings to fill a report. But
+"healthy" is not the same as "inside every budget": as of the 2026-09-06 re-baseline the export sits
+at **98.5% of its size budget**, one JS chunk is over, and the tag budget is knowingly breached.
+Those three are real and are stated as such in §1. Everything else here is fine.
 
 ---
 
@@ -12,28 +15,56 @@ findings to fill a report.
 
 ### Core Web Vitals — field targets (p75, mobile)
 
-| Metric | Target | Fail | Notes |
-| --- | --- | --- | --- |
-| **LCP** | ≤ 2.0 s | > 2.5 s | Stricter than Google's 2.5 s "good": we are static HTML on a global edge, so 2.5 s means something is wrong |
-| **INP** | ≤ 150 ms | > 200 ms | Only two client components ship; anything approaching 200 ms means new JS arrived |
-| **CLS** | ≤ 0.05 | > 0.1 | Every image is dimensioned and the sticky bar has a spacer; 0.1 means a reserve was dropped |
-| **TTFB** | ≤ 300 ms | > 600 ms | Edge-served HTML. A sustained regression means an origin/config change |
+| Metric   | Target   | Fail     | Notes                                                                                                       |
+| -------- | -------- | -------- | ----------------------------------------------------------------------------------------------------------- |
+| **LCP**  | ≤ 2.0 s  | > 2.5 s  | Stricter than Google's 2.5 s "good": we are static HTML on a global edge, so 2.5 s means something is wrong |
+| **INP**  | ≤ 150 ms | > 200 ms | Three client components ship, plus GTM after hydration; anything approaching 200 ms means new JS arrived    |
+| **CLS**  | ≤ 0.05   | > 0.1    | Every image is dimensioned and the sticky bar has a spacer; 0.1 means a reserve was dropped                 |
+| **TTFB** | ≤ 300 ms | > 600 ms | Edge-served HTML. A sustained regression means an origin/config change                                      |
 
 Lab (Lighthouse mobile, throttled): **Performance ≥ 95, Accessibility 100, Best Practices ≥ 95,
 SEO 100.** Anything below is a defect, not a nice-to-have.
 
-### Byte budgets — per page, uncompressed
+### Byte budgets — measured, not estimated
 
-| Asset class | Budget | Current |
-| --- | --- | --- |
-| Total `out/` | ≤ 6 MB | ~3.9 MB ✅ |
-| Any single JS chunk | ≤ 200 KB | none > 500 KB ✅ |
-| Total JS per route | ≤ 120 KB | well under ✅ |
-| LCP image | ≤ 150 KB | `hero.webp` — measure |
-| Any single image | ≤ 250 KB | — |
-| Fonts total | ≤ 120 KB | Heebo + Assistant subset |
-| Client components | ≤ 4 | 3 (`ContactForm`, `Navbar`, `ThankYouContent`) ✅ |
-| Runtime dependencies | ≤ 6 | 4 ✅ |
+**Baseline re-measured 2026-09-06** against a clean build (22 routes: 22 `index.html` + `404.html`;
+19 URLs in `sitemap.xml`). Every "Current" figure below is a byte count from that export, not an
+estimate. Where a row is over budget it says so — an honest breach is worth more than a green tick
+measured against the wrong yardstick, which is how the previous version of this table hid two of
+these.
+
+| Asset class                             | Budget                      | Current (2026-09-06)                                                                                                              |
+| --------------------------------------- | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Total `out/`                            | ≤ 6,000,000 B               | **5,910,433 B — 98.5% of budget** ⚠️ 220 files                                                                                    |
+| ├ RSC segment payloads (`out/**/*.txt`) | _no budget — set one_       | **2,769,645 B / 158 files = 46.9% of the export**                                                                                 |
+| ├ HTML                                  | —                           | 1,984,248 B / 23 files                                                                                                            |
+| └ `out/_next` (JS, CSS, fonts)          | —                           | 936,350 B                                                                                                                         |
+| Any single JS chunk                     | ≤ 200 KB (204,800 B)        | **226,355 B** (`3j9pm5otqxm82.js`, the React/Next runtime) ⚠️ breached                                                            |
+| JS per route — framework floor          | _irreducible; not a target_ | 688,193 B across 9 chunks · 575,599 B modern-only (one 112,594 B chunk is `noModule`) · **168,200 B brotli on the wire**          |
+| JS per route — **delta**                | **+0 B**                    | ✅ every route loads the identical 9 chunks                                                                                       |
+| LCP image                               | ≤ 150 KB                    | `hero.webp` 33,210 B (828×670) ✅                                                                                                 |
+| Any single image                        | ≤ 250 KB                    | `og.png` 128,363 B (never rendered on-page) ✅                                                                                    |
+| Fonts preloaded per page                | ≤ 80 KB                     | 71,540 B — 4 faces ✅ (135,576 B on disk; the rest is `unicode-range`-gated, §4)                                                  |
+| Client components                       | ≤ 4                         | 3 (`ContactForm`, `Navbar`, `ThankYouContent`) ✅                                                                                 |
+| Runtime dependencies                    | ≤ 6                         | 4 ✅                                                                                                                              |
+| Third-party JS                          | ≤ 50 KB gzipped             | ⚠️ ~90 KB (GTM) — **breached by an accepted decision**, see [data-tracking-infrastructure.md](data-tracking-infrastructure.md) §2 |
+
+**On the RSC `.txt` payloads — the row that did not exist, which is how it grew unbudgeted.**
+Next 16 emits each route's flight payload for `<Link>` prefetching, and it emits it **twice**:
+`out/index.txt` and `out/__next._full.txt` are byte-identical (70,789 B each), and the `__next*.txt`
+set alone is 1,415,029 B, so roughly 1.38 MB of the export is pure duplication. **This is navigation
+prefetch, not first paint — it does not touch LCP** and should never be "optimised" by deleting
+files from `out/`. It is deploy weight and a per-navigation origin fetch (§5), and it grows with
+every route, which is why the export moved from ~3.9 MB to 5.91 MB when `/guides/` and `/locations/`
+landed. **The 6 MB budget is now 98.5% consumed: the next silo breaches it.** Treat that as the
+trigger to decide whether to raise the budget deliberately or to constrain route growth — not as
+something to discover mid-sprint.
+
+**On the JS rows.** The old "≤ 120 KB per route, well under ✅" was never measured and is 4.7×
+wrong against its own stated unit. The framework floor is what Next 16.2.9 + React 19.2.4 cost on
+any route; it is not something this site can tune. So the enforceable budget is the **delta**: a new
+dependency or a new client component is the only JS regression this site can realistically have, and
+that is exactly what the +0 B row catches.
 
 **A new dependency must survive "can the platform already do this?"** The answer is usually yes.
 
@@ -47,29 +78,45 @@ SEO 100.** Anything below is a defect, not a nice-to-have.
    first paint. It is simultaneously the fastest option, the most accessible, and what makes
    `FAQPage` schema honest and the content extractable by answer engines. Converting it to client
    state breaks all four.
-3. **At most one `priority` image per page**, and it must be the LCP element. The navbar logo's
-   `priority` was removed 2026-08-17 — it was preloading a ~40 px logo in competition with the hero.
+3. **At most one `priority` image per page**, and it must be the LCP element — **and an
+   above-the-fold image that is _not_ the LCP element must still be `loading="eager"`.** The second
+   clause exists because the first one was over-applied: dropping the navbar logo's `priority`
+   (correctly — it was preloading a ~40 px wordmark in competition with the hero) left it on
+   `next/image`'s default, so the emitted markup is `loading="lazy"` on the topmost element of all
+   22 routes. Lazy-loading an in-viewport image hides it from the preload scanner and the wordmark
+   pops in after first paint. There is no CLS (the box is reserved), so this is a polish defect, not
+   a budget breach — but it is the swing the rule now names. Open: `components/Logo.tsx` needs a
+   `loading` pass-through, `components/Navbar.tsx` an eager instance; the footer copy stays lazy.
 4. **Every image reserves its box.** Explicit `width`/`height`, or `fill` with a sized parent.
 5. **No layout-shifting late content.** No client-injected banners, no post-hydration content swaps
    above the fold. See [mobile-ux-and-personalization.md](mobile-ux-and-personalization.md) §4 for
    why geo-personalisation must respect this.
-6. **No render-blocking third-party anything.** Tags load async, after paint. See
-   [data-tracking-infrastructure.md](data-tracking-infrastructure.md).
+6. **No render-blocking third-party anything.** Tags load async, after paint. One third party ships
+   — GTM, via `next/script` `afterInteractive`, so the container is created after hydration and is
+   absent from the static HTML entirely. That protects LCP and costs early-tap measurement; the
+   trade is recorded at [data-tracking-infrastructure.md](data-tracking-infrastructure.md) §5.
 
 ---
 
 ## 3. Images
 
 `next.config.ts` sets `images: { unoptimized: true }` — `next/image` emits a bare `<img>` with **no
-srcset**. Consequence: passing `sizes` is *misleading*, it does nothing.
+srcset**. Consequence: passing `sizes` is _misleading_, it does nothing.
 
-Three of four service illustrations are **SVG**, where this costs nothing. What actually matters:
+**All four** service illustrations are **SVG**, where this costs nothing. `public/images/` is
+80 KB in total. What actually matters:
 
-- **`hero.webp`** — the one raster LCP candidate. Measure it; serve a width-appropriate variant.
-- **`thermoleak_logo.webp`** — small, but was competing for preload. Fixed.
-- **`og.png`** — never rendered on-page; its weight does not affect CWV.
+- **`hero.webp`** — the one raster LCP candidate. Measured: **33,210 B, 828×670 intrinsic**,
+  rendered at ≤ 448 CSS px (`max-w-md`) on desktop and ~358 px on mobile, and preloaded. That is
+  4.5× inside the LCP-image budget and correct as a single size for DPR 2+. **There is nothing to
+  win here** — a width-variant exercise buys a few KB, so do not schedule it as a performance sprint
+  item. `grep -rn 'sizes=' app/ components/` returns zero hits, so there is no misleading `sizes`
+  to remove either.
+- **`thermoleak_logo.webp`** — 18,480 B, fetched on every route. Not a weight problem; see §2 rule 3
+  for its `loading` state.
+- **`og.png`** — 128,363 B, never rendered on-page; its weight does not affect CWV.
 
-**Two viable paths, pick one deliberately, never mix:**
+**If a genuinely large raster ever lands, two viable paths — pick one deliberately, never mix:**
 
 1. **Pre-generate width variants** and hand-write `srcset`/`sizes`. No config change, no host
    dependency, works with `unoptimized: true`.
@@ -80,7 +127,7 @@ Three of four service illustrations are **SVG**, where this costs nothing. What 
 formats near the colour-ramp edges — check for banding at quality < 80.
 
 **Every content image needs meaningful Hebrew `alt`**; decorative gets `alt=""`. Thermal images
-need `alt` that describes the *finding* — colour carries the entire information channel.
+need `alt` that describes the _finding_ — colour carries the entire information channel.
 
 ---
 
@@ -90,9 +137,18 @@ Heebo (headings) + Assistant (body), self-hosted via `next/font/google` in `app/
 as CSS variables consumed by the `@theme` block. Correct setup.
 
 Rules:
+
 - `display: swap` — never `block`.
-- **Subset to Hebrew + Latin only.** Full Google Font files carry ranges this site never renders.
-- **Preload only above-the-fold subsets.** Without a preload both families FOUT on first paint;
+- **Subset to Hebrew + Latin only.** `app/fonts.ts` already declares `["hebrew", "latin"]` — **do
+  not "fix" it**. Note what that does _not_ do: `next/font/google` still emits five `unicode-range`
+  faces for Heebo (hebrew, latin, latin-ext, **MATH 23,772 B, SYMBOLS 14,244 B**) against
+  Assistant's three, so 135,576 B sits on disk while ~38 KB of it is glyph data this site will never
+  render. The browser never fetches it — `unicode-range` gates the download — which is why the
+  budget is stated per _preloaded_ face (§1) and why this is a note, not a defect. Recorded so the
+  next auditor does not chase it.
+- **Preload only above-the-fold subsets.** ✅ shipped — the build emits exactly four
+  `<link rel="preload" as="font">` tags per route (71,540 B); `next/font/google` does this by
+  default, so there was never work owing here. Without a preload both families FOUT on first paint;
   preloading everything is as bad as preloading nothing.
 - Fallback stack must be metric-compatible enough that swap does not shift layout (contributes to
   CLS).
@@ -104,11 +160,19 @@ Rules:
 
 Cloudflare Pages, edge-served worldwide.
 
-| Asset | Policy | Where |
-| --- | --- | --- |
-| `/_next/static/*` | `public, max-age=31536000, immutable` | `public/_headers` — safe: content-hashed filenames |
-| HTML | Pages default (`DYNAMIC`, fresh per deploy) | Do not add per-request HTML caching |
-| Images in `public/` | Long-lived, but **not** immutable unless hashed | Rename on change |
+| Asset                      | Policy                                                             | Where                                              | State                                                                                                                                                                                      |
+| -------------------------- | ------------------------------------------------------------------ | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `/_next/static/*`          | `public, max-age=31536000, immutable`                              | `public/_headers` — safe: content-hashed filenames | ✅ shipped, verified live                                                                                                                                                                  |
+| HTML                       | Pages default (`DYNAMIC`, fresh per deploy)                        | Do not add per-request HTML caching                | ✅                                                                                                                                                                                         |
+| RSC payloads (`/**/*.txt`) | Pages default (`DYNAMIC`, `max-age=0, must-revalidate`)            | Nothing declares them                              | **Accepted.** Every `<Link>` prefetch is an uncached origin round trip (~10 KB brotli). Correct for freshness; revisit only if prefetch volume ever shows up in the logs                   |
+| Images in `public/`        | Long-lived, but **not** immutable unless hashed — rename on change | `public/_headers`                                  | 🔴 **not implemented.** No `/images/*` rule exists, so a Cloudflare **zone default** (`max-age=14400, must-revalidate`) owns the policy for the preloaded LCP hero and the every-page logo |
+
+**The `/images/*` gap is the one actionable row.** The mechanism demonstrably works — the fonts come
+back `max-age=31536000, immutable` from the same file — so this is a missing four-line block, not a
+platform limit. The fix is an append to `public/_headers` (`Cache-Control: public, max-age=2592000`,
+**no** `immutable`, because the filenames are not content-hashed and rename-on-change is the
+invalidation path). Header edits are inert until a deploy, and `out.prev/_headers` is the rollback
+snapshot — never hand-edit it.
 
 **Do not cache HTML at the edge with a long TTL.** A stale page after a deploy costs more than the
 milliseconds saved, and Pages already serves HTML from the edge. There is nothing to purge on
@@ -141,11 +205,33 @@ The auditor reads the artifact; it does not measure a browser. For real numbers:
    lab whenever they disagree.
 4. Re-measure **after deploy**, not after build.
 
+The commands that reproduce every number in §1 — run them, do not re-estimate:
+
 ```bash
-du -sh out
-find out -name "*.js" -size +200k -exec ls -lh {} \;
-ls -lh public/images/*
-grep -c srcset out/index.html
+# total export size, and the budget as an assertion (exit 1 = breached)
+find out -type f -printf '%s\n' | awk '{s+=$1;n++} END {print s" bytes / "n" files"; exit (s>6000000)}'
+# the asset class that is half the export
+find out -name '*.txt'    -printf '%s\n' | awk '{s+=$1;n++} END {print "txt   "s" / "n}'
+find out -name '*.html'   -printf '%s\n' | awk '{s+=$1;n++} END {print "html  "s" / "n}'
+# the duplication: these two must be byte-identical, per route
+cmp out/index.txt out/__next._full.txt && echo "payload emitted twice (expected)"
+# JS actually loaded by a route, and the single-chunk budget
+grep -o '/_next/static/chunks/[a-z0-9_.-]*\.js' out/index.html | sort -u \
+  | while read f; do stat -c '%s %n' "out$f"; done | awk '{s+=$1;print} END {print "SUM "s}'
+find out -name '*.js' -size +200k -exec ls -lh {} \;
+# fonts the browser actually fetches
+grep -o 'href="/_next/static/media/[^"]*"' out/index.html | sort -u | wc -l   # expect 4
+ls -l public/images/
+grep -c srcset out/index.html                                                 # expect 0
+```
+
+Live, after a deploy (edge state is verified, never inferred):
+
+```bash
+# §5: currently answers with the zone default, max-age=14400
+curl -sSI https://thermoleak.co.il/images/hero.webp | grep -i cache-control
+# control case — the same _headers file does produce immutable where a rule exists
+curl -sSI "https://thermoleak.co.il$(grep -o '/_next/static/media/[^"]*\.woff2' out/index.html | head -1)" | grep -i cache-control
 ```
 
 ---
@@ -158,4 +244,14 @@ grep -c srcset out/index.html
 - Any font change
 - Tag manager / analytics installation ← **the highest-risk change on this list**
 - Any `_headers` edit
+- **A new route silo** — `/guides/` and `/locations/` together added ~1.87 MB to the export, almost
+  all of it RSC payload (§1). At 98.5% of budget this is now the trigger that matters most
 - The i18n build landing (doubles the route count)
+
+> **This list only works if someone runs it.** It did not run once between 2026-08-30 and
+> 2026-09-06, while four commits landed that hit three of these triggers at once — the analytics
+> install, two new silos and an `_headers` edit — which is how a table of unmeasured estimates
+> survived the sprints that invalidated it. **§1's 2026-09-06 re-baseline is the reference point
+> now, and every figure in it is a byte count.** When you trip a
+> trigger, re-measure with §7's commands and update §1's Current column in the same commit that
+> caused the change.

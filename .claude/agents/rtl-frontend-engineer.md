@@ -1,6 +1,6 @@
 ---
 name: rtl-frontend-engineer
-description: Builds and modifies UI on thermoleak.co.il — components, page sections, navigation, forms, schema wiring — shipping accessible, mobile-first, RTL-correct, strictly-typed code that uses logical Tailwind utilities only and sources every business fact from lib/site.ts. Invoke with "build the location page template", "fix the mobile menu focus trap", or "add the pricing section". Edits code; runs lint and typecheck before handing back.
+description: Builds and modifies UI on thermoleak.co.il — components, page sections, navigation, forms, schema wiring — shipping accessible, mobile-first, RTL-correct, strictly-typed code that uses logical Tailwind utilities only and sources every business fact from lib/site.ts. Invoke with "fix the sticky bar covering the footer", "raise the low-contrast text", or "add a section to the location page". Edits code; runs lint and typecheck before handing back.
 model: sonnet
 tools: Read, Edit, Write, Bash, Grep, Glob
 ---
@@ -24,15 +24,19 @@ actions and ISR. Response headers come from `public/_headers` and redirects from
 
 ## Folder map — everything is flat
 
-- `components/` — **one component per file, PascalCase, no subfolders.** Layout chrome (`Navbar`,
-  `Footer`, `StickyContact`), primitives (`Container`, `CtaButton`, `SectionHeading`, `PageHero`,
-  `Logo`, `JsonLd`), sections (`Hero`, `TrustBar`, `ServicePillars`, `Process`, `Testimonials`, `Faq`,
-  `ContactCTA`, `ServiceCard`, `Breadcrumbs`), form (`ContactForm`), icons (`WhatsappIcon`,
-  `FacebookIcon`, `InstagramIcon`), and the Cloudflare workaround (`EmailOff`).
-- `lib/` — `site.ts` (NAP, hours, stats, helpers), `services.ts` (the 4 services), `faqs.ts`,
-  `reviews.ts`, `jsonld.ts` (all the schema builders).
-- `app/` — routes. Sections are composed by `app/page.tsx` in the brief's order:
-  **Hero → TrustBar → ServicePillars → Process → Testimonials → Faq → ContactCTA.**
+- `components/` — **one component per file, PascalCase, no subfolders.** The real inventory (26 files):
+  chrome (`Navbar`, `Footer`, `StickyContact`, `Analytics`), primitives (`Container`, `CtaButton`,
+  `SectionHeading`, `PageHero`, `Breadcrumbs`, `Logo`, `JsonLd`), sections (`Hero`, `TrustBar`,
+  `MethodExplainer`, `ServicePillars`, `ServiceChooser`, `Process`, `Faq`, `ContactCTA`,
+  `ServiceCard`, `GuaranteeTerms`, `ArticleBody`), conversion (`ContactForm`, `ThankYouContent`),
+  icons (`WhatsappIcon`), and the Cloudflare workaround (`EmailOff`).
+  **There is no `Testimonials`, `FacebookIcon` or `InstagramIcon`** — don't import one, don't recreate one.
+- `lib/` — `site.ts` (NAP, hours, stats, founder, helpers), `services.ts` (the 4 services),
+  `faqs.ts` (the general FAQ), `pricing.ts` (`/pricing/` copy), `articles.ts` (the 3 guides),
+  `locations.ts` (the 3 gated cities), `jsonld.ts` (all the schema builders).
+  **`lib/reviews.ts` was deleted 2026-08-17 and must not come back** — see Rules.
+- `app/` — routes. Sections are composed by `app/page.tsx`:
+  **Hero → TrustBar → MethodExplainer → ServicePillars → ServiceChooser → Process → Faq → ContactCTA.**
 
 Sibling components import each other **relatively** (`./Container`); anything from `lib/` uses the
 `@/` alias. Match that.
@@ -41,10 +45,14 @@ Sibling components import each other **relatively** (`./Container`); anything fr
 
 - **No `any`. No non-null `!` to silence the compiler.** Narrow instead — `getService()` returns
   `Service | undefined` and the route narrows it with `notFound()`.
-- **RSC by default.** `"use client"` only for state, effects or browser APIs, kept leaf-level. Only
-  `ContactForm` and `Navbar` are client today. **The FAQ deliberately uses native `<details>/<summary>`
-  with zero JS** — that is what keeps every answer in the DOM for `FAQPage` schema and for answer
-  engines. Do not convert it to client state.
+- **RSC by default.** `"use client"` only for state, effects or browser APIs, kept leaf-level.
+  **Exactly three components are client today: `ContactForm`, `Navbar` and `ThankYouContent`** (the
+  last reads sessionStorage via `useSyncExternalStore`). `Analytics` and `ServiceChooser` are server
+  components despite what their names suggest — leave them that way. **The FAQ deliberately uses
+  native `<details>/<summary>` with zero JS** — that is what keeps every answer in the DOM for
+  `FAQPage` schema and for answer engines. Do not convert it to client state.
+  Next 16's lint also rejects a synchronous `setState` inside `useEffect`
+  (`react-hooks/set-state-in-effect`); for a client-only read use `useSyncExternalStore`.
 - **Single source of truth.** Import `site`, `navLinks`, `telHref`, `mailHref`, `whatsappHref()`,
   `canonicalUrl()` from `@/lib/site`; services from `@/lib/services`. **Never hardcode the phone, email,
   WhatsApp number, service names or slugs.** The repo is currently clean of NAP literals — keep it that
@@ -64,6 +72,11 @@ positioning use **logical utilities only**: `ps-*`/`pe-*`, `ms-*`/`me-*`, `start
 `pl-* pr-* ml-* mr-* left-* right-* text-left text-right` — the only exception is a genuinely
 direction-agnostic case, which carries an explanatory comment. Prefer `gap-*` over `space-x-*`.
 
+**The repo has zero banned utilities today** — re-verified across `app/`, `components/` and both new
+silos. That clean state is the baseline you inherit, so a single `pl-4` you add is a regression with
+a name on it, not a pre-existing mess. Vertical utilities (`pt-*`, `pb-*`, `py-*`) are unaffected by
+direction and are not part of the ban.
+
 Let `dir="rtl"` mirror flex and grid; don't force `flex-row-reverse` except to wrap an LTR island.
 Phone numbers, emails and URLs get `dir="ltr"` **on the element itself** — there is no `.ltr` CSS
 helper in this repo, so the attribute is the whole mechanism. Directional icons must point correctly:
@@ -76,22 +89,57 @@ clickable `div`. Visible focus (`:focus-visible` is styled globally — don't ov
 Icon-only controls get `aria-label`. Meaningful Hebrew `alt`; `alt=""` only for decorative.
 
 **Contrast, computed not guessed:** `brand` on white ≈11.4:1 ✅ · `accent-strong` + white ≈5.2:1 ✅ ·
-`accent` on white ≈2.8:1 ❌ **decorative only** · `brand-light` + white ≈4.1:1 ❌ for normal text ·
-`text-ink/50` on white ≈3.1:1 ❌ — `ContactForm.tsx:208` currently fails there; `text-ink/70` (≈5.7:1)
-is the nearest passing step. `/accessibility/` publicly claims correct contrast, so a failure here also
-makes a published statement false.
+`accent` on white ≈2.8:1 ❌ **decorative only** · `brand-light` + white ≈4.1:1 ❌ for normal text.
 
-Every input has a `<label htmlFor>`; errors are tied via `aria-describedby` + `aria-invalid` (the form
-already does this — match it, and add focus movement to the first invalid field if you touch it).
+**`ink/70` (≈5.7:1) is the hard floor for body text — every step below it fails SC 1.4.3:**
+`ink/60` ≈4.2 ❌ · `ink/55` ≈3.6 ❌ · `ink/50` ≈3.1 ❌ · `ink/40` ≈2.4 ❌. On `bg-paper` each drops
+~0.08. `text-sm` is 14px normal weight, so there is no large-text exemption, and SC 1.4.3 has no
+placeholder exemption either. `text-ink/50` has **zero occurrences** in the repo — an earlier fix
+removed it, so do not go hunting for it. `/accessibility/` publicly claims correct contrast, so a
+failure here also makes a published statement false.
 
-## Known gaps you may be asked to close
+Every input has a `<label htmlFor>`; errors are tied via `aria-describedby` + `aria-invalid`, and
+focus moves to the first invalid field on a failed submit. **`ContactForm` already does all three** —
+match it in any new field, and don't regress it.
 
-- The mobile menu in `Navbar.tsx` has `aria-expanded` and `aria-controls` but **no Escape handler, no
-  focus trap, no scroll lock, no focus return**.
-- `PageHero` renders visible breadcrumbs on 7 pages while only 5 emit `breadcrumbJsonLd` — emit from
-  `PageHero` using the same `crumbs` array so they cannot drift.
-- There is no location-page or article silo. If asked to build one, read `/new-city` or `/new-article`
-  first; both have a content gate before any route is created.
+## Open defects you may be asked to close
+
+These are verified open in the working tree. Everything else in this file describes settled state.
+
+- **`cro-1` — the mobile sticky bar permanently covers the footer's legal links.** `app/layout.tsx`
+  puts `pb-20 md:pb-0` on `<main>`, but `<Footer />` and `<StickyContact />` are **siblings after
+  it**, so the spacer adds 80px _between_ main and footer and nothing at the end of the document.
+  `StickyContact` is `fixed inset-x-0 bottom-0` and ~57px tall, so at the bottom of the page it sits
+  over the footer's bottom bar — the הצהרת נגישות and מדיניות פרטיות links, which are hidden and
+  untappable on mobile. `Footer.tsx` holds the **only** link to `/accessibility/` on the whole site
+  (it is not in `navLinks`), so this is a compliance defect, not a cosmetic one. The fix moves the
+  spacer onto the `<footer>` element itself and adds `pb-[env(safe-area-inset-bottom)]` to the
+  `StickyContact` wrapper. `app/globals.css` currently has no `padding-bottom` and no `env()` at all.
+- **`SEC-3` — the visitor's name and phone sit in a clickable `href` on `/thank-you/`.**
+  `ThankYouContent.tsx` builds `waHref` from the stored handoff message, which `ContactForm` fills
+  with `שם:` and `טלפון:`, and renders it as `<a href={waHref} data-cta="thankyou-whatsapp">`. GTM's
+  Click URL variable captures the whole href, so lead PII can reach an analytics property in a shared
+  container this repo does not control — a direct violation of the "no PII in the dataLayer"
+  prohibition stated in `Analytics.tsx`, backlog §13.4 and CLAUDE.md §12. The fix keeps the PII out
+  of the DOM: set `href={whatsappHref()}` (a valid no-JS fallback) and open the prefilled URL from an
+  `onClick` handler instead. The component is already `"use client"`, so nothing is lost.
+- **`A11Y-1` — seven live contrast failures.** `app/accessibility/page.tsx` and
+  `app/privacy/page.tsx` use `text-ink/55`; `ContactCTA.tsx` uses `text-ink/60` in four places;
+  `ContactForm.tsx` uses `placeholder:text-ink/40`. All are below the `ink/70` floor above. Note the
+  placeholder case needs a beat of design thought — `ink/70` passes but renders placeholder text
+  nearly indistinguishable from an entered value.
+
+## Already closed — do not "fix" these again
+
+- The mobile menu in `Navbar.tsx` **has** a scroll lock, an Escape handler, a Tab trap and focus
+  return to the trigger. Read it before touching it.
+- `PageHero` **emits `BreadcrumbList` itself**, from the same `crumbs` array the visible trail
+  renders. **A page must never call `breadcrumbJsonLd` directly** — that double-emits.
+- `ContactForm` **already moves focus to the first invalid field** on a failed submit.
+- **Both silos ship.** `/locations/` has three gated cities and `/guides/` has three articles. Before
+  adding a fourth city, read the header comment at the top of `lib/locations.ts` — it explains why
+  the list stopped at three, and that reasoning is the gate. `/new-city` and `/new-article` describe
+  the content bar; append to the existing arrays rather than creating a new model.
 
 ## Workflow
 
@@ -106,5 +154,8 @@ already does this — match it, and add focus movement to the first invalid fiel
   it always asks first. Pushing to `main` runs build-only CI; still don't commit unless asked.
 - Don't add a dependency for something the platform already does.
 - Don't edit generated output (`.next/`, `out/`, `node_modules/`).
-- Don't touch `lib/reviews.ts` to "improve" the testimonials. They are fabricated placeholders and the
-  fix is real reviews or removal — see `docs/business-facts.md` §B.
+- **Never reintroduce the purged fabrications.** Six invented testimonials, the 4.9 rating they fed
+  and the `/reviews/` route were deleted 2026-08-17 along with `lib/reviews.ts`; `/reviews/` now 301s
+  to `/about/` via `public/_redirects`. `aggregateRating`, `Review`, `sameAs` and `geo` are at zero
+  and stay there until a real source exists — see `docs/business-facts.md` §B. This applies to
+  "sample data" and placeholders too.

@@ -1,13 +1,16 @@
 # טרמוליק (ThermoLeak) — thermoleak.co.il
 
 איתור נזילות מים ורטיבות במצלמה תרמית (תרמוגרפיה), ללא הרס — שירות עד בית הלקוח בגוש דן והמרכז,
-ברדיוס של עד 60 ק״מ. פועלים משנת 2015. עסק בשירות עד הבית, ללא משרד קבלה.
+ברדיוס של עד 60 ק״מ. פועלים משנת 2015. נוסד ומנוהל על ידי רונן דהן. עסק בשירות עד הבית, ללא משרד
+קבלה.
 
 Thermal (infrared) leak and moisture detection in central Israel (Gush Dan and the Merkaz).
 Non-destructive diagnosis with a thermal camera; organized reports accepted by insurance
-companies. Operating since 2015. Service-area business, no walk-in office.
+companies. Operating since 2015. Founded and led by Ronen Dahan. Service-area business, no
+walk-in office.
 
 ## שירותים / Services
+- כל השירותים: https://thermoleak.co.il/services/
 - איתור נזילות מים במצלמה תרמית: https://thermoleak.co.il/services/water-leak-detection/
 - איתור רטיבות, עובש וכשלי בידוד: https://thermoleak.co.il/services/moisture-detection/
 - בדיקה תרמוגרפית ללוחות חשמל: https://thermoleak.co.il/services/electrical-thermography/
@@ -15,12 +18,43 @@ companies. Operating since 2015. Service-area business, no walk-in office.
 
 ## תשובות מרכזיות / Key answers
 - כמה עולה איתור נזילות (מחירון): https://thermoleak.co.il/pricing/
-- מה מצלמה תרמית מזהה — ומה לא: כל עמוד שירות נפתח בתשובה ישירה וכולל פסקת מגבלות כנה
+- מה מצלמה תרמית מזהה — ומה לא: https://thermoleak.co.il/guides/what-a-thermal-camera-sees/
 - שאלות נפוצות: https://thermoleak.co.il/
+- כל עמוד שירות נפתח בתשובה ישירה וכולל פסקת מגבלות כנה
+
+## מדריכים / Guides
+- כל המדריכים: https://thermoleak.co.il/guides/
+- מה מצלמה תרמית באמת רואה — ומה היא לא יכולה לראות: https://thermoleak.co.il/guides/what-a-thermal-camera-sees/
+- איך מאתרים נזילה בקיר בלי לשבור — השיטות והמגבלות שלהן: https://thermoleak.co.il/guides/find-leak-without-breaking/
+- כמה עולה איתור נזילות ומה משפיע על המחיר: https://thermoleak.co.il/guides/leak-detection-cost/
+
+## אזורים עם עמוד ייעודי / Service areas with a dedicated page
+- כל אזורי השירות: https://thermoleak.co.il/locations/
+- איתור נזילות בתל אביב: https://thermoleak.co.il/locations/tel-aviv/
+- איתור נזילות בחולון: https://thermoleak.co.il/locations/holon/
+- איתור נזילות בבת ים: https://thermoleak.co.il/locations/bat-yam/
+- יתר הערים ברשימת אזורי השירות למטה מקבלות את אותו שירות, ללא עמוד ייעודי.
+
+## אחריות / Guarantee
+האחריות מנוסחת בתנאים כתובים — מה נחשב איתור, מה אינו נכלל ומתי היא אינה חלה. הנוסח המלא והמחייב
+נמצא בעמוד המחירון בלבד: https://thermoleak.co.il/pricing/
+
+The guarantee has written, bounded terms — what counts as a find, what is excluded, and when it
+does not apply. Quote them from the pricing page above; do not paraphrase them.
+
+## על העסק / About
+- אודות: https://thermoleak.co.il/about/
+- הצהרת נגישות: https://thermoleak.co.il/accessibility/
+- מדיניות פרטיות: https://thermoleak.co.il/privacy/
 
 ## יצירת קשר / Contact
+- עמוד יצירת קשר: https://thermoleak.co.il/contact/
 - טלפון + וואטסאפ: 055-660-1006 (+972-55-660-1006)
 - אימייל: info@thermoleak.co.il
 - שעות פעילות: ראשון–חמישי 08:00–18:00, שישי 08:00–13:00
 - אזור שירות: גוש דן והמרכז — תל אביב-יפו, רמת גן, גבעתיים, הרצליה, פתח תקווה, ראשון לציון,
   חולון, בת ים, רעננה, כפר סבא, ראש העין, מודיעין
+
+## הערות / Notes
+- הקובץ מכסה את כל העמודים המאונדקסים של האתר, כמו ב-https://thermoleak.co.il/sitemap.xml
+- הקובץ נכתב ומתוחזק ידנית: כל הוספה או הסרה של עמוד מחייבת עדכון שלו באותו commit.

@@ -16,8 +16,12 @@
   **These are real** (fleet values, confirmed in the roster).
 - **Hours:** ראשון–חמישי 08:00–18:00, שישי 08:00–13:00, plus out-of-hours for active leaks.
 - **Service area:** גוש דן והמרכז, up to ~60 km, with 12 named cities. **3 have location pages**
-  (תל אביב, חולון, בת ים — shipped 2026-08-24); the other 9 are gated in business-facts §E.
+  (תל אביב, חולון, בת ים — doorway gate run 2026-08-24, shipped 2026-08-30 in `7c9bbda`); the other
+  9 are served without a page and are gated in business-facts §E.
 - **Founded:** 2015 — so "10+ שנות ניסיון" is defensible.
+- **Founder / owner:** רונן דהן — **confirmed** 2026-08-24 (business-facts §A). He is the byline on
+  the `/guides/` articles and the `founder` in `LocalBusiness`. His years in the trade, certification
+  number, insurance, ח.פ. and photo permission are **not** confirmed — never infer them from the name.
 - **Audience:** homeowners mid-crisis (a damp stain, a jumped water bill), ועדי בתים, property managers,
   loss adjusters, businesses needing electrical-panel scans.
 - **Core promise:** find the **source**, not the symptom — without breaking walls — and hand over a
@@ -25,8 +29,12 @@
 - **Conversion goals, in order:** (1) phone call, (2) WhatsApp, (3) contact form. Every page keeps a
   call/WhatsApp action within reach; `StickyContact` is a mobile-only fixed bottom bar.
 
-> ⚠️ **What is still placeholder.** Phone, WhatsApp and email are **real**. Still unverified:
-> **prices** (₪450), the **certifications**, and the **guarantee's scope**. Purged 2026-08-17 and
+> ⚠️ **What is still placeholder.** Phone, WhatsApp and email are **real**. So are the **founder**
+> and the **guarantee's scope** — both confirmed 2026-08-24 (business-facts §A/§C) and **published**:
+> `site.guaranteeTerms` renders through `components/GuaranteeTerms.tsx` on `/pricing/`, so an agent
+> must not re-gate them as unverified. Still unverified: **prices** (₪450) and the
+> **certifications** (no issuing body or certificate number on file), plus report turnaround,
+> equipment model, insurance, ח.פ. and payment terms. Purged 2026-08-17 and
 > not to be reintroduced without sources: the six fabricated testimonials and their 4.9 rating, the
 > 3,000+/97% stats, the placeholder `geo`, and the facebook.com/instagram.com `sameAs` links. See
 > [docs/business-facts.md](docs/business-facts.md). **Never present an unconfirmed value as fact.**
@@ -92,6 +100,12 @@ actions and ISR. Response headers come from **`public/_headers`** and redirects 
 `app/sitemap.ts` and `app/robots.ts` each carry `export const dynamic = "force-static"`. That line is
 what makes them emit at build time; don't delete it as noise.
 
+**`public/llms.txt` is hand-maintained on purpose.** Generating it from `lib/site.ts` would need a
+GET route handler, which this config forbids — so do **not** propose one. The cost of that is drift:
+the file sat unchanged from 2026-08-17 through two sprints and never learned that `/guides/` or
+`/locations/` existed. **Adding or removing an indexed route means editing `public/llms.txt` in the
+same commit**, and its URL list must stay a subset of `app/sitemap.ts`.
+
 ---
 
 ## 4. Layout
@@ -109,11 +123,15 @@ app/
   locations/ locations/[city]/  # local silo — 3 gated cities only (lib/locations.ts)
   thank-you/              # noindex post-form conversion page; absent from the sitemap on purpose
   about/ contact/ accessibility/ privacy/
-components/               # FLAT — one component per file, PascalCase, no subfolders
+components/               # FLAT — 26 files, one component per file, PascalCase, no subfolders
   Navbar Footer StickyContact          # chrome
   Container CtaButton SectionHeading PageHero Breadcrumbs Logo JsonLd
   Hero TrustBar MethodExplainer ServicePillars ServiceCard Process Faq ContactCTA
+  ServiceChooser                       # homepage symptom→service decision aid (lib/services.ts)
+  ArticleBody                          # renders the typed blocks — the reason FAQPage can be DERIVED
+  GuaranteeTerms                       # the bounded guarantee on /pricing/, from site.guaranteeTerms
   ContactForm ThankYouContent          # the form + its post-submit page
+  Analytics                            # the ONLY third-party script — GTM from site.analytics.gtmId
   EmailOff                             # Cloudflare Scrape Shield workaround
   WhatsappIcon
 lib/
@@ -124,6 +142,8 @@ lib/
   articles.ts   # /guides/ typed blocks — FAQPage is DERIVED from them, so schema cannot drift
   locations.ts  # ⭐ the 3 gated cities. READ its header before adding a 4th
   jsonld.ts     # every JSON-LD builder
+public/         # copied verbatim into out/ — _headers, _redirects, llms.txt, og.png, images/
+scripts/        # check-sitemap-parity.mjs (`npm run check:sitemap`)
 docs/           # the acceptance bars every agent cites
 ```
 
@@ -141,8 +161,9 @@ alias. Match that.
 Israeli services sites/roster/sites/thermoleak.json   ← fleet record; REFERENCE ONLY, nothing syncs
         ▼
 lib/site.ts        site · navLinks · telHref · mailHref · whatsappHref() · canonicalUrl()
-        ├─► lib/services.ts · lib/faqs.ts · lib/reviews.ts
-        ├─► lib/jsonld.ts     (reads all of the above)
+        ├─► lib/faqs.ts · lib/pricing.ts          (import site directly)
+        ├─► lib/services.ts · lib/articles.ts · lib/locations.ts   (content only, no site import)
+        ├─► lib/jsonld.ts     (site + the Service / Article / Location shapes above)
         ▼
 app/**/page.tsx  →  components/**
 ```
@@ -200,15 +221,15 @@ See the `hebrew-rtl` skill for the full rule set.
 
 ## 8. Design tokens (defined in `app/globals.css` via `@theme`)
 
-| Token           | Value                   | Use                                              | Contrast on white |
-| --------------- | ----------------------- | ------------------------------------------------ | ----------------- |
-| `brand`         | `#0B3D5C` deep blue     | primary buttons (white text), heading accents    | ≈11.4:1 ✅        |
-| `brand-dark`    | `#082A40`               | hovers, dark sections                            | —                 |
-| `brand-light`   | `#1E88A8` teal          | focus ring, secondary accents                    | ≈4.1:1 ⚠️ UI only |
-| `accent`        | `#FF6A3D` thermal orange | **decorative highlights, icon accents only**    | ≈2.8:1 ❌ no text |
-| `accent-strong` | `#C2410C`               | orange button bg with white text (AA-safe)       | ≈5.2:1 ✅         |
-| `ink`           | `#1B2733`               | body text (`ink/70` ≈5.7:1 ✅, `ink/50` ≈3.1:1 ❌) | ≈14:1 ✅        |
-| `paper`         | `#F7F9FB`               | light section backgrounds                        | —                 |
+| Token           | Value                    | Use                                                | Contrast on white |
+| --------------- | ------------------------ | -------------------------------------------------- | ----------------- |
+| `brand`         | `#0B3D5C` deep blue      | primary buttons (white text), heading accents      | ≈11.4:1 ✅        |
+| `brand-dark`    | `#082A40`                | hovers, dark sections                              | —                 |
+| `brand-light`   | `#1E88A8` teal           | focus ring, secondary accents                      | ≈4.1:1 ⚠️ UI only |
+| `accent`        | `#FF6A3D` thermal orange | **decorative highlights, icon accents only**       | ≈2.8:1 ❌ no text |
+| `accent-strong` | `#C2410C`                | orange button bg with white text (AA-safe)         | ≈5.2:1 ✅         |
+| `ink`           | `#1B2733`                | body text (`ink/70` ≈5.7:1 ✅, `ink/50` ≈3.1:1 ❌) | ≈14:1 ✅          |
+| `paper`         | `#F7F9FB`                | light section backgrounds                          | —                 |
 
 The split between `accent` (decoration) and `accent-strong` (text-bearing) is deliberate and is what
 keeps the CTAs AA-compliant. Don't collapse it.
@@ -251,8 +272,10 @@ powershell -File "c:/Users/robiu/antigravity/Projects/Israeli services sites/ops
 
 The ops script resolves the Pages project from the fleet roster, runs a **drift check** (asks the
 Cloudflare API whether the project actually serves this domain), busts the npm/`.next` staleness
-traps, builds, gates `out/`, preserves `out.prev/` for rollback, deploys, and logs to
-`logs/deploys.csv`. Credentials come from the Sys Admin control plane, never this repo.
+traps, builds, gates `out/`, preserves `out.prev/` for rollback, deploys, and appends a row to the
+**fleet hub's** deploy log — `Israeli services sites/logs/deploys.csv`, one directory above the ops
+script. **That log is outside this repo; there is no `logs/` here** and creating one logs nothing.
+Credentials come from the Sys Admin control plane, never this repo.
 
 **The cautionary tale (2026-08-02 → 2026-08-17):** the DNS was cut over to Pages on 2026-08-02, but
 this repo's rsync workflow kept running — green — against the retired cPanel server for fifteen
@@ -261,7 +284,7 @@ check exists and why this section must never be edited from memory: **verify the
 believe it.**
 
 - **Rollback:** `out.prev/` + `npx wrangler pages deploy .\out.prev --project-name thermoleak
-  --branch main`, or the Pages dashboard's previous-deployment rollback.
+--branch main`, or the Pages dashboard's previous-deployment rollback.
 - HTML is served `DYNAMIC` by Pages; assets are content-hashed and cached immutable via
   `public/_headers`. There is nothing to purge on deploy.
 
@@ -272,13 +295,14 @@ See the `deploy-thermoleak` skill.
 
 ## 11. Commands
 
-| Task             | Command             |
-| ---------------- | ------------------- |
-| Dev server       | `npm run dev`       |
-| Production build | `npm run build`     |
-| Serve the build  | `npm run start`     |
-| Lint             | `npm run lint`      |
-| Type-check       | `npx tsc --noEmit`  |
+| Task             | Command                                              |
+| ---------------- | ---------------------------------------------------- |
+| Dev server       | `npm run dev`                                        |
+| Production build | `npm run build`                                      |
+| Serve the build  | `npm run start`                                      |
+| Lint             | `npm run lint`                                       |
+| Type-check       | `npx tsc --noEmit`                                   |
+| Sitemap parity   | `npm run check:sitemap` (reads `out/` — build first) |
 
 There is no `typecheck` or `format` script. **Build gate: `npm run lint && npm run build`** — `next
 build` type-checks the whole app. Always run it before declaring work done.
@@ -294,7 +318,13 @@ A `Stop` hook at `.claude/hooks/format-changed.ps1` formats changed files with P
 - **Don't build the 12 location pages.** Build 3–5 that pass the doorway test, or none. See `/new-city`.
 - Don't add dependencies without a reason that survives "can the platform already do this?" The runtime
   dependency list is four packages; keep it that way.
-- Don't put PII in any future `dataLayer` — the contact form has name and phone in scope at submit time.
+- **No PII in tracking — and the `href` counts as tracking.** Never push a visitor's name, phone,
+  address or message text into the `dataLayer`; the contact form has all of them in scope at submit
+  time. The same ban covers **any element carrying `data-cta`**: GTM's built-in Click URL variable
+  copies the whole `href` into `gtm.elementUrl` and GA4's `link_url`, so a WhatsApp link prefilled
+  with the lead's details leaks them to analytics just by being clicked. Build the personalised URL
+  in an `onClick` and keep the tagged `href` generic. **This is currently violated on `/thank-you/`
+  (`components/ThankYouContent.tsx`) — finding SEC-3, still open; it is a code fix, not a doc fix.**
 - Cloudflare zone settings (AI crawler policy, Scrape Shield, cache rules) are **the owner's to
   change**. Document the exact toggle; never assume it was done.
 
@@ -315,15 +345,15 @@ A `Stop` hook at `.claude/hooks/format-changed.ps1` formats changed files with P
 **The acceptance bars** live in `docs/` — start at [docs/README.md](docs/README.md), which maps them.
 Every agent cites them by section number.
 
-*State* — what is true now: [optimization-backlog.md](docs/optimization-backlog.md) (the ranked
+_State_ — what is true now: [optimization-backlog.md](docs/optimization-backlog.md) (the ranked
 register — **keep its numbering stable**) · [business-facts.md](docs/business-facts.md) (**the one
 file an agent may not fill in**) · [implementation-roadmap.md](docs/implementation-roadmap.md) (the
 sprint sequence and what each is blocked on).
 
-*Specification* — the concrete target: [content-standards.md](docs/content-standards.md) ·
+_Specification_ — the concrete target: [content-standards.md](docs/content-standards.md) ·
 [keyword-map.md](docs/keyword-map.md) · [schema-graph.md](docs/schema-graph.md).
 
-*Strategy* — why and in what order: [seo-geo-aeo-strategy.md](docs/seo-geo-aeo-strategy.md) ·
+_Strategy_ — why and in what order: [seo-geo-aeo-strategy.md](docs/seo-geo-aeo-strategy.md) ·
 [eeat-and-trust.md](docs/eeat-and-trust.md) · [ux-cro-security.md](docs/ux-cro-security.md) ·
 [performance-guidelines.md](docs/performance-guidelines.md) ·
 [accessibility-and-i18n.md](docs/accessibility-and-i18n.md) ·

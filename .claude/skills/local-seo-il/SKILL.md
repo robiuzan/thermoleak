@@ -1,12 +1,16 @@
 ---
 name: local-seo-il
-description: Israeli local-SEO doctrine for טרמוליק — NAP for a service-area business with no premises, the 12 named service areas that have no pages behind them, the 4×12 matrix and its expansion cap, Hebrew ב+city grammar, the placeholder sameAs and geo, Google עסק שלי as the top lever, and the doorway-page policy that gates any city page. Use when planning local coverage or auditing local visibility. Triggers "local SEO", "NAP", "city pages", "Google עסק שלי", "doorway pages", "areaServed", "add a city".
+description: Israeli local-SEO doctrine for טרמוליק — NAP for a service-area business with no premises, the 12 named service areas of which 3 have pages and 9 are still chips, the 4×12 matrix and its expansion cap, Hebrew ב+city grammar, sameAs and geo both empty by design until a real GBP lands, Google עסק שלי as the top lever, and the doorway-page policy that gates any city page. Use when planning local coverage or auditing local visibility. Triggers "local SEO", "NAP", "city pages", "Google עסק שלי", "doorway pages", "areaServed", "add a city".
 ---
 
 # Local SEO — Israel
 
-One business, **no public premises**, 12 named service areas, **zero location pages**. Everything below
-follows from that.
+One business, **no public premises**, 12 named service areas, **3 of them with location pages**
+(תל אביב, חולון, בת ים — shipped 2026-08-24). Everything below follows from that.
+
+The doctrine in this file is stable. The **status** paragraphs are the part that rots — every one of
+them was wrong for two weeks after sprint 3. Verify against `lib/locations.ts` and `out/` before
+reporting a local gap.
 
 ## 1. NAP for a service-area business
 
@@ -17,47 +21,55 @@ it commits you to three things:
 
 - The Google Business Profile must be a **service-area profile with the address hidden**. A profile with
   a visible address that the site doesn't show is an inconsistency Google resolves against you.
-- `geo` must be real or absent. `site.geo` is currently `32.0853, 34.7818` — **Tel Aviv city centre**,
-  a placeholder. For a business with no premises, either drop it or set the real operating base
-  (business-facts §E).
+- `geo` must be real or absent, and here it is **absent by design**: `lib/site.ts` has no `geo` key at
+  all, and no `GeoCoordinates` node is emitted anywhere. A placeholder pointing at Tel Aviv city centre
+  was removed 2026-08-17. Do not restore one — a real operating base is a `docs/business-facts.md` §E
+  fact the owner has to supply.
 - Phone and email must be byte-identical everywhere. They currently are, and per the roster manifest
   they are **real fleet values** — `055-660-1006` / `+972556601006` / `info@thermoleak.co.il`. Don't
   "correct" them to the fleet's `055-6601006` display format without checking; the E.164 number matches.
 
 ## 2. Google עסק שלי — the top lever
 
-`site.social` holds `https://www.facebook.com/` and `https://www.instagram.com/` — platform homepages,
-not profiles — and they are emitted into JSON-LD `sameAs` **and** rendered as the footer's social icons.
-There is **no GBP link anywhere on the site**.
+`sameAs` is **empty and there is no `social` key in `lib/site.ts`**. The two platform-homepage links
+that used to sit there (`facebook.com`, `instagram.com`) were emitted into `sameAs` and rendered as
+footer icons; both were removed 2026-08-17 and `components/Footer.tsx` carries a comment saying they
+return only with real profile URLs. There is **no GBP link anywhere on the site** — that is the gap,
+not the empty field.
 
 For a single-operator trade business the Business Profile outranks almost everything else you can do
 on-page: it drives the map pack, it is where reviews live, and it is the entity anchor that makes
-`sameAs` meaningful. It is also the only legitimate source for the `aggregateRating` the site is
-currently fabricating (see `/schema-structured-data`).
+`sameAs` meaningful. It is also the **only** legitimate source for a rating or a review on this site.
+The six invented testimonials and the 4.9 `aggregateRating` built from them were removed 2026-08-17
+and `/reviews/` now 301s to `/about/`; reintroducing any of it without a real sourced profile is a
+stop-ship, not a shortcut (golden rule 3, `/schema-structured-data`).
 
 This is a `docs/business-facts.md` §B blocker, not a code task. Escalate it rather than working around
-it. Once supplied, the URLs go in `lib/site.ts` `social` and flow to both surfaces from there.
+it. Once supplied, the URL goes in `lib/site.ts` and flows to `sameAs` and the footer from there.
 
-## 3. The missing Tier-2 layer
+## 3. The Tier-2 layer — three of twelve
 
 `site.serviceAreas` names twelve cities:
 
 > תל אביב-יפו · רמת גן · גבעתיים · הרצליה · פתח תקווה · ראשון לציון · חולון · בת ים · רעננה ·
 > כפר סבא · ראש העין · מודיעין
 
-They render as **plain text chips with no route behind them**, and they are enumerated as `City` nodes
-in `areaServed`. So every `איתור נזילות ב{city}` query — the entire Tier-2 layer, and the way most
-local demand is actually typed — is unexpressed.
+Three of them — **תל אביב, חולון, בת ים** — have routes at `/locations/{slug}/` behind them. The other
+nine still render as **plain text chips with no route**. All twelve are enumerated as `City` nodes in
+`areaServed`, so the schema claims more coverage than the site expresses.
 
-This is simultaneously the largest local opportunity and the largest local risk on the site.
+So two thirds of the `איתור נזילות ב{city}` layer — the way most local demand is actually typed — is
+still unexpressed. That is the largest remaining local opportunity, and §4 is why it is not simply a
+backlog of nine pages waiting to be typed.
 
 ## 4. The doorway policy — non-negotiable
 
 > Replace the city name with another city name. Is the page now correct and publishable for that other
 > city? If yes, it is a doorway page.
 
-This site has an advantage the rest of the fleet doesn't: **it has not yet built a thin location silo.**
-Don't create one. To pass, a location page needs **three or more** true, specific items:
+The three shipped cities passed this gate on 2026-08-24 and are the standard to match — read
+`lib/locations.ts`'s header comment, which records why the batch stopped at three even though all
+twelve could clear the bar. To pass, a location page needs **three or more** true, specific items:
 
 - Named neighbourhoods, streets or landmarks.
 - Housing-stock reality — 60s שיכונים with old galvanised plumbing, towers with pressurised systems and
@@ -70,6 +82,14 @@ Don't create one. To pass, a location page needs **three or more** true, specifi
 **If none of those can be said truthfully about a city, that city does not warrant a page.** Record that
 in business-facts §E rather than padding. Full spec: `docs/content-standards.md` §2–§3.
 
+The shipped model carries that audit trail in the data: each claim is a `LocationClaim` with a
+`category` of `"housing-stock" | "neighbourhood" | "travel" | "infrastructure"`, so a reviewer can see
+**why** a claim was considered city-specific. Keep that when you add a city — see `/new-city`.
+
+> ⚠️ **Batch 2 is not a data edit.** What survives for the nine deferred cities in business-facts §E is
+> one truncated angle each, not the research behind them (LOC-1). Adding a fourth city means re-running
+> the gate for that city, not copying a row.
+
 ## 5. Hebrew grammar per location
 
 All twelve are real cities, so `ב{name}` mostly works — with two cautions:
@@ -78,25 +98,22 @@ All twelve are real cities, so `ב{name}` mostly works — with two cautions:
 - Any future **region** entry (השרון, השפלה, גוש דן, צפון) needs `בצפון הארץ` / `באזור השרון`, not a
   bare preposition.
 
-So define the shape **before** the first page exists, not after:
+The shipped `Location` interface in `lib/locations.ts` already encodes this — don't redesign it:
 
 ```ts
-// lib/locations.ts
-export interface Location {
-  slug: string;                    // ASCII, matching the /services/ convention
-  name: string;                    // תל אביב
-  kind: "city" | "region";         // drives City vs AdministrativeArea in schema
-  prefixed: string;                // בתל אביב
-}
+kind: "city" | "region"; // drives City vs AdministrativeArea in the schema
+prefixed: string; // the name WITH its preposition — בתל אביב, באזור השרון
 ```
 
-`kind` drives the schema type; `prefixed` carries the preposition so no template has to guess.
+`kind` drives the schema type; `prefixed` carries the preposition so no template has to guess. Read the
+full interface from the file rather than from any doc, this one included.
 
 ## 6. The expansion cap
 
 4 services × 12 areas = 48 possible cells. **Do not build them.** Order of operations:
 
-1. Build location pages **only** for cities where §4 can be satisfied — likely 3–5, not 12.
+1. Build location pages **only** for cities where §4 can be satisfied — 3 ship, and the ceiling is
+   3–5, not 12.
 2. Each earns its depth per content-standards §3 before the next one starts.
 3. Only then consider a service × location second tier, and only for services with genuine local
    demand — `water-leak-detection` and `moisture-detection`, not `insurance-reports` (which is a
@@ -113,15 +130,26 @@ claim via business-facts §E before it becomes a keyword.
 
 ## 8. Internal equity
 
-With no location pages there is nothing to link to yet. Plan the mesh **before** building: each location
-page needs inbound links from the footer, from `/services/`, and from at least one service page, plus
-2–4 nearby-location links out. See `/internal-linking`.
+The mesh shipped **half wired** (LOC-2), and this is the standing local gap:
+
+- ✅ `/locations/` is in `navLinks` and in the footer's navigation column, so every page reaches the hub
+  and nothing is orphaned.
+- ✅ Each city page links out to all four services, and `nearby` edges between the three cities are
+  bidirectional.
+- ❌ No footer locations column.
+- ❌ No service page links to any city with a descriptive anchor — the four pages that monetise a local
+  query send no relevance signal to the page targeting it.
+
+Wire the inbound links **in the same commit** as any new city; `/new-city`, the roadmap and
+`docs/keyword-map.md` §6 all say "before it ships", and sprint 3 is the counter-example. See
+`/internal-linking`.
 
 ## Checklist
 
 - [ ] GBP exists as a service-area profile, is linked from the site, and is in `sameAs`.
-- [ ] `sameAs` contains real profile URLs, or is empty — never a platform homepage.
-- [ ] `geo` is the real operating base, or absent.
+- [ ] `sameAs` contains real profile URLs, or is empty — never a platform homepage. It is empty today.
+- [ ] `geo` is the real operating base, or absent. It is absent today.
+- [ ] No `aggregateRating`, no `Review` — unless sourced from a real public profile (§2).
 - [ ] Every location entry has `kind` and `prefixed`; no template interpolates a bare `ב${name}`.
 - [ ] Every location page that ships passes the doorway test.
 - [ ] Location pages emit `Service` + `areaServed` with the correct area type.
@@ -131,6 +159,7 @@ page needs inbound links from the footer, from `/services/`, and from at least o
 
 - **Never** a `LocalBusiness` node per city. This business has no premises at all; one node is the
   honest count.
-- Never invent a review, rating, neighbourhood or coordinate to fill a local-SEO checkbox.
+- Never invent a review, rating, neighbourhood or coordinate to fill a local-SEO checkbox. This site
+  shipped invented ones once and paid to remove them; the empty fields are the fix, not the defect.
 - Adding twelve city pages in one batch is not a local-SEO strategy; it is a doorway cluster waiting
   for a deploy — and there is no staging environment between the ops script and production.

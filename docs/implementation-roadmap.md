@@ -1,236 +1,566 @@
 # Implementation roadmap — sequenced sprints
 
-**The register** of what is wrong lives in [optimization-backlog.md](optimization-backlog.md)
-(§1–§13). **This file is the sequencing**: what order we fix it in, what "done" means, and what each
-sprint is blocked on. Every task cites its backlog section.
+**The register** of what is wrong lives in [optimization-backlog.md](optimization-backlog.md).
+**This file is the sequencing**: what order we fix it in, what "done" means, and what each sprint is
+blocked on. Every task cites a backlog section and, where it came from the 2026-09-06 audit, a
+finding id.
 
-**Measured baseline: 2026-08-24**, against a clean build. Word counts are raw; subtract ~110 words
-of chrome for the unique-body figure that [content-standards.md](content-standards.md) §1 gates on.
+**Measured baseline: 2026-09-06**, against a clean build (`npm run lint && npm run build` both
+green) with a freshly rebuilt `out/`. Every number below was measured, not estimated.
 
-| Route | Raw | Unique | Floor | Status |
-| --- | --- | --- | --- | --- |
-| `/` | 814 | ~704 | 800 | ❌ short ~96 |
-| `/services/water-leak-detection/` | 655 | ~545 | 450 | ✅ |
-| `/services/moisture-detection/` | 591 | ~481 | 450 | ✅ |
-| `/services/electrical-thermography/` | 579 | ~469 | 450 | ✅ |
-| `/services/insurance-reports/` | 559 | ~449 | 450 | ⚠️ at the line |
-| `/pricing/` | 516 | ~406 | 400 | ✅ |
-| `/services/` | 452 | ~342 | 250 | ✅ |
-| `/about/` | 382 | ~272 | 500 | ❌ short ~228 |
-| `/contact/` | 231 | ~121 | 200 | ❌ short ~79 |
+| Measure                     | Value                                    |
+| --------------------------- | ---------------------------------------- |
+| Routes in the build table   | 26                                       |
+| `index.html` files emitted  | 22                                       |
+| URLs in `sitemap.xml`       | 19                                       |
+| Export size                 | 5,910,433 B (5.64 MiB)                   |
+| — RSC payloads (`**/*.txt`) | 2,769,645 B — **46.9%**                  |
+| — HTML                      | 1,984,248 B — 33.6%                      |
+| — JS                        | 722,262 B — 12.2%                        |
+| — all of `_next`            | 936,350 B — 15.8% (JS + CSS + fonts)     |
+| Client components           | 3 (ContactForm, Navbar, ThankYouContent) |
+| Banned RTL utilities        | 0                                        |
+| `data-cta` attributes       | 13                                       |
+| Custom `dataLayer` pushes   | **0**                                    |
 
-14 routes emitted · 11 in the sitemap · 0 location pages · 0 guides.
-
----
-
-## Sprint 0 — Owner unlocks (runs in parallel with everything, starts now)
-
-**Not engineering work.** Four facts gate more downstream value than any sprint below, and each has
-a long lead time. Start them today; they mature while Sprints 1–2 run.
-
-| Unlock | Unblocks | Backlog |
-| --- | --- | --- |
-| **Google Business Profile** (service-area, address hidden) | Map pack · review hosting · `sameAs` · legitimate `AggregateRating` | §5.3 |
-| **Review acquisition running** — WhatsApp ask the evening of each job, target 10 in 60 days | `/reviews/` restoration · `Review` schema · social proof · CRO | §7.1 |
-| **A named human + credentials** — name, role, cert body + number, insurance, ח.פ. | `Person` schema · every guide byline · `/about/` depth · basic trust | §7.3, §7.5 |
-| **Analytics decision** — Zaraz vs shared GTM (see [data-tracking-infrastructure.md](data-tracking-infrastructure.md) §2) | All of Sprint 1 | §13.1 |
-| **Guarantee scope + price confirmation** | `Offer` schema · honest pricing copy | §7.4, §7.7 |
-
-**Definition of done:** rows filled and flipped to ✅ in [business-facts.md](business-facts.md).
-
-> The analytics decision is a five-minute call and blocks an entire sprint. Make it first.
+> **On the RSC payload class.** Next 16 emits each route's flight payload **twice** — `index.txt`
+> and `__next._full.txt`, byte-identical — 158 files, ~1.38 MB of pure duplication. It is
+> navigation prefetch, not first paint, so **it does not affect LCP**. It is deploy weight, and it
+> is the reason the export is 5.9 MB rather than the ~4 MB
+> [performance-guidelines.md](performance-guidelines.md) assumed. Budget it; do not panic about it.
 
 ---
 
-## Sprint 1 — Measurement, schema completion, and the a11y delta
+## Sprint numbering — read this before citing a sprint
 
-**Goal:** make every subsequent sprint verifiable, and close the cheap correctness gaps.
-**Why first:** shipping content you cannot measure is how you end up guessing. Everything here is
-small, unblocked (except the analytics decision), and compounds.
+Sprints **0–3 shipped** (2026-08-17 → 2026-08-30). The old Sprint 4 ("Performance, conversion and
+proof") and old Sprint 5 ("Bilingual") were never started; their content is redistributed below.
+**Bilingual keeps its conditional status and is no longer numbered** — it is gated on a business
+decision, not on a sprint.
 
-### 1.1 Analytics + CSP — one commit, never two
-- Install the chosen tagger (Zaraz recommended — edge-executed, ~0 KB client).
-- Assert `gtm.js?id=…` returns **200** if GTM is chosen — §13.3 is a hard rule, not advice.
-- Wire the event schema from [data-tracking-infrastructure.md](data-tracking-infrastructure.md) §4:
-  `call_click`, `whatsapp_click`, `lead_whatsapp_open`, `lead_handoff_blocked`, `thank_you_view`,
-  `faq_open`, `pricing_view`.
-- **Ship the CSP in the same commit.** The site has zero third-party JS today; that advantage is
-  spent the moment a tag lands, and retrofitting a CSP afterwards is strictly harder.
-- Mark Key events in GA4. Verify no PII on the wire — inspect the request, not the config.
-
-### 1.2 Complete the schema graph — §4.5
-- `ContactPage` on `/contact/`, `AboutPage` on `/about/`, `CollectionPage` on `/services/`
-  (all unblocked, ~1 hour).
-- `Offer` / `PriceSpecification` on service nodes — **blocked on price confirmation** (§7.7).
-- Confirm the fabrication gate still holds: `aggregateRating`, `sameAs`, `GeoCoordinates` must
-  return **zero** files.
-
-### 1.3 WCAG 2.1 AA delta — [accessibility-and-i18n.md](accessibility-and-i18n.md) §A1
-Audit and fix the twelve criteria 2.1 adds over the published 2.0 baseline. Priority order:
-- **2.5.3 Label in Name** — `aria-label="התקשרו אלינו: 055-660-1006"` on a button reading
-  "חייגו עכשיו" is a violation; the accessible name must contain the visible text.
-- **4.1.3 Status Messages** — form errors and the `/thank-you/` confirmation.
-- **1.4.10 Reflow** at 320 px — the pricing grid and any table.
-- **1.4.12 Text Spacing** — fixed-height buttons and chips.
-- **1.4.11 Non-text Contrast** — input borders (`ink/20`).
-- Plus the open items from §11.3/§11.5/§11.6: mobile-menu **focus trap + scroll lock**, service
-  image `alt` redundancy, and **measuring** the menu button against 44 px.
-
-> **Do not update the published `/accessibility/` statement to claim 2.1** until every criterion
-> verifies. That statement is a legal declaration under Israeli regulation.
-
-### 1.4 Housekeeping
-- 404 emits three ways (`/404/`, `/_not-found/`, `/404.html`) — §1.1. Add `public/_redirects` 301s
-  for the directory forms.
-- Derive `staticRoutes` in `app/sitemap.ts` rather than hand-maintaining it — §1.2.
-
-**Sprint 1 done when:** a call click, a WhatsApp click and a form submit each appear exactly once in
-realtime analytics; CSP is report-only and collecting; `npm run lint && npm run build` clean; the
-a11y delta has no open Critical/High; the fabrication grep returns zero.
+| Sprint                                        | State                                                |
+| --------------------------------------------- | ---------------------------------------------------- |
+| 0 — Owner unlocks                             | Partly delivered; the remainder is **Track O** below |
+| 1 — Measurement, schema, a11y delta           | ✅ shipped `ff2545c` (with gaps — see Sprint 4)      |
+| 2 — Content depth + `/guides/`                | ✅ shipped `047180c`                                 |
+| 3 — The local silo (3 of 12 cities)           | ✅ shipped `7c9bbda`                                 |
+| **4 — Stop the bleeding**                     | **next, fully unblocked**                            |
+| **5 — Re-arm the instruments**                | ✅ **shipped 2026-09-06** (see below)                |
+| **6 — Make the funnel measurable**            | after 4                                              |
+| **7 — Repair the location silo, then extend** | after 6                                              |
+| **8 — The second guide triplet**              | after 7                                              |
+| **9 — Owner-gated upside**                    | a queue, not a sequence                              |
 
 ---
 
-## Sprint 2 — Content depth and the answer cluster
+## Track O — owner unlocks (parallel; never on a sprint's critical path)
 
-**Goal:** clear every content floor and build the AEO moat.
-**Why now:** this is the largest ranking lever that is *not* owner-blocked, and Sprint 1 made it
-measurable.
+Not engineering work. Each row is a fact only the owner can supply. **No sprint gate below depends
+on any row here** — that is a design constraint of this roadmap, and it is enforced: where a
+verification genuinely needs owner-held access, it is split out into an explicitly owner-gated step
+rather than hidden inside a sprint's "done when".
 
-### 2.1 Close the three failing floors — §3.1, §3.3
-- **`/about/` → 500 words.** Its word count and its trust gap are the same problem: it is short
-  *because* nobody is named. Partially blocked on Sprint 0 (credentials); the company story,
-  method philosophy and service-area reality can be written now.
-- **`/contact/` → 200 words.** What to expect on a call, what to prepare, response times,
-  out-of-hours policy.
-- **`/` → 800 words.** Extend the method explainer and add a "which service do I need?" decision
-  aid — genuinely useful, and it captures method-confused searchers (strategy §1).
-- **`/services/insurance-reports/`** sits exactly at the 450 line — give it headroom.
+| #   | Ask                                                                  | Owner effort         | Unlocks                                                                 | Backlog |
+| --- | -------------------------------------------------------------------- | -------------------- | ----------------------------------------------------------------------- | ------- |
+| 1   | **Google Business Profile URL** (service-area, address hidden)       | one copy-paste       | first non-empty `sameAs`; map pack; precondition for every review asset | §5.3    |
+| 2   | **Real reviews with source URLs** (ask at the job; ~10 over 60 days) | operational, ongoing | retires the `/reviews/` 301; legitimate `Review` + `AggregateRating`    | §7.1    |
+| 3   | **Certification body + level + certificate number**                  | one lookup           | turns a badge into a credential; `hasCredential` on the founder node    | §7.3    |
+| 4   | **Is ₪450 current?**                                                 | one answer           | `Offer`/`PriceSpecification`; clears 🔶 on 5 routes                     | §7.7    |
+| 5   | **Which FLIR model?**                                                | one sentence         | model-level specificity; author-bio equipment line                      | §7.3    |
+| 6   | **Report turnaround as a number**                                    | one sentence         | concrete answer block on `/services/insurance-reports/`                 | §7.7    |
+| 7   | **Same-day radius — 60 km or less?**                                 | one answer           | **gates location batch 4** (business-facts §E)                          | §5.4    |
+| 8   | **Is "שירות ארצי בתיאום מראש" true?**                                | one answer           | it renders in 6 places today with no confirmation                       | §5.4    |
+| 9   | **ח.פ. number**                                                      | a lookup             | `legalName: טרמוליק בע״מ` stops being an unbacked claim                 | §7.3    |
+| 10  | **Third-party insurance (ביטוח צד ג׳)**                              | a policy detail      | the signal ועדי בתים and property managers ask for                      | §7.3    |
+| 11  | **Accessibility coordinator name**                                   | one name             | `/accessibility/` currently asserts a coordinator with no name          | §11.2   |
+| 12  | **Owner photo + permission**                                         | a yes + a file       | strongest single trust element on `/about/`                             | §7.5    |
+| 13  | **One real job reference per city**                                  | operational          | the only doorway-test item research cannot supply                       | §3.4    |
+| 14  | **Before/after thermal pairs with consent**                          | operational          | the E-E-A-T unfair advantage                                            | §7.1    |
 
-### 2.2 Launch `/guides/` — §3.5, strategy §5 gate 3
-The AEO moat. Build the route (see `/new-article`), then the first three, in this order:
+**Two asks are fleet decisions, not facts:**
 
-1. **מה מצלמה תרמית באמת רואה — ומה היא לא** ← the flagship; no competitor publishes it
-2. **איך מאתרים נזילה בקיר בלי לשבור — השיטות והמגבלות שלהן** (method comparison table)
-3. **כמה עולה איתור נזילות ומה משפיע על המחיר** (feeds `/pricing/`)
-
-Each: 900-word floor, answer block in the first 60 words, question-form `<h2>`s, one
-screenshot-worthy table, `Article` + `BreadcrumbList` + `FAQPage` schema derived from the blocks,
-2–3 contextual links down to the service that monetises it.
-
-**Bylines are blocked on Sprint 0.** Draft now, publish when there is a real author — never invent
-one.
-
-### 2.3 Internal link mesh — §9.3, §9.4
-- Hub prose on `/services/` explaining how the four services relate (one camera, one visit, four
-  questions).
-- 2–3 contextual in-copy links per service page — the site's entire internal anchor signal is
-  currently nav boilerplate.
-- Header dropdown exposing all four services (§9.2) — makes them 1 hop from home.
-
-**Sprint 2 done when:** every route clears its floor; three guides live with real bylines and dates;
-zero orphans; `/services/` has hub prose; the answer-block spec passes on every new page.
+- **GTM-KWGGH438 container edits.** The container is shared across the Israeli fleet. Any click
+  trigger must be hostname-scoped — that is a fleet-ops change, not a repo change.
+- **Cloudflare zone toggles** (Scrape Shield, cache TTL, AI-crawler policy). Document the exact
+  toggle; never assume it was done (CLAUDE.md §12).
 
 ---
 
-## Sprint 3 — The local silo
+## Sprint 4 — Stop the bleeding
 
-**Goal:** express the Tier-2 layer without creating a doorway cluster.
-**Why after Sprint 2:** depth before breadth. Location pages built before the guide cluster exists
-have nothing authoritative to link to.
+**Goal:** fix everything a visitor, a crawler or a regulator experiences as wrong today.
 
-- **Build the data model first**: `lib/locations.ts` with `{ slug, name, kind, prefixed }` —
-  before page one, so `בתל אביב` vs `בתל אביב-יפו` and any future region entry are handled in data,
-  not in template guesswork.
-- **Apply the gate to all 12 candidates** ([content-standards.md](content-standards.md) §2). Expect
-  **3–5 to qualify**, not 12. Record the rejected cities and *why* in business-facts §E.
-- Build only the qualifying pages: answer block → local substance (≥3 true specifics, housing stock
-  is the richest seam) → service list → nearby locations → city FAQ → CTA.
-- Wire the mesh **before shipping**: footer column, links from `/services/`, links from each service
-  page, bidirectional `nearby`.
-- `Service` + `areaServed` (`City` vs `AdministrativeArea` per `kind`) + `BreadcrumbList`.
-  **Never a `LocalBusiness` per city.**
-- Add to `app/sitemap.ts`; update `/qa-build-gate` route-count assertions in the same commit.
+**Why first:** these are the only findings with a _live_ consequence — a privacy policy that
+understates actual tracking, customer PII in a tracked link, a legal link no mobile user can reach,
+contrast failures on the accessibility statement itself, and ten pages with no link-preview card.
+None is owner-blocked. None depends on another sprint.
 
-**Sprint 3 done when:** every shipped city passes the doorway substitution test; ≥350 unique words
-each; zero orphans; route counts reconciled in the gate.
+**Scope:** 9 tasks across `app/`, `components/`, `lib/`, `public/_headers`. All small or trivial
+individually; the sprint is wide, not deep.
+
+### Tasks
+
+1. **Make the privacy policy true, and decide on consent.** [critic §2 · new §12.4]
+   `app/privacy/page.tsx` says the site _"ייתכן"_ (may) use Google Analytics. GTM-KWGGH438 and GA4
+   `G-5YWLZ07PEC` have shipped on **every route** since 2026-08-30, and `grep -rn "consent" app
+components lib` returns **zero**. Rewrite the section to state GA4 definitively, name what is
+   collected, and give an opt-out. **Then take the Consent Mode v2 decision explicitly** — under
+   Israeli Privacy Protection Law Amendment 13 this is the owner's call, and it must be taken
+   _before_ Sprint 6 adds event tags on top. Record the decision in
+   [ux-cro-security.md](ux-cro-security.md); do not leave it implicit.
+   _This is the one item on the site where a published statement is currently false._
+
+2. **Get the lead's name and phone out of the DOM.** [SEC-3 / AN-2 · §12.3, new §13.6]
+   `components/ContactForm.tsx:73-79` composes `שם: {name}` / `טלפון: {phone}` into the handoff
+   message; `components/ThankYouContent.tsx:85` renders it as `href={waHref}` on a `data-cta`
+   element. GTM's Click URL variable and GA4 outbound-link measurement capture that href verbatim.
+   Change to a generic `href={whatsappHref()}` (still a valid no-JS fallback) plus an `onClick` that
+   `preventDefault()`s and calls `window.open(whatsappHref(handoff.message), "_blank", "noopener")`.
+   **Hard prerequisite for Sprint 6** — adding any click trigger first converts a latent exposure
+   into a live one. The form also tells the visitor "הם אינם נשמרים אצלנו", so this is a
+   truthfulness problem as well as a privacy one.
+
+3. **Un-cover the footer's legal links on mobile.** [cro-1 · §11.6/§8] The sticky bar's spacer is on
+   the wrong element, so the bar permanently covers the footer. `components/Footer.tsx` holds the
+   **only** link to `/accessibility/` on the site — it is not in `navLinks` — so this is a
+   compliance defect, not a layout nit. Move `pb-20 md:pb-0` from `<main>` in `app/layout.tsx` onto
+   the `<footer>`, and add `pb-[env(safe-area-inset-bottom)]` to the `StickyContact` wrapper.
+
+4. **Close the live SC 1.4.3 contrast failures — using the measured table, not a guess.**
+   [A11Y-1 · §11.1/§11.2] Contrast ratios computed against `ink #1B2733` on `white` and
+   `paper #F7F9FB`:
+
+   | token        | on white | on paper | body text (4.5:1)     | non-text (3:1) |
+   | ------------ | -------- | -------- | --------------------- | -------------- |
+   | `ink/40`     | 2.37     | 2.36     | ❌                    | ❌             |
+   | `ink/50`     | 3.10     | 3.06     | ❌                    | ✅             |
+   | `ink/55`     | 3.58     | 3.50     | ❌                    | ✅             |
+   | `ink/60`     | 4.16     | 4.07     | ❌                    | ✅             |
+   | **`ink/65`** | **4.82** | **4.71** | ✅ **lowest passing** | ✅             |
+   | `ink/70`     | 5.67     | 5.53     | ✅                    | ✅             |
+
+   **`ink/65` is the true WCAG minimum; `ink/70` is the enforced house floor.** Earlier drafts of
+   this plan proposed `ink/55` and `ink/60` — both fail 4.5:1 and neither may ship. We enforce
+   `/70` rather than `/65` because it is already the site-wide convention, it clears the threshold
+   with margin on both backgrounds, and a single floor makes the build-gate grep trivial; adopting
+   `/65` would buy one barely-perceptible shade at the cost of a second token to police. The
+   placeholder at `ContactForm.tsx:45` goes to `/70` with the rest — against full-opacity `ink`
+   entered text that is still an obvious affordance difference. Fill the missing rows of the
+   contrast table in
+   [accessibility-and-i18n.md](accessibility-and-i18n.md) §A2 with the figures above — `ink/40`,
+   `/55` and `/60` went uncomputed for three sprints precisely because the table only ever
+   enumerated `/50`, `/70`, `/80`, `/100`.
+
+5. **Raise the input borders to 3:1.** [A11Y-3 · §11] Five `border-ink/20` (1.49:1) in
+   `components/ContactForm.tsx` → `border-ink/55` (3.58:1 white / 3.50:1 paper — passes the
+   non-text threshold). This was an explicit Sprint 1 task that never landed in `ff2545c`; record
+   that here so the sprint history stays honest.
+
+6. **Fix the focus ring on dark surfaces.** [A11Y-2 · §11] `brand-light #1E88A8` on `brand #0B3D5C`
+   measures **2.80:1** against a 3:1 target. Add an `.on-dark` rule setting `outline-color:#fff`,
+   applied to both the container and the focusable element (on Hero, `/pricing/` and StickyContact
+   the class lands on the focusable element itself). Correct the claim in
+   [accessibility-and-i18n.md](accessibility-and-i18n.md) that the ring clears 3:1 — it does, **on
+   light surfaces only**.
+
+7. **Restore `og:image` on the ten dynamic routes; give the eight static ones their own `og:url`.**
+   [SEO-01 · §2] Next shallow-merges metadata at the top-level key, so a page's `openGraph` object
+   **replaces** the layout's rather than merging into it. Result: all 4 service pages, 3 guides and
+   3 city pages emit **no `og:image` at all** — every commercial and topical page on the site
+   renders as a bare text row when shared to WhatsApp, which is conversion goal #2. Meanwhile 8
+   static routes inherit `url: site.domain` and claim to _be_ the homepage. Add a
+   `pageOpenGraph()` helper to `lib/site.ts`, spread it in the three dynamic routes, drop
+   `url: site.domain` from the layout, and give the static routes their own. Set per-page
+   `twitter.title`/`twitter.description` from the same values — today
+   `/services/water-leak-detection/` has a `twitter:title` that disagrees with its own `og:title`.
+
+   > Backlog §2 currently records "✅ OG and Twitter tags present with a 1200×630 image". That line
+   > has been false since the dynamic routes shipped. Correct it in the same commit.
+
+8. **Write real location meta descriptions.** [SEO-02 · §2/§3.4]
+   `app/locations/[city]/page.tsx:30` does `location.answer.slice(0, 155)`, hard-truncating all
+   three city descriptions mid-word — בת ים's page cuts inside its own city name. Add a typed
+   `metaDescription` field to the `Location` interface, written to the formula already specified in
+   [keyword-map.md](keyword-map.md) §Location, and delete the slice. The spec was right; the code
+   never implemented it.
+
+9. **Two cheap performance wins.** [PERF-5, PERF-6 · §10.1/§10.3] Add `/images/*` →
+   `Cache-Control: public, max-age=2592000` to `public/_headers` (30 days, **no `immutable`** —
+   these filenames are not content-hashed). Today `hero.webp` and the every-page logo revalidate off
+   a zone default nobody in the repo controls. And stop lazy-loading the above-the-fold navbar logo.
+
+### Blocked on
+
+Nothing. Every task is code or config against facts already in the repo. **Task 1's consent
+_decision_ is the owner's**, but making the privacy text match reality is not — do that regardless.
+
+### Done when — verifiable from the repo and an unprivileged `curl`
+
+- `grep -rnE 'text-ink/([0-9]|[1-6][0-9])\b' app components` → 0. Match on the **range**, not on an
+  enumerated list of four values — enumerating is exactly how `/40`, `/55` and `/60` went uncomputed
+  for three sprints.
+- For all 19 indexed routes in a fresh `out/`: `og:image` count = 1 **and** `og:url` equals that
+  route's own `rel=canonical`. Asserted in the gate, not checked by eye.
+- All three `out/locations/*/index.html` meta descriptions are 150–160 chars and end on a word
+  boundary.
+- `app/privacy/page.tsx` states GA4 as fact, with an opt-out, and no `ייתכן` hedge remains.
+- After a real form submit, `document.querySelector('[data-cta="thankyou-whatsapp"]').href` contains
+  no `?text=`.
+- At 390×844 in a real browser, the footer's `/accessibility/` and `/privacy/` links are visible and
+  tappable with the sticky bar rendered.
+
+> **Two of those require a browser and a real submit.** Every a11y and CRO finding in the 2026-09-06
+> audit was CSS arithmetic and code reading — nothing was rendered, tabbed through, or submitted.
+> Do not mark this sprint done on greps alone.
+
+### Owner-gated verification (separate step, after deploy)
+
+- `curl -sI https://thermoleak.co.il/images/hero.webp | grep -i cache-control` → `max-age=2592000`.
+- Deploying is a production mutation — **ask first** (CLAUDE.md §10).
 
 ---
 
-## Sprint 4 — Performance, conversion and proof
+## Sprint 5 — Re-arm the instruments ✅ shipped 2026-09-06
 
-**Goal:** convert the traffic the first three sprints earn.
+**Goal was:** make the acceptance bars and the agent environment describe the site that actually
+exists, so every sprint after this is graded against reality.
 
-- **Images — §10.2**: `hero.webp` width variants (or enable Cloudflare Image Resizing). Note
-  `sizes` on an unoptimized `next/image` is inert — remove it or make it real.
-- **Fonts — §10.4**: preload above-the-fold subsets; subset to Hebrew + Latin only.
-- **Before/after thermal gallery** — [eeat-and-trust.md](eeat-and-trust.md) §5. The unfair
-  advantage: paired ordinary/thermal frames of real jobs. **Blocked on real imagery + consent.**
-  If a slider is built, WCAG 2.5.1 applies (no path-only gestures).
-- **Case studies** — §4 of the same doc. Solves E-E-A-T, the doorway test, AEO and conversion at
-  once. Blocked on consent.
-- **Run `cro-conversion-auditor`** against the live funnel and action its Critical/High.
-- **Restore `/reviews/`** once Sprint 0 delivers real reviews — with `Review` schema and source
-  links.
+**Why it mattered:** every audit dimension is downstream of these files, and stale instructions do
+not merely waste tokens — they cause damage. `/web-security-headers` prescribed `script-src 'self'`,
+which would have silently killed analytics on a live site. `schema-auditor` was tasked with
+reporting "the fabricated AggregateRating that currently ships on all 13 pages", purged in August.
+`/new-city` and `/new-article` instructed an agent to create files that already exist.
 
-**Sprint 4 done when:** Lighthouse mobile ≥95/100/≥95/100; CWV budgets in
-[performance-guidelines.md](performance-guidelines.md) §1 met in the field; CRO audit clean.
+**Measured before the pass:** **17 of 29** instruction files (11 agents + 18 skills) carried at
+least one stale-state marker — `does not exist yet`, `zero analytics`, `ink/50`, `lib/reviews.ts`,
+`aggregateRating that currently ships`, `4.9`, `3,000`, `97%`.
 
----
+**What was reconciled:** `docs/schema-graph.md` (had no nodes for `/guides/`, `/locations/` or
+`/pricing/`), `docs/keyword-map.md`, `docs/content-standards.md`, `docs/README.md`,
+`docs/optimization-backlog.md`, the seven strategy docs, `CLAUDE.md`, `public/llms.txt`, all 11
+agents and all 18 skills.
 
-## Sprint 5 — Bilingual (conditional — do not start by default)
-
-**Gate:** [accessibility-and-i18n.md](accessibility-and-i18n.md) §B0. Build only if a named audience
-exists (olim/expat homeowners, English-speaking property managers, international insurers). English
-**permanently doubles** content, floors and audits.
-
-If approved: two root layouts via route groups, Hebrew stays at the URL root, English under `/en/`,
-locale-keyed content model, reciprocal `hreflang` with `x-default` → Hebrew. **Start with a subset**
-(home, four services, pricing, contact). Legal pages stay Hebrew-authoritative. Route count roughly
-doubles — update `/qa-build-gate` in the same commit. Follow `/i18n-bilingual`.
+> **`public/llms.txt` stays a static file.** An earlier draft proposed generating it at build time
+> from `lib/site.ts` via a route handler. `output: "export"` forbids route handlers (CLAUDE.md §3),
+> so that would not have built. Hand-maintain it and assert parity in the gate instead.
 
 ---
 
-## Continuous tracks (not sprints — habits)
+## Sprint 6 — Make the funnel measurable, and the promise reachable
 
-| Track | Cadence | Owner |
-| --- | --- | --- |
-| Review requests after every job | Per job | Owner |
-| GBP posts with thermal imagery | Weekly | Owner |
-| Guide publishing | 1–2/month after Sprint 2 | Copywriter + named expert |
-| AI-citation spot-check (the six gate-3 questions) | Monthly | Anyone |
-| `robots.txt` live verification | Every audit | Any agent |
-| Seasonality: winter → roof/facade moisture; summer → A/C condensation + electrical load | Quarterly planning | Owner |
+**Goal:** turn `page_view` into a real conversion signal, and put the confirmed guarantee in front of
+the visitor at the moment they ask for it.
+
+**Why third:** Sprints 7 and 8 both need a way to be judged, and today the site's **number-one stated
+conversion goal fires zero times**. Three content sprints have already shipped with nothing
+measuring them. The guarantee work rides along because it is the same shape of problem — a confirmed
+asset that does no work — and it touches overlapping files.
+
+**Ordering within the sprint: Sprint 4 task 2 (the PII fix) must be deployed before any click
+trigger exists.** Do not compress that.
+
+### Tasks
+
+1. **Correct the client-routing premise before anyone builds a trigger.** [cro-2 · §13.1]
+   [data-tracking-infrastructure.md](data-tracking-infrastructure.md) states that a static export
+   has no client-side routing, so a History Change trigger "is unnecessary and will not fire". That
+   is **false** for an App Router export — `<Link>` and `router.push` do pushState navigation, and
+   `/thank-you/` is reached _only_ from the form handler, so 100% of legitimate thank-you views are
+   client-side. An agent following that sentence guarantees the doc's own "cleanest conversion
+   target" records zero. This gates everything below it.
+
+2. **Add `lib/analytics.ts` and push the three events a container cannot see.** [AN-1 · new §13.5]
+   A typed `pushEvent(name, params)` guarding `window.dataLayer`, called from the form handler
+   (`lead_whatsapp_open` / `lead_handoff_blocked` with `{ service, handoff_ok }`) and from
+   `ThankYouContent` (`thank_you_view`). **Pass `service` only — never `area`.** The area field is
+   free text and homeowners type street addresses into it. Add a comment at the
+   `data-cta="form-whatsapp"` element recording that it fires **pre-validation** and must never be
+   used as the lead trigger — a naive click trigger there counts three mistyped phone numbers as
+   three leads. Skip `faq_open` unless the `"use client"` cost on `Faq.tsx` is worth it; the
+   three-client-component budget is deliberate and native `<details>` is golden rule 6.
+
+3. **Extend the PII rule to cover hrefs.** [AN-2 · §13.6] The tracking doc's PII section only ever
+   warned about the submit handler, so an agent following it would ship the Sprint 4 task 2 leak
+   while believing it complied. State it as: _no PII in the dataLayer, **and no PII in any `href`,
+   because Click URL is a dataLayer variable**_.
+
+4. **Widen `connect-src` for GA4's real endpoints.** [SEC-4 · §12.2] `public/_headers` allows
+   `www.google-analytics.com` (an exact host) and `*.analytics.google.com` (a different registrable
+   domain). GA4's regional endpoint for Israeli traffic — `region1.google-analytics.com` — matches
+   neither. Add `https://*.google-analytics.com` and keep the exact hosts alongside it; a wildcard
+   does not match its own apex. Zero impact today because the header is Report-Only, which is
+   exactly why it must be fixed _before_ enforcement.
+
+5. **Replace the unmeetable CSP promotion gate.** [SEC-2 · §12.2] Sprint 1's gate said "CSP is
+   report-only and **collecting**". It has no `report-uri` and no `report-to`, so it has never
+   collected anything, and the documented "observe a week of real traffic" process is unexecutable
+   as written. Replace with something deterministic: deploy the policy as enforcing to a **Pages
+   preview branch**, walk all 19 routes plus a real submit through to `/thank-you/` with the console
+   open, promote only on zero violations. Note in the same edit that `'unsafe-inline'` in
+   `script-src` is **structural** under `output: "export"` — inline RSC flight scripts, no server, no
+   nonce — so nobody "tightens" it into a hydration break.
+
+6. **Replace `interest-cohort` with `browsing-topics`.** [SEC-7 · §12.1] FLoC was removed from
+   Chrome; that directive is inert. Topics — which the newly-live Google tag can actually read — is
+   ungoverned. **Do not edit `out.prev/_headers`**; that is the rollback snapshot.
+
+7. **Give the guarantee an anchor and reach.** [EEAT-4, cro-4 · §7.4] Add `id="guarantee"` to the
+   `GuaranteeTerms` section and link the bare promise to `/pricing/#guarantee` from the service-page
+   sidebar, the Hero and `/about/`. **No service page links to `/pricing/` at all** today — the only
+   route is the navbar. Add a FAQ entry composed from `site.guaranteeTerms` so the homepage
+   `FAQPage` carries the site's most load-bearing commercial claim; the wording is already
+   owner-approved. Replace the hand-typed terms in `lib/articles.ts` with a value composed from
+   `site.guaranteeTerms` so a future correction cannot leave one copy stale.
+
+8. **Stop calling the guarantee a certification.** [EEAT-6 · §7.3] `"אחריות מלאה ושקיפות מחירים"`
+   sits in the `certifications` array and renders under `הסמכות וציוד` with a badge per row — the
+   exact pattern [eeat-and-trust.md](eeat-and-trust.md) bans, and it inflates the perceived
+   verifiability of the rows above it. Remove it from that array and rename the heading to
+   `שיטה וציוד` until a certificate number exists. **Do not touch the certification text itself** —
+   owner-blocked (Track O #3).
+
+9. **Consolidate the founder entity.** [SD-5, EEAT-5 · §7.5] Emit `"@id": .../about/#founder` on the
+   Article author when the author is the founder, and wrap the visible byline in a link to that
+   anchor — the anchor exists and nothing on the site links to it. Delete the stale comment in
+   `app/guides/[slug]/page.tsx` claiming the byline is "deliberately absent until a real person is
+   on file", which sits six lines above the code that renders it.
+
+10. **Fold the location answer block into `FAQPage`, and fix the schema nits.** [AEO-5, SD-8 · §4]
+    Locations are the only page type whose answer block never reaches the FAQ graph. Change
+    `Location.answer` to the existing `{ q, a }` shape and pass it through `faqPageJsonLd`. Guard
+    `faqPageJsonLd` centrally against an empty array so a future article without an answer block
+    cannot ship `{"@type":"FAQPage","mainEntity":[]}`. Drop `inLanguage` from the two `Service`
+    builders — it is the only out-of-domain property in the graph.
+
+11. **Single-source ₪450.** [TS-1 · §7.7] `lib/services.ts` and `lib/articles.ts` write the literal;
+    three other files interpolate `site.priceFrom`. Behaviour-preserving today — the point is that
+    `site.priceFrom` is marked 🔶 and **will** change, and the `lib/articles.ts` copy feeds
+    `FAQPage` JSON-LD, so a stale copy becomes a price-mismatch signal to Google. After the change
+    `grep -rn '₪450' lib app components` returns comments only, and the rebuilt `out/` should be
+    byte-identical.
+
+### Blocked on
+
+- **Container-side triggers** (`call_click`, `whatsapp_click` from `[data-cta]`) are a **fleet-ops
+  ask**, not repo work. **This sprint's gate does not depend on them.** Cheapest zero-risk interim:
+  create `thank_you_view` and `pricing_view` as GA4-property-side Key events from `page_path`
+  conditions — that covers two of seven immediately.
+- CSP promotion to enforcing is deliberately _not_ in this sprint; task 5 only makes the gate
+  executable.
+
+### Done when — verifiable from the repo and an unprivileged `curl`
+
+- `lib/analytics.ts` exists and is called from both the form handler and `ThankYouContent`.
+- `grep -rn '₪450' lib app components` → comments only, and `out/` is byte-identical to the
+  pre-change build.
+- `out/index.html` emits 10 `"@type":"Question"` nodes (9 + the guarantee FAQ);
+  `out/locations/tel-aviv/index.html` emits 3.
+- Every page rendering `site.guarantee` has a path to `/pricing/#guarantee` within one click.
+- `curl -sI https://thermoleak.co.il/ | grep -i permissions-policy` contains `browsing-topics=()`
+  and no `interest-cohort`.
+
+### Owner-gated verification (separate step — needs GA4 access and a deploy)
+
+- A real submit from a phone produces, in GA4 Realtime within 60 seconds: one `lead_whatsapp_open`
+  (or `lead_handoff_blocked`) carrying `service` and `handoff_ok`, and one `thank_you_view`.
+- The same submit produces **no** `/g/collect` request containing the tester's name or phone —
+  **inspect the request, not the config.** This check has been specified since Sprint 1 and has
+  never actually been run.
+- The enforcing-CSP preview walkthrough produces zero console violations across all 19 routes.
 
 ---
 
-## Dependency map — what actually blocks what
+## Sprint 7 — Repair the location silo, then extend it
 
-```
-Sprint 0 (owner facts) ──┬─→ Sprint 1 analytics ─→ everything becomes measurable
-                         ├─→ guide bylines (Sprint 2.2)
-                         ├─→ /about/ depth (Sprint 2.1)
-                         ├─→ Offer schema (Sprint 1.2)
-                         └─→ /reviews/ + Review schema (Sprint 4)
+**Goal:** make the three shipped city pages earn their keep, then add only the cities the evidence
+supports.
 
-Sprint 2 (depth+guides) ──→ Sprint 3 (locations link INTO guides and services)
+**Why fourth:** the pages themselves are good — 583–653 unique words against a 350 floor, correct
+ב+city grammar, clean service-area NAP, and a 5-gram overlap of 22–24% whose shared spans are all
+chrome. What is broken is everything _around_ them. **Adding cities before fixing the mesh just
+doubles the size of an equity cul-de-sac.**
 
-Sprint 0 imagery/consent ──→ Sprint 4 gallery + case studies
+### Phase A — repair (do not skip; blocks Phase B)
 
-Sprint 5 gated separately on a business decision, not on any sprint above
-```
+Fix the link mesh, the `nearby` reciprocity, and the `Service.areaServed` type matching
+`location.kind`. Add a **Location index** row to the content-standards word table — its absence is
+why the `/locations/` hub went unmeasured.
 
-**The critical path runs through Sprint 0.** Every sprint below it has unblocked work, but the
-highest-value items in each are waiting on a fact only the owner can supply.
+### Phase B — extend, in this order
+
+| Batch           | City                      | km      | Claims | Why here                                                                                                                                                                                     |
+| --------------- | ------------------------- | ------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2               | **רמת גן**                | 6       | 13     | Most claims of any deferred city; contiguous with the built cluster so `nearby` stays honest; תמ״א 38 / התחדשות עירונית generates two genuinely distinct call types                          |
+| 2               | **גבעתיים**               | 5       | 11     | Nearest deferred city; the four-hills topography (גבעת קוזלובסקי at ~87 m) is a physically distinct leak story no other page can borrow                                                      |
+| 3               | **פתח תקווה**             | 12      | 9      | 9–23-storey new-build stock from 2003 on is the **inverse** of the three shipped pages, which all lean on old stock — easy substitution-test pass, and it widens the cluster's topical range |
+| 4 — gated       | **כפר סבא**               | 23      | 11     | Water supplied by an agricultural cooperative, not a municipal corporation — a genuinely unique infrastructure angle. **Gated on Track O #7**                                                |
+| 4 — gated       | **ראש העין**              | 25      | 11     | 1949–51 permanent housing stock. Same radius gate                                                                                                                                            |
+| 5 — at most one | **רעננה** _or_ **הרצליה** | 20 / 14 | 9 / 6  | Both rest on the same בנייני רכבת typology — shipping both is exactly what the substitution test punishes. Prefer רעננה on claim count                                                       |
+| Hold            | **ראשון לציון**           | 20      | 4      | 4 claims is no margin, and its urban-renewal angle duplicates בת ים's frame                                                                                                                  |
+| Hold            | **מודיעין**               | 40      | 10     | Good claims, but at 40 km it has **no contiguous partner** — its `nearby` block renders empty — and it is outside any plausible same-day radius                                              |
+
+**Every city must clear the doorway gate in [content-standards.md](content-standards.md) §2 before
+it ships.** The gate is re-run per city, not inherited from batch 1.
+
+> **Budget note:** at roughly 305 KB of export per location page, the nine remaining cities would
+> add ~2.7 MB and breach a 6 MB export ceiling. Add the export-size assertion to the `/new-city`
+> gate now, not after it breaks.
+
+### Done when
+
+- Every shipped city passes the substitution test; ≥350 unique words each; zero orphans.
+- `Service.areaServed` name matches `LocalBusiness.areaServed` byte-for-byte on every city page.
+- `du -sb out` under 6,291,456 bytes.
+- Claim research for each new city is recorded with untruncated source text, and business-facts §E
+  links to it.
+
+---
+
+## Sprint 8 — The second guide triplet
+
+**Goal:** finish the six gate-3 citable topics and give the two thinnest commercial pages long-form
+support.
+
+**Why fifth:** the largest content investment in the plan and the only one with **no defect behind
+it** — nothing is broken; three guides are simply unwritten. It also benefits most from everything
+above: corrected authoring skills (Sprint 5), working measurement to judge the traffic (Sprint 6),
+and a repaired mesh to plug into (Sprint 7).
+
+1. **למה כתם הרטיבות כמעט אף פעם לא נמצא מתחת לנזילה** — water tracking along pipes and slabs. The
+   most quotable-verbatim fact the business owns, and the natural inbound-link target from every
+   service page. Today it appears only as a single location claim.
+2. **מה חברת ביטוח באמת דורשת בדו״ח נזילה — ומה גורם לדחיית תביעה** → links down to
+   `/services/insurance-reports/`, the page sitting closest to its word floor. Turnaround as a
+   number is Track O #6 — **write around it; do not invent it.**
+3. **למה בודקים לוח חשמל תחת עומס — ומה אומרת דרגת חומרה של נקודה חמה** → links down to
+   `/services/electrical-thermography/`. Equipment model is Track O #5 — write around it.
+
+Plus: add a **freshness rule** to `/new-article` and the build gate. Nothing in `.claude/` currently
+instructs bumping `dateModified` on a _later_ edit, while the sitemap reads it directly — without
+this, these guides will advertise a stale date the day someone edits them.
+
+### Done when
+
+- Six `/guides/` routes live, each ≥900 words, each with a 40–60 word answer block under a
+  question-form H2, one comparison table, a real byline resolving to `/about/#founder`, and ≥2
+  contextual links into the service that monetises it.
+- `out/llms.txt` lists all six, asserted by the parity check.
+- Each guide's `dateModified` equals its file's last content commit date; the sitemap agrees.
+- **Factual review of all six** against [content-standards.md](content-standards.md) §6 "free to
+  state". The three _existing_ guides have never had one — ~2,700 words of thermography and
+  insurance claims under a real byline, checked for schema and word count but never for accuracy. A
+  wrong claim in a bylined guide is the same class of E-E-A-T defect as a fabricated review.
+
+---
+
+## Sprint 9 — Owner-gated upside (a queue, not a sequence)
+
+Start any row the day its fact lands. None blocks another.
+
+| Trigger                                                                         | Work                                                                                                                                                    | Backlog    |
+| ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| GBP URL (#1)                                                                    | `sameAs` on the LocalBusiness node; GBP link on `/contact/` and `/about/`                                                                               | §5.3, §4.2 |
+| ≥5 sourced reviews (#2)                                                         | Rebuild `/reviews/`, retire the 301, `Review` + honest `AggregateRating`. **Sourced or not at all — golden rule 3.**                                    | §7.1       |
+| Certificate number (#3)                                                         | `hasCredential` on the founder; restore `הסמכות` as the heading                                                                                         | §7.3       |
+| Price confirmed (#4)                                                            | `Offer`/`PriceSpecification`; clears 🔶 on 5 routes                                                                                                     | §7.7       |
+| FLIR model (#5)                                                                 | Replace the generic equipment phrasing; author-bio line                                                                                                 | §7.3       |
+| Turnaround (#6)                                                                 | Concrete answer block on `/services/insurance-reports/`                                                                                                 | §7.7       |
+| Radius (#7)                                                                     | Unblocks location batch 4                                                                                                                               | §5.4       |
+| National claim (#8)                                                             | Restore the clause, or leave it removed permanently                                                                                                     | §5.4       |
+| ח.פ. (#9)                                                                       | `legalName` on the business node                                                                                                                        | §7.3       |
+| Insurance (#10)                                                                 | The signal ועדי בתים and property managers ask for                                                                                                      | §7.3       |
+| Coordinator name (#11)                                                          | `/accessibility/` currently asserts one with no name                                                                                                    | §11.2      |
+| Photo + consent (#12)                                                           | Author bio block on all guides                                                                                                                          | §7.5       |
+| Job references (#13)                                                            | Strengthens every city page's doorway margin                                                                                                            | §3.4       |
+| Imagery + consent (#14)                                                         | Before/after thermal gallery; case studies. Solves E-E-A-T, doorway, AEO and CRO at once. If a slider ships, WCAG 2.5.1 applies — no path-only gestures | §7.1       |
+| **CSP promotion** (no owner fact — needs Sprint 6 task 5's walkthrough to pass) | Drop `-Report-Only`                                                                                                                                     | §12.2      |
+
+**Bilingual stays conditional** and gated on [accessibility-and-i18n.md](accessibility-and-i18n.md)
+§B0 — build only if a named audience exists. English permanently doubles content, floors and audits.
+Nothing above depends on it.
+
+---
+
+## Deliberately not scheduled
+
+Recorded so they are not re-litigated at every audit.
+
+- **`CollectionPage mainEntity`/`ItemList`** — no search feature consumes it; the hubs already expose
+  their members as crawlable links. A preference, not a gap.
+- **Padding the three sub-40-word answer blocks** — the spec's own **Good** exemplar measures 32
+  words by the same tokenizer, so 35–39-word Hebrew blocks cannot be faulted against it. Editing
+  them would be padding to hit a number, which the same doc warns against.
+- **Reordering the service-page sidebar on mobile** — the page already ships H1 + answer block first
+  with a fixed call bar. Revisit only if Sprint 6's event data shows service-page → call conversion
+  lagging `/pricing/`.
+- **Relaxing CLAUDE.md §6's `dir="ltr"` rule** — nothing misrenders; §6 is NON-NEGOTIABLE and
+  narrowing it is the owner's call, not an auditor's.
+- **Bumping `next` past the pinned 16.2.9** — would clear the prod-tree advisories, but none is
+  reachable under `output: "export"` + `images.unoptimized`, and it changes a version CLAUDE.md §3
+  pins. Its own decision. **Do** add a non-blocking `npm audit --omit=dev --audit-level=high || true`
+  step to CI, and **do** pin the float-tagged `actions/checkout@v4` / `actions/setup-node@v4` to
+  SHAs — that workflow is the one place third-party code runs with repo context.
+
+---
+
+## Standing operating cadence
+
+The single root cause behind most of the 2026-09-06 findings is that **nothing owned freshness** —
+not the content's, and not the environment's. The backlog declared itself the shared acceptance bar
+for `.claude/` and then tracked only the code.
+
+### Per-commit (automatic)
+
+| What                                                                                                        | Mechanism                                                                                   |
+| ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Route counts, sitemap parity, orphans, fabrication greps, `og:image`/`og:url`, `text-ink/<70`, export ≤6 MB | `/qa-build-gate` — **derived assertions, not `# expect N` comments**                        |
+| Sitemap ↔ emitted tree ↔ `llms.txt` parity                                                                  | `npm run check:sitemap`                                                                     |
+| Sitemap `lastModified` vs `git log -1` on each backing file                                                 | gate line                                                                                   |
+| Prettier on changed files                                                                                   | `.claude/hooks/format-changed.ps1` — a deliberate no-op until `prettier` is a devDependency |
+
+### Per-sprint (blocking)
+
+> **Any sprint that changes the route count, the component list, a `lib/*` file, or the status of a
+> backlog item must, in the same commit, update every agent and skill that cites the changed state.**
+> Not the next sprint. The same commit.
+
+### Recurring re-audits
+
+| Cadence                      | What                                                                                                                   | Who                    |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| **Every deploy**             | Live `robots.txt` fetch; live header check; confirm the change is actually on production                               | `/deploy-thermoleak`   |
+| **Weekly**                   | GA4 Realtime smoke: one call, one WhatsApp, one thank-you from a real device                                           | Owner                  |
+| **Monthly**                  | AI-citation spot-check — the six gate-3 questions against ChatGPT, Perplexity, AI Overviews                            | `aeo-geo-strategist`   |
+| **Monthly**                  | `npm audit --omit=dev`; re-triage on the runtime-shipped axis                                                          | `security-auditor`     |
+| **Monthly**                  | GSC coverage + query drift for the location silo and the guides                                                        | `local-seo-strategist` |
+| **Quarterly**                | Full perf re-pass; re-baseline [performance-guidelines.md](performance-guidelines.md) §1 against a fresh `out/`        | `perf-a11y-auditor`    |
+| **Quarterly**                | Contrast + focus + tap-target sweep; re-date `/accessibility/` **in the same commit as any fix, never before**         | `perf-a11y-auditor`    |
+| **Quarterly**                | `schema-auditor` against the rewritten [schema-graph.md](schema-graph.md); Rich Results Test on one route per family   | `schema-auditor`       |
+| **Quarterly**                | `.claude/` freshness sweep — route counts, component list, backlog status flags, deploy mechanism, purge-history tense | Any agent              |
+| **Semi-annual**              | `docs/` cross-check — every "currently" and "today" claim re-verified against the build                                | Any agent              |
+| **On any Cloudflare change** | Re-verify AI-crawler robots policy, Scrape Shield (`EmailOff` depends on it), cache rules                              | Owner + any agent      |
+
+### Two invariants worth writing on the wall
+
+1. **Verify the edge, then believe it.** Never infer a header, a redirect, a robots policy or a
+   deploy from the repo. `curl` it. This repo believed the wrong deploy target for fifteen days.
+2. **A closure is not closed until the register says so in the same commit.** Every false closure
+   found in the 2026-09-06 audit is the same failure: the fix landed and the bar was not updated, or
+   the bar was updated and the fix did not land.
 
 ---
 
 ## Definition of done — applies to every sprint
 
 1. `npm run lint && npm run build` clean from a cold `.next`.
-2. `/qa-build-gate` passes end to end, including the fabrication greps.
+2. `/qa-build-gate` passes end to end, including the fabrication greps, **and**
+   `npm run check:sitemap` — a command cited throughout this file that had never actually been run
+   before 2026-09-06.
 3. No claim shipped that [business-facts.md](business-facts.md) marks 🔶.
-4. Relevant auditor agent run against the fresh `out/`, Critical/High cleared.
+4. Relevant auditor agent run against a **fresh** `out/` — compare its mtime to `git log -1` first;
+   auditing a stale export measures an artifact nobody serves.
 5. [optimization-backlog.md](optimization-backlog.md) updated — sections marked ✅ with the date,
-   numbering left stable.
+   **numbering left stable**.
 6. Deployed via `/deploy-thermoleak` (dry-run → `-Confirm`) and **verified live** by asserting
-   content only the new build has — never a status code on an old route.
+   content only the new build has — never a status code on an old route. **Deploying is a production
+   mutation; ask first.**

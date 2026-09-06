@@ -21,6 +21,12 @@ half-translated site with `hreflang` pointing at missing pages is worse than a m
 Legal pages stay **Hebrew-authoritative**: `/accessibility/` is a legal declaration under Israeli
 regulation, and a translation is not the declaration.
 
+Two silos shipped after this skill was written and are **deliberately outside that subset** unless
+someone argues otherwise: the three `/guides/` articles (long-form Hebrew editorial — translating them
+is a writing project, not a string swap) and the three `/locations/` city pages (their whole value is
+city-specific Hebrew substance aimed at Israeli local search). Decide their scope explicitly rather than
+letting a loop over the data arrays decide it for you.
+
 ## 1. What is already done (protect it)
 
 The repo has **zero physical-direction Tailwind utilities** — everything is logical
@@ -38,10 +44,10 @@ Expect no output.
 
 ## 2. URL architecture — Hebrew stays at the root
 
-| Locale | Prefix | Example |
-| --- | --- | --- |
-| Hebrew (default) | **none** | `/services/water-leak-detection/` |
-| English | `/en/` | `/en/services/water-leak-detection/` |
+| Locale           | Prefix   | Example                              |
+| ---------------- | -------- | ------------------------------------ |
+| Hebrew (default) | **none** | `/services/water-leak-detection/`    |
+| English          | `/en/`   | `/en/services/water-leak-detection/` |
 
 **Never move Hebrew to `/he/`.** Every existing URL carries ranking signal; re-prefixing means
 301-ing the entire site to gain nothing. Slugs stay ASCII English in both trees — only content
@@ -67,7 +73,7 @@ app/
 catch-all whose static-export behaviour is fiddly. **Only a root layout can render `<html lang dir>`**
 — which is the entire point.
 
-Accepted trade-off: navigating *between* locales is a full page load. Irrelevant on a static export
+Accepted trade-off: navigating _between_ locales is a full page load. Irrelevant on a static export
 where every navigation already is.
 
 Both trees need their own `generateStaticParams` for `[slug]` routes, and `metadataBase` stays set
@@ -87,7 +93,7 @@ export const content: Record<Locale, SiteContent> = { he, en };
 ```
 
 Identity (phone, WhatsApp, email, hours, service areas, founding year) is **locale-independent** and
-stays in `lib/site.ts`. Only *wording* is keyed by locale.
+stays in `lib/site.ts`. Only _wording_ is keyed by locale.
 
 **Never duplicate a page component per locale.** Duplicate the data, share the markup — pass
 `locale` as a prop. Two copies of a page drift within a sprint.
@@ -116,14 +122,14 @@ Validity rules:
 
 ## 6. Per-locale formatting
 
-| Concern | Hebrew | English |
-| --- | --- | --- |
-| Fonts | Heebo + Assistant | **Reuse both** — each has Latin coverage. A third family breaks the font budget |
-| Phone | `055-660-1006` in a `dir="ltr"` island | `+972 55-660-1006` — international form |
-| Currency | `₪450` (symbol first — existing convention) | `₪450` or `450 NIS`, consistently |
-| Dates | `dd/mm/yyyy` | `dd/mm/yyyy` — **never** switch to US order in an IL context |
-| Punctuation | גרש `׳` / גרשיים `״` | ASCII |
-| Ranges | En dash, no spaces | En dash |
+| Concern     | Hebrew                                      | English                                                                         |
+| ----------- | ------------------------------------------- | ------------------------------------------------------------------------------- |
+| Fonts       | Heebo + Assistant                           | **Reuse both** — each has Latin coverage. A third family breaks the font budget |
+| Phone       | `055-660-1006` in a `dir="ltr"` island      | `+972 55-660-1006` — international form                                         |
+| Currency    | `₪450` (symbol first — existing convention) | `₪450` or `450 NIS`, consistently                                               |
+| Dates       | `dd/mm/yyyy`                                | `dd/mm/yyyy` — **never** switch to US order in an IL context                    |
+| Punctuation | גרש `׳` / גרשיים `״`                        | ASCII                                                                           |
+| Ranges      | En dash, no spaces                          | En dash                                                                         |
 
 `dir="ltr"` on phone/email elements is a **no-op inside an LTR document**, so the existing island
 pattern is safe to share across both trees unchanged.
@@ -148,8 +154,9 @@ span (**3.1.2 Language of Parts**).
       in that locale.
 - [ ] Not machine-translated. A bad translation damages E-E-A-T in both languages.
 - [ ] Legal pages Hebrew-authoritative; any English version marked a convenience translation.
-- [ ] `npm run lint && npm run build`; route count roughly doubles — update
-      `/qa-build-gate` expectations in the same commit.
+- [ ] `npm run lint && npm run build`; route count roughly doubles — from today's **22 emitted
+      `index.html` / 19 in the sitemap** — so update `/qa-build-gate` and `npm run check:sitemap`
+      expectations in the same commit.
 
 ## Gotchas
 

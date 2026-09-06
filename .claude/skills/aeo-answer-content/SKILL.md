@@ -1,6 +1,6 @@
 ---
 name: aeo-answer-content
-description: Answer-engine and LLM-citability layer for thermoleak — question-form H2s with a 40–60 word extractable answer first, definition and comparison blocks, llms.txt, verifying the live Cloudflare-served robots.txt rather than trusting app/robots.ts, and freshness/authorship signals. Use when optimizing a page to be quoted by AI Overviews, ChatGPT or Perplexity. Triggers "AEO", "GEO", "AI Overviews", "llms.txt", "will an LLM cite this", "answer block", "AI crawlers".
+description: Answer-engine and LLM-citability layer for thermoleak — question-form H2s with a 40–60 word extractable answer first (shipped on all four services, three cities, /pricing/ and three guides), definition and comparison blocks, the llms.txt that has not been updated since the two new silos landed, verifying the live Cloudflare-served robots.txt rather than trusting app/robots.ts, and the freshness signals the guides now carry. Use when optimizing a page to be quoted by AI Overviews, ChatGPT or Perplexity. Triggers "AEO", "GEO", "AI Overviews", "llms.txt", "will an LLM cite this", "answer block", "AI crawlers".
 ---
 
 # Answer-engine optimization
@@ -63,9 +63,15 @@ An answer engine lifts a **contiguous, self-contained span**. Structure for that
 דורשת שבירת קירות או ריצוף. בנכסים גדולים או כשיש כמה מוקדים חשודים הבדיקה עשויה להימשך זמן נוסף.
 ```
 
-Today **no service page does this.** Each opens with two narrative `intro` paragraphs from
-`lib/services.ts` that set context before answering anything. The information is often there — it is
-just in the third sentence instead of the first.
+**This shipped 2026-08-17 and 2026-08-24.** Every service page, every city page, `/pricing/` and every
+guide opens with an answer block: `answer: ServiceFaq` on `Service` (`lib/services.ts`), `answer` on
+`Location` (`lib/locations.ts`), `pricing.answer` (`lib/pricing.ts`) and a `{ kind: "answer" }` block on
+each `Article` (`lib/articles.ts`). On services, `/pricing/` and the guides the same q/a also feeds the
+page's `FAQPage` node, so the visible answer and the marked-up answer are the same string by
+construction.
+
+So the job here is **matching the shipped pattern, not introducing it** — and holding the 40–60 word
+band, which is the part that drifts. Measure the words; don't eyeball it.
 
 Other liftable shapes worth using: a **definition** ("בדיקה תרמוגרפית היא…"), a **comparison table**
 (תרמוגרפיה מול איתור אקוסטי מול מד לחות — what each detects, cost, when it fails), and a **spec list**
@@ -79,39 +85,55 @@ That is the strongest AEO asset the site has. Keep that property in anything new
 ## Gate 3 — worth citing
 
 An assistant picks the source that answers most precisely. Generic reassurance loses to a competitor
-with a number. This category rewards technical honesty, and none of it is on the site today
-(backlog §6.6):
+with a number. This category rewards technical honesty. Half of it now ships (backlog §6.6):
 
-- **What a thermal camera actually sees.** It images **surface temperature**, not water — so it detects
-  a leak by the thermal pattern moisture creates, and it therefore has real limits: deep slab leaks,
-  well-insulated walls, a wall already at ambient. Saying this plainly is the single most citable thing
-  this site could publish, and every competitor avoids it.
-- **תרמוגרפיה מול איתור אקוסטי מול מד לחות** — what each detects, what each costs, when each fails.
+✅ **Published:**
+
+- **What a thermal camera actually sees** — it images **surface temperature**, not water. The guide
+  `/guides/what-a-thermal-camera-sees/` carries this, and every service page carries a `limits` block
+  saying plainly where the method fails. This is the site's strongest citable asset; don't dilute it.
+- **תרמוגרפיה מול איתור אקוסטי מול מד לחות** — the three-method comparison table in
+  `/guides/find-leak-without-breaking/` (what each suits, what each cannot do).
+- **What changes the price of a visit** — `/pricing/` (the factors block) plus
+  `/guides/leak-detection-cost/` and its tables.
+
+❌ **Still unwritten** — these are the remaining gate-3 topics, and where a new guide should go:
+
 - **Why the damp stain is usually not directly beneath the leak** — water tracks along pipes, slabs and
-  ceilings.
-- **What an insurer actually requires in a report**, and what gets a claim rejected.
-- **What changes the price of a visit** — property size, number of suspected sources, access.
-- **Electrical thermography intervals** — why the scan is done **under load**, and what a hotspot
-  severity rating means.
+  porous walls. Fragments exist inside two existing pages, but no page owns the question.
+- **What an insurer actually requires in a report**, and what gets a claim rejected. One sentence in a
+  guide today; `/services/insurance-reports/` is the natural home for the full treatment.
+- **Electrical thermography intervals.** The "under load" point and hotspot severity are already on
+  `/services/electrical-thermography/`; how often a panel should be rescanned is not.
 
-These are also the Tier-3 keyword targets in `docs/keyword-map.md` §2 and the natural spine of a
+These are also the Tier-3 keyword targets in `docs/keyword-map.md` §2 and the natural spine of the
 `/guides/` hub. One genuinely useful comparison table earns more citations than ten reassuring pages.
 
 ## Freshness and authorship
 
-Assistants discount undated, unattributed content. The site has **no** `datePublished`, `dateModified`
-or author anywhere. Add all three to articles (see `/new-article`), and put a real named person behind
-them — blocked on `docs/business-facts.md` §A. **Never invent an author**; a fabricated byline is a
-worse trust signal than an absent one, and this site is already carrying the cost of six fabricated
-customers.
+Assistants discount undated, unattributed content. The three guides carry all three signals:
+`datePublished`, `dateModified` and a **real, confirmed** byline — רונן דהן, approved in
+`docs/business-facts.md` §A. `app/sitemap.ts` derives each guide's `lastModified` from
+`article.dateModified`, so the dates are a live signal rather than decoration.
+
+Two standing rules:
+
+- **Bump `dateModified` whenever you substantively edit an article.** Nothing enforces it, and the
+  sitemap will keep advertising the old date. Same for the hand-maintained per-route dates in
+  `app/sitemap.ts`.
+- **Never invent an author.** `author` is deliberately **optional** on `Article`, so an article by
+  someone unnamed publishes unattributed rather than borrowing a name. A fabricated byline is a worse
+  trust signal than an absent one, and this site already paid to remove six fabricated customers.
 
 ## Entity consistency
 
-An assistant resolves "טרמוליק" to an entity by cross-referencing sources. With `sameAs` pointing at
-`facebook.com` and `instagram.com` homepages, there are no other sources — worse, there are two links
-that look like corroboration and provide none. Name, phone, service area and description must be
-identical across the schema, the visible copy, and every off-site profile once they exist. See
-`/local-seo-il` §2.
+An assistant resolves "טרמוליק" to an entity by cross-referencing sources. **`sameAs` is empty**, and
+that is deliberate: the two platform-homepage links that used to sit there looked like corroboration
+and provided none, and they were removed 2026-08-17. So there is currently **no off-site source a
+visitor or an assistant can check** — that is the top open trust gap, blocked on a real Google Business
+Profile URL (`docs/business-facts.md` §B), not a defect to re-report each pass. Name, phone, service
+area and description must be identical across the schema, the visible copy, and every off-site profile
+once they exist. See `/local-seo-il` §2.
 
 ## llms.txt
 
@@ -120,15 +142,22 @@ service list, canonical URLs for the key answers, contact, and the service area.
 factual and in sync with `lib/site.ts` when facts change; it is a pointer file, not a second
 website.
 
+**It is stale.** It was written before the `/guides/` and `/locations/` silos shipped, so it lists no
+guide URL and no city URL — the three guides are exactly the pages an answer engine would most want
+pointed at. Bring it level with `out/sitemap.xml`: every indexable URL should either appear in
+`llms.txt` or be excluded on purpose, with the reason written down.
+
 ## Checklist
 
 - [ ] Live `robots.txt` **fetched** and the AI-crawler stance recorded, not assumed.
-- [ ] Every service page and article opens with a 40–60 word answer block under a question heading.
+- [ ] Every service, city, guide and `/pricing/` opens with a 40–60 word answer block under a
+      question heading — **counted**, not eyeballed.
 - [ ] Answers ship in the HTML at first paint (native `<details>`, never client-conditional).
 - [ ] Each answer is comprehensible with zero surrounding context.
 - [ ] At least one comparison or limits table exists that a competitor doesn't have.
-- [ ] Articles carry `datePublished`, `dateModified` and a real named author.
-- [ ] `public/llms.txt` published and accurate.
+- [ ] Articles carry `datePublished`, `dateModified` and a real named author (or none at all).
+- [ ] `dateModified` bumped if the article's content changed in this commit.
+- [ ] `public/llms.txt` published, accurate, and covering every silo in `sitemap.xml`.
 
 ## Gotchas
 
@@ -136,4 +165,5 @@ website.
 - Never mark up an answer in `FAQPage` that isn't rendered on the page.
 - A blocked crawler makes perfect on-page AEO worth nothing. Gate 1 first, always.
 - An unsourced `aggregateRating` is an AEO liability too — an assistant that repeats it exposes both
-  itself and the business.
+  itself and the business. The site's rating, reviews and stats were removed 2026-08-17 and are at zero
+  in the export; that is the correct state, not an outstanding task.

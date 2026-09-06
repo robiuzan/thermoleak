@@ -22,8 +22,8 @@ title/description formulas in [keyword-map.md](keyword-map.md), the JSON-LD targ
   premises. Local visibility therefore rests on the Google Business Profile far more than on the
   site — see §4.
 
-**Strategic thesis:** win the *method* conversation (Tier 3), convert it into *service* rankings
-(Tier 1), and use the GBP plus a small number of genuinely local pages to take the *map pack*
+**Strategic thesis:** win the _method_ conversation (Tier 3), convert it into _service_ rankings
+(Tier 1), and use the GBP plus a small number of genuinely local pages to take the _map pack_
 (Tier 2). Do not try to win Tier 2 by volume of pages.
 
 ---
@@ -39,29 +39,36 @@ Five tiers, defined in [keyword-map.md](keyword-map.md) §2. This section says *
         |                     |                     |
    SERVICE CLUSTER       LOCAL CLUSTER        ANSWER CLUSTER
    /services/{slug}/     /locations/{city}/   /guides/{question}/
-   4 pages, commercial   3-5 pages, gated     6+ pages, informational
+   4 pages, commercial   3 shipped, 9 gated   3 shipped, 3 topics open
         |                     |                     |
         +--------- every guide links down to the service that monetises it,
                    every location links across to all four services,
                    every service links out to 2-3 guides + its best locations
 ```
 
-**The rule that makes it a cluster and not a pile:** every page in the outer ring links *up* to the
-pillar with a descriptive Hebrew anchor, and the pillar links *down* to its strongest children. A
+**The rule that makes it a cluster and not a pile:** every page in the outer ring links _up_ to the
+pillar with a descriptive Hebrew anchor, and the pillar links _down_ to its strongest children. A
 page with no inbound contextual link is not in the cluster — it is an orphan with a URL.
+
+**Where that stands after sprint 3.** The guide ring is wired both ways, and every city links across
+to all four services. The missing edge is the return leg on the local ring: **no service page
+carries a descriptive anchor into any city**, so the cities' only inbound links are the header and
+footer nav (open — LOC-2). Nav links keep them out of orphan status; they do not carry the topical
+relevance that an `איתור נזילות בתל אביב` anchor from `/services/water-leak-detection/` would. Close
+this before widening the silo, not after.
 
 ### Cluster ownership — one page per intent, no overlap
 
-| Intent | Owner | Never also targeted by |
-| --- | --- | --- |
-| איתור נזילות (generic) | `/` + `/services/` | any single service page |
-| איתור נזילות מים | `/services/water-leak-detection/` | the homepage |
-| איתור רטיבות | `/services/moisture-detection/` | the water-leak page |
-| בדיקה תרמוגרפית לוח חשמל | `/services/electrical-thermography/` | — |
-| דו״ח לביטוח | `/services/insurance-reports/` | — |
-| כמה עולה | `/pricing/` | every service page (they *link* to it) |
-| `{service} ב{city}` | `/locations/{city}/` | service pages |
-| method questions | `/guides/{slug}/` | service pages (they *summarise*, guides *explain*) |
+| Intent                   | Owner                                | Never also targeted by                             |
+| ------------------------ | ------------------------------------ | -------------------------------------------------- |
+| איתור נזילות (generic)   | `/` + `/services/`                   | any single service page                            |
+| איתור נזילות מים         | `/services/water-leak-detection/`    | the homepage                                       |
+| איתור רטיבות             | `/services/moisture-detection/`      | the water-leak page                                |
+| בדיקה תרמוגרפית לוח חשמל | `/services/electrical-thermography/` | —                                                  |
+| דו״ח לביטוח              | `/services/insurance-reports/`       | —                                                  |
+| כמה עולה                 | `/pricing/`                          | every service page (they _link_ to it)             |
+| `{service} ב{city}`      | `/locations/{city}/`                 | service pages                                      |
+| method questions         | `/guides/{slug}/`                    | service pages (they _summarise_, guides _explain_) |
 
 **Cannibalisation test before any new page:** name the one query it owns that no existing page
 owns. If you cannot, you are splitting equity, not adding it.
@@ -77,6 +84,10 @@ a real entity (GBP + reviews + a named human), internal link equity flowing up, 
 citations. **Adding pages does not help here.** The levers are §4 (entity) and the guide cluster
 feeding authority upward.
 
+Of the three entity ingredients, only the named human has landed (רונן דהן, confirmed 2026-08-24).
+The GBP and the reviews are still owner-blocked in business-facts §B, and they are the two that
+carry off-site corroboration — see [eeat-and-trust.md](eeat-and-trust.md) §1.
+
 ### 3b. Service terms — won with depth and specificity
 
 Each of the four service pages must clear the 450-word floor with material a competitor cannot
@@ -90,6 +101,10 @@ with answer blocks and limits blocks. Next increment is per-service case evidenc
 See §4. The failure mode is fatal and common: 12 templated city pages is a doorway cluster, and the
 penalty lands on the **domain**, not the page.
 
+Status: **three cities shipped 2026-08-24** — תל אביב, חולון, בת ים — through the §4 gate, with nine
+still gated. The restraint is the achievement here. Read §4 as the standard the next batch has to
+match, not as a plan still waiting to be executed.
+
 ---
 
 ## 4. Local SEO (GEO) architecture
@@ -99,11 +114,11 @@ penalty lands on the **domain**, not the page.
 The business is **service-area, no public office** (`site.address.note`). Legitimate, but it must
 be expressed consistently in three places or Google resolves the conflict against us:
 
-| Surface | Correct state |
-| --- | --- |
-| Site | Phone/WhatsApp/email from `lib/site.ts` only; no street address anywhere; `serviceAreaText` describes coverage |
-| JSON-LD | `PostalAddress` with `addressRegion` + `addressCountry` only; `areaServed` enumerating the 12 cities; **no `geo`** unless it is the real operating base |
-| Google Business Profile | **Service-area profile with the address hidden**, same phone, same 12 areas |
+| Surface                 | Correct state                                                                                                                                           |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Site                    | Phone/WhatsApp/email from `lib/site.ts` only; no street address anywhere; `serviceAreaText` describes coverage                                          |
+| JSON-LD                 | `PostalAddress` with `addressRegion` + `addressCountry` only; `areaServed` enumerating the 12 cities; **no `geo`** unless it is the real operating base |
+| Google Business Profile | **Service-area profile with the address hidden**, same phone, same 12 areas                                                                             |
 
 **Never** invent a coordinate to complete the schema. A city-centre placeholder was removed
 2026-08-17 for exactly this reason.
@@ -111,13 +126,19 @@ be expressed consistently in three places or Google resolves the conflict agains
 ### The Google Business Profile is the highest-leverage asset on this project
 
 For a service-area trade business the GBP outranks nearly everything on-page: it owns the map pack
-(which renders *above* organic for `{service} ב{city}`), it hosts reviews, and it is the entity
+(which renders _above_ organic for `{service} ב{city}`), it hosts reviews, and it is the entity
 anchor that makes `sameAs` meaningful. It is currently **absent** — blocked on business-facts §B.
 
-Once it exists: profile URL goes to `lib/site.ts` `social`, and flows to both the footer and
-JSON-LD `sameAs` from that one edit.
+Once it exists, the profile URL is added to `lib/site.ts` and flows to the footer and to JSON-LD
+`sameAs` from there. Note the `social` key **no longer exists** — it was removed 2026-08-17 with the
+facebook.com / instagram.com placeholders it held, so restoring it is a deliberate act that requires
+a real profile URL, never a platform homepage.
 
-### The local silo — build 3-5, not 12
+### The local silo — 3 shipped, 9 gated
+
+`/locations/` plus תל אביב, חולון and בת ים went live 2026-08-24 (`lib/locations.ts`). All twelve
+areas were found to have three or more true city-specific claims available — the cap to three was a
+deliberate "should we", not a "could we", and the reasoning is recorded in that file's header.
 
 Gate every candidate city on [content-standards.md](content-standards.md) §2. A city earns a page
 only if **three or more** of these are true and specific to it:
@@ -132,13 +153,29 @@ only if **three or more** of these are true and specific to it:
 - local pricing reality if it differs
 
 Order of operations: **service depth → guides → 3-5 locations → only then consider
-service×location.** The 4×12 = 48 cell matrix is a trap; see [keyword-map.md](keyword-map.md) §6.
+service×location.** The first three have run; the fourth stays shut. The 4×12 = 48 cell matrix is a
+trap; see [keyword-map.md](keyword-map.md) §6.
+
+**Two preconditions on batch 2, in this order.**
+
+1. **Re-run the research gate.** The nine deferred cities were carried forward as **one truncated
+   angle each**, not as the intact claim sets the sprint-3 note describes — so batch 2 is a research
+   pass, not a data edit, and it must be costed that way (open — LOC-1).
+2. **Wire the inbound mesh for the three cities that already exist** before adding a fourth (open —
+   LOC-2, §2 above). Widening a silo whose pages receive no contextual equity multiplies the
+   weakness instead of the coverage.
 
 ### Hebrew grammar is a ranking detail here
 
 `ב{city}` is not universally correct. `תל אביב-יפו` reads wrong as `בתל אביב-יפו` in a title; any
-region entry (`השרון`, `צפון`) needs `באזור השרון` or `בצפון הארץ`. Model it in data before page
-one: `{ slug, name, kind: "city" | "region", prefixed }`.
+region entry (`השרון`, `צפון`) needs `באזור השרון` or `בצפון הארץ`. This is modelled in data, as it
+had to be: the `Location` interface in `lib/locations.ts` carries `kind: "city" | "region"` and a
+hand-written `prefixed`, and no template may ever guess it. Every new entry fills both.
+
+One residue: the visible name and the schema name can diverge. `lib/locations.ts` says `תל אביב`
+while `site.serviceAreas` says `תל אביב-יפו`, so the same page emits both spellings in two
+`areaServed` nodes (open — LOC-11). Minor, but it works against §5 "Entity clarity" below, which
+asks for byte-identical strings.
 
 ---
 
@@ -195,6 +232,17 @@ competitors:
 Each becomes a `/guides/` article (see `/new-article`) and a compressed answer block on the service
 page that monetises it.
 
+**Status of the six.** Topics 1, 2 and 6 shipped as the first guide triplet on 2026-08-24 —
+`/guides/what-a-thermal-camera-sees/`, `/guides/find-leak-without-breaking/` and
+`/guides/leak-detection-cost/`. Topics 3, 4 and 5 are unwritten as guides. Two of them are not
+starting from nothing: topic 4 already has an answer block and a limits section on
+`/services/insurance-reports/`, and topic 5 has the under-load explanation in the limits section of
+`/services/electrical-thermography/` — a guide would deepen existing coverage. **Topic 3 has no
+dedicated treatment anywhere** (the closest is a single city FAQ on `/locations/tel-aviv/`), which
+makes it both the widest gap and the most quotable of the three. The order above is the publishing
+order; the sprint assignment lives in
+[implementation-roadmap.md](implementation-roadmap.md).
+
 ### Entity clarity
 
 An assistant resolves טרמוליק by cross-referencing sources. With `sameAs` empty there are none —
@@ -202,29 +250,55 @@ which is still better than the previous state (links to facebook.com and instagr
 asserting corroboration that did not exist). Name, phone, service area and description must be
 byte-identical across schema, visible copy and every off-site profile once they exist.
 
+**While `sameAs` is legitimately empty, the internal graph is the only corroboration available.**
+That raises the value of one cheap move that needs no new business fact: making the guide byline
+resolve to the founder node. `/about/` already emits a `Person` at `about/#founder`, but each
+`Article` emits a second, anonymous `Person` with the same name and no `@id`, so a parser cannot
+tell they are one human (open — EEAT-5 / AEO-6). Consolidating them is the highest-value
+entity work that is not blocked on the owner.
+
 ### Freshness and authorship
 
-No `datePublished`, `dateModified` or author anywhere. Assistants discount undated, unattributed
-content. Guides must carry all three — with a **real** named person (business-facts §A). Never
-invent a byline; a fabricated author is a worse trust signal than none.
+Shipped 2026-08-24: all three guides carry `datePublished`, `dateModified` and a real byline
+(רונן דהן, confirmed — business-facts §A), and the guide entries in `app/sitemap.ts` derive their
+`lastModified` from `article.dateModified` so the two cannot drift apart. That closes the signal
+itself.
+
+Two things still owed. The visible byline is plain text that links nowhere — the rule in
+[eeat-and-trust.md](eeat-and-trust.md) §3 is that a byline which links nowhere is decoration — and
+the author has no credential line behind it, which is blocked on business-facts §B. **Never invent a
+byline or a date; a fabricated author is a worse trust signal than none.**
 
 ### llms.txt
 
 `public/llms.txt` ships (added 2026-08-17 when gate 1 opened): who the business is, the service
-list, canonical URLs for key answers, contact, service area. Keep it in sync with `lib/site.ts`.
-It is a pointer file, not a second website.
+list, canonical URLs for key answers, contact, service area. It is a pointer file, not a second
+website.
+
+**It is currently stale, and that is a standing failure mode of this file, not a one-off.** It was
+written before both silos and still lists only the four services, `/pricing/` and the homepage — no
+guide URL, no location URL, and no named human, so the file whose entire job is routing an assistant
+to the best answer routes it away from every answer written since (open — AEO-1 / LOC-10 / EEAT-8).
+Keep it in sync with `lib/site.ts`, `lib/articles.ts` **and** `lib/locations.ts`: adding a route
+means updating this file in the same commit.
 
 ---
 
 ## 6. Measurement — what proves this is working
 
-| Signal | Where | Why it is the leading indicator |
-| --- | --- | --- |
-| Impressions on Tier-3 queries | Search Console | Moves 3-6 weeks **before** rankings do — first proof the guide cluster is landing |
-| Map-pack impressions | GBP dashboard | The metric most correlated with calls for a service-area business |
-| Calls + WhatsApp clicks per session | GA4 (once installed) | Raw sessions are vanity here; the funnel is phone-first |
-| Citations in AI answers | Manual spot-check | Ask the six §5 gate-3 questions in ChatGPT/Perplexity/AI Overviews monthly |
-| Branded search volume | Search Console | Evidence the entity is forming |
+| Signal                              | Where                        | Why it is the leading indicator                                                   |
+| ----------------------------------- | ---------------------------- | --------------------------------------------------------------------------------- |
+| Impressions on Tier-3 queries       | Search Console               | Moves 3-6 weeks **before** rankings do — first proof the guide cluster is landing |
+| Map-pack impressions                | GBP dashboard                | The metric most correlated with calls for a service-area business                 |
+| Calls + WhatsApp clicks per session | GA4 — **not yet measurable** | Raw sessions are vanity here; the funnel is phone-first                           |
+| Citations in AI answers             | Manual spot-check            | Ask the six §5 gate-3 questions in ChatGPT/Perplexity/AI Overviews monthly        |
+| Branded search volume               | Search Console               | Evidence the entity is forming                                                    |
+
+**The conversion row is the one that cannot be read yet.** GTM and GA4 ship on every route, so
+`page_view` flows — but no click event does: the CTAs carry `data-cta` attributes and nothing reads
+them, so calls and WhatsApp taps are invisible. Until that is wired, this strategy is judged on
+impressions and rankings, not on leads. The instrumentation plan lives in
+[data-tracking-infrastructure.md](data-tracking-infrastructure.md).
 
 ---
 

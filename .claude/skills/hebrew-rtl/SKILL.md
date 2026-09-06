@@ -80,7 +80,9 @@ visible address; `Footer` already does.
   convention rather than switching to `450 ₪` mid-file.
 - Dates: `dd/mm/yyyy`.
 - Ranges: en dash, no spaces — `08:00–18:00`, `3–6 שעות`.
-- Thousands separator: comma — `3,000+`.
+- Thousands separator: comma — `1,200`. (Any _count_ on this site is a business fact: see
+  `docs/business-facts.md` before writing one. The job-count and success-rate figures that used to sit
+  here were fabricated and were removed 2026-08-17.)
 
 ## Hebrew punctuation
 
@@ -88,8 +90,8 @@ Use **גרש** `׳` (U+05F3) and **גרשיים** `״` (U+05F4) in Hebrew abbrev
 `ח״פ`, `ת״י`. Not the ASCII `'` and `"`, which render wrong and read as English punctuation.
 
 The repo is **consistent** about this — `דו״ח תרמוגרפי`, `ק״מ`, `בע״מ`, `ת״י 5568` all use the correct
-characters, including inside the review names (`דנה ל׳`). Match it exactly; a stray ASCII quote in a
-Hebrew abbreviation is visible to a native reader.
+characters. Match it exactly; a stray ASCII quote in a Hebrew abbreviation is visible to a native
+reader.
 
 ## Directional icons
 
@@ -115,7 +117,8 @@ Both halves matter. A route that skips this **works in dev and 404s in productio
 - Keep user-facing strings Hebrew. No mid-sentence language mixing — an English equipment name (FLIR)
   gets its own clause.
 - Address the reader as "אתם"; speak as "אנחנו" / טרמוליק.
-- Copy lives in `lib/site.ts`, `lib/services.ts` and `lib/faqs.ts`, never in JSX.
+- Copy lives in the data files, never in JSX: `lib/site.ts` (identity, NAP), `lib/services.ts`,
+  `lib/faqs.ts`, `lib/pricing.ts`, `lib/articles.ts` (the guides) and `lib/locations.ts` (the cities).
 - Full voice and depth rules: `docs/content-standards.md` §4 and §7.
 
 ## Checklist

@@ -2,8 +2,14 @@
 
 What every route should emit. `schema-auditor` validates against this file;
 `schema-structured-data` implements it. Builders live in **`lib/jsonld.ts`** (hand-written in this repo,
-no external SEO kit): `localBusinessJsonLd` · `webSiteJsonLd` · `serviceJsonLd` · `faqPageJsonLd` ·
+no external SEO kit): `localBusinessJsonLd` · `webSiteJsonLd` · `serviceJsonLd` ·
+`locationServiceJsonLd` · `articleJsonLd` · `faqPageJsonLd` · `aboutPageJsonLd` ·
+`contactPageJsonLd` · `collectionPageJsonLd` (the last three share the private `pageNode` helper) ·
 `breadcrumbJsonLd`, rendered through `components/JsonLd.tsx`.
+
+**Status verified against the build of 2026-09-06** — 22 `index.html` files, 19 of them in
+`sitemap.xml`. Every ✅/❌ below was read out of `out/`, not inferred from the source. When this file
+and a fresh `out/` disagree, `out/` wins and this file gets fixed in the same commit.
 
 ---
 
@@ -11,13 +17,22 @@ no external SEO kit): `localBusinessJsonLd` · `webSiteJsonLd` · `serviceJsonLd
 
 Stable `@id`s let nodes reference each other instead of repeating themselves.
 
-| Node                | `@id`                                        | Status                       |
-| ------------------- | -------------------------------------------- | ---------------------------- |
-| The business        | `https://thermoleak.co.il/#business`         | ✅ emitted                   |
-| The website         | `https://thermoleak.co.il/#website`          | ✅ emitted                   |
-| A service           | `https://thermoleak.co.il/services/{slug}/#service` | ❌ `Service` has no `@id` |
-| A person            | `https://thermoleak.co.il/about/#person-{n}` | ❌ no person exists          |
-| A page's breadcrumb | `{pageUrl}#breadcrumb`                       | ❌ breadcrumbs have no `@id` |
+| Node                 | `@id`                                                | Status                                                       |
+| -------------------- | ---------------------------------------------------- | ------------------------------------------------------------ |
+| The business         | `https://thermoleak.co.il/#business`                 | ✅ emitted on all 22 pages                                   |
+| The website          | `https://thermoleak.co.il/#website`                  | ✅ emitted on all 22 pages                                   |
+| A service            | `https://thermoleak.co.il/services/{slug}/#service`  | ✅ `lib/jsonld.ts:69`                                        |
+| A location's service | `https://thermoleak.co.il/locations/{slug}/#service` | ✅ `lib/jsonld.ts:94`                                        |
+| An article           | `https://thermoleak.co.il/guides/{slug}/#article`    | ✅ `lib/jsonld.ts:172`                                       |
+| A page / hub node    | `{pageUrl}#page`                                     | ✅ `lib/jsonld.ts:135` — see §2 for which pages              |
+| The founder          | `https://thermoleak.co.il/about/#founder`            | ✅ on `LocalBusiness.founder`; ❌ on `Article.author` (SD-5) |
+| A page's breadcrumb  | `{pageUrl}#breadcrumb`                               | ❌ breadcrumbs still have no `@id`                           |
+
+`about/#founder` resolves to a real on-page anchor (`app/about/page.tsx` renders `id="founder"`), so
+the reference is not dangling. The one place it is missing is `Article.author`, which emits a bare
+`{"@type":"Person","name":…}` on the three guides — the same real human as `LocalBusiness.founder`,
+described twice as two unlinked entities. Fixing that is a one-line code change (SD-5, §7b) and needs
+no new business fact, since the name is already confirmed (business-facts §A).
 
 All URLs are built through `canonicalUrl()` in `lib/site.ts`, which applies `withTrailingSlash()` — so
 `@id`, `url`, the page canonical and the sitemap `<loc>` are the same string. Keep using it rather than
@@ -27,33 +42,58 @@ concatenating URLs by hand.
 
 ## 2. Node per route type
 
-| Route                         | Required                                                    | Currently                        |
-| ----------------------------- | ----------------------------------------------------------- | -------------------------------- |
-| every page (root layout)      | `LocalBusiness` + `WebSite`                                 | ✅ both                          |
-| `/`                           | + `FAQPage` from `generalFaqs`                              | ✅                               |
-| `/services/{slug}/` ×4        | `Service` + `FAQPage` + `BreadcrumbList`                    | ✅ all three                     |
-| `/services/`                  | `BreadcrumbList` + `CollectionPage`                         | breadcrumb ✅, collection ❌     |
-| `/about/`                     | `BreadcrumbList` + `AboutPage` + `Person[]`                 | breadcrumb ✅, rest ❌           |
-| `/contact/`                   | `BreadcrumbList` + `ContactPage`                            | breadcrumb ✅, contact ❌        |
-| `/reviews/`                   | `BreadcrumbList` + `Review[]` **only when real**            | breadcrumb ✅, reviews ⚠️ §4.1   |
-| `/accessibility/` `/privacy/` | `BreadcrumbList`                                            | ❌ **missing — see §2a**         |
-| `/locations/{city}/`          | `Service` + `areaServed` + `BreadcrumbList`                 | route doesn't exist              |
-| `/guides/{slug}/`             | `Article` + `BreadcrumbList` + `FAQPage`                    | route doesn't exist              |
-| `/404/`                       | none                                                        | —                                |
+Required = what this spec demands. Emitted = what the 2026-09-06 build actually contains.
 
-### 2a. The breadcrumb drift
+| Route                         | Required                                                | Emitted today                                    |
+| ----------------------------- | ------------------------------------------------------- | ------------------------------------------------ |
+| every page (root layout)      | `LocalBusiness` + `WebSite`                             | ✅ both, 22/22 pages                             |
+| `/`                           | + `FAQPage` from `generalFaqs`                          | ✅ 9 questions; no breadcrumb, by design         |
+| `/services/`                  | `CollectionPage` + `BreadcrumbList`                     | ✅ both                                          |
+| `/services/{slug}/` ×4        | `Service` + `FAQPage` + `BreadcrumbList`                | ✅ all three (FAQPage = `answer` + 3 `faqs`)     |
+| `/guides/`                    | `CollectionPage` + `BreadcrumbList`                     | ✅ both                                          |
+| `/guides/{slug}/` ×3          | `Article` + `FAQPage` + `BreadcrumbList`                | ✅ all three; `Article.image` ❌ (SD-6, §7b)     |
+| `/locations/`                 | `CollectionPage` + `BreadcrumbList`                     | ✅ both                                          |
+| `/locations/{city}/` ×3       | `Service` + `areaServed` + `FAQPage` + `BreadcrumbList` | ✅ all four — see §5                             |
+| `/pricing/`                   | `FAQPage` + `BreadcrumbList`                            | ✅ both (FAQPage = `answer` + 4 `faqs`)          |
+| `/about/`                     | `AboutPage` + `BreadcrumbList`                          | ✅ both; the `Person` is the global `founder`    |
+| `/contact/`                   | `ContactPage` + `BreadcrumbList`                        | ✅ both                                          |
+| `/accessibility/` `/privacy/` | `BreadcrumbList`                                        | ✅ — no `#page` node, and none is required       |
+| `/thank-you/`                 | nothing beyond the global pair                          | ✅ — noindex, absent from the sitemap on purpose |
+| `/404/` `/_not-found/`        | nothing beyond the global pair                          | ✅                                               |
 
-`components/PageHero.tsx` renders a visible breadcrumb trail on **7** routes. `breadcrumbJsonLd` is
-called on only **5** — `about`, `contact`, `reviews`, `services`, `services/[slug]`. So
-`/accessibility/` and `/privacy/` show a trail to a human and emit nothing for a crawler.
+`/reviews/` is **gone** — the route and `lib/reviews.ts` were removed 2026-08-17 and the URL 301s to
+`/about/` via `public/_redirects`. It has no row here and must not get one back without real,
+sourced reviews (§4.1).
 
-Worse, on the five routes that do both, the same trail is typed **twice** — once as `crumbs` for
-`PageHero` (`{ name, href }`) and once as an array for `breadcrumbJsonLd` (`{ name, url }`). Two shapes,
-one truth, guaranteed to drift.
+### 2a. The page-node convention
 
-**The fix:** emit from `PageHero` itself, from the array it already receives. Then every page using the
-component gets the markup for free and the two can't disagree. Target: **7 pages** carrying
-`BreadcrumbList` — everything except `/` and the two 404 artifacts.
+A page gets a `#page` node (`AboutPage` / `ContactPage` / `CollectionPage`, all built by the private
+`pageNode` helper at `lib/jsonld.ts:131`) **only when it has no other content node to carry it**. Hub
+and narrative pages qualify; a page already emitting `Service`, `Article` or `FAQPage` does not.
+
+So `/pricing/` carrying `FAQPage` and no `#page` node is a **decision, not a gap** — the same reason
+`/services/{slug}/`, `/guides/{slug}/` and `/locations/{city}/` have none. `/accessibility/` and
+`/privacy/` carry neither, which is accepted: a `WebPage` node adds nothing a crawler cannot read from
+the document itself, and one node per concept per page (§4.6) is the value being protected.
+
+`CollectionPage.mainEntity` (an `ItemList` of what each hub collects) is **deliberately not required**.
+The three hubs already expose their members as crawlable links, no search feature consumes the
+property, and adding it would widen the builder surface for no measurable return.
+
+### 2b. Breadcrumbs: emitted once, by `PageHero`
+
+`components/PageHero.tsx` emits the `BreadcrumbList` itself, from the same `crumbs` array the visible
+trail renders. One array, one truth — the markup and the schema cannot drift apart.
+
+**Pages must never call `breadcrumbJsonLd` directly.** Doing so double-emits the node on that page.
+The only legitimate caller is `PageHero`; the builder stays exported for it alone.
+
+Target and actual: **18 pages** carry `BreadcrumbList` — every page except `/`, `/thank-you/` and the
+two 404 artifacts, none of which render a `PageHero` trail. Verified: `grep -rl 'BreadcrumbList' out
+--include=index.html | wc -l` → 18.
+
+The one thing still missing is the `@id` (§1): the node ships without `{pageUrl}#breadcrumb`, so it
+cannot be referenced from elsewhere in the graph. Low value, still open.
 
 ---
 
@@ -65,17 +105,22 @@ hand-assemble it and never hardcode a value `site` already carries.
 **Present and correct today:** `@type: ["LocalBusiness", "HomeAndConstructionBusiness"]`, `@id`, `name`,
 `alternateName`, `description`, `url`, `telephone`, `email`, `image`, `logo`, `priceRange`,
 `foundingDate` (`2015`, matching the roster), `PostalAddress` (region + country), `areaServed` (12
-`City` nodes), two `OpeningHoursSpecification` entries.
+`City` nodes), two `OpeningHoursSpecification` entries, and `founder` — a `Person` carrying
+`@id` `about/#founder` and the **confirmed** name (business-facts §A). All 22 pages carry it.
 
-**Wrong or blocked:**
+**Absent, and staying absent until sourced.** The first three below were emitted until 2026-08-17 and
+were removed as a deliberate anti-fabrication measure; `hasMap` never shipped. The export confirms all
+four at **zero files**. Restoring any of them without the source named below is a stop-ship, not a
+judgement call:
 
-| Field             | Problem                                                                                                  | Blocked on         |
-| ----------------- | -------------------------------------------------------------------------------------------------------- | ------------------ |
-| `aggregateRating` | **Fabricated** — 4.9/6 computed from six invented testimonials. See §4.1                                | business-facts §B  |
-| `sameAs`          | Points at `https://www.facebook.com/` and `https://www.instagram.com/` — platform homepages, not profiles | business-facts §B  |
-| `geo`             | `32.0853, 34.7818` = Tel Aviv city centre, a placeholder for a business with **no premises**             | business-facts §E  |
-| `founder`         | Absent — no person is named anywhere on the site                                                         | business-facts §A  |
-| `hasMap`          | Absent — appropriate while there is no premises                                                          | business-facts §E  |
+| Field             | Why it was removed                                                                               | Unblocked by      |
+| ----------------- | ------------------------------------------------------------------------------------------------ | ----------------- |
+| `aggregateRating` | Was 4.9/6, computed from six invented testimonials. See §4.1                                     | business-facts §B |
+| `sameAs`          | Pointed at `facebook.com` and `instagram.com` — platform homepages, not profiles                 | business-facts §B |
+| `geo`             | Was `32.0853, 34.7818` = Tel Aviv city centre, a placeholder for a business with **no premises** | business-facts §E |
+| `hasMap`          | Never shipped — appropriate while there is no premises                                           | business-facts §E |
+
+`lib/jsonld.ts:3-7` carries the same gate as a header comment. Do not "tidy it up".
 
 **On the address:** carrying only `addressRegion` + `addressCountry` is **correct** here. This is a
 service-area business (`site.address.note`: "שירות עד בית הלקוח"). Don't invent a street address to
@@ -89,37 +134,65 @@ address hidden, or the two will contradict each other.
 These are correctness rules, not preferences. Getting them wrong is worse than emitting nothing.
 
 1. **`Review` and `AggregateRating` ship only when the reviews are real and publicly verifiable.**
-   **This site currently violates that rule on every page.** `lib/reviews.ts` holds six invented
-   testimonials — its own header says so — and `averageRating` / `reviewCount` derived from them are
-   emitted as `aggregateRating` inside the business node, which ships from the root layout. An invented
-   rating is a Google policy violation and a Rich Results failure. Two acceptable resolutions and no
-   third: replace the reviews with real, sourced ones, or remove the rating and the testimonials until
-   you can. **Do not seed sample data "to test the markup".**
+   This is a standing prohibition, and **the gate currently passes** — `aggregateRating`, `Review`,
+   `sameAs` and `GeoCoordinates` each return **zero files** across the 22-page export. It did not
+   always: until 2026-08-17 the business node carried a 4.9/6 `aggregateRating` computed from six
+   invented testimonials in a `lib/reviews.ts` that no longer exists. An invented rating is a Google
+   policy violation and a Rich Results failure. The only thing that unblocks the node is real, sourced
+   reviews on a public profile (business-facts §B). **Do not seed sample data "to test the markup",
+   and do not treat the historical breach as precedent.**
 2. **Schema must match what the user sees.** A `FAQPage` question that isn't rendered is a violation.
    Any `Offer` price must equal the visible price text. Never mark up hidden content.
-3. **`FAQPage` only where FAQs are visible.** The homepage and all four service pages qualify because
-   the FAQs use native `<details>/<summary>` — the answers ship in the DOM, merely collapsed. A
-   client-state accordion that conditionally renders answers would break this. Keep the `<details>`
-   pattern.
-4. **No dangling `@id`s.** `serviceJsonLd` wires `provider` to `${site.domain}/#business`, which the
-   root layout always emits. Don't invent references.
-5. **One node per concept per page.** Two `LocalBusiness` blocks on one page is worse than one.
-6. **`geo` must be real or absent.** It is never approximated to the nearest city centre.
+3. **`FAQPage` only where FAQs are visible, and always derived from the same array the page renders.**
+   Twelve pages qualify: `/`, the 4 services, the 3 guides, the 3 locations and `/pricing/`. Each
+   builds `mainEntity` from the same typed data the DOM renders — `generalFaqs`, `service.answer` +
+   `service.faqs`, `articleFaqs(article)`, `location.faqs`, `pricing.answer` + `pricing.faqs` — so the
+   schema cannot drift from the copy. The service, pricing and homepage FAQs use native
+   `<details>/<summary>`, which keeps every answer in the DOM, merely collapsed; a client-state
+   accordion that conditionally renders answers would break this rule. Keep the `<details>` pattern.
+4. **Never emit an empty `FAQPage`.** `faqPageJsonLd` has no empty guard, so an empty array ships
+   `{"@type":"FAQPage","mainEntity":[]}` — a page type the page is not, and a Rich Results failure.
+   `/locations/{city}/` gates the call on `location.faqs.length > 0`; `/guides/{slug}/` does **not**,
+   so a future article with neither an `answer` nor a `faq` block would ship one (SD-8, §7b). Not live
+   today — all three guides carry both blocks.
+5. **No dangling `@id`s.** `serviceJsonLd` wires `provider` to `${site.domain}/#business`, which the
+   root layout always emits; `articleJsonLd` wires `publisher` to the same node; the `pageNode` helper
+   wires `isPartOf` → `#website` and `about` → `#business`. Every reference in the graph resolves.
+   Don't invent references.
+6. **One node per concept per page.** Two `LocalBusiness` blocks on one page is worse than one — which
+   is also why breadcrumbs are emitted only by `PageHero` (§2b) and why content pages get no second
+   `#page` node (§2a).
+7. **`geo` must be real or absent.** It is never approximated to the nearest city centre.
 
 ---
 
-## 5. Location-page schema (when the silo is built)
+## 5. Location-page schema — shipped 2026-08-24
 
-Each location page should emit:
+The silo exists: `/locations/` plus **three** city pages (תל אביב, חולון, בת ים). The other nine
+service areas stay gated in business-facts §E. Built by `locationServiceJsonLd` (`lib/jsonld.ts:83`).
 
-- **`Service`** — `name: "איתור נזילות ב{prefixed}"`, `serviceType: "איתור נזילות"`,
+Each location page emits, and every new one must:
+
+- **`Service`** — `@id` `{url}#service`, `name: "איתור נזילות {prefixed}"`,
+  `serviceType: "איתור נזילות"`, `description: location.answer`, `url`,
   `provider: { "@id": ".../#business" }`,
-  `areaServed: { "@type": "City" | "AdministrativeArea", name }`.
-- **`BreadcrumbList`** — `בית › אזורי שירות › {city}`.
-- **`FAQPage`** once city-specific FAQs exist (content-standards §3).
+  `areaServed: { "@type": "City" | "AdministrativeArea", name }`. ✅ all three.
+- **`BreadcrumbList`** — `בית › אזורי שירות › {city}`, emitted by `PageHero` (§2b). ✅ all three.
+- **`FAQPage`** from `location.faqs`, gated on the array being non-empty (§4.4). ✅ all three, 2
+  questions each.
+
+Note the `name` takes `prefixed` **as-is** — `איתור נזילות בתל אביב` — because the location model
+carries the preposition. No template should ever glue a bare `ב` onto `name`.
+
+The visible answer block on a location page is **not** folded into its `FAQPage`, unlike
+`/services/{slug}/` and `/pricing/`, which prepend `answer` to their FAQ array. That asymmetry is
+deliberate rather than accidental: the location answer already serves as the `Service.description`,
+and duplicating it as a `Question` would assert the same text twice on one page. Keep both patterns as
+they are; don't "harmonise" them.
 
 Use `City` for real cities and `AdministrativeArea` for regions — the `kind` field on the location model
-drives this (`/new-city`). Marking a region as a `City` is a factual error in the graph.
+drives this (`/new-city`). Marking a region as a `City` is a factual error in the graph. All three
+shipped cities are `kind: "city"`, so `AdministrativeArea` is currently untested on this route.
 
 **Do not** emit a `LocalBusiness` node per location. This business has **no physical premises at all**;
 one node is the honest count, and a node per city implies premises that don't exist — a well-known
@@ -130,26 +203,72 @@ four service pages, which is correct.
 
 ---
 
-## 6. Article schema (when `/guides/` exists)
+## 6. Article schema — shipped 2026-08-24
 
-`Article` with `headline`, `description`, `image`, `datePublished`, `dateModified`,
-`author` (a `Person` with a **real** name — business-facts §A), `publisher` (`@id` → `#business`),
-`mainEntityOfPage`. Plus `BreadcrumbList`, plus `FAQPage` derived from the article's `faq` blocks.
+`/guides/` plus **three** articles. Built by `articleJsonLd` (`lib/jsonld.ts:160`).
 
-Deriving `FAQPage` from the typed blocks rather than authoring it separately is what keeps rule §4.2
-from breaking as copy is edited — the same property the `<details>`-based service FAQs already have.
+| Property           | Required | Emitted today                                                         |
+| ------------------ | -------- | --------------------------------------------------------------------- |
+| `@id`              | yes      | ✅ `{url}#article`                                                    |
+| `headline`         | yes      | ✅                                                                    |
+| `description`      | yes      | ✅                                                                    |
+| `url`              | yes      | ✅                                                                    |
+| `datePublished`    | yes      | ✅ ISO date from `lib/articles.ts`                                    |
+| `dateModified`     | yes      | ✅ ISO date from `lib/articles.ts`                                    |
+| `author`           | yes      | ✅ `Person` with the **confirmed** founder name — but no `@id` (SD-5) |
+| `publisher`        | yes      | ✅ `@id` → `#business`                                                |
+| `mainEntityOfPage` | yes      | ✅                                                                    |
+| `inLanguage`       | yes      | ✅ (in-domain here — `Article` is a `CreativeWork`)                   |
+| `image`            | yes      | ❌ **open — SD-6, §7b**                                               |
+
+**On `author`.** The builder makes it optional and omits the property entirely when no name is on
+file. That stays: an absent author costs an `Article` rich result, an invented one is a fabricated
+E-E-A-T signal this project has already paid for once. Absent wins. The three shipped guides all carry
+the real, confirmed byline (business-facts §A) — do not strip it as a suspected fabrication.
+
+**On `image`.** This spec requires it and the builder omits it, which is the one place §2's table shows
+a required property missing. The resolution is `image: "${site.domain}/og.png"` — the site's own
+existing 1200×630 asset, so nothing is fabricated — paired with the same `/og.png` being restored to
+each guide's `openGraph.images`, which the page-level `generateMetadata` currently drops. Until real
+job photography exists, `/og.png` is the honest source; do **not** reference a photo the site does not
+own. This needs a code change (§7b).
+
+Deriving `FAQPage` from the typed blocks via `articleFaqs()` rather than authoring it separately is what
+keeps rule §4.2 from breaking as copy is edited — the same property the `<details>`-based service FAQs
+already have. Note the missing empty-array guard on this route (§4.4).
 
 ---
 
-## 7. Missing node types worth adding
+## 7. What is still missing
 
-| Node                          | Where                      | Blocked on                          |
-| ----------------------------- | -------------------------- | ----------------------------------- |
-| `Offer` / `PriceSpecification` | `Service` nodes            | business-facts §C (is ₪450 current?) |
-| `AboutPage` + `Person`         | `/about/`                  | business-facts §A (nobody is named)  |
-| `ContactPage`                  | `/contact/`                | nothing — ship it                    |
-| `CollectionPage`               | `/services/`               | nothing — ship it                    |
-| `@id` on `Service` nodes       | `lib/jsonld.ts`            | nothing — ship it                    |
+### 7a. Node types blocked on a business fact
+
+| Node                           | Where                        | Blocked on                                                   |
+| ------------------------------ | ---------------------------- | ------------------------------------------------------------ |
+| `Offer` / `PriceSpecification` | `Service` nodes, `/pricing/` | business-facts §C — the ₪450 base is **unconfirmed**         |
+| `Review` / `AggregateRating`   | the business node            | business-facts §B — no sourced public reviews exist (§4.1)   |
+| `sameAs`                       | the business node            | business-facts §B — no confirmed Google Business Profile URL |
+| `geo`                          | the business node            | business-facts §E — no real operating base to state          |
+
+**On the `Offer`.** The ₪450 figure is already visible in the copy (`lib/pricing.ts`,
+`lib/services.ts`), carried under a `🔶 confirm` marker. Restating an unconfirmed number in
+machine-readable form makes it harder to retract and is exactly what §4.2 warns about, so the node
+stays out. **Do not write this node "and confirm the price later"** — the sequence is: owner confirms
+in business-facts §C, then the `Offer` ships. `priceRange: "₪₪"` on the business node is the honest
+placeholder in the meantime.
+
+### 7b. Open defects in the emitted graph — all need a CODE change
+
+None of these fabricate anything; all four are mechanical.
+
+| #    | Defect                                                                                                                                                                                                                                                                                          | Fix location                                                                              |
+| ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| SD-6 | `Article.image` absent, though §6 requires it — and the same `generateMetadata` blocks drop `og:image` from the 10 dynamic routes                                                                                                                                                               | `lib/jsonld.ts` (Article builder) + the three `[slug]`/`[city]` `generateMetadata` blocks |
+| SD-5 | `Article.author` has no `@id`, so the founder is two unlinked `Person` nodes                                                                                                                                                                                                                    | `lib/jsonld.ts` (Article builder)                                                         |
+| SD-9 | `Service.inLanguage` is outside schema.org's declared domain for `Service` — the schema.org Validator flags it on all 7 `Service` nodes (4 services + 3 locations). Google ignores it silently. Removal is the clean fix; `inLanguage` on the `CreativeWork`-derived nodes is correct and stays | `lib/jsonld.ts` (both `Service` builders)                                                 |
+| SD-8 | `/guides/{slug}/` emits `FAQPage` ungated, unlike `/locations/{city}/` (§4.4)                                                                                                                                                                                                                   | `app/guides/[slug]/page.tsx`, or guard centrally in `faqPageJsonLd`                       |
+
+Plus the standing low-value gap from §1: `BreadcrumbList` carries no `{pageUrl}#breadcrumb` `@id`.
 
 ---
 
@@ -159,12 +278,28 @@ from breaking as copy is edited — the same property the `<details>`-based serv
 # every page carries JSON-LD
 grep -rL 'application/ld+json' out --include=index.html          # expect none
 
-# breadcrumbs everywhere they should be
-grep -rl 'BreadcrumbList' out --include=index.html | wc -l       # target 7
+# the global pair, on every emitted page
+find out -name index.html | wc -l                                # expect 22
+grep -rl 'LocalBusiness' out --include=index.html | wc -l        # expect 22
+grep -rl '"@type":"WebSite"' out --include=index.html | wc -l    # expect 22
 
-# nothing fabricated
-grep -rl 'aggregateRating\|"@type": *"Review"' out --include=index.html | wc -l   # target 0
+# breadcrumbs everywhere they should be — all but /, /thank-you/ and the two 404 artifacts
+grep -rl 'BreadcrumbList' out --include=index.html | wc -l       # expect 18
+
+# FAQPage — /, 4 services, 3 guides, 3 locations, /pricing/
+grep -rl 'FAQPage' out --include=index.html | wc -l              # expect 12
+
+# the fabrication gate — currently PASSING, all four at zero
+grep -rl 'aggregateRating' out --include=index.html | wc -l                  # expect 0
+grep -rl '"@type":"Review"' out --include=index.html | wc -l                 # expect 0
+grep -rl 'sameAs' out --include=index.html | wc -l                           # expect 0
+grep -rl 'GeoCoordinates' out --include=index.html | wc -l                   # expect 0
 ```
 
-Then run Google's **Rich Results Test** on the homepage, one service page, and `/reviews/`. Zero errors
-is the bar; warnings get triaged against this file.
+Every number above was measured against the 2026-09-06 build. When a route is added, the counts move —
+update them here in the same commit rather than letting an operator learn to wave a mismatch through.
+
+Then run Google's **Rich Results Test** on one page per route family: the homepage, one service page
+(`/services/water-leak-detection/`), one guide (`/guides/leak-detection-cost/`) and one location
+(`/locations/tel-aviv/`). Zero errors is the bar; warnings get triaged against this file. The
+schema.org Validator is the stricter second pass and is the one that surfaces SD-9.
