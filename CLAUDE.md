@@ -15,7 +15,8 @@
 - **Phone (click-to-call):** `055-660-1006` · WhatsApp same number · `info@thermoleak.co.il`.
   **These are real** (fleet values, confirmed in the roster).
 - **Hours:** ראשון–חמישי 08:00–18:00, שישי 08:00–13:00, plus out-of-hours for active leaks.
-- **Service area:** גוש דן והמרכז, up to ~60 km, with 12 named cities. **No location pages exist.**
+- **Service area:** גוש דן והמרכז, up to ~60 km, with 12 named cities. **3 have location pages**
+  (תל אביב, חולון, בת ים — shipped 2026-08-24); the other 9 are gated in business-facts §E.
 - **Founded:** 2015 — so "10+ שנות ניסיון" is defensible.
 - **Audience:** homeowners mid-crisis (a damp stain, a jumped water bill), ועדי בתים, property managers,
   loss adjusters, businesses needing electrical-panel scans.
@@ -104,6 +105,8 @@ app/
   services/page.tsx       # services index
   services/[slug]/        # 4 pages — Service + FAQPage JSON-LD, answer block, honest-limits section
   pricing/                # /pricing/ — the money-intent page, renders from lib/pricing.ts
+  guides/ guides/[slug]/  # knowledge hub — 3 articles; FAQPage DERIVED from lib/articles.ts blocks
+  locations/ locations/[city]/  # local silo — 3 gated cities only (lib/locations.ts)
   thank-you/              # noindex post-form conversion page; absent from the sitemap on purpose
   about/ contact/ accessibility/ privacy/
 components/               # FLAT — one component per file, PascalCase, no subfolders
@@ -118,6 +121,8 @@ lib/
   services.ts   # ⭐ the 4 services — copy, answer blocks, limits, steps, FAQs, keywords
   faqs.ts       # the general FAQ
   pricing.ts    # /pricing/ copy — per-service prices stay in services.ts, never restated here
+  articles.ts   # /guides/ typed blocks — FAQPage is DERIVED from them, so schema cannot drift
+  locations.ts  # ⭐ the 3 gated cities. READ its header before adding a 4th
   jsonld.ts     # every JSON-LD builder
 docs/           # the acceptance bars every agent cites
 ```

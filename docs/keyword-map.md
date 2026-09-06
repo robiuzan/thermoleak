@@ -27,10 +27,8 @@ synonym-split service pages usually do.
 competition, commercial intent. Target: homepage + the matching service page. Won with authority and
 depth, not with more pages.
 
-**Tier 2 — local.** `{service} ב{city}` — איתור נזילות בתל אביב, איתור רטיבות ברמת גן. **Currently
-unexpressed.** `site.serviceAreas` names 12 cities as plain text with no routes behind them, so the
-entire local layer is absent. This is the largest structural opportunity on the site and, if done
-badly, its largest risk — see §6.
+**Tier 2 — local.** `{service} ב{city}` — איתור נזילות בתל אביב, איתור רטיבות ברמת גן. **Partially expressed since 2026-08-24:** תל אביב, חולון and בת ים have pages; the other nine
+service areas remain plain-text chips. Expansion is deliberately gated — see §6.
 
 **Tier 3 — long-tail / problem-led.** The questions people actually type, and where this business's real
 expertise pays:
@@ -46,7 +44,8 @@ expertise pays:
 - הבדל בין איתור אקוסטי לתרמוגרפי
 
 These are the highest-value AEO targets, far less contested than Tier 1, and the natural spine of a
-`/guides/` hub (see `/new-article`). **The site has no page targeting any of them.**
+`/guides/` hub (see `/new-article`). **Three now ship** — what a thermal camera sees · finding a
+leak without breaking · what detection costs. The rest of the Tier-3 list is still open.
 
 **Tier 4 — commercial modifiers.** מחיר, מומלץ, אחריות, דחוף, ללא הרס, 24 שעות, ליד הבית. Fold into
 titles and descriptions rather than building pages for them.
@@ -68,7 +67,7 @@ append the brand again.** Two live exceptions, in opposite directions (backlog �
 | Service        | `service.h1`                         | `איתור נזילות מים במצלמה תרמית \| טרמוליק`             |
 | Services index | `שירותים — איתור נזילות, רטיבות ותרמוגרפיה` | `… \| טרמוליק`                                  |
 | Location       | `איתור נזילות ב{prefixed}`           | `איתור נזילות בתל אביב \| טרמוליק`                     |
-| About          | `אודות` — **not** `אודות טרמוליק`    | currently doubles the brand ❌                          |
+| About          | `אודות` — **not** `אודות טרמוליק`    | `אודות \| טרמוליק` ✅ fixed 2026-08-17                  |
 | Contact        | `צור קשר`                            | `צור קשר \| טרמוליק`                                   |
 | Article        | the question verbatim                | `מה מצלמה תרמית באמת רואה? \| טרמוליק`                 |
 
@@ -95,7 +94,7 @@ The H1 restates the title's intent in natural Hebrew — it is not a copy of the
 | Location   | `איתור נזילות ב{prefixed}`                              |
 | Article    | the question itself, verbatim                           |
 
-Exactly one `<h1>` per page — currently correct on all 13. Everything below is `<h2>`/`<h3>` with no
+Exactly one `<h1>` per page — verified correct on all 22 emitted routes. Everything below is `<h2>`/`<h3>` with no
 skipped levels.
 
 ---
@@ -103,7 +102,7 @@ skipped levels.
 ## 5. Description formulas
 
 150–160 characters, unique per route. Lead with **what it is + where**, add **one true**
-differentiator, close with an action. Never reuse a description across two routes. All 11 content
+differentiator, close with an action. Never reuse a description across two routes. All 19 indexed
 routes are currently unique.
 
 - **Service:** `{what it is in one clause}. {method or duration}. {one true differentiator}. חייגו {phone}.`
@@ -122,7 +121,8 @@ Only claim what [business-facts.md](business-facts.md) confirms. The 97% figure,
 
 4 services × 12 service areas = 48 possible cells. **Do not build them.**
 
-The site currently has **zero** location pages, which is an advantage worth protecting: sibling sites in
+The site has **three** location pages. An adversarially-verified gate (2026-08-24) found all 12
+areas *could* qualify, so the cap is a depth decision rather than a claim shortage: sibling sites in
 this fleet generated one page per city from a shared paragraph and all of them now fail the doorway
 test in [content-standards.md](content-standards.md) §2. The penalty lands on the domain.
 
