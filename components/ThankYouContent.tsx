@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useSyncExternalStore } from "react";
+import { useEffect, useRef, useSyncExternalStore, type MouseEvent } from "react";
 import Link from "next/link";
 import { CheckCircle2, Phone, TriangleAlert } from "lucide-react";
 import { site, telHref, whatsappHref } from "@/lib/site";
@@ -52,10 +52,24 @@ export default function ThankYouContent() {
     headingRef.current?.focus();
   }, []);
 
-  // With a stored message the re-open link resumes the exact prefilled conversation;
-  // without one (direct visit, private mode) it opens a blank chat.
-  const waHref = whatsappHref(handoff?.message);
+  // The rendered href stays GENERIC on purpose. The prefilled message carries the visitor's name
+  // and phone, and this anchor is tagged `data-cta` — GTM's built-in Click URL variable reads the
+  // href, so a prefilled one would push real customer PII into the dataLayer and on to GA4 as
+  // `link_url`. CLAUDE.md §12 forbids that, and ContactForm's own consent line promises it does not
+  // happen. The prefilled conversation is opened from the click handler instead, where the URL
+  // never enters the DOM. No-JS visitors get a blank chat, which is a working fallback.
+  const genericWaHref = whatsappHref();
+  const prefilledWaHref = whatsappHref(handoff?.message);
   const blocked = handoff !== null && !handoff.opened;
+
+  function openPrefilledChat(event: MouseEvent<HTMLAnchorElement>) {
+    if (!handoff?.message) return; // nothing stored — let the generic href do its job
+    event.preventDefault();
+    const win = window.open(prefilledWaHref, "_blank", "noopener,noreferrer");
+    // Popup blocked: navigate this tab instead. The address bar carries the message, but the
+    // anchor's href — the only thing the tag manager can read — stays clean.
+    if (!win) window.location.href = prefilledWaHref;
+  }
 
   return (
     <section className="py-16 md:py-24">
@@ -82,10 +96,11 @@ export default function ThankYouContent() {
 
           <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
             <a
-              href={waHref}
+              href={genericWaHref}
               target="_blank"
               rel="noopener noreferrer"
               data-cta="thankyou-whatsapp"
+              onClick={openPrefilledChat}
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-6 py-3.5 text-base font-bold text-ink transition-colors hover:bg-[#1faa57]"
             >
               <WhatsappIcon className="size-5" />

@@ -561,7 +561,7 @@ the measured ~305 KB per location, taking the export past the budget. Nothing wo
 over 500 KB when the documented budget is 200 KB. Kill that 500 KB folklore wherever it appears; it
 is not this site's budget.
 
-**Still true and worth protecting:** no dev-only artifacts; four runtime dependencies; exactly three
+**Still true and worth protecting:** no dev-only artifacts; four runtime dependencies; exactly four
 client components (`ContactForm`, `Navbar`, `ThankYouContent`); a FAQ built on `<details>` with zero
 JS; a one-year immutable `Cache-Control` on `/_next/static/*` in `public/_headers`; and Cloudflare
 Pages serving from the edge.

@@ -207,7 +207,8 @@ See the `hebrew-rtl` skill for the full rule set.
 - **Explicit function declarations:** `export default function Hero() {…}`. Type every prop with an
   explicit `interface`/`type`.
 - **RSC by default.** Add `"use client"` only for state, effects or browser APIs, kept leaf-level.
-  Currently client: **`ContactForm`**, **`Navbar`** and **`ThankYouContent`** (sessionStorage) —
+  Currently client: **`ContactForm`**, **`Navbar`**, **`ThankYouContent`** (sessionStorage) and
+  **`ConsentBanner`** (the Consent Mode v2 choice, in `localStorage`) —
   those three only. Note Next 16's lint rejects synchronous `setState` inside `useEffect`
   (`react-hooks/set-state-in-effect`); for client-only reads use `useSyncExternalStore`, as
   `ThankYouContent` does.

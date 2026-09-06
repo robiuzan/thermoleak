@@ -8,6 +8,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import StickyContact from "@/components/StickyContact";
 import Analytics from "@/components/Analytics";
+import ConsentBanner from "@/components/ConsentBanner";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.domain),
@@ -90,6 +91,7 @@ export default function RootLayout({
         </main>
         <Footer />
         <StickyContact />
+        <ConsentBanner />
       </body>
     </html>
   );

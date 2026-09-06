@@ -206,7 +206,7 @@ lab numbers need a real Lighthouse or PSI run, and any a11y item you computed ra
 - Give measured numbers — real byte sizes, real computed contrast ratios. Never estimate and present it
   as measurement. Where you could not measure, say so qualitatively instead of inventing a figure.
 - **Distinguish first-paint cost from deploy weight.** The runtime experience here is genuinely healthy
-  — ~80 KB of images, four font preloads, an LCP image preload, three client components — while the
+  — ~80 KB of images, four font preloads, an LCP image preload, four client components — while the
   _export_ sits at 98.5% of its budget on prefetch payloads that never touch a rendering metric. Say
   both. A verdict that calls 5.91 MB an LCP problem is as wrong as one that ignores it.
 - Don't manufacture findings to fill a section. But don't hunt closed ones either: `text-ink/50`, the

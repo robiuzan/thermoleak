@@ -1,6 +1,6 @@
 ---
 name: performance-web-vitals
-description: Core Web Vitals for a static export on Cloudflare Pages — the measured 5.91 MB export and why nearly half of it is duplicated RSC .txt payloads that never touch first paint, what images.unoptimized actually costs on a site whose service art is all SVG, the shipped hero and font preloads, the CLS reserve that does not actually cover the footer, and the three-client-component JS budget now that GTM ships. Use before shipping or when LCP, CLS or INP regress. Triggers "perf pass", "Core Web Vitals", "LCP slow", "image optimization", "bundle size", "srcset".
+description: Core Web Vitals for a static export on Cloudflare Pages — the measured 5.91 MB export and why nearly half of it is duplicated RSC .txt payloads that never touch first paint, what images.unoptimized actually costs on a site whose service art is all SVG, the shipped hero and font preloads, the CLS reserve that does not actually cover the footer, and the four-client-component JS budget now that GTM ships. Use before shipping or when LCP, CLS or INP regress. Triggers "perf pass", "Core Web Vitals", "LCP slow", "image optimization", "bundle size", "srcset".
 ---
 
 # Core Web Vitals
@@ -96,11 +96,12 @@ grep -o 'rel="preload"[^>]*' out/index.html
 
 ## JS budget (INP)
 
-Exactly three client components exist and each needs to be:
+Exactly four client components exist and each needs to be:
 
 - `components/ContactForm.tsx` — form state, validation, submit handling.
 - `components/Navbar.tsx` — the mobile menu boolean.
 - `components/ThankYouContent.tsx` — reads the `sessionStorage` handoff the form writes.
+- `components/ConsentBanner.tsx` — reads the stored consent choice and calls `gtag("consent","update")`.
 
 Everything else is a Server Component — including `components/Analytics.tsx` and
 `components/ServiceChooser.tsx`, whose names suggest otherwise. `components/Faq.tsx` and the per-service
@@ -154,7 +155,7 @@ Test a service page as well as the homepage — they have different LCP elements
 - [ ] `out/` contains no unreferenced file over 1 MB, and no JS chunk over 200 KB.
 - [ ] The export total is explained, not just reported — nearly half of it is duplicated RSC `.txt`
       payloads that never load at first paint.
-- [ ] No `"use client"` without a stated reason; still exactly three; the FAQ is `<details>`-based.
+- [ ] No `"use client"` without a stated reason; still exactly four; the FAQ is `<details>`-based.
 - [ ] No third-party script added outside the GTM container.
 - [ ] CLS reserves intact for every new block.
 

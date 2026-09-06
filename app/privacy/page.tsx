@@ -51,8 +51,32 @@ export default function PrivacyPage() {
 
           <h2 className="mt-8 text-xl font-bold text-brand">עוגיות וכלי ניתוח</h2>
           <p className="mt-2">
-            ייתכן שהאתר עושה שימוש בעוגיות ובכלי ניתוח תנועה (כגון Google Analytics) לצורך הבנת אופן
-            השימוש באתר ושיפורו. ניתן לחסום עוגיות דרך הגדרות הדפדפן.
+            האתר טוען את Google Tag Manager ואת Google Analytics 4 של חברת Google, לצורך הבנת אופן
+            השימוש באתר ושיפורו.
+          </p>
+          <p className="mt-2">
+            <strong>המדידה אינה פועלת כברירת מחדל.</strong> בכניסה הראשונה תוצג הודעה שבה אפשר לאשר
+            את המדידה או לדחות אותה. כל עוד לא אישרתם, Google Analytics אינו שומר עוגיות ואינו אוסף
+            נתונים עליכם. הבחירה שלכם נשמרת בדפדפן שלכם בלבד.
+          </p>
+          <p className="mt-2">
+            אם אישרתם, הנתונים הנאספים הם הנתונים הסטנדרטיים של Google Analytics: אילו עמודים נצפו
+            ומתי, סוג המכשיר והדפדפן, מקור ההגעה לאתר, ומיקום משוער ברמת עיר או אזור הנגזר מכתובת
+            ה־IP. <strong>הפרטים שאתם ממלאים בטופס — שם, טלפון ותוכן הפנייה — אינם נשלחים למערכות
+            המדידה בשום שלב.</strong>
+          </p>
+          <p className="mt-2">
+            לשינוי הבחירה: נקו את נתוני האתר בהגדרות הדפדפן, וההודעה תוצג שוב בכניסה הבאה. אפשר גם
+            לחסום עוגיות לחלוטין דרך הגדרות הדפדפן, וכן להתקין את{" "}
+            <a
+              href="https://tools.google.com/dlpage/gaoptout"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-brand underline"
+            >
+              תוסף ההסתלקות של Google Analytics
+            </a>
+            .
           </p>
 
           <h2 className="mt-8 text-xl font-bold text-brand">זכויותיכם</h2>

@@ -138,7 +138,7 @@ substitution.** See [seo-geo-aeo-strategy.md](seo-geo-aeo-strategy.md) §4.
 
 If the case is ever made, it is confined to **non-indexed, below-the-fold, progressively-enhanced UI
 affordances**, defaulting to a stable universal state. Nothing in this table is built; each row
-would be a new client component, and the repo currently ships exactly three (§5) — that count is a
+would be a new client component, and the repo currently ships exactly four (§5) — that count is a
 budget, and every row here spends from it:
 
 | Allowed                                                          | Mechanism                                   | Constraint                                              |

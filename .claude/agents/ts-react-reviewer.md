@@ -39,12 +39,12 @@ authority — not recollection. Check them before flagging or endorsing any fram
    compiler — handle the null case. Note `lib/services.ts` exposes `getService(slug): Service | undefined`
    and the page narrows it with `notFound()`; keep that shape.
 4. **RSC boundaries — currently PASSING, verified 2026-09-06.** `"use client"` only for state, effects,
-   or browser APIs, kept leaf-level. **Exactly three client components exist** and each is justified:
-   `ContactForm` (form state), `Navbar` (menu toggle + focus trap) and `ThankYouContent`
-   (sessionStorage). Two files that look like they should be client components and are not:
-   `Analytics.tsx` (it only emits a `<script>` tag — a server component is correct) and
-   `ServiceChooser.tsx`. Do not "fix" either, and do not report CLAUDE.md §7's three-component
-   statement as drifted — it is accurate. The FAQ deliberately uses native `<details>/<summary>`
+   or browser APIs, kept leaf-level. **Exactly four client components exist** and each is justified:
+   `ContactForm` (form state), `Navbar` (menu toggle + focus trap), `ThankYouContent`
+   (sessionStorage) and `ConsentBanner` (the Consent Mode v2 choice in `localStorage`). Two files
+   that look like they should be client components and are not: `Analytics.tsx` (it only emits a
+   `<script>` tag — a server component is correct) and `ServiceChooser.tsx`. Do not "fix" either,
+   and do not report CLAUDE.md §7's four-component statement as drifted — it is accurate. The FAQ deliberately uses native `<details>/<summary>`
    instead of client state, which also keeps the answers in the DOM for `FAQPage` schema. Flag any new
    client component that doesn't need to be, and flag anything that would move the FAQ to client state.
    Note Next 16's lint rejects synchronous `setState` inside `useEffect`
