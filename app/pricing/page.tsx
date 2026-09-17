@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, Wallet } from "lucide-react";
+import { ArrowLeft, Check, Wallet, X } from "lucide-react";
 import { services } from "@/lib/services";
 import { pricing } from "@/lib/pricing";
 import { site, telHref, whatsappHref, defaultWhatsappMessage } from "@/lib/site";
@@ -43,6 +43,39 @@ export default function PricingPage() {
             <h2 className="text-xl font-bold text-brand">{pricing.answer.q}</h2>
             <p className="mt-3 leading-relaxed text-ink/80">{pricing.answer.a}</p>
           </div>
+
+          {/* What the base visit covers. Owner-approved terms from site.visitScope — the #1
+              pre-purchase question, and the answer a price alone does not give. Placed directly
+              under the price answer block because that is where the question is asked. */}
+          <section className="mt-10 rounded-2xl border border-ink/10 bg-white p-6">
+            <h2 className="text-xl font-bold text-brand">
+              מה כולל ביקור איתור ב-₪{site.priceFrom}?
+            </h2>
+            <div className="mt-4 grid gap-6 sm:grid-cols-2">
+              <div>
+                <h3 className="text-sm font-bold text-ink">כולל</h3>
+                <ul className="mt-2 space-y-2">
+                  {site.visitScope.includes.map((item) => (
+                    <li key={item} className="flex items-start gap-2 text-ink/80">
+                      <Check className="mt-0.5 size-5 shrink-0 text-brand" aria-hidden="true" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-ink">לא כולל — מתומחר בנפרד</h3>
+                <ul className="mt-2 space-y-2">
+                  {site.visitScope.excludes.map((item) => (
+                    <li key={item} className="flex items-start gap-2 text-ink/80">
+                      <X className="mt-0.5 size-5 shrink-0 text-accent-strong" aria-hidden="true" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </section>
 
           <h2 className="mt-12 text-2xl font-extrabold text-brand">{pricing.ratesHeading}</h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-2">

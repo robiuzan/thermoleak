@@ -98,9 +98,28 @@ export const site = {
   // credit cards, Bit, bank transfer or anything else until the owner names them.
   issuesTaxInvoice: true,
 
-  // ₪350 CONFIRMED by the owner 2026-09-17 (was an unverified ₪450). What the visit includes and
-  // excludes is still 🔶 — see docs/business-facts.md §C.
+  // ₪350 CONFIRMED by the owner 2026-09-17 (was an unverified ₪450).
   priceFrom: 350,
+  // What the ₪350 visit covers. APPROVED VERBATIM by the owner 2026-09-17 — it was drafted from
+  // claims already published (guaranteeTerms.excluded, and the "מתומחרים בנפרד" line on the
+  // reports and panel services) and then confirmed, rather than invented. Treat it exactly like
+  // guaranteeTerms: these are terms, not marketing copy. Do not soften, extend or reorder them.
+  visitScope: {
+    includes: [
+      "הגעה לנכס",
+      "סריקה תרמית של המוקדים החשודים",
+      "אימות הממצא במדידה משלימה",
+      "מסירת הממצאים בעל פה במקום",
+    ],
+    excludes: [
+      "תיקון, פתיחת קירות או ריצוף, ועבודות איטום",
+      "דו״ח כתוב לחברת ביטוח",
+      "בדיקת לוח חשמל",
+    ],
+  },
+  // CONFIRMED 2026-09-17: three business days. The site previously said only "מספר ימי עסקים",
+  // which was deliberately vague because no number was on file. Now that one is, state it.
+  reportTurnaroundDays: 3,
   currency: "₪",
   guarantee: "לא מצאנו — לא שילמתם",
   // Scope CONFIRMED 2026-08-24 (docs/business-facts.md §C). A precisely bounded promise converts

@@ -139,16 +139,21 @@ so this was a real correction, not a rubber stamp).
 | Guarantee: what counts as "מצאנו"         | Defines the entire promise                              | `lib/site.ts` + services  | ✅ published         | ✅     |
 | Guarantee: exclusions and call-out fee    | Reduces post-sale disputes                              | `lib/services.ts`         | ✅ no call-out fee   | ✅     |
 | Issues a חשבונית מס?                      | Conversion friction; ועדי בתים and businesses need it   | `lib/site.ts`             | **yes**              | ✅     |
-| **What the ₪350 visit includes/excludes** | The #1 pre-purchase question; AEO answer-block material | `lib/services.ts`         | **asked; not yet answered** | 🔶 |
-| **Report turnaround as a number**         | Stated only as vague "מספר ימי עסקים" today             | `lib/services.ts`         | **asked; not yet answered** | 🔶 |
+| What the ₪350 visit includes/excludes      | The #1 pre-purchase question; AEO answer-block material | `lib/site.ts` `visitScope` | **approved verbatim 2026-09-17** — renders on `/pricing/` | ✅ |
+| Report turnaround                         | Was only a vague "מספר ימי עסקים"                       | `lib/site.ts` `reportTurnaroundDays` | **3 business days** | ✅ |
 | Accepted payment methods                  | Card / transfer / Bit — none confirmed                  | `lib/site.ts`             |                      | 🔶     |
 
-> ⚠️ **Two rows were asked on 2026-09-17 and came back as "use your judgement".** They stay 🔶.
-> What a visit includes, and how many days a report takes, are facts about *this* business —
-> inferring them from industry norms is fabrication under golden rule 1, however reasonable the
-> guess. A draft was written for the owner to approve or correct; **nothing ships until he does.**
-> The current copy stays deliberately vague ("מספר ימי עסקים"), which is true, rather than
-> precise-and-invented.
+> ✅ **Both resolved the same day, and the route there is the point.** Asked what a visit includes
+> and how long a report takes, the owner first answered "use your experience" and "the standard".
+> That is **not an answer a site may publish** — they are facts about *this* business, and a
+> reasonable-sounding guess is still fabrication under golden rule 1. So a draft was written
+> **from claims already published** (`guaranteeTerms.excluded`, and the "מתומחרים בנפרד" lines on
+> the reports and panel services), put to the owner, and **approved verbatim**. Turnaround came
+> back as **3 business days**.
+>
+> **Reuse this pattern.** When an owner delegates a factual question back, do not accept the
+> delegation and do not invent — draft from what the site already commits to, and get an explicit
+> yes. The result is sourced; a guess would not have been.
 
 ## D. Performance claims — three numbers with no measurement
 
