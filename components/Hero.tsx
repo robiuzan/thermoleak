@@ -7,7 +7,7 @@ import WhatsappIcon from "./WhatsappIcon";
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden bg-brand text-white">
+    <section className="on-dark relative overflow-hidden bg-brand text-white">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_15%,rgba(255,106,61,0.28),transparent_55%)]"

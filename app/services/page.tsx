@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, CheckCircle2 } from "lucide-react";
 import { services } from "@/lib/services";
-import { site } from "@/lib/site";
+import { site, pageOpenGraph } from "@/lib/site";
 import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
 import Process from "@/components/Process";
@@ -15,6 +15,7 @@ export const metadata: Metadata = {
   description:
     "השירותים של טרמוליק: איתור נזילות מים, איתור רטיבות ובידוד, בדיקת לוחות חשמל ודו״ח תרמוגרפי לחברות ביטוח. הכול במצלמה תרמית, ללא הרס.",
   alternates: { canonical: "/services/" },
+  ...pageOpenGraph({ path: "/services", title: `שירותים — איתור נזילות, רטיבות ותרמוגרפיה | ${site.nameHe}`, description: "השירותים של טרמוליק: איתור נזילות מים, איתור רטיבות ובידוד, בדיקת לוחות חשמל ודו״ח תרמוגרפי לחברות ביטוח. הכול במצלמה תרמית, ללא הרס." }),
 };
 
 export default function ServicesPage() {

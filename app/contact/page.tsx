@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { site } from "@/lib/site";
+import { site, pageOpenGraph } from "@/lib/site";
 import PageHero from "@/components/PageHero";
 import ContactCTA from "@/components/ContactCTA";
 import Container from "@/components/Container";
@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   description:
     "צרו קשר עם טרמוליק לאיתור נזילות, רטיבות ובדיקות תרמוגרפיה בגוש דן והמרכז. טלפון, וואטסאפ או טופס — מענה מהיר ושירות חירום.",
   alternates: { canonical: "/contact/" },
+  ...pageOpenGraph({ path: "/contact", title: `צור קשר | ${site.nameHe}`, description: "צרו קשר עם טרמוליק לאיתור נזילות, רטיבות ובדיקות תרמוגרפיה בגוש דן והמרכז. טלפון, וואטסאפ או טופס — מענה מהיר ושירות חירום." }),
 };
 
 export default function ContactPage() {

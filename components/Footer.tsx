@@ -15,7 +15,11 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-brand text-white/90">
+    // pb-20 clears the mobile StickyContact bar (fixed, ~3.5rem + safe area). It lives HERE rather
+    // than on <main> because the footer is the last thing on the page — the bar was covering its
+    // bottom row, which carries the only links to /accessibility/ and /privacy/ on the whole site.
+    // md:pb-0 because StickyContact is md:hidden.
+    <footer className="on-dark bg-brand pb-20 text-white/90 md:pb-0">
       <Container className="grid grid-cols-1 gap-10 py-12 sm:grid-cols-2 lg:grid-cols-4">
         {/* Brand + contact */}
         <div>

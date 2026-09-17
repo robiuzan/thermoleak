@@ -21,3 +21,11 @@
 # Fingerprinted build assets are immutable by construction.
 /_next/static/*
   Cache-Control: public, max-age=31536000, immutable
+
+# /images/* is NOT content-hashed — hero.webp and thermoleak_logo.webp keep their names across
+# deploys — so `immutable` would be wrong: a corrected image could stay cached for a year with no
+# way to bust it. 30 days with normal revalidation is the right trade, and the invalidation path is
+# rename-on-change (docs/performance-guidelines.md §5). Without this rule both files revalidate off
+# a Cloudflare zone default that this repo does not control.
+/images/*
+  Cache-Control: public, max-age=2592000

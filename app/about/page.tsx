@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ShieldCheck, Target, Wallet, Sparkles, BadgeCheck } from "lucide-react";
-import { site } from "@/lib/site";
+import { site, pageOpenGraph } from "@/lib/site";
 import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
 import TrustBar from "@/components/TrustBar";
@@ -15,6 +15,7 @@ export const metadata: Metadata = {
   description:
     "מעל עשור של ניסיון באיתור נזילות ורטיבות במצלמה תרמית. הכירו את הערכים, השיטה והמומחיות של טרמוליק — דיוק, שקיפות וללא הרס.",
   alternates: { canonical: "/about/" },
+  ...pageOpenGraph({ path: "/about", title: `אודות | ${site.nameHe}`, description: "מעל עשור של ניסיון באיתור נזילות ורטיבות במצלמה תרמית. הכירו את הערכים, השיטה והמומחיות של טרמוליק — דיוק, שקיפות וללא הרס." }),
 };
 
 const story = [

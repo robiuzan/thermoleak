@@ -5,14 +5,16 @@ import WhatsappIcon from "./WhatsappIcon";
 
 export default function StickyContact() {
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 border-t border-ink/10 bg-white shadow-[0_-4px_16px_rgba(0,0,0,0.08)] md:hidden">
+    // pb-[env(safe-area-inset-bottom)] keeps the two buttons clear of the iOS home indicator,
+    // which otherwise overlaps the bottom of a fixed bar and eats part of the tap target.
+    <div className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 border-t border-ink/10 bg-white pb-[env(safe-area-inset-bottom)] shadow-[0_-4px_16px_rgba(0,0,0,0.08)] md:hidden">
       {/* The accessible name must CONTAIN the visible text "חייגו עכשיו" (WCAG 2.5.3 Label in
           Name) — so it leads with it and appends the number for context, rather than replacing it
           with "התקשרו אלינו…". */}
       <a
         href={telHref}
         data-cta="sticky-call"
-        className="flex items-center justify-center gap-2 bg-brand py-4 text-base font-bold text-white"
+        className="on-dark flex items-center justify-center gap-2 bg-brand py-4 text-base font-bold text-white"
         aria-label={`חייגו עכשיו: ${site.phone.display}`}
       >
         <Phone className="size-5" aria-hidden="true" />

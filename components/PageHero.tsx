@@ -11,7 +11,7 @@ export interface PageHeroProps {
 
 export default function PageHero({ title, subtitle, crumbs }: PageHeroProps) {
   return (
-    <section className="relative overflow-hidden bg-brand text-white">
+    <section className="on-dark relative overflow-hidden bg-brand text-white">
       {/* BreadcrumbList is emitted here, from the same array the visible trail renders, so the
           markup and the schema can never drift apart (docs/schema-graph.md §2a). Pages must NOT
           also call breadcrumbJsonLd themselves — that would double-emit. */}

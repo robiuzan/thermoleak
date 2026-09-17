@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, MapPin } from "lucide-react";
 import { getLocation, locationSlugs, locations } from "@/lib/locations";
 import { services } from "@/lib/services";
-import { site, canonicalUrl } from "@/lib/site";
+import { site, pageOpenGraph } from "@/lib/site";
 import { locationServiceJsonLd, faqPageJsonLd } from "@/lib/jsonld";
 import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
@@ -27,13 +27,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   // Title formula per docs/keyword-map.md §3 — bare subject, the layout template appends the brand.
   return {
     title: `איתור נזילות ${location.prefixed}`,
-    description: `${location.answer.slice(0, 155)}`,
+    description: location.metaDescription,
     alternates: { canonical: `/locations/${city}/` },
-    openGraph: {
+    ...pageOpenGraph({
+      path: `/locations/${city}`,
       title: `איתור נזילות ${location.prefixed} | ${site.nameHe}`,
       description: location.answer,
-      url: canonicalUrl(`/locations/${city}`),
-    },
+    }),
   };
 }
 

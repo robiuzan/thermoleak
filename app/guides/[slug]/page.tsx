@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getArticle, articleSlugs, articleFaqs, articles } from "@/lib/articles";
 import { getService } from "@/lib/services";
-import { canonicalUrl, site } from "@/lib/site";
+import { site, pageOpenGraph } from "@/lib/site";
 import { articleJsonLd, faqPageJsonLd } from "@/lib/jsonld";
 import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
@@ -23,14 +23,21 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const article = getArticle(slug);
   if (!article) return {};
 
+  const og = pageOpenGraph({
+    path: `/guides/${slug}`,
+    title: `${article.title} | ${site.nameHe}`,
+    description: article.description,
+  });
+
   return {
     title: article.title,
     description: article.description,
     alternates: { canonical: `/guides/${slug}/` },
+    ...og,
+    // A guide is an article, not a website. Spread the shared block first, then override the two
+    // fields that differ — that way the og:image and og:url still come from one place.
     openGraph: {
-      title: `${article.title} | ${site.nameHe}`,
-      description: article.description,
-      url: canonicalUrl(`/guides/${slug}`),
+      ...og.openGraph,
       type: "article",
       publishedTime: article.datePublished,
       modifiedTime: article.dateModified,

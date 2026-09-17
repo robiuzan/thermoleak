@@ -205,3 +205,46 @@ export function withTrailingSlash(path: string): string {
 export function canonicalUrl(path: string): string {
   return `${site.domain}${withTrailingSlash(path)}`;
 }
+
+/**
+ * Per-page Open Graph + Twitter metadata.
+ *
+ * WHY THIS EXISTS: Next merges `metadata` shallowly at the TOP-LEVEL KEY. A page that declares its
+ * own `openGraph` object **replaces** the layout's rather than merging into it — so every page that
+ * set an og:title silently lost the layout's `images`, and every page that set none inherited the
+ * layout's absolute `url` and claimed to be the homepage. Both halves shipped for three sprints
+ * (finding SEO-01): ten routes — all four services, all three guides, all three cities — had NO
+ * og:image at all, so sharing any of them to WhatsApp produced a bare text row.
+ *
+ * Spread the result into BOTH `openGraph` and `twitter` so the two graphs cannot disagree. Passing
+ * `path` is what keeps og:url equal to the page's own canonical.
+ */
+export function pageOpenGraph({
+  path,
+  title,
+  description,
+}: {
+  path: string;
+  title: string;
+  description: string;
+}) {
+  const url = canonicalUrl(path);
+  const images = [{ url: "/og.png", width: 1200, height: 630, alt: `${site.nameHe} — ${title}` }];
+  return {
+    openGraph: {
+      type: "website" as const,
+      locale: site.locale,
+      siteName: site.nameHe,
+      url,
+      title,
+      description,
+      images,
+    },
+    twitter: {
+      card: "summary_large_image" as const,
+      title,
+      description,
+      images: ["/og.png"],
+    },
+  };
+}

@@ -48,6 +48,19 @@ h6 {
   border-radius: 4px;
 }
 
+/* The ring above is brand-light (#1E88A8), which clears 3:1 on LIGHT surfaces only. On a
+   bg-brand (#0B3D5C) section it measures 2.80:1 — under SC 1.4.11's 3:1 — and because
+   outline-offset puts the ring OUTSIDE the element, both its edges land on that dark background.
+   White resolves it at 11.44:1.
+
+   BOTH selectors are required: on the hero CTAs, the pricing banner and the sticky bar the
+   `on-dark` class sits on the focusable element itself, so the descendant selector alone
+   would never match. */
+.on-dark:focus-visible,
+.on-dark :focus-visible {
+  outline-color: #ffffff;
+}
+
 ::selection {
   background-color: var(--color-accent);
   color: #ffffff;

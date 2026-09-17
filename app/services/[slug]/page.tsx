@@ -4,7 +4,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ArrowLeft, CheckCircle2, Eye } from "lucide-react";
 import { getService, services, serviceSlugs } from "@/lib/services";
-import { site, telHref, canonicalUrl } from "@/lib/site";
+import { site, telHref, pageOpenGraph } from "@/lib/site";
 import { serviceJsonLd, faqPageJsonLd } from "@/lib/jsonld";
 import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
@@ -30,11 +30,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description: service.summary,
     keywords: service.keywords,
     alternates: { canonical: `/services/${slug}/` },
-    openGraph: {
+    ...pageOpenGraph({
+      path: `/services/${slug}`,
       title: `${service.h1} | ${site.nameHe}`,
       description: service.summary,
-      url: canonicalUrl(`/services/${slug}`),
-    },
+    }),
   };
 }
 

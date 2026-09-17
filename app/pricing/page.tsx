@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowLeft, Check, Wallet, X } from "lucide-react";
 import { services } from "@/lib/services";
 import { pricing } from "@/lib/pricing";
-import { site, telHref, whatsappHref, defaultWhatsappMessage } from "@/lib/site";
+import { site, telHref, whatsappHref, defaultWhatsappMessage, pageOpenGraph } from "@/lib/site";
 import { faqPageJsonLd } from "@/lib/jsonld";
 import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
@@ -18,6 +18,7 @@ export const metadata: Metadata = {
   description:
     `כמה עולה איתור נזילות? ביקור איתור החל מ-₪${site.priceFrom}, מחיר סופי שקוף שנמסר מראש לפי גודל הנכס והיקף הבדיקה. כל המחירים וההסברים — בעמוד אחד.`,
   alternates: { canonical: "/pricing/" },
+  ...pageOpenGraph({ path: "/pricing", title: `מחירון איתור נזילות | ${site.nameHe}`, description: `כמה עולה איתור נזילות? ביקור איתור החל מ-₪${site.priceFrom}, מחיר סופי שקוף שנמסר מראש לפי גודל הנכס והיקף הבדיקה. כל המחירים וההסברים — בעמוד אחד.` }),
 };
 
 export default function PricingPage() {
@@ -116,7 +117,7 @@ export default function PricingPage() {
             ))}
           </ul>
 
-          <div className="mt-10 rounded-2xl bg-brand p-6 text-white sm:flex sm:items-center sm:justify-between sm:gap-6">
+          <div className="on-dark mt-10 rounded-2xl bg-brand p-6 text-white sm:flex sm:items-center sm:justify-between sm:gap-6">
             <div>
               <p className="text-lg font-bold">רוצים מחיר מדויק לנכס שלכם?</p>
               <p className="mt-1 text-sm text-white/80">

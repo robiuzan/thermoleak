@@ -26,7 +26,11 @@ The same logic applies in the other direction: **any contrast or semantics regre
 existing statement false.** That is why a11y defects here rank above cosmetic bugs — one of them
 was found live (`text-ink/50` at ≈3.1:1) and fixed 2026-08-17.
 
-> 🔴 **The statement is false again right now.** `app/accessibility/page.tsx` asserts
+> ✅ **RESOLVED 2026-09-17 (Sprint 4).** All seven values were raised to `ink/70` or above, the
+> input borders to `border-ink/55` (3.58:1), and the statement was re-dated to ספטמבר 2026 —
+> **after** the fix, never before. The paragraph below is kept as the record of what went wrong.
+>
+> 🔴 **(HISTORICAL — was true until 2026-09-17.) The statement is false right now.** `app/accessibility/page.tsx` asserts
 > "שמירה על ניגודיות צבעים תקינה בין הטקסט לרקע", and **seven live text values sit below 4.5:1** —
 > including the "last updated" line of the accessibility statement itself and the equivalent line on
 > `/privacy/`. They are enumerated in §A2 and they are **open**: this pass is documentation only, so

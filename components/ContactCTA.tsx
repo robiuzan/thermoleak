@@ -35,7 +35,7 @@ export default function ContactCTA() {
                 <Phone className="size-5" aria-hidden="true" />
               </span>
               <span>
-                <span className="block text-sm text-ink/60">חייגו אלינו</span>
+                <span className="block text-sm text-ink/70">חייגו אלינו</span>
                 <span className="block font-bold text-brand" dir="ltr">
                   {site.phone.display}
                 </span>
@@ -53,7 +53,7 @@ export default function ContactCTA() {
                 <WhatsappIcon className="size-5" />
               </span>
               <span>
-                <span className="block text-sm text-ink/60">שליחת הודעה</span>
+                <span className="block text-sm text-ink/70">שליחת הודעה</span>
                 <span className="block font-bold text-brand">וואטסאפ</span>
               </span>
             </a>
@@ -68,7 +68,7 @@ export default function ContactCTA() {
                   <Mail className="size-5" aria-hidden="true" />
                 </span>
                 <span>
-                  <span className="block text-sm text-ink/60">אימייל</span>
+                  <span className="block text-sm text-ink/70">אימייל</span>
                   <span className="block font-bold text-brand" dir="ltr">
                     {site.email}
                   </span>
@@ -103,7 +103,7 @@ export default function ContactCTA() {
 
         <div className="rounded-2xl border border-ink/10 bg-paper p-6 shadow-sm">
           <h3 className="text-lg font-bold text-brand">השאירו פרטים ונחזור אליכם</h3>
-          <p className="mt-1 text-sm text-ink/60">מענה מהיר, ללא התחייבות.</p>
+          <p className="mt-1 text-sm text-ink/70">מענה מהיר, ללא התחייבות.</p>
           <div className="mt-4">
             <ContactForm />
           </div>

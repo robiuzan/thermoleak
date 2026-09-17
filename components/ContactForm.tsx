@@ -42,7 +42,7 @@ function validate(values: FormState): Errors {
 }
 
 const fieldClasses =
-  "w-full rounded-xl border bg-white px-4 py-3 text-ink placeholder:text-ink/40 focus:border-brand focus:outline-none";
+  "w-full rounded-xl border bg-white px-4 py-3 text-ink placeholder:text-ink/70 focus:border-brand focus:outline-none";
 
 export default function ContactForm() {
   const router = useRouter();
@@ -116,7 +116,7 @@ export default function ContactForm() {
           onChange={(event) => update("name", event.target.value)}
           aria-invalid={errors.name ? true : undefined}
           aria-describedby={errors.name ? "name-error" : undefined}
-          className={`${fieldClasses} ${errors.name ? "border-red-500" : "border-ink/20"}`}
+          className={`${fieldClasses} ${errors.name ? "border-red-500" : "border-ink/55"}`}
         />
         {errors.name ? (
           <p id="name-error" className="mt-1 text-sm text-red-600">
@@ -142,7 +142,7 @@ export default function ContactForm() {
           onChange={(event) => update("phone", event.target.value)}
           aria-invalid={errors.phone ? true : undefined}
           aria-describedby={errors.phone ? "phone-error" : undefined}
-          className={`${fieldClasses} text-start ${errors.phone ? "border-red-500" : "border-ink/20"}`}
+          className={`${fieldClasses} text-start ${errors.phone ? "border-red-500" : "border-ink/55"}`}
         />
         {errors.phone ? (
           <p id="phone-error" className="mt-1 text-sm text-red-600">
@@ -166,7 +166,7 @@ export default function ContactForm() {
           onChange={(event) => update("area", event.target.value)}
           aria-invalid={errors.area ? true : undefined}
           aria-describedby={errors.area ? "area-error" : undefined}
-          className={`${fieldClasses} ${errors.area ? "border-red-500" : "border-ink/20"}`}
+          className={`${fieldClasses} ${errors.area ? "border-red-500" : "border-ink/55"}`}
         />
         {errors.area ? (
           <p id="area-error" className="mt-1 text-sm text-red-600">
@@ -184,7 +184,7 @@ export default function ContactForm() {
           name="service"
           value={values.service}
           onChange={(event) => update("service", event.target.value)}
-          className={`${fieldClasses} border-ink/20`}
+          className={`${fieldClasses} border-ink/55`}
         >
           {services.map((service) => (
             <option key={service.slug} value={service.title}>
@@ -205,7 +205,7 @@ export default function ContactForm() {
           placeholder="ספרו לנו בקצרה על הבעיה"
           value={values.message}
           onChange={(event) => update("message", event.target.value)}
-          className={`${fieldClasses} resize-y border-ink/20`}
+          className={`${fieldClasses} resize-y border-ink/55`}
         />
       </div>
 

@@ -71,7 +71,7 @@ export default function Navbar() {
         <Link href="/" aria-label={`${site.nameHe} — דף הבית`}>
           {/* No `priority`: the hero image is the LCP candidate, and a second high-priority
               preload for a ~40px logo competes with it for early bandwidth (backlog §10.3). */}
-          <Logo />
+          <Logo eager />
         </Link>
 
         <nav aria-label="ניווט ראשי" className="hidden items-center gap-1 md:flex">

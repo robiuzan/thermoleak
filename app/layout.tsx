@@ -86,7 +86,10 @@ export default function RootLayout({
         </a>
         <Analytics />
         <Navbar />
-        <main id="main" className="flex-1 pb-20 md:pb-0">
+        {/* The StickyContact spacer belongs on the FOOTER, not here. With `pb-20` on <main> the
+            footer still sat flush to the viewport bottom and the fixed bar covered its last row —
+            which holds the site's only links to /accessibility/ and /privacy/. See Footer.tsx. */}
+        <main id="main" className="flex-1">
           {children}
         </main>
         <Footer />

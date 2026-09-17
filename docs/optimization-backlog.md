@@ -53,22 +53,29 @@ both clean.
 
 **Measured, not asserted:** 22 emitted `index.html` files · 19 URLs in `sitemap.xml` (`/thank-you/`
 is deliberately noindex and excluded; the two 404 artifacts are not content) · `out/` is
-**5,910,433 bytes** across 220 files · exactly **three** client components (`ContactForm`, `Navbar`,
-`ThankYouContent`) · **zero** banned RTL utilities · **zero** `aggregateRating`, `Review`, `sameAs`
+**5,910,433 bytes** across 220 files · exactly **four** client components (`ContactForm`, `Navbar`,
+`ThankYouContent`, `ConsentBanner`) · **zero** banned RTL utilities · **zero** `aggregateRating`, `Review`, `sameAs`
 and `GeoCoordinates` nodes.
 
-**The three things that matter most now:**
+**Updated 2026-09-17 — Sprint 4 shipped.** Items 2 and 3 below are **resolved**; item 1 stands.
 
-1. **§13.5 — the conversion layer is wired to nothing.** GTM ships on every route and `page_view`
-   flows, but no repo code pushes an event and the container holds no event tag, so all seven
-   documented conversion events fire zero times. Three sprints have shipped with no way to judge
-   them.
-2. **§13.6 and §8.6 — two live defects that are cheap to fix and land on real people.** The
-   visitor's name and phone sit in a tagged, clickable `href` on `/thank-you/`; and on mobile the
-   sticky bar permanently covers the footer's only link to the accessibility statement.
-3. **§11.2 — the contrast regression is back, in values nobody enumerated.** The one literal the
-   last pass named was fixed; seven sub-`ink/70` occurrences ship today, two of them on
-   `/accessibility/` and `/privacy/` themselves.
+1. **§13.5 — the conversion layer is still wired to nothing.** GTM ships on every route and
+   `page_view` flows, but no repo code pushes an event and the container holds no event tag, so all
+   seven documented conversion events fire zero times. **This is now the single largest open gap**,
+   and it is Sprint 6.
+2. ✅ **§13.6 and §8.6 — both fixed 2026-09-17.** The tagged `/thank-you/` href is generic and the
+   prefilled chat opens from `onClick`, so no lead PII can reach the dataLayer; and the
+   StickyContact spacer moved from `<main>` to `<footer>`, so the footer's only links to
+   `/accessibility/` and `/privacy/` are reachable on mobile.
+3. ✅ **§11.2 — fixed 2026-09-17.** All seven sub-`ink/70` values raised, input borders to
+   `border-ink/55`, focus ring switched to white on dark surfaces via `.on-dark`, and
+   `/accessibility/` re-dated **after** the fix.
+
+**Also shipped 2026-09-17:** Consent Mode v2 (analytics denied until opt-in) with a truthful
+`/privacy/`; the owner's fact batch (₪350, FLIR E8, two-person team, ~20 years, insurance, national
+service) and the **removal** of three false claims (`בע״מ`, the thermography certificate, the
+accessibility coordinator); `og:image` restored on all 19 indexed routes with self-referencing
+`og:url`; authored location meta descriptions; `/images/*` cache headers.
 
 **Still owner-blocked and unchanged:** §5.3 (Google Business Profile), §7.3 (certifications,
 insurance, ח.פ.), §7.7 (prices). Never fill these in yourself — see
@@ -599,8 +606,13 @@ level AA of ת״י 5568. A failure here also makes a published document false.
 and `text-ink/70` (≈5.7:1) is the passing step. **But it was a swap of one literal, not an audit of
 the palette** — see §11.2. Do not send anyone hunting `text-ink/50`; it is gone.
 
-**11.2 🟠 REOPENED 2026-09-06 — seven live contrast failures, one of them on the accessibility
-statement itself and one on `/privacy/`.** The 2026-08-17 pass declared this closed. It was not. `ink` is `#1B2733`; recomputed
+**11.2 ✅ (2026-09-17) RESOLVED in Sprint 4.** All seven raised to `ink/70`+ and the input borders
+to `border-ink/55`; `/accessibility/` re-dated to ספטמבר 2026 after the fix. The gate now greps a
+RANGE (`text-ink/` below 70), not a list of values — enumerating is what let `/40`, `/55` and `/60`
+through for three sprints. **The history below is kept deliberately.**
+
+**11.2 (historical) 🟠 REOPENED 2026-09-06 — seven live contrast failures, one of them on the
+accessibility statement itself and one on `/privacy/`.** The 2026-08-17 pass declared this closed. It was not. `ink` is `#1B2733`; recomputed
 against the real backgrounds, the opacity steps actually in use are `ink/70` ≈5.7 ✅ · `ink/60`
 ≈4.15 ❌ · `ink/55` ≈3.58 ❌ · `ink/50` ≈3.10 ❌ · `ink/40` ≈2.38 ❌. Shipping today, seven
 occurrences across three token values:

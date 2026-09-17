@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { site, telHref, mailHref } from "@/lib/site";
+import { site, telHref, mailHref, pageOpenGraph } from "@/lib/site";
 import PageHero from "@/components/PageHero";
 import Container from "@/components/Container";
 import EmailOff from "@/components/EmailOff";
@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   description:
     "הצהרת הנגישות של אתר טרמוליק — האתר עומד ברמת AA של תקן ישראלי 5568 ובהנחיות WCAG 2.0. דרכי פנייה לדיווח על בעיית נגישות.",
   alternates: { canonical: "/accessibility/" },
+  ...pageOpenGraph({ path: "/accessibility", title: `הצהרת נגישות | ${site.nameHe}`, description: "הצהרת הנגישות של אתר טרמוליק — האתר עומד ברמת AA של תקן ישראלי 5568 ובהנחיות WCAG 2.0. דרכי פנייה לדיווח על בעיית נגישות." }),
 };
 
 export default function AccessibilityPage() {
@@ -69,7 +70,10 @@ export default function AccessibilityPage() {
             </li>
           </ul>
 
-          <p className="mt-8 text-sm text-ink/55">הצהרת הנגישות עודכנה לאחרונה ביוני 2026.</p>
+          {/* Re-dated 2026-09-17, AFTER the seven SC 1.4.3 contrast failures were fixed — never
+              before. This page is a legal declaration under תקנות שוויון זכויות; re-dating a page
+              whose claims are not yet true is worse than leaving the old date in place. */}
+          <p className="mt-8 text-sm text-ink/70">הצהרת הנגישות עודכנה לאחרונה בספטמבר 2026.</p>
         </Container>
       </section>
     </>

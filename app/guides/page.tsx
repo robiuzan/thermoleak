@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { articles } from "@/lib/articles";
+import { site, pageOpenGraph } from "@/lib/site";
 import { collectionPageJsonLd } from "@/lib/jsonld";
 import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
   description:
     "מדריכים מקצועיים על איתור נזילות: מה מצלמה תרמית באמת רואה ומה לא, איך מאתרים נזילה בלי לשבור, וכמה עולה בדיקה. הסבר ענייני, כולל המגבלות.",
   alternates: { canonical: "/guides/" },
+  ...pageOpenGraph({ path: "/guides", title: `מדריכים — איתור נזילות ורטיבות | ${site.nameHe}`, description: "מדריכים מקצועיים על איתור נזילות: מה מצלמה תרמית באמת רואה ומה לא, איך מאתרים נזילה בלי לשבור, וכמה עולה בדיקה. הסבר ענייני, כולל המגבלות." }),
 };
 
 export default function GuidesPage() {

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { locations } from "@/lib/locations";
-import { site } from "@/lib/site";
+import { site, pageOpenGraph } from "@/lib/site";
 import { collectionPageJsonLd } from "@/lib/jsonld";
 import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
@@ -14,6 +14,7 @@ export const metadata: Metadata = {
   description:
     "היכן אנחנו עובדים: איתור נזילות ורטיבות במצלמה תרמית בגוש דן והמרכז, ושירות ארצי בתיאום מראש. שירות עד בית הלקוח, ללא צורך להגיע למשרד.",
   alternates: { canonical: "/locations/" },
+  ...pageOpenGraph({ path: "/locations", title: `אזורי שירות — איתור נזילות בגוש דן והמרכז | ${site.nameHe}`, description: "היכן אנחנו עובדים: איתור נזילות ורטיבות במצלמה תרמית בגוש דן והמרכז, ושירות ארצי בתיאום מראש. שירות עד בית הלקוח, ללא צורך להגיע למשרד." }),
 };
 
 export default function LocationsPage() {

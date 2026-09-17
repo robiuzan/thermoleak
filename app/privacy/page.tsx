@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { site, telHref, mailHref } from "@/lib/site";
+import { site, telHref, mailHref, pageOpenGraph } from "@/lib/site";
 import PageHero from "@/components/PageHero";
 import Container from "@/components/Container";
 import EmailOff from "@/components/EmailOff";
@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   description:
     "מדיניות הפרטיות של טרמוליק — איזה מידע נאסף באתר, כיצד נעשה בו שימוש, וכיצד אנו שומרים על פרטיותכם.",
   alternates: { canonical: "/privacy/" },
+  ...pageOpenGraph({ path: "/privacy", title: `מדיניות פרטיות | ${site.nameHe}`, description: "מדיניות הפרטיות של טרמוליק — איזה מידע נאסף באתר, כיצד נעשה בו שימוש, וכיצד אנו שומרים על פרטיותכם." }),
   robots: { index: true, follow: true },
 };
 
@@ -103,7 +104,7 @@ export default function PrivacyPage() {
             </li>
           </ul>
 
-          <p className="mt-8 text-sm text-ink/55">
+          <p className="mt-8 text-sm text-ink/70">
             מסמך זה הוא תבנית כללית ואינו מהווה ייעוץ משפטי. מומלץ להתאים אותו לפעילות העסק עם איש מקצוע.
           </p>
         </Container>
