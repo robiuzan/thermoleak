@@ -49,7 +49,7 @@ const approach = [
   },
   {
     title: "אזור השירות — ומה זה אומר בפועל",
-    body: "אנחנו פועלים בגוש דן והמרכז, ברדיוס של עד כ-60 ק״מ, ונותנים שירות ארצי בתיאום מראש. המרחק משפיע על זמינות ולא על איכות הבדיקה: לנזילה פעילה נשתדל להגיע באותו יום באזור הקרוב, ובמרחק גדול יותר נתאם מועד. אין לנו משרד קבלה — השירות ניתן אצלכם, וזה מה שהעסק הזה עושה כל היום.",
+    body: "אנחנו פועלים בגוש דן והמרכז, ומגיעים עד כשעתיים נסיעה מתל אביב — כלומר שירות ארצי בתיאום מראש. המרחק משפיע על זמינות ולא על איכות הבדיקה: לנזילה פעילה נשתדל להגיע באותו יום באזור הקרוב, ובמרחק גדול יותר נתאם מועד. אין לנו משרד קבלה — השירות ניתן אצלכם, וזה מה שהעסק הזה עושה כל היום.",
   },
 ];
 
@@ -91,9 +91,10 @@ export default function AboutPage() {
 
       <TrustBar />
 
-      {/* Founder. Only what is confirmed: the name (business-facts §A) and the 2015 founding year.
-          Role detail, years in the trade, certification number, insurance and ח.פ. are still 🔶 —
-          do not infer them from the name. */}
+      {/* Founder. Confirmed: the name (business-facts §A), the 2015 founding year, ~20 years in
+          the trade and a two-person team (all §A, 2026-09-17). There is no certificate and no
+          ח.פ. — both were confirmed ABSENT, not merely unverified, so nothing here may imply
+          either. A photo and permission to publish it are still 🔶. */}
       <section className="py-12">
         <Container className="max-w-3xl">
           <div id="founder" className="rounded-2xl border border-ink/10 bg-white p-6">
@@ -142,9 +143,11 @@ export default function AboutPage() {
           </div>
 
           <div className="mt-12 rounded-2xl border border-ink/10 bg-paper p-8">
-            <h2 className="text-xl font-bold text-brand">הסמכות וציוד</h2>
+            {/* NOT "הסמכות" — the owner confirmed 2026-09-17 there is no thermography
+                certificate. The heading must not imply a credential the business does not hold. */}
+            <h2 className="text-xl font-bold text-brand">ציוד וכיסוי</h2>
             <ul className="mt-4 grid gap-3 sm:grid-cols-2">
-              {site.certifications.map((item) => (
+              {site.credentials.map((item) => (
                 <li key={item} className="flex items-start gap-2 text-ink/80">
                   <BadgeCheck className="mt-0.5 size-5 shrink-0 text-brand" aria-hidden="true" />
                   {item}

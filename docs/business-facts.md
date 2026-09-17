@@ -8,10 +8,10 @@ matching agent or skill will wire it into the right place.
 
 **Where confirmed values land:**
 
-- **`lib/site.ts`** — NAP, hours, service areas, stats, certifications, social. This is the source of
+- **`lib/site.ts`** — NAP, hours, service areas, stats, `credentials` (renamed from `certifications` 2026-09-17), social. This is the source of
   truth for this repo; nothing syncs into it automatically.
 - **`lib/services.ts` / `lib/faqs.ts`** — wording, per-service claims, FAQ answers.
-- **`lib/reviews.ts`** — testimonials. Currently fabricated; see §B.
+- **`lib/reviews.ts`** — does not exist. Deleted 2026-08-17 with the fabricated testimonials; recreate only when real sourced reviews arrive. See §B.
 - **Roster** — `Israeli services sites/roster/sites/thermoleak.json` is the fleet's record of this site.
   It is a **reference, not an upstream build input**: editing it changes nothing here. Keep the two in
   sync by hand when a fact is confirmed.
@@ -28,31 +28,39 @@ matching agent or skill will wire it into the right place.
 | WhatsApp            | `972556601006` (same number)                               | roster                          |
 | Email               | `info@thermoleak.co.il`                                    | roster                          |
 | Brand name (he/en)  | טרמוליק / ThermoLeak                                       | roster                          |
-| Legal name          | טרמוליק בע״מ                                                | roster                          |
-| Year founded        | **2015** — so "10+ שנות ניסיון" is defensible              | roster `foundedYear`            |
+| Legal name          | **טרמוליק** — NOT `בע״מ`. Corrected 2026-09-17: no company registration exists. The roster still says `טרמוליק בע״מ` and is **wrong**; this file wins | owner, 2026-09-17 |
+| Year founded        | **2015** — the business is 11 years old. The founder's field experience is separate: ~2005 → "20+ בשטח" | roster `foundedYear` + owner |
 | Service area (text) | גוש דן והמרכז                                              | roster `schema.areaServed`      |
 | Search Console tag  | `BxQI2a7Ich4zF5TWYlTsXPCi7iAueoYlddQLGxW62p0`              | `app/layout.tsx:32` (live, public) |
 
-> ⚠️ The repo's own `CLAUDE.md` still warns that phone, WhatsApp and email are invented. **That warning
-> is stale for those three fields** — they are real. It remains correct for prices, stats, reviews and
-> geo. Update the warning when you next touch that file.
+> ⚠️ **The roster manifest is now behind this file on two facts** — it still carries
+> `טרמוליק בע״מ` as the legal name and has no record of the ₪350 price. The roster is a reference,
+> not a build input, so nothing breaks; but per CLAUDE.md §5 the two should be reconciled by hand.
+> **This file wins.**
 
 ---
 
 ## A. Identity & people — founder confirmed, credentials still open
 
-**Resolved 2026-08-24: the founder is רונן דהן.** He now appears on `/about/` (`#founder`), as a
-`Person` node on the business, and as the byline on all three `/guides/` articles. What is STILL
-unconfirmed is everything that would turn a name into demonstrated expertise — years in the trade, a
-certification number, insurance, ח.פ. **Do not infer any of those from the name.** `site.legalName` claims a registered company (`בע״מ`) whose number is never given.
+**Resolved 2026-08-24: the founder is רונן דהן.** **Resolved 2026-09-17 (owner, in conversation):**
+years in the trade, team size — and, importantly, two **negative** answers. There is **no company
+registration and no ח.פ.**, so `site.legalName` dropped `בע״מ`; and there is **no accessibility
+coordinator**, so `/accessibility/` no longer asserts one.
 
-| Field                            | Why it's needed                                                     | Lands in                  | Value | Status |
-| -------------------------------- | ------------------------------------------------------------------- | ------------------------- | ----- | ------ |
-| Owner / founder name             | `Person` schema, author bylines, the About story                    | `lib/site.ts` + `/about/` | **רונן דהן** | ✅ |
-| Owner's years in the trade       | The "experience" half of E-E-A-T                                    | `lib/site.ts`             |       | 🔶     |
-| ח.פ. / ע.מ. number               | Standard IL trust signal; `בע״מ` is claimed without one             | `lib/site.ts` + `/about/` |       | 🔶     |
-| Technician count / team shape    | "צוות" is implied but never quantified                              | `lib/site.ts`             |       | 🔶     |
-| Permission to publish a photo    | A named face is the strongest single trust signal available         | `public/images/`          |       | 🔶     |
+> ⚠️ **A ❌ row is an answer, not a gap.** Three rows below are confirmed ABSENT. Do not re-open
+> them as "missing facts to chase", and never let a future agent refill them.
+
+| Field                          | Why it's needed                                             | Lands in                  | Value                              | Status |
+| ------------------------------ | ----------------------------------------------------------- | ------------------------- | ---------------------------------- | ------ |
+| Owner / founder name           | `Person` schema, author bylines, the About story            | `lib/site.ts` + `/about/` | **רונן דהן**                       | ✅     |
+| Owner's years in the trade     | The "experience" half of E-E-A-T                            | `lib/site.ts`             | **in the trade since ~2005** (10 years before founding in 2015) | ✅ |
+| Technician count / team shape  | "צוות" was implied but never quantified                     | `lib/site.ts`             | **2 people**                       | ✅     |
+| ח.פ. / ע.מ. number             | Was claimed via `בע״מ` with no number behind it             | `lib/site.ts`             | **none — not a registered company** | ❌    |
+| Permission to publish a photo  | A named face is the strongest single trust signal available | `public/images/`          |                                    | 🔶     |
+
+> **On the two experience numbers.** The BUSINESS was founded 2015 (11 years). The FOUNDER has been
+> in the trade ~20 years. `site.stats.years` says "20+ שנות ניסיון **בשטח**" — the word בשטח is
+> load-bearing. Writing "20 years in business" would be false.
 
 ## B. Proof & authority — fabrications purged, real proof still missing
 
@@ -61,17 +69,23 @@ certification number, insurance, ח.פ. **Do not infer any of those from the nam
 were all **removed**. The site no longer fabricates proof — but it now has **none**, which keeps
 this section the highest-priority ask. The rows below are what replaces them legitimately.
 
-| Field                                                    | Why it's needed                                                                             | Lands in                | Value | Status |
-| -------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ----------------------- | ----- | ------ |
-| **Google Business Profile URL** (service-area profile)   | The top local lever; `sameAs`; the only legitimate source for `aggregateRating`             | `lib/site.ts` `social`  |       | 🔶     |
-| Facebook page URL                                        | `sameAs`; entity corroboration. Currently a link to facebook.com                            | `lib/site.ts` `social`  |       | 🔶     |
-| Instagram URL                                            | `sameAs`; thermal imagery is a natural fit                                                  | `lib/site.ts` `social`  |       | 🔶     |
-| 5–10 real reviews (author, date, text, **source URL**)   | Replaces the six fabricated ones                                                            | `lib/reviews.ts`        |       | 🔶     |
-| Real review count + average rating                       | `AggregateRating`. **Ships only with a verifiable public source**                           | derived from the above  |       | 🔶     |
-| Thermography certification — issuing body + number       | `site.certifications` claims "Level 1" with no certificate                                  | `lib/site.ts`           |       | 🔶     |
-| Equipment claim — is it FLIR, and which model?           | Claimed in `certifications`; a specific model is a genuine expertise signal                 | `lib/site.ts`           |       | 🔶     |
-| Insurance (ביטוח צד ג׳)                                  | Standard trade trust signal; appears nowhere                                                | `lib/site.ts`           |       | 🔶     |
-| Trade association membership                             | Authority signal                                                                            | `lib/site.ts`           |       | 🔶     |
+| Field                                                  | Why it's needed                                                                 | Lands in               | Value                              | Status |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------- | ---------------------- | ---------------------------------- | ------ |
+| **Google Business Profile URL** (service-area profile) | The top local lever; `sameAs`; the only legitimate source for `aggregateRating` | `lib/site.ts` `social` | **does not exist yet** — owner will open one | 🔶 |
+| Facebook page URL                                      | `sameAs`; entity corroboration                                                  | `lib/site.ts` `social` |                                    | 🔶     |
+| Instagram URL                                          | `sameAs`; thermal imagery is a natural fit                                      | `lib/site.ts` `social` |                                    | 🔶     |
+| 5–10 real reviews (author, date, text, **source URL**) | Replaces the six fabricated ones                                                | a new `lib/reviews.ts` |                                    | 🔶     |
+| Real review count + average rating                     | `AggregateRating`. **Ships only with a verifiable public source**               | derived from the above |                                    | 🔶     |
+| Equipment — which thermal camera?                      | A specific model is a genuine expertise signal                                  | `lib/site.ts`          | **FLIR E8**                        | ✅     |
+| Insurance (ביטוח צד ג׳)                                | Standard trade trust signal                                                     | `lib/site.ts`          | **yes — held** (insurer and coverage amount not supplied, so no figure ships) | ✅ |
+| Thermography certification — issuing body + number     | Was claimed as "Thermography Level 1" with no certificate behind it             | `lib/site.ts`          | **none — no certificate held**     | ❌     |
+| Trade association membership                           | Authority signal                                                                | `lib/site.ts`          | **none**                           | ❌     |
+
+> ⚠️ **The certification row is ❌, not 🔶.** The owner confirmed 2026-09-17 there is no
+> thermography certificate, and the unbacked "Level 1" line was deleted from `site.credentials` on
+> his instruction. `site.certifications` no longer exists — the field is now `credentials`, and it
+> holds only concrete capabilities. **Never reintroduce a certification claim**, and do not treat
+> this as an open ask.
 
 ## C. Commercial terms — the guarantee has no scope
 
@@ -79,7 +93,7 @@ this section the highest-priority ask. The rows below are what replaces them leg
 with **no definition of "found", no exclusions, and no stated call-out fee**. It is simultaneously the
 strongest conversion asset on the site and its largest undefined liability.
 
-`site.priceFrom` is `450` and three of the four services state "החל מ-₪450"; the fourth
+`site.priceFrom` is `450` and three of the four services state "החל מ-₪350"; the fourth
 (`insurance-reports`) and `electrical-thermography` quote per job. The roster marks prices unverified.
 
 ### ✅ APPROVED guarantee wording — confirmed by the owner 2026-08-24, now PUBLISHED
@@ -114,18 +128,27 @@ boundary that prevents disputes.
    unless a return visit was offered and declined. This is the honest reading and it matches what
    the guides already tell readers.
 
-**On pricing:** the recommendation is to keep ₪450 as a stated *starting* price with the factors that
-move it published (as `/pricing/` already does), rather than moving to "call for a quote". Price
-opacity is a conversion tax on a crisis purchase. Confirm ₪450 is current and this needs no change.
+**On pricing:** keeping a stated *starting* price with the factors that move it published (as
+`/pricing/` already does) beats "call for a quote" — price opacity is a conversion tax on a crisis
+purchase. **The owner confirmed ₪350 on 2026-09-17** (the site had been showing an unverified ₪350,
+so this was a real correction, not a rubber stamp).
 
-| Field                                        | Why it's needed                                          | Lands in                    | Value | Status |
-| -------------------------------------------- | -------------------------------------------------------- | --------------------------- | ----- | ------ |
-| Is ₪450 the current starting price?          | Stated on the homepage and three service pages           | `lib/site.ts` `priceFrom`   |       | 🔶     |
-| What the ₪450 visit includes / excludes      | The #1 pre-purchase question; AEO answer-block material  | `lib/services.ts`           |       | 🔶     |
-| Guarantee: what counts as "מצאנו"            | Defines the entire promise                               | `lib/site.ts` + services    | ✅ published | ✅ |
-| Guarantee: exclusions and call-out fee       | Reduces post-sale disputes                               | `lib/services.ts`           | ✅ no call-out fee | ✅ |
-| Report turnaround ("מספר ימי עסקים")         | Stated in the insurance-reports FAQ                      | `lib/services.ts`           |       | 🔶     |
-| Payment methods / invoice terms              | Conversion friction                                      | `lib/site.ts`               |       | 🔶     |
+| Field                                     | Why it's needed                                         | Lands in                  | Value                | Status |
+| ----------------------------------------- | ------------------------------------------------------- | ------------------------- | -------------------- | ------ |
+| Starting price                            | Stated on the homepage, `/pricing/` and two services    | `lib/site.ts` `priceFrom` | **₪350**             | ✅     |
+| Guarantee: what counts as "מצאנו"         | Defines the entire promise                              | `lib/site.ts` + services  | ✅ published         | ✅     |
+| Guarantee: exclusions and call-out fee    | Reduces post-sale disputes                              | `lib/services.ts`         | ✅ no call-out fee   | ✅     |
+| Issues a חשבונית מס?                      | Conversion friction; ועדי בתים and businesses need it   | `lib/site.ts`             | **yes**              | ✅     |
+| **What the ₪350 visit includes/excludes** | The #1 pre-purchase question; AEO answer-block material | `lib/services.ts`         | **asked; not yet answered** | 🔶 |
+| **Report turnaround as a number**         | Stated only as vague "מספר ימי עסקים" today             | `lib/services.ts`         | **asked; not yet answered** | 🔶 |
+| Accepted payment methods                  | Card / transfer / Bit — none confirmed                  | `lib/site.ts`             |                      | 🔶     |
+
+> ⚠️ **Two rows were asked on 2026-09-17 and came back as "use your judgement".** They stay 🔶.
+> What a visit includes, and how many days a report takes, are facts about *this* business —
+> inferring them from industry norms is fabrication under golden rule 1, however reasonable the
+> guess. A draft was written for the owner to approve or correct; **nothing ships until he does.**
+> The current copy stays deliberately vague ("מספר ימי עסקים"), which is true, rather than
+> precise-and-invented.
 
 ## D. Performance claims — three numbers with no measurement
 
@@ -133,7 +156,7 @@ opacity is a conversion tax on a crisis purchase. Confirm ₪450 is current and 
 
 | Claim                              | Status                                                        | Lands in            | Value | Status |
 | ---------------------------------- | ------------------------------------------------------------- | ------------------- | ----- | ------ |
-| `10+ שנות ניסיון בשטח`             | **Defensible** — `foundedYear: 2015` is in the roster         | `lib/site.ts` stats | 2015  | ✅     |
+| `20+ שנות ניסיון בשטח`             | **Confirmed 2026-09-17** — founder in the trade since ~2005. Raised from `10+`, which had been derived from the 2015 founding year. The label says **בשטח** because this is the founder's experience, not the company's age | `lib/site.ts` stats | ~2005 | ✅ |
 | `3,000+ בתים ועסקים`               | **Removed from the site 2026-08-17.** Returns only with a record behind it | `lib/site.ts` stats |  | 🔶     |
 | `97% איתור כבר בביקור הראשון`      | **Removed from the site 2026-08-17.** Returns only if actually measured    | `lib/site.ts` stats |  | 🔶     |
 | `4.9 דירוג לקוחות ממוצע`           | **Removed 2026-08-17 with the fabricated reviews** — see §B                | —                   |  | ❌     |
@@ -141,17 +164,26 @@ opacity is a conversion tax on a crisis purchase. Confirm ₪450 is current and 
 
 ## E. Coverage & geo
 
-`site.geo` is `32.0853, 34.7818` — **Tel Aviv city centre**, emitted as `GeoCoordinates` for a business
-with **no public premises**. `site.serviceAreas` names 12 cities, none of which has a page. The national
-claim in `serviceAreaText` is broader than `areaServed`.
+The placeholder `geo` (Tel Aviv city centre, for a business with **no public premises**) was removed
+2026-08-17. `site.serviceAreas` names 12 cities; 3 have pages.
+
+**Resolved 2026-09-17:** the national clause is **true**, and the real reach is **about two hours'
+drive from Tel Aviv** — which is most of the country and far beyond the "עד 60 ק״מ" the site had
+been claiming. That figure was never confirmed and has been removed from `serviceAreaText`,
+`lib/faqs.ts`, `/about/` and `/locations/`.
+
+> **Roadmap consequence:** Sprint 7's location batch 4 (כפר סבא 23 km, ראש העין 25 km) was gated on
+> this exact answer. **That gate is now lifted on distance.** Each city still has to clear the
+> doorway test on its own content — distance was never the only gate.
 
 | Field                                              | Why it's needed                                                      | Lands in                | Value | Status |
 | -------------------------------------------------- | -------------------------------------------------------------------- | ----------------------- | ----- | ------ |
-| Real operating base (or: drop `geo` entirely)      | A placeholder coordinate is worse than none for a service-area business | `lib/site.ts` `geo`   |       | 🔶     |
-| Is "שירות ארצי בתיאום מראש" true?                  | It's a coverage claim; a false `areaServed` is a liability            | `lib/site.ts`           |       | 🔶     |
-| Which of the 12 cities have real job history?      | Decides which earn a location page at all (`/new-city` gate)          | `lib/locations.ts` (new) |      | 🔶     |
-| Realistic same-day radius                          | "זמינות מהירה" is claimed sitewide                                    | `lib/site.ts`           |       | 🔶     |
-| Is there a Google Business Profile address to hide? | Service-area profiles must not contradict the site                   | GBP                     |       | 🔶     |
+| Real operating base (or: drop `geo` entirely)      | A placeholder coordinate is worse than none for a service-area business | `lib/site.ts` `geo`   | `geo` removed 2026-08-17; no base supplied | 🔶 |
+| Is "שירות ארצי בתיאום מראש" true?                  | It's a coverage claim; a false `areaServed` is a liability            | `lib/site.ts`           | **yes — true** | ✅ |
+| Realistic travel reach                             | Gates which cities can honestly be claimed                           | `lib/site.ts` `serviceAreaText` | **up to ~2 hours' drive from Tel Aviv** | ✅ |
+| Which of the 12 cities have real job history?      | Decides which earn a location page at all (`/new-city` gate)          | `lib/locations.ts`      |       | 🔶     |
+| Realistic **same-day** radius                      | "זמינות מהירה" is claimed sitewide. Distinct from travel reach: two hours' drive is what he *will* travel, not what he can reach same-day | `lib/site.ts` |  | 🔶 |
+| Is there a Google Business Profile address to hide? | Service-area profiles must not contradict the site                   | GBP                     | no profile exists yet | 🔶 |
 
 ### 🔶 Location silo — 3 built, 9 deferred (gate run 2026-08-24)
 

@@ -1,8 +1,21 @@
 // Central business configuration & site-wide content.
 // Phone, WhatsApp and email are REAL (confirmed fleet values — see the roster manifest and
-// docs/business-facts.md). Still unverified: prices (₪450), the certifications, the guarantee's
-// exact scope, and the trust figures beyond the 2015 founding year. Never present an unconfirmed
-// value as fact — mark it `// 🔶 confirm` and add a row to docs/business-facts.md.
+// docs/business-facts.md).
+//
+// A large batch of facts was CONFIRMED BY THE OWNER on 2026-09-17 (docs/business-facts.md records
+// each with that date): the ₪350 starting price, the FLIR E8 camera, a two-person team, ~20 years
+// in the trade, third-party insurance, national service by prior arrangement, and that tax
+// invoices are issued.
+//
+// That same batch REMOVED three claims, and the removals matter more than the additions:
+//   • There is NO company registration — the business is not a בע״מ and has no ח.פ.
+//   • There is NO thermography certificate. "Thermography Level 1" was an unbacked claim.
+//   • There is NO accessibility coordinator. /accessibility/ no longer asserts one.
+// Do not reintroduce any of the three. A removed false claim is not a gap to be refilled.
+//
+// STILL unverified: what the ₪350 visit includes/excludes, and the insurance-report turnaround.
+// Never present an unconfirmed value as fact — mark it `// 🔶 confirm` and add a row to
+// docs/business-facts.md.
 
 export interface NavLink {
   href: string;
@@ -22,7 +35,9 @@ export interface TrustStat {
 export const site = {
   name: "ThermoLeak",
   nameHe: "טרמוליק",
-  legalName: "טרמוליק בע״מ",
+  // NOT "טרמוליק בע״מ". The owner confirmed 2026-09-17 there is no company registration and no
+  // ח.פ., so "בע״מ" was a false legal claim. It must not come back without a registration number.
+  legalName: "טרמוליק",
   domain: "https://thermoleak.co.il",
   locale: "he_IL",
 
@@ -41,7 +56,11 @@ export const site = {
     country: "IL",
     note: "שירות עד בית הלקוח — אין צורך להגיע למשרד",
   },
-  serviceAreaText: "גוש דן והמרכז, ברדיוס של עד 60 ק״מ · שירות ארצי בתיאום מראש",
+  // The national clause is CONFIRMED (owner, 2026-09-17) — he travels up to about two hours from
+  // Tel Aviv, which covers most of the country. The old "עד 60 ק״מ" understated the real reach and
+  // was never confirmed, so it is gone. גוש דן stays named first because it is the core area and
+  // the only one with location pages.
+  serviceAreaText: "גוש דן והמרכז · שירות ארצי בתיאום מראש",
   serviceAreas: [
     "תל אביב-יפו",
     "רמת גן",
@@ -65,11 +84,23 @@ export const site = {
 
   founded: 2015,
   // Owner/founder. Confirmed 2026-08-24 (docs/business-facts.md §A). This unlocks Person schema
-  // and article bylines. Role detail, years in trade, certification number, insurance and ח.פ.
-  // remain UNCONFIRMED — do not infer them from the name.
+  // and article bylines. There is no certification number and no ח.פ. — see the header.
   founder: "רונן דהן",
+  // Owner confirmed 2026-09-17: ten years in the trade BEFORE founding in 2015, so field
+  // experience runs from ~2005. Keep the two numbers distinct — the BUSINESS is 11 years old, the
+  // FOUNDER has ~20 years of experience. Conflating them would overstate the company.
+  founderInTradeSince: 2005,
+  teamSize: 2,
+  // Third-party cover confirmed 2026-09-17. Insurer and coverage amount were not supplied, so no
+  // figure may be stated — the fact of cover is all that ships.
+  insurance: "ביטוח צד ג׳",
+  // Tax invoices confirmed 2026-09-17. Accepted payment METHODS were not specified — do not list
+  // credit cards, Bit, bank transfer or anything else until the owner names them.
+  issuesTaxInvoice: true,
 
-  priceFrom: 450, // 🔶 confirm — unverified starting price (docs/business-facts.md §C)
+  // ₪350 CONFIRMED by the owner 2026-09-17 (was an unverified ₪450). What the visit includes and
+  // excludes is still 🔶 — see docs/business-facts.md §C.
+  priceFrom: 350,
   currency: "₪",
   guarantee: "לא מצאנו — לא שילמתם",
   // Scope CONFIRMED 2026-08-24 (docs/business-facts.md §C). A precisely bounded promise converts
@@ -90,18 +121,24 @@ export const site = {
   // "3,000+ jobs / 97% first-visit / 4.9 rating" figures were unverifiable and were removed
   // 2026-08-17 — do not reintroduce a number without a source (docs/business-facts.md §D).
   stats: {
-    years: { value: "10+", label: "שנות ניסיון בשטח" },
+    // "20+" is the FOUNDER's field experience (in the trade since ~2005, confirmed 2026-09-17),
+    // not the company's age — which is why the label says "בשטח". The business itself was founded
+    // in 2015; never write "20 years in business".
+    years: { value: "20+", label: "שנות ניסיון בשטח" },
     duration: { value: "כשעה", label: "משך בדיקה ברוב הדירות" },
     method: { value: "ללא הרס", label: "איתור במצלמה תרמית, בלי לשבור" },
     report: { value: "דו״ח", label: "מסודר ומקובל בחברות הביטוח" },
   } satisfies Record<string, TrustStat>,
 
-  certifications: [
-    // 🔶 confirm — no issuing body or certificate number on file (docs/business-facts.md §B)
-    "טכנאי תרמוגרפיה מוסמך (Thermography Level 1)",
-    "עבודה עם מצלמות תרמיות מקצועיות מסוג FLIR",
-    "אחריות מלאה ושקיפות מחירים",
-  ],
+  // Renamed from `certifications` on 2026-09-17, because none of these is a certification.
+  // The owner confirmed there is NO thermography certificate, so "Thermography Level 1" was
+  // removed outright. "אחריות מלאה ושקיפות מחירים" was removed too — a guarantee rendered with a
+  // BadgeCheck alongside real credentials borrows their authority (finding EEAT-6); the guarantee
+  // has its own bounded terms on /pricing/ and does not need a badge.
+  //
+  // Everything in this array must be a concrete, owner-confirmed capability. Never a credential
+  // without a number behind it.
+  credentials: ["מצלמה תרמית FLIR E8", "ביטוח צד ג׳", "צוות של שני טכנאים"],
 
   // Shared Israeli-fleet GTM container (10 of 12 fleet sites carry it). Verified HTTP 200 on
   // 2026-08-24 — a snippet in the HTML proves nothing, so re-assert with:

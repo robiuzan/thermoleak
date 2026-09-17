@@ -18,7 +18,7 @@ green) with a freshly rebuilt `out/`. Every number below was measured, not estim
 | — HTML                      | 1,984,248 B — 33.6%                      |
 | — JS                        | 722,262 B — 12.2%                        |
 | — all of `_next`            | 936,350 B — 15.8% (JS + CSS + fonts)     |
-| Client components           | 3 (ContactForm, Navbar, ThankYouContent) |
+| Client components           | 4 (ContactForm, Navbar, ThankYouContent, ConsentBanner) |
 | Banned RTL utilities        | 0                                        |
 | `data-cta` attributes       | 13                                       |
 | Custom `dataLayer` pushes   | **0**                                    |
@@ -60,22 +60,41 @@ on any row here** — that is a design constraint of this roadmap, and it is enf
 verification genuinely needs owner-held access, it is split out into an explicitly owner-gated step
 rather than hidden inside a sprint's "done when".
 
-| #   | Ask                                                                  | Owner effort         | Unlocks                                                                 | Backlog |
-| --- | -------------------------------------------------------------------- | -------------------- | ----------------------------------------------------------------------- | ------- |
-| 1   | **Google Business Profile URL** (service-area, address hidden)       | one copy-paste       | first non-empty `sameAs`; map pack; precondition for every review asset | §5.3    |
-| 2   | **Real reviews with source URLs** (ask at the job; ~10 over 60 days) | operational, ongoing | retires the `/reviews/` 301; legitimate `Review` + `AggregateRating`    | §7.1    |
-| 3   | **Certification body + level + certificate number**                  | one lookup           | turns a badge into a credential; `hasCredential` on the founder node    | §7.3    |
-| 4   | **Is ₪450 current?**                                                 | one answer           | `Offer`/`PriceSpecification`; clears 🔶 on 5 routes                     | §7.7    |
-| 5   | **Which FLIR model?**                                                | one sentence         | model-level specificity; author-bio equipment line                      | §7.3    |
-| 6   | **Report turnaround as a number**                                    | one sentence         | concrete answer block on `/services/insurance-reports/`                 | §7.7    |
-| 7   | **Same-day radius — 60 km or less?**                                 | one answer           | **gates location batch 4** (business-facts §E)                          | §5.4    |
-| 8   | **Is "שירות ארצי בתיאום מראש" true?**                                | one answer           | it renders in 6 places today with no confirmation                       | §5.4    |
-| 9   | **ח.פ. number**                                                      | a lookup             | `legalName: טרמוליק בע״מ` stops being an unbacked claim                 | §7.3    |
-| 10  | **Third-party insurance (ביטוח צד ג׳)**                              | a policy detail      | the signal ועדי בתים and property managers ask for                      | §7.3    |
-| 11  | **Accessibility coordinator name**                                   | one name             | `/accessibility/` currently asserts a coordinator with no name          | §11.2   |
-| 12  | **Owner photo + permission**                                         | a yes + a file       | strongest single trust element on `/about/`                             | §7.5    |
-| 13  | **One real job reference per city**                                  | operational          | the only doorway-test item research cannot supply                       | §3.4    |
-| 14  | **Before/after thermal pairs with consent**                          | operational          | the E-E-A-T unfair advantage                                            | §7.1    |
+> ### ✅ Answered 2026-09-17 — rows 3, 4, 5, 7, 8, 9, 10 are closed
+>
+> The owner answered a large batch. **Shipped:** the starting price is **₪350** (it had been showing
+> an unverified ₪350), the camera is a **FLIR E8**, the team is **2 people**, the founder has been
+> in the trade since **~2005**, **third-party insurance** is held, **national service by prior
+> arrangement is true**, reach is **~2 hours' drive from Tel Aviv**, and **tax invoices are issued**.
+>
+> **Three answers were negative, and they removed claims rather than adding any:** there is **no
+> ח.פ.** (so `בע״מ` is gone from `legalName`), **no thermography certificate** (so the "Level 1"
+> badge is gone), and **no accessibility coordinator** (so `/accessibility/` no longer asserts one).
+> Rows 3, 9 and 11 are therefore **❌ closed, not outstanding** — do not re-ask them.
+>
+> **Still genuinely open:** GBP (#1 — none exists yet, owner will open one), reviews (#2), photo
+> (#12), job references (#13), imagery (#14) — plus two new ones: **what the ₪350 visit
+> includes/excludes**, and **report turnaround as a number**. Both were asked and came back as "use
+> your judgement", which is not an answer a site may publish. See business-facts §C.
+
+| #   | Ask                                                  | Status                                                                 | Unlocks                                                        | Backlog |
+| --- | ---------------------------------------------------- | ---------------------------------------------------------------------- | -------------------------------------------------------------- | ------- |
+| 1   | **Google Business Profile URL**                      | 🔶 **open** — none exists yet; owner will open one                      | first non-empty `sameAs`; map pack; the only legitimate route to a rating | §5.3 |
+| 2   | **Real reviews with source URLs**                    | 🔶 **open** — ask at the job; ~10 over 60 days                          | retires the `/reviews/` 301; `Review` + honest `AggregateRating` | §7.1 |
+| 3   | **Thermography certificate**                         | ❌ **closed — none held.** The "Level 1" badge was removed              | nothing. Do not re-ask; do not reintroduce a certification claim | §7.3   |
+| 4   | **Starting price**                                   | ✅ **₪350** (was an unverified ₪350)                                    | `Offer`/`PriceSpecification` once inclusions are known too    | §7.7    |
+| 5   | **Thermal camera model**                             | ✅ **FLIR E8**                                                          | model-level specificity; shipped in `site.credentials`          | §7.3    |
+| 6   | **Report turnaround as a number**                    | 🔶 **open** — answered "use the standard", which is not a fact about this business | a concrete answer block on `/services/insurance-reports/` | §7.7 |
+| 7   | **Travel reach**                                     | ✅ **~2 hours' drive from Tel Aviv** — lifts the batch-4 distance gate   | location batches 4–5 on distance                                 | §5.4    |
+| 8   | **Is "שירות ארצי בתיאום מראש" true?**                | ✅ **yes**                                                              | the clause it renders in 6 places is now backed                  | §5.4    |
+| 9   | **ח.פ. number**                                      | ❌ **closed — not a registered company.** `בע״מ` removed from `legalName` | nothing. Do not re-ask                                      | §7.3    |
+| 10  | **Third-party insurance (ביטוח צד ג׳)**              | ✅ **held** — insurer and amount not supplied, so no figure ships        | the signal ועדי בתים and property managers ask for                | §7.3    |
+| 11  | **Accessibility coordinator name**                   | ❌ **closed — none appointed.** `/accessibility/` no longer asserts one | nothing. Do not re-ask                                          | §11.2   |
+| 12  | **Owner photo + permission**                         | 🔶 **open**                                                             | author bio block; strongest single trust element on `/about/`   | §7.5    |
+| 13  | **One real job reference per city**                  | 🔶 **open** — operational                                               | the only doorway-test item research cannot supply                | §3.4    |
+| 14  | **Before/after thermal pairs with consent**          | 🔶 **open** — operational                                               | the E-E-A-T unfair advantage                                     | §7.1    |
+| 15  | **What the ₪350 visit includes / excludes**          | 🔶 **open** — answered "use your judgement"; a draft awaits approval    | the #1 pre-purchase question; `Offer` schema; AEO answer block  | §7.7    |
+| 16  | **Accepted payment methods**                         | 🔶 **open** — only "issues a חשבונית מס" is confirmed                   | removes a conversion objection for ועדי בתים                      | §7.7    |
 
 **Two asks are fleet decisions, not facts:**
 
@@ -332,11 +351,11 @@ trigger exists.** Do not compress that.
     cannot ship `{"@type":"FAQPage","mainEntity":[]}`. Drop `inLanguage` from the two `Service`
     builders — it is the only out-of-domain property in the graph.
 
-11. **Single-source ₪450.** [TS-1 · §7.7] `lib/services.ts` and `lib/articles.ts` write the literal;
+11. **Single-source ₪350.** [TS-1 · §7.7] `lib/services.ts` and `lib/articles.ts` write the literal;
     three other files interpolate `site.priceFrom`. Behaviour-preserving today — the point is that
     `site.priceFrom` is marked 🔶 and **will** change, and the `lib/articles.ts` copy feeds
     `FAQPage` JSON-LD, so a stale copy becomes a price-mismatch signal to Google. After the change
-    `grep -rn '₪450' lib app components` returns comments only, and the rebuilt `out/` should be
+    `grep -rn '₪350' lib app components` returns comments only, and the rebuilt `out/` should be
     byte-identical.
 
 ### Blocked on
@@ -351,7 +370,7 @@ trigger exists.** Do not compress that.
 ### Done when — verifiable from the repo and an unprivileged `curl`
 
 - `lib/analytics.ts` exists and is called from both the form handler and `ThankYouContent`.
-- `grep -rn '₪450' lib app components` → comments only, and `out/` is byte-identical to the
+- `grep -rn '₪350' lib app components` → comments only, and `out/` is byte-identical to the
   pre-change build.
 - `out/index.html` emits 10 `"@type":"Question"` nodes (9 + the guarantee FAQ);
   `out/locations/tel-aviv/index.html` emits 3.
@@ -393,8 +412,8 @@ why the `/locations/` hub went unmeasured.
 | 2               | **רמת גן**                | 6       | 13     | Most claims of any deferred city; contiguous with the built cluster so `nearby` stays honest; תמ״א 38 / התחדשות עירונית generates two genuinely distinct call types                          |
 | 2               | **גבעתיים**               | 5       | 11     | Nearest deferred city; the four-hills topography (גבעת קוזלובסקי at ~87 m) is a physically distinct leak story no other page can borrow                                                      |
 | 3               | **פתח תקווה**             | 12      | 9      | 9–23-storey new-build stock from 2003 on is the **inverse** of the three shipped pages, which all lean on old stock — easy substitution-test pass, and it widens the cluster's topical range |
-| 4 — gated       | **כפר סבא**               | 23      | 11     | Water supplied by an agricultural cooperative, not a municipal corporation — a genuinely unique infrastructure angle. **Gated on Track O #7**                                                |
-| 4 — gated       | **ראש העין**              | 25      | 11     | 1949–51 permanent housing stock. Same radius gate                                                                                                                                            |
+| 4               | **כפר סבא**               | 23      | 11     | Water supplied by an agricultural cooperative, not a municipal corporation — a genuinely unique infrastructure angle. **Distance gate LIFTED 2026-09-17** (reach confirmed ~2h from Tel Aviv) |
+| 4               | **ראש העין**              | 25      | 11     | 1949–51 permanent housing stock. Same distance gate, also lifted — still must clear the doorway test on its own content                                                                       |
 | 5 — at most one | **רעננה** _or_ **הרצליה** | 20 / 14 | 9 / 6  | Both rest on the same בנייני רכבת typology — shipping both is exactly what the substitution test punishes. Prefer רעננה on claim count                                                       |
 | Hold            | **ראשון לציון**           | 20      | 4      | 4 claims is no margin, and its urban-renewal angle duplicates בת ים's frame                                                                                                                  |
 | Hold            | **מודיעין**               | 40      | 10     | Good claims, but at 40 km it has **no contiguous partner** — its `nearby` block renders empty — and it is outside any plausible same-day radius                                              |

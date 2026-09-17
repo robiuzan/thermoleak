@@ -306,7 +306,7 @@ Rules that make it valid:
 | Fonts       | Heebo (headings) + Assistant (body)         | **Reuse both** — each has Latin coverage. A third family breaks the font budget |
 | Numerals    | Always LTR inside RTL text                  | Native                                                                          |
 | Phone       | `055-660-1006`, `dir="ltr"` island          | `+972 55-660-1006` — international form for an international reader             |
-| Currency    | `₪450` (symbol first — existing convention) | `₪450` or `450 NIS`; be consistent                                              |
+| Currency    | `₪350` (symbol first — existing convention) | `₪350` or `450 NIS`; be consistent                                              |
 | Dates       | `dd/mm/yyyy`                                | `dd/mm/yyyy` (IL context) — do **not** switch to US order                       |
 | Punctuation | גרש `׳` / גרשיים `״` in abbreviations       | ASCII apostrophes/quotes                                                        |
 | Ranges      | En dash, no spaces                          | En dash                                                                         |

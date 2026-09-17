@@ -1,6 +1,7 @@
 // Pricing page (/pricing/) content. Per-service price lines render from lib/services.ts
 // `priceModel` — this file never restates a per-service price.
-// 🔶 confirm — the ₪450 base and what a visit includes are unverified (docs/business-facts.md §C).
+// The ₪350 base is CONFIRMED (owner, 2026-09-17) and reads from site.priceFrom. 🔶 STILL open:
+// what the visit includes and excludes (docs/business-facts.md §C) — do not invent an inclusions list.
 import type { ServiceFaq } from "./services";
 import { site } from "./site";
 

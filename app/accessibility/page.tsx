@@ -7,7 +7,7 @@ import EmailOff from "@/components/EmailOff";
 export const metadata: Metadata = {
   title: "הצהרת נגישות",
   description:
-    "הצהרת הנגישות של אתר טרמוליק — האתר עומד ברמת AA של תקן ישראלי 5568 ובהנחיות WCAG 2.0. פרטי רכז הנגישות ואפשרות לדיווח.",
+    "הצהרת הנגישות של אתר טרמוליק — האתר עומד ברמת AA של תקן ישראלי 5568 ובהנחיות WCAG 2.0. דרכי פנייה לדיווח על בעיית נגישות.",
   alternates: { canonical: "/accessibility/" },
 };
 
@@ -46,8 +46,11 @@ export default function AccessibilityPage() {
 
           <h2 className="mt-8 text-xl font-bold text-brand">דיווח על בעיית נגישות</h2>
           <p className="mt-2">
+            {/* Deliberately does NOT name a "רכז נגישות". The owner confirmed 2026-09-17 that no
+                accessibility coordinator has been appointed, so asserting one on a legal
+                declaration would be a false statement. The contact route is the business itself. */}
             אנו משקיעים מאמץ מתמשך בשיפור נגישות האתר. אם נתקלתם בקושי או בתקלת נגישות, נשמח שתעדכנו אותנו
-            ונפעל לתקן בהקדם. ניתן לפנות לרכז הנגישות:
+            ונפעל לתקן בהקדם. ניתן לפנות אלינו בכל אחת מהדרכים הבאות:
           </p>
           <ul className="mt-3 space-y-1">
             <li>

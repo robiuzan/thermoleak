@@ -15,13 +15,16 @@
 - **Phone (click-to-call):** `055-660-1006` · WhatsApp same number · `info@thermoleak.co.il`.
   **These are real** (fleet values, confirmed in the roster).
 - **Hours:** ראשון–חמישי 08:00–18:00, שישי 08:00–13:00, plus out-of-hours for active leaks.
-- **Service area:** גוש דן והמרכז, up to ~60 km, with 12 named cities. **3 have location pages**
+- **Service area:** גוש דן והמרכז core, plus national service by prior arrangement — reach is ~2 hours' drive from Tel Aviv (confirmed 2026-09-17; the old "~60 km" was never confirmed and understated it). 12 named cities. **3 have location pages**
   (תל אביב, חולון, בת ים — doorway gate run 2026-08-24, shipped 2026-08-30 in `7c9bbda`); the other
   9 are served without a page and are gated in business-facts §E.
-- **Founded:** 2015 — so "10+ שנות ניסיון" is defensible.
+- **Founded:** 2015 — the **business** is 11 years old.
 - **Founder / owner:** רונן דהן — **confirmed** 2026-08-24 (business-facts §A). He is the byline on
-  the `/guides/` articles and the `founder` in `LocalBusiness`. His years in the trade, certification
-  number, insurance, ח.פ. and photo permission are **not** confirmed — never infer them from the name.
+  the `/guides/` articles and the `founder` in `LocalBusiness`. **In the trade since ~2005** and a
+  **two-person team** (both confirmed 2026-09-17). His **certification and ח.פ. are confirmed not to
+  exist**; photo permission is still open.
+  > ⚠️ **Keep the two experience numbers apart.** `site.stats.years` reads "20+ שנות ניסיון **בשטח**"
+  > — that is the founder's field experience, not the company's age. "20 years in business" is false.
 - **Audience:** homeowners mid-crisis (a damp stain, a jumped water bill), ועדי בתים, property managers,
   loss adjusters, businesses needing electrical-panel scans.
 - **Core promise:** find the **source**, not the symptom — without breaking walls — and hand over a
@@ -32,11 +35,21 @@
 > ⚠️ **What is still placeholder.** Phone, WhatsApp and email are **real**. So are the **founder**
 > and the **guarantee's scope** — both confirmed 2026-08-24 (business-facts §A/§C) and **published**:
 > `site.guaranteeTerms` renders through `components/GuaranteeTerms.tsx` on `/pricing/`, so an agent
-> must not re-gate them as unverified. Still unverified: **prices** (₪450) and the
-> **certifications** (no issuing body or certificate number on file), plus report turnaround,
-> equipment model, insurance, ח.פ. and payment terms. Purged 2026-08-17 and
-> not to be reintroduced without sources: the six fabricated testimonials and their 4.9 rating, the
-> 3,000+/97% stats, the placeholder `geo`, and the facebook.com/instagram.com `sameAs` links. See
+> must not re-gate them as unverified. **Confirmed 2026-09-17** (business-facts §A/§B/§C/§E): the
+> **₪350** starting price, the **FLIR E8** camera, a **two-person team**, the founder in the trade
+> since **~2005**, **third-party insurance**, **national service by prior arrangement** with a reach
+> of **~2 hours' drive from Tel Aviv**, and that **tax invoices are issued**.
+>
+> **Confirmed ABSENT the same day — these are answers, not gaps.** There is **no ח.פ. and no company
+> registration** (so `legalName` is `טרמוליק`, never `טרמוליק בע״מ`), **no thermography
+> certificate** (the "Thermography Level 1" badge was deleted; `site.certifications` is now
+> `site.credentials` and holds only concrete capabilities), and **no accessibility coordinator**
+> (`/accessibility/` no longer asserts one). **Never refill any of the three.**
+>
+> Still unverified: **what the ₪350 visit includes/excludes**, **report turnaround as a number**,
+> and **accepted payment methods**. Purged 2026-08-17 and not to be reintroduced without sources:
+> the six fabricated testimonials and their 4.9 rating, the 3,000+/97% stats, the placeholder `geo`,
+> and the facebook.com/instagram.com `sameAs` links. See
 > [docs/business-facts.md](docs/business-facts.md). **Never present an unconfirmed value as fact.**
 
 ---
@@ -193,7 +206,7 @@ list — then edit `lib/site.ts` by hand and keep the two in sync.
 - Directional icons must point correctly for RTL — "next" points **left** (`ArrowLeft`).
 - Hebrew punctuation: גרש `׳` and גרשיים `״` in abbreviations (`דו״ח`, `ק״מ`, `בע״מ`), never ASCII
   quotes. The repo is consistent about this; match it exactly.
-- **Israeli formats:** currency `₪450` (symbol first — the existing convention), phones `0XX-XXX-XXXX`
+- **Israeli formats:** currency `₪350` (symbol first — the existing convention), phones `0XX-XXX-XXXX`
   (`tel:` uses `+972…`), dates `dd/mm/yyyy`, ranges with an en dash.
 
 See the `hebrew-rtl` skill for the full rule set.
@@ -324,8 +337,9 @@ A `Stop` hook at `.claude/hooks/format-changed.ps1` formats changed files with P
   time. The same ban covers **any element carrying `data-cta`**: GTM's built-in Click URL variable
   copies the whole `href` into `gtm.elementUrl` and GA4's `link_url`, so a WhatsApp link prefilled
   with the lead's details leaks them to analytics just by being clicked. Build the personalised URL
-  in an `onClick` and keep the tagged `href` generic. **This is currently violated on `/thank-you/`
-  (`components/ThankYouContent.tsx`) — finding SEC-3, still open; it is a code fix, not a doc fix.**
+  in an `onClick` and keep the tagged `href` generic. **Finding SEC-3 — fixed 2026-09-17 in
+  `components/ThankYouContent.tsx`**, which now renders the generic `whatsappHref()` and opens the
+  prefilled conversation from its click handler. That file is the worked example; copy its shape.
 - Cloudflare zone settings (AI crawler policy, Scrape Shield, cache rules) are **the owner's to
   change**. Document the exact toggle; never assume it was done.
 

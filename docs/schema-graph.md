@@ -245,12 +245,12 @@ already have. Note the missing empty-array guard on this route (§4.4).
 
 | Node                           | Where                        | Blocked on                                                   |
 | ------------------------------ | ---------------------------- | ------------------------------------------------------------ |
-| `Offer` / `PriceSpecification` | `Service` nodes, `/pricing/` | business-facts §C — the ₪450 base is **unconfirmed**         |
+| `Offer` / `PriceSpecification` | `Service` nodes, `/pricing/` | business-facts §C — the ₪350 base is **unconfirmed**         |
 | `Review` / `AggregateRating`   | the business node            | business-facts §B — no sourced public reviews exist (§4.1)   |
 | `sameAs`                       | the business node            | business-facts §B — no confirmed Google Business Profile URL |
 | `geo`                          | the business node            | business-facts §E — no real operating base to state          |
 
-**On the `Offer`.** The ₪450 figure is already visible in the copy (`lib/pricing.ts`,
+**On the `Offer`.** The ₪350 figure is already visible in the copy (`lib/pricing.ts`,
 `lib/services.ts`), carried under a `🔶 confirm` marker. Restating an unconfirmed number in
 machine-readable form makes it harder to retract and is exactly what §4.2 warns about, so the node
 stays out. **Do not write this node "and confirm the price later"** — the sequence is: owner confirms

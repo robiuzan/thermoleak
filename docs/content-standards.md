@@ -207,7 +207,7 @@ Two facts moved onto this list after the owner confirmed them 2026-08-24:
 until confirmed:
 
 - Any rating, review count, or customer quote (§B)
-- The ₪450 starting price and what it includes (§C)
+- The ₪350 starting price and what it includes (§C)
 - Certifications, equipment brand, insurance, association membership, ח.פ. (§B)
 - Any person other than the confirmed founder — and any claim about the founder beyond his name and
   role (§A)
@@ -258,7 +258,7 @@ acoustic detection is the better tool.
 
 ## 8. Hebrew mechanics
 
-- Israeli formats: phone `055-660-1006`, currency written **symbol first** — `₪450` — (the repo's
+- Israeli formats: phone `055-660-1006`, currency written **symbol first** — `₪350` — (the repo's
   existing convention; don't switch mid-file), dates `dd/mm/yyyy`. That `450` is a **formatting**
   example only: the starting price is still 🔶 unconfirmed (§6), so never lift it from here as a fact.
 - Hebrew abbreviations use גרש `׳` and גרשיים `״` — `דו״ח`, `ק״מ`, `בע״מ`, `ת״י`, `רח׳` — not straight
