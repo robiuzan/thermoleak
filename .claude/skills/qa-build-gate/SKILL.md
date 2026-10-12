@@ -230,12 +230,22 @@ first place.
 
 ```bash
 find out -name index.html | sed 's|^out||; s|index.html$||' | sort > /tmp/emitted.txt
-grep -rho 'href="/[^"]*"' out --include=index.html | sed 's|href="||; s|"$||' | sort -u > /tmp/linked.txt
+# The live-kit's announcement bar and seasonal card are on every page (hidden until their season):
+# strip them as chrome, or a page linked only from a seasonal line would pass as linked (CLAUDE.md §14).
+find out -name index.html -exec perl -0pe 's/<div class="live-topbar".*?<\/div><\/div>//gs; s/<div class="live-dialogs".*?<\/dialog><\/div>//gs' {} + \
+  | grep -o 'href="/[^"]*"' | sed 's|href="||; s|"$||' | sort -u > /tmp/linked.txt
 comm -23 /tmp/emitted.txt /tmp/linked.txt
 ```
 
 Expected output: exactly `/404/`, `/_not-found/` and `/thank-you/` (reached only via the form's
 post-submit navigation, by design). Anything else is a new orphan.
+
+**Live surfaces (CLAUDE.md §14):** `npm run build` runs their gates in `prebuild`/`postbuild` — an
+unapproved register fails the build, and `LIVE_DRAFT=1` (local preview only) leaves
+`out/.live-draft`, which `deploy-site.ps1` refuses, `-DeployOnly` included (fixed 2026-10-12).
+The next deploy discards a draft `out/` instead of rotating it into `out.prev/`, the rollback copy,
+and `check-live-out` keeps the marker while either register lacks `approved` (a standalone re-run
+cannot clear it).
 
 ## 11. No PII in any tagged href
 

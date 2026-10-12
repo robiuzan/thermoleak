@@ -66,6 +66,56 @@ h6 {
   color: #ffffff;
 }
 
+/*
+ * Fleet live-kit theme (lib/live/live-core.css owns the behaviour; these are the colours only —
+ * CLAUDE.md §14). The bar is brand with white text (11.44:1, the hero and sticky-bar pairing). The
+ * card's call button is accent-strong with white text (5.18:1 — the hero's call CTA); WhatsApp is
+ * the site's own #25D366 with ink text (7.65:1, as on StickyContact and the hero), not the kit's
+ * dark green. Card and strip text is ink on white (15.17:1), their links brand on white (11.44:1).
+ * Tokens, not hexes, wherever a token exists (CLAUDE.md §7).
+ */
+:root {
+  --live-bar-bg: var(--color-brand);
+  --live-bar-ink: #ffffff;
+  --live-ink: var(--color-ink);
+  --live-accent: var(--color-brand);
+  --live-soft-bg: var(--color-paper);
+  --live-call-bg: var(--color-accent-strong);
+  --live-call-ink: #ffffff;
+  --live-wa-bg: #25d366;
+  --live-wa-ink: var(--color-ink);
+  --live-max: 72rem; /* Container's max-w-6xl */
+  /* StickyContact is 57px tall (py-4 + a 24px line + its 1px border): the card stops 16px above it. */
+  --live-sticky-offset: 73px;
+}
+
+/*
+ * The live-kit splits phone from desktop at 992px; this site's mobile layout ends at 768px
+ * (Tailwind md: StickyContact and the menu button are md:hidden, the desktop nav and the header's
+ * call button start there). Between the two the site is in its desktop layout, so the kit's
+ * desktop rules apply there too:
+ *   (a) the bar is open — the evergreen line at least — on every page, calm pages included (they
+ *       show the evergreen line instead of a seasonal one, as on a desktop), and closed only when
+ *       the status switch says off. ONE selector on purpose: it beats the kit's base `display:
+ *       none` (the bar shut below 992px on an evergreen day) and both of its phone-only "closed
+ *       on calm pages" rules — the path-marked ones (`html[data-live-calm]…`) AND the 404, which
+ *       marks itself (`html:has([data-live-calm-page])…`). `!important` because the calm rules
+ *       out-specify any plain selector; `:not([data-live="off"])` keeps the switch's off winning;
+ *   (b) the card is centred, not a bottom sheet: there is no sticky call bar to clear from 768px.
+ *       max-height restores the user-agent value for a modal <dialog>.
+ * Unlayered on purpose, like gagoline's and betonplus's band overrides — live-core.css is
+ * unlayered and loads after this file (fleet live-kit review, 2026-10-11).
+ */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  html:not([data-live="off"]) .live-topbar {
+    display: block !important;
+  }
+  html .live-dialog {
+    margin: auto;
+    max-height: calc(100% - 6px - 2em);
+  }
+}
+
 /* Respect users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
   html {

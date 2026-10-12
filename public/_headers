@@ -10,13 +10,18 @@
 # Promote to enforcing (drop "-Report-Only") only after a full week of real traffic, including a
 # real form submission, produces no legitimate violations.
 #   'unsafe-inline' in style-src: Next emits inline styles; removing it costs more than it returns.
+#   imgquarry.com in connect-src (2026-10-12, same change as the script that needs it):
+#   /assets/live.js reads the fleet status switch, https://imgquarry.com/status/fleet.json, once
+#   per page view (CLAUDE.md §14). Blocked, the switch reads as unreadable and every seasonal line
+#   and the card stay off — silently. The live surfaces' two inline <head> scripts are covered by
+#   the existing 'unsafe-inline', /assets/live.js by 'self'.
 /*
   Strict-Transport-Security: max-age=31536000
   X-Frame-Options: SAMEORIGIN
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
-  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; connect-src 'self' https://www.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; object-src 'none'; frame-src https://www.googletagmanager.com; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; connect-src 'self' https://www.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://imgquarry.com; img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; object-src 'none'; frame-src https://www.googletagmanager.com; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
 
 # Fingerprinted build assets are immutable by construction.
 /_next/static/*

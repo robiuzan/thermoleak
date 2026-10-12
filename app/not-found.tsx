@@ -4,6 +4,10 @@ import CtaButton from "@/components/CtaButton";
 export default function NotFound() {
   return (
     <section className="py-24">
+      {/* Fleet live-kit (CLAUDE.md §14): this page answers every unknown URL, so no path in
+          live.config.mjs can mark it calm — it marks itself: no seasonal line, no card
+          (lib/live/live-core.css, public/assets/live.js). */}
+      <div data-live-calm-page hidden />
       <Container className="max-w-xl text-center">
         <p className="text-6xl font-extrabold text-brand">404</p>
         <h1 className="mt-4 text-2xl font-bold text-brand">הדף לא נמצא</h1>

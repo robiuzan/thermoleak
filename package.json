@@ -4,10 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/live/check-live-copy.mjs && node scripts/live/check-live-register.mjs && node scripts/live/check-live-schedule.mjs",
     "build": "next build",
+    "postbuild": "node scripts/live/check-live-out.mjs",
     "start": "next start",
     "lint": "eslint",
-    "check:sitemap": "node scripts/check-sitemap-parity.mjs"
+    "check:sitemap": "node scripts/check-sitemap-parity.mjs",
+    "live:remind": "node scripts/live/check-reminders.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.17.0",

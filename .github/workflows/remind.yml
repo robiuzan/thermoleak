@@ -1,0 +1,43 @@
+name: Weekly reminder
+
+# Fleet live-kit (CLAUDE.md §14). Reads PRODUCTION once a week and pushes a message to the owner's
+# phone (ntfy) ONLY when THIS site needs something: the status switch unreadable from this site's
+# origin (or without a CORS header for it), the homepage not answering, deploy drift (the
+# schedule, the calm pages, live.js or the updates strip differ from what the repo would build),
+# an updates strip 21+ days old or missing (it hides itself at 45), a pre-written runway ending
+# within 30 days. An all-good week is printed, never pushed. What is the same for every fleet site — the switch's mode, quiet days and chag in the
+# coming week, the calendar's horizon — is printed here only and pushed once, for the whole fleet,
+# by the 3locksmiths reminder. scripts/live/check-reminders.mjs (byte-locked) says what each means.
+#
+# It never builds, never deploys and never writes — deploys stay human-only (CLAUDE.md §10). The
+# one secret is the ntfy topic (NTFY_TOPIC; optional NTFY_SERVER). Without NTFY_TOPIC the run
+# prints the message and goes RED on GitHub on purpose (the script exits 1 when CI is set): an
+# owner who silently gets nothing is the failure this exists to prevent.
+#   gh secret set NTFY_TOPIC -R robiuzan/thermoleak
+#
+# GitHub runs a schedule only from the DEFAULT branch (main): this file does nothing until it is
+# merged there. GitHub also pauses scheduled workflows in a repository with no commits for 60
+# days; it emails the owner first. Any push re-arms it — or run it by hand from the Actions tab.
+
+on:
+  schedule:
+    - cron: "0 5 * * 0" # Sunday 08:00 Israel summer time / 07:00 winter
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Read production and push the weekly message
+        run: node scripts/live/check-reminders.mjs
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          NTFY_SERVER: ${{ secrets.NTFY_SERVER }}

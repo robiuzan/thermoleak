@@ -84,6 +84,25 @@ literally in `components/`, eight passed through `CtaButton`'s `dataCta` prop:
 
 Any new CTA without one is an incomplete CTA — the click becomes permanently invisible.
 
+**The live surfaces add six more (owner decision 2026-10-11, fleet live-kit — CLAUDE.md §14)**,
+printed by the byte-locked `lib/live/render.mjs` from the registers rather than written in
+`components/`, so a grep of `components/` does not find them; the values are the same on every fleet
+site: `topbar-whatsapp` (the evergreen line) · `topbar-link` (a seasonal line's page) ·
+`popup-call` · `popup-whatsapp` · `popup-link` (the seasonal card) · `update-link` (the homepage
+strip). `topbar-call` exists in the kit too, used only by a line carrying the `{phone}` token — none
+of this site's lines does today. Their hrefs are generic (`tel:` and a bare `wa.me` link — no
+prefilled text), so the PII rule below holds.
+
+The seasonal card also pushes the site's only custom events, from the static `public/assets/live.js`
+(a fleet file, not a component): `surface_view` (`surface: "dialog"`, `variant`: the line's id) when
+it opens and `surface_dismiss` (+ `method`: `button` | `backdrop` | `esc` | `expired` | `action` |
+`nav`) when it closes. Ids only — never personal data. **Owner step before the first deploy:** the
+container's trigger `CE - popup events (3locksmiths)` is hostname-scoped to 3locksmiths.co.il; it
+must include `thermoleak.co.il`, or these two events reach the dataLayer and go nowhere. The card
+never opens before the consent question is answered (`data-live-block` — set on `<html>` before
+first paint by `app/layout.tsx` when no answer is stored, lifted by `ConsentBanner` on a choice); for
+a visitor who declined, the events go out cookieless under Consent Mode, so the counts under-read.
+
 ⚠️ **Nothing consumes these attributes yet.** They are hooks with no consumer: the container has no
 click trigger, so GTM does not even attach its click listeners. A complete `data-cta` inventory is
 therefore _not_ evidence that clicks are measured — it is evidence that they _could_ be.
@@ -158,13 +177,13 @@ the code fix lands, the re-open control on `/thank-you/` should carry a PII-free
 Tags are the single highest-risk change to Core Web Vitals on this project. Budgets from
 [performance-guidelines.md](performance-guidelines.md), applied to tagging:
 
-| Rule                   | Threshold                                             | State                                                             |
-| ---------------------- | ----------------------------------------------------- | ----------------------------------------------------------------- |
-| Added JS from all tags | **≤ 50 KB gzipped**                                   | ⚠️ **breached by design** — classic GTM is ~90 KB. Accepted in §2 |
-| Added INP              | ≤ 20 ms                                               | Unmeasured — no field data yet                                    |
-| CLS from tags          | **0** — no tag may inject visible DOM                 | ✅ nothing visible is injected                                    |
-| Load timing            | After paint, `async`/`defer`. Never render-blocking   | ✅ `afterInteractive`                                             |
-| Consent dialogs        | Must reserve space or overlay without shifting layout | N/A — none ships (§8)                                             |
+| Rule                   | Threshold                                             | State                                                                                                                       |
+| ---------------------- | ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Added JS from all tags | **≤ 50 KB gzipped**                                   | ⚠️ **breached by design** — classic GTM is ~90 KB. Accepted in §2                                                           |
+| Added INP              | ≤ 20 ms                                               | Unmeasured — no field data yet                                                                                              |
+| CLS from tags          | **0** — no tag may inject visible DOM                 | ✅ nothing visible is injected                                                                                              |
+| Load timing            | After paint, `async`/`defer`. Never render-blocking   | ✅ `afterInteractive`                                                                                                       |
+| Consent dialogs        | Must reserve space or overlay without shifting layout | ✅ `ConsentBanner` is fixed-position; the seasonal card (2026-10-11, CLAUDE.md §14) is a native `<dialog>` in the top layer |
 
 **The 50 KB row is over budget and stays over budget.** That was decided knowingly (§2). It is
 recorded here so a later audit reads it as an accepted trade rather than a fresh discovery — and so

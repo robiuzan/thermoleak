@@ -118,6 +118,9 @@ row here _before_ using a new step, not after.
 | `text-ink/40`                          | ≈ 2.38:1         | ❌ **live** as `placeholder:text-ink/40` — `components/ContactForm.tsx:45`             |
 | `accent` `#FF6A3D` on white            | ≈ 2.8:1          | ❌ **decorative only — never text**                                                    |
 | `border-ink/20` on white               | ≈ 1.49:1         | ❌ SC 1.4.11, not 1.4.3 — §A1 item 2                                                   |
+| Live bar: white on `brand`             | 11.44:1          | ✅ the announcement bar, 13 px / 500 (2026-10-12, CLAUDE.md §14)                       |
+| Live card: `ink` on `#25D366`          | 7.65:1           | ✅ the card's WhatsApp button — the site's own pairing (StickyContact, hero)           |
+| Live card: white on `accent-strong`    | 5.18:1           | ✅ the card's call button, 16 px bold                                                  |
 
 **Six live SC 1.4.3 failures (A11Y-1), all open, all 14 px normal weight — no large-text
 exemption:** the four `ink/60` and the two `ink/55` above. On `bg-paper` each is ~0.08 worse. The
@@ -163,6 +166,17 @@ service-page illustration is now `alt=""` (it sat beside an `h1` that already na
 the `h1`-as-`alt` was a duplicate announcement); the menu button is `size-11` = **exactly 44 px**.
 **Do not regress any of these** — the focus trap in particular is the pattern any new disclosure
 should copy.
+
+**The seasonal card is a dialog, and ships whole** (owner decision 2026-10-11, fleet live-kit —
+CLAUDE.md §14). It is a native `<dialog>` opened with `showModal()`, so the browser supplies the
+modal semantics, the inert background, focus containment, Esc and focus return; it is named and
+described by its own title and body (`aria-labelledby` / `aria-describedby`); focus lands on the
+title, not on the call button, so a stray Enter never dials; `html:has(.live-dialog[open])` locks
+the scroll; the ✕ is a real 44 px `<button>` named `סגירה`; the two actions are 48 px tall and the
+link 44 px. Its focus rings are ink on white; the bar's links ring in white inside the link — the
+kit's rule out-specifies the global `brand-light` ring, which would be 2.80:1 on the bar (§A4). The
+bar sits after the skip link, so `דלג לתוכן המרכזי` is still the first stop for a keyboard, and it
+carries `data-nosnippet` (not `aria-hidden`: a screen reader reads the visible line).
 
 **Open items — all small, all needing a code change this pass did not make:**
 

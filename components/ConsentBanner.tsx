@@ -44,6 +44,9 @@ function record(choice: ConsentChoice) {
     // Not persistable — the choice still applies for this page view.
   }
   cached = choice;
+  // Answered: lift the before-paint "no card yet" mark that app/layout.tsx put on <html> for a
+  // visitor with no stored answer (fleet live-kit — CLAUDE.md §14).
+  document.documentElement.removeAttribute("data-live-block");
   // Only an upgrade is signalled. "denied" is already the default set before the container loaded,
   // so there is nothing to send for a refusal.
   if (choice === "granted") window.gtag?.("consent", "update", { analytics_storage: "granted" });
@@ -52,10 +55,16 @@ function record(choice: ConsentChoice) {
 
 export default function ConsentBanner() {
   const state = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  // The seasonal card (/assets/live.js, fleet live-kit — CLAUDE.md §14) never opens over this
+  // banner, and never before the question is answered. Before first paint, app/layout.tsx marks
+  // <html> with `data-live-block` only when no answer is stored — the server cannot know, and a
+  // mark rendered here for everyone held the card back for every returning visitor until
+  // hydration. The banner carries the mark too while it asks; record() lifts the <html> one.
   if (state !== "none") return null;
 
   return (
     <div
+      data-live-block=""
       // On mobile it sits above StickyContact (a ~3.5rem fixed bar) so the call and WhatsApp
       // buttons stay tappable while the banner is up — a consent prompt must never block the
       // primary conversion path. StickyContact is md:hidden, hence bottom-0 from md up.

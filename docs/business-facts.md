@@ -233,6 +233,17 @@ the strongest doorway-test item and the only one research cannot supply.
 | Security headers approval          | HSTS shipped 2026-08-17 without `preload`/`includeSubDomains`; escalating either needs sign-off (near-irreversible)                                                                     | `public/_headers`  |     | 🔶     |
 | Roster sync                        | `thermoleak.json` records `googleSiteVerification: null` while the site ships a real token — update the roster                                                                          | roster           |       | 🔶     |
 
+## G. The live surfaces (fleet live-kit, owner decision 2026-10-11)
+
+The announcement bar, the seasonal card and the homepage updates strip (CLAUDE.md §14) print only
+sentences this site already shows, quoted in each line's `source`; `live.config.mjs` turns every 🔶
+and ❌ row above into a ⛔ stem the build enforces. Drafted 2026-10-12, not yet shown to the owner.
+
+| Fact                                                | Current value                                                                  | Source                                                         | Status                                                                        |
+| --------------------------------------------------- | ------------------------------------------------------------------------------ | -------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| The live wording (bar lines, the card, the updates) | draft of 2026-10-12 in `content/live/` — six seasonal lines to 31/10/2027, one card (first rains) | quoted from `lib/services.ts`, `lib/articles.ts`, `lib/pricing.ts` | 🔶 awaiting the owner's approval (`approved` field in both registers)         |
+| Wartime line (`reduced` in `_campaigns.mjs`)        | `פועלים בכפוף להנחיות פיקוד העורף`, shown only in the switch's `reduced` mode  | worded for 3locksmiths, owner-confirmed there 2026-10-04       | 🔶 **does טרמוליק work under Home Front Command restrictions?** If not, the entry is deleted |
+
 ---
 
 ## Shipped 2026-08-17 — Phase 1–2 of the growth plan

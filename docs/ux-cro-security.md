@@ -58,6 +58,13 @@ checked pages against. It is now a map of _surfaces_, and the attribute names ar
 The silos reuse `ContactCTA`, so `/guides/` and `/locations/` introduce no new attributes and need
 no rows.
 
+The live surfaces (owner decision 2026-10-11, fleet live-kit — CLAUDE.md §14) add three surfaces,
+printed by the kit rather than written in `components/` (their attribute names are in
+data-tracking-infrastructure.md §4): the **announcement bar** (WhatsApp on the evergreen line; a
+seasonal line links its own page), the **seasonal card** (call, WhatsApp and a link to the page its
+tip comes from) and the **homepage updates strip** (a link per item). None carries the form, and
+none carries a prefilled WhatsApp href.
+
 Every CTA carries a `data-cta="{location}-{action}"` attribute. Adding one is free; omitting one
 makes the click permanently invisible. Any new CTA without one is an incomplete CTA.
 
@@ -65,7 +72,9 @@ makes the click permanently invisible. Any new CTA without one is an incomplete 
 > and the repo makes no `dataLayer` push, so **every one of these attributes is currently inert and
 > every documented conversion event fires zero times.** "All CTAs are tagged ✅" has been read as
 > "clicks are tracked" for three sprints. They are hooks awaiting a consumer —
-> [data-tracking-infrastructure.md](data-tracking-infrastructure.md) §1.
+> [data-tracking-infrastructure.md](data-tracking-infrastructure.md) §1. (Since 2026-10-12 the one
+> `dataLayer` push in the repo is the live-kit's: `public/assets/live.js` pushes `surface_view` /
+> `surface_dismiss` when the seasonal card opens and closes — ids only, data-tracking §4.)
 
 **The guarantee is the strongest confirmed fact on the site and it does almost no work.** The bare
 promise renders on the homepage hero, all four service sidebars, `/about/` and `/pricing/`; the
@@ -292,6 +301,13 @@ So be honest about which directives are doing the work here: **`object-src 'none
 `base-uri 'self'`, `form-action 'self'` and `frame-ancestors 'self'`.** `script-src` is a host
 allowlist, not an XSS control. What compensates: there is no user-generated HTML anywhere, and
 `EmailOff` is the sole `dangerouslySetInnerHTML`, taking build-time constant strings only.
+_Recorded exception (owner decision 2026-10-11, fleet live-kit — CLAUDE.md §14):
+`components/live/Live.tsx` prints the live surfaces the same way — two inline `<head>` scripts, the
+bar, the card and the homepage strip — all compiled at build time from the registers in
+`content/live/` by the byte-locked `lib/live/render.mjs`, which HTML-escapes every visible string
+and puts only ids, paths and dates into the two scripts. Both scripts are covered by the existing
+`'unsafe-inline'`; `/assets/live.js` by `'self'`; its one fetch, the fleet status switch, by
+`https://imgquarry.com` in `connect-src` (added in the same change). Flag any further use._
 
 **Promotion to enforcing — the documented process is currently unexecutable.** "Report-only →
 observe a week of real traffic → enforce" assumes reports are being collected. They are not: the

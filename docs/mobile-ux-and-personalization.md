@@ -110,6 +110,26 @@ the reasons below, and also because the cheaper wins are not taken yet: the stic
 footer (§2), conversions are unmeasured, and three of the six flagship guide topics are unwritten.
 Personalisation is what you build when the fundamentals are done; here they are not.
 
+> **The live surfaces (owner decision 2026-10-11, fleet live-kit — CLAUDE.md §14) are not geo
+> personalisation, and they keep the four rules below.** The announcement line is picked by the
+> visitor's clock against a schedule compiled into every page, before first paint, by an inline
+> `<head>` script; the seasonal card uses `document.referrer`, `sessionStorage` (`ls-pv`, the page
+> count) and `localStorage` (`ls-dlg-<line>`, the 14-day cap; `ls-status`, the switch's last answer).
+> The one network call is the fleet status switch (`https://imgquarry.com/status/fleet.json`), read
+> by `/assets/live.js` after first paint with a 1.5 s ceiling — it can only hide or swap a line that
+> is already in the page, never add text. (1) Every line is in every page's HTML for every visitor
+> and for Googlebot alike, inside `data-nosnippet` — nothing is served differently; (2) the line is
+> chosen before paint, so it reserves its own box (performance-guidelines.md §2 rule 5 records the
+> one after-paint case); (3) nothing waits on it; (4) no personal data — the events carry the line's
+> id only. The statement above about storage predates the consent banner (`tl-consent-v1`) and this.
+>
+> **The card on a phone** — the owner's 2026-10-11 decision overrides this site's silence on popups
+> with the pilot's rules: a bottom sheet that stops 16 px above `StickyContact` (which stays exactly
+> as specified in §2), never on the first page of a search visit, at most once per 14 days, never
+> while the menu is open, the consent question is unanswered or a form field has focus, and never on
+> `/contact/`, `/thank-you/`, `/privacy/`, `/accessibility/` or the 404 page. No exit-intent overlay,
+> no "call us now" pop-up, no urgency wording — the claim gate enforces the last.
+
 The request is dynamic content swapping by visitor location. **My architectural recommendation is
 to do very little of this, and here is the honest reasoning.**
 
@@ -178,7 +198,10 @@ _after_ paint to confirm coverage. Not: rendering the homepage per visitor.
 
 This site works with **zero JavaScript** for everything that matters: content renders server-side,
 FAQs are native `<details>`, navigation is real links, and the phone number is a plain `tel:`
-anchor. Exactly three components ship client JS: `ContactForm`, `Navbar` and `ThankYouContent`.
+anchor. Exactly four components ship client JS: `ContactForm`, `Navbar`, `ThankYouContent` and
+`ConsentBanner`. The live surfaces (CLAUDE.md §14) add none: their markup is server-rendered and
+their behaviour is the static `public/assets/live.js` — with JavaScript off the bar shows its
+evergreen line from 768 px and nothing else changes.
 
 Two that look like they should be client components are not, and a count taken by eye gets this
 wrong: `Analytics` loads the tag through `next/script`, and the homepage's `ServiceChooser` is a

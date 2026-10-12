@@ -73,6 +73,10 @@ in this policy are `object-src 'none'`, `base-uri 'self'`, `form-action 'self'` 
 content is ever rendered as HTML** — `components/EmailOff.tsx:20-21` is the only
 `dangerouslySetInnerHTML` in the repo and it takes two build-time constant comment strings. Keep it
 that way: the day a component interpolates visitor input into HTML, this policy stops covering you.
+(Recorded exception, 2026-10-12: `components/live/Live.tsx`, the fleet live-kit's surfaces —
+register strings compiled and HTML-escaped at build time by the byte-locked `lib/live/render.mjs`,
+never visitor input. Its `/assets/live.js` reads `https://imgquarry.com/status/fleet.json`, hence
+that origin in `connect-src` — CLAUDE.md §14.)
 
 `form-action 'self'` is still accurate — the form posts nowhere, so no `api.web3forms.com` is
 needed, unlike the fleet siblings.

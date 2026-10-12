@@ -8,6 +8,7 @@ import Process from "@/components/Process";
 import Faq from "@/components/Faq";
 import ContactCTA from "@/components/ContactCTA";
 import JsonLd from "@/components/JsonLd";
+import { LiveUpdates } from "@/components/live/Live";
 import { generalFaqs } from "@/lib/faqs";
 import { faqPageJsonLd } from "@/lib/jsonld";
 
@@ -28,6 +29,10 @@ export default function HomePage() {
       <Hero />
       <TrustBar />
       <MethodExplainer />
+      {/* The updates strip (fleet live-kit, CLAUDE.md §14): after the definition block, never
+          between the hero and its trust bar. Server-rendered; it hides itself (before first
+          paint) 45 days after the newest item in content/live/_updates.mjs. */}
+      <LiveUpdates />
       <ServicePillars />
       <ServiceChooser />
       <Process />

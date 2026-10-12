@@ -147,6 +147,7 @@ components/               # FLAT — 26 files, one component per file, PascalCas
   Analytics                            # the ONLY third-party script — GTM from site.analytics.gtmId
   EmailOff                             # Cloudflare Scrape Shield workaround
   WhatsappIcon
+  live/Live.tsx                        # the ONE subfolder: the fleet live-kit's server components (§14)
 lib/
   site.ts       # ⭐ NAP, hours, service areas, trust stats, helpers (telHref, whatsappHref, canonicalUrl)
   services.ts   # ⭐ the 4 services — copy, answer blocks, limits, steps, FAQs, keywords
@@ -155,8 +156,13 @@ lib/
   articles.ts   # /guides/ typed blocks — FAQPage is DERIVED from them, so schema cannot drift
   locations.ts  # ⭐ the 3 gated cities. READ its header before adding a 4th
   jsonld.ts     # every JSON-LD builder
+  live/         # fleet live-kit copies — byte-locked, never edit (§14)
+content/live/   # ⭐ the live registers: _campaigns.mjs, _updates.mjs (+ the synced calendar) (§14)
+live.config.mjs # the live surfaces' calm / no-card pages, NAP restated, this site's ⛔ claim stems (§14)
 public/         # copied verbatim into out/ — _headers, _redirects, llms.txt, og.png, images/
+                #   assets/live.js is a fleet live-kit copy (§14)
 scripts/        # check-sitemap-parity.mjs (`npm run check:sitemap`)
+  live/         # the live-kit gates (prebuild + postbuild) and the weekly reminder (§14)
 docs/           # the acceptance bars every agent cites
 ```
 
@@ -222,7 +228,8 @@ See the `hebrew-rtl` skill for the full rule set.
 - **RSC by default.** Add `"use client"` only for state, effects or browser APIs, kept leaf-level.
   Currently client: **`ContactForm`**, **`Navbar`**, **`ThankYouContent`** (sessionStorage) and
   **`ConsentBanner`** (the Consent Mode v2 choice, in `localStorage`) —
-  those three only. Note Next 16's lint rejects synchronous `setState` inside `useEffect`
+  those four only. (The live surfaces' browser behaviour is the static `public/assets/live.js`,
+  not a component — §14.) Note Next 16's lint rejects synchronous `setState` inside `useEffect`
   (`react-hooks/set-state-in-effect`); for client-only reads use `useSyncExternalStore`, as
   `ThankYouContent` does.
 - **Mobile-first.** Style the base case first, then layer `sm:`/`md:`/`lg:`.
@@ -309,17 +316,24 @@ See the `deploy-thermoleak` skill.
 
 ## 11. Commands
 
-| Task             | Command                                              |
-| ---------------- | ---------------------------------------------------- |
-| Dev server       | `npm run dev`                                        |
-| Production build | `npm run build`                                      |
-| Serve the build  | `npm run start`                                      |
-| Lint             | `npm run lint`                                       |
-| Type-check       | `npx tsc --noEmit`                                   |
-| Sitemap parity   | `npm run check:sitemap` (reads `out/` — build first) |
+| Task             | Command                                                       |
+| ---------------- | ------------------------------------------------------------- |
+| Dev server       | `npm run dev`                                                 |
+| Production build | `npm run build`                                               |
+| Serve the build  | `npm run start`                                               |
+| Lint             | `npm run lint`                                                |
+| Type-check       | `npx tsc --noEmit`                                            |
+| Sitemap parity   | `npm run check:sitemap` (reads `out/` — build first)          |
+| Live draft build | `LIVE_DRAFT=1 npm run build` — local preview only (§14)       |
+| Live reminder    | `npm run live:remind` (prints; pushes only with `NTFY_TOPIC`) |
 
 There is no `typecheck` or `format` script. **Build gate: `npm run lint && npm run build`** — `next
-build` type-checks the whole app. Always run it before declaring work done.
+build` type-checks the whole app. Always run it before declaring work done. `npm run build` also
+runs the live-kit gates (§14) in `prebuild` and `postbuild`; they fail on unapproved live wording, so
+a draft can only be previewed with `LIVE_DRAFT=1 npm run build` — and a draft `out/` (it carries
+`out/.live-draft`) must never be deployed. `ops/deploy-site.ps1` refuses it, `-DeployOnly` included
+(fixed 2026-10-12), and discards a draft `out/` instead of rotating it into `out.prev/`, the
+rollback copy.
 
 A `Stop` hook at `.claude/hooks/format-changed.ps1` formats changed files with Prettier — it is a
 **no-op until `prettier` is added as a devDependency**, by design (`--no-install` never downloads one).
@@ -374,3 +388,72 @@ _Strategy_ — why and in what order: [seo-geo-aeo-strategy.md](docs/seo-geo-aeo
 [accessibility-and-i18n.md](docs/accessibility-and-i18n.md) ·
 [mobile-ux-and-personalization.md](docs/mobile-ux-and-personalization.md) ·
 [data-tracking-infrastructure.md](docs/data-tracking-infrastructure.md).
+
+---
+
+## 14. Live surfaces — the announcement bar, the seasonal card, the updates strip
+
+Fleet live-kit (owner decision 2026-10-11: every fleet site gets the bar, the card and the strip,
+the card overriding any no-popup rule, under the 3locksmiths pilot's rules). Canonical in
+`../3locksmiths.co.il/fleet/live-kit/` — read its README. Every page carries a thin announcement bar
+above the sticky header (in flow, **not** sticky) whose line is chosen before first paint by the
+Israeli calendar — memorial days and fasts silence it, Shabbat and chag silence the seasonal lines —
+and by the fleet status switch (`https://imgquarry.com/status/fleet.json`: quiet / reduced / off).
+One seasonal card: a native `<dialog>` — 2nd page of a visit (after 4 s) or 20 s plus a scroll on
+the first, never from a search engine, once per 14 days, never on calm or no-card pages, never while
+a form field has focus, the mobile menu is open or the consent question is unanswered. The homepage
+shows an updates strip after the method explainer; it hides itself 45 days after the newest item.
+
+- **Edit here:** `content/live/_campaigns.mjs` (the lines, their windows, the card) and
+  `content/live/_updates.mjs` — wording only from sentences the site already shows, each quoted in
+  `source` (a `lib/articles.ts` / `lib/services.ts` quote must link to the page that shows it — the
+  gate checks the slug it sits under); nothing 🔶, no hours, availability, emergency, speed, price,
+  the guarantee's slogan, coverage, credentials, counts or reviews — the business is closed on
+  Shabbat and its out-of-hours service is unconfirmed. Calm / no-card pages, the NAP and this site's
+  own ⛔ claim stems: `live.config.mjs`. Both registers need the owner's
+  `approved: "YYYY-MM-DD — who, how"`, or the build fails (`LIVE_DRAFT=1 npm run build` previews a
+  draft locally only — never deploy that output).
+- **This is the one exception to §5's "wording lives in lib/":** the registers are fleet data
+  checked by their own gates. The markup comes from `lib/live/render.mjs` through
+  `components/live/Live.tsx` (server components; no new client component — the behaviour is the
+  static `public/assets/live.js`).
+- **NAP:** there is no `site.config.json` here, so `live.config.mjs` restates the phone and WhatsApp
+  numbers for the kit's gates; `lib/site.ts` stays the one source — `Live.tsx` refuses to build
+  when the two disagree. A number change is two edits, and the build says so.
+- **Never edit:** `lib/live/**`, `scripts/live/**`, `public/assets/live.js`,
+  `content/live/_calendar*.json`, `live-kit.lock.json` — byte-locked kit copies;
+  `scripts/live/check-live-copy.mjs` fails the build if they change. Fix the kit upstream and re-sync.
+- **Wiring:** `<LiveHead/>` first in the explicit `<head>`, `<LiveTopBar/>` after the skip link and
+  before `<Navbar/>`, `<LiveDialogs/>` last in `<body>`, `suppressHydrationWarning` on `<html>`,
+  `<LiveUpdates/>` after `<MethodExplainer/>`, the 404 page marks itself calm
+  (`data-live-calm-page`). `--live-*` colours and the 768–991 px override (this site's mobile layout
+  ends at Tailwind `md`, the kit's at 992 px — the band gets the kit's desktop rules) at the end of
+  `app/globals.css`. `data-live-block` on the open mobile menu (`components/Navbar.tsx`), on the
+  consent banner while it asks, and on `<html>` from before first paint for a visitor with no
+  stored consent answer — the inline `live-consent-block` script after `<LiveHead/>` in
+  `app/layout.tsx` (the server cannot know who answered, so a returning visitor who did is never
+  held back); `ConsentBanner` lifts it when the visitor answers (the kit README, step 5).
+- **Gates:** `prebuild` = check-live-copy → check-live-register → check-live-schedule;
+  `postbuild` = check-live-out (the built pages must carry exactly what the registers say). CI
+  (`deploy.yml`) runs `npm run build`, so it is red until the registers are approved. The orphan
+  recipes in the `qa-build-gate` and `internal-linking` skills strip the bar and the cards as chrome.
+  `.github/workflows/remind.yml` reads production weekly and pushes to the owner's phone (ntfy)
+  only when THIS site needs something (the switch unreadable from its origin, deploy drift, the
+  strip's age, the runway); the switch's mode, quiet days and the calendar's end are pushed once
+  for the fleet by the 3locksmiths reminder. Red on GitHub without the `NTFY_TOPIC` secret.
+- **Popups:** this site had no written no-popup rule; the nearest rules are
+  [performance-guidelines.md](docs/performance-guidelines.md) §2 rule 5 (no late, layout-shifting
+  content), [data-tracking-infrastructure.md](docs/data-tracking-infrastructure.md) §5 (CLS 0) and
+  [eeat-and-trust.md](docs/eeat-and-trust.md) §7 (no urgency or scarcity). The card keeps all three:
+  pre-rendered, in the top layer, no shift, no urgency wording (the claim gate enforces it). The owner's
+  2026-10-11 decision is recorded there and in
+  [mobile-ux-and-personalization.md](docs/mobile-ux-and-personalization.md).
+- **Before the first deploy (owner):** approve the wording (business-facts §G); re-sync the kit from
+  a committed 3locksmiths (`live-kit.lock.json` says `+dirty` today — it must name a commit); add the
+  three origins (apex, www, `.pages.dev`) to the status switch's CORS list — without it the switch
+  is unreadable here, every seasonal line and the card stay off, and a phone visitor sees a seasonal
+  bar open and then close; widen the GTM trigger `CE - popup events (3locksmiths)` to this hostname;
+  set `NTFY_TOPIC`; and raise the export budget deliberately — the live surfaces take `out/` from
+  6.01 MB (already over the 6 MB budget) to 6.93 MB, measured in
+  [performance-guidelines.md](docs/performance-guidelines.md) §1, and a change that breaks a budget
+  there does not ship. Order and commands: the kit README, "Before a site's first deploy".

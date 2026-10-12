@@ -66,6 +66,14 @@ replaces the missing mechanism.
 | What is already known broken?                                       | optimization-backlog.md                     |
 | Which instruction files must I update after a sprint?               | optimization-backlog.md §14                 |
 | What do we do next, and in what order?                              | implementation-roadmap.md                   |
+| What may the announcement bar, the seasonal card or the strip say?  | `content/live/` + `live.config.mjs` (below) |
+
+**The live surfaces** — the announcement bar, the seasonal card and the homepage updates strip
+(fleet live-kit, owner decision 2026-10-11; CLAUDE.md §14) — keep their wording in
+`content/live/_campaigns.mjs` and `_updates.mjs`, and their calm pages and ⛔ claim stems in
+`live.config.mjs` at the repo root. Their own gates turn every 🔶 row of `business-facts.md` into
+a build failure on any line that states it; the wording itself is 🔶 until the owner approves it
+(`business-facts.md` §G).
 
 ## Ground rules that override everything else
 

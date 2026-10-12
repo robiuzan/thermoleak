@@ -115,7 +115,14 @@ export default function Navbar() {
       </Container>
 
       {open ? (
-        <div id="mobile-menu" ref={menuRef} className="border-t border-ink/10 bg-white md:hidden">
+        <div
+          id="mobile-menu"
+          ref={menuRef}
+          className="border-t border-ink/10 bg-white md:hidden"
+          // Mounted only while open, so the mark is too: the seasonal card (/assets/live.js, fleet
+          // live-kit — CLAUDE.md §14) never opens over the open menu.
+          data-live-block=""
+        >
           <Container className="flex flex-col gap-1 py-3">
             {navLinks.map((link) => (
               <Link

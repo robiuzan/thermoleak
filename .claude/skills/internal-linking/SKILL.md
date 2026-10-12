@@ -114,7 +114,10 @@ inbound links **in the same commit** — the roadmap, `/new-city` and `docs/keyw
 
 ```bash
 find out -name index.html | sed 's|^out||; s|index.html$||' | sort > /tmp/routes.txt
-grep -rho 'href="/[^"]*"' out --include=index.html | sed 's|href="||; s|"$||' | sort -u > /tmp/linked.txt
+# The live-kit's bar and seasonal card are sitewide chrome (CLAUDE.md §14): strip them before
+# collecting links, or a page linked only from a seasonal line would pass as linked.
+find out -name index.html -exec perl -0pe 's/<div class="live-topbar".*?<\/div><\/div>//gs; s/<div class="live-dialogs".*?<\/dialog><\/div>//gs' {} + \
+  | grep -o 'href="/[^"]*"' | sed 's|href="||; s|"$||' | sort -u > /tmp/linked.txt
 comm -23 /tmp/routes.txt /tmp/linked.txt
 ```
 

@@ -55,7 +55,10 @@ against that fact.
      means `script-src` is a host allowlist and not an XSS control on this site. Say which directives
      actually do the work — `object-src 'none'`, `base-uri 'self'`, `form-action 'self'`,
      `frame-ancestors 'self'` — and what compensates: no user-generated HTML, and `EmailOff` is the
-     sole `dangerouslySetInnerHTML`, taking build-time constants only.
+     sole `dangerouslySetInnerHTML`, taking build-time constants only — plus one recorded exception,
+     `components/live/Live.tsx` (fleet live-kit, CLAUDE.md §14), which prints register strings
+     escaped by the byte-locked `lib/live/render.mjs` at build time; `https://imgquarry.com` in
+     `connect-src` is its status-switch read. Not a finding; any further use is.
    - **The promotion gate cannot currently run (SEC-2, open).** The CSP has **no `report-uri` and no
      `report-to`**, so report-only has never collected a single violation anywhere. The live
      `Report-To`/`Nel` headers are Cloudflare's Network Error Logging group and cannot receive CSP

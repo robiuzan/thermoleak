@@ -33,21 +33,21 @@ estimate. Where a row is over budget it says so — an honest breach is worth mo
 measured against the wrong yardstick, which is how the previous version of this table hid two of
 these.
 
-| Asset class                             | Budget                      | Current (2026-09-06)                                                                                                              |
-| --------------------------------------- | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| Total `out/`                            | ≤ 6,000,000 B               | **5,910,433 B — 98.5% of budget** ⚠️ 220 files                                                                                    |
-| ├ RSC segment payloads (`out/**/*.txt`) | _no budget — set one_       | **2,769,645 B / 158 files = 46.9% of the export**                                                                                 |
-| ├ HTML                                  | —                           | 1,984,248 B / 23 files                                                                                                            |
-| └ `out/_next` (JS, CSS, fonts)          | —                           | 936,350 B                                                                                                                         |
-| Any single JS chunk                     | ≤ 200 KB (204,800 B)        | **226,355 B** (`3j9pm5otqxm82.js`, the React/Next runtime) ⚠️ breached                                                            |
-| JS per route — framework floor          | _irreducible; not a target_ | 688,193 B across 9 chunks · 575,599 B modern-only (one 112,594 B chunk is `noModule`) · **168,200 B brotli on the wire**          |
-| JS per route — **delta**                | **+0 B**                    | ✅ every route loads the identical 9 chunks                                                                                       |
-| LCP image                               | ≤ 150 KB                    | `hero.webp` 33,210 B (828×670) ✅                                                                                                 |
-| Any single image                        | ≤ 250 KB                    | `og.png` 128,363 B (never rendered on-page) ✅                                                                                    |
-| Fonts preloaded per page                | ≤ 80 KB                     | 71,540 B — 4 faces ✅ (135,576 B on disk; the rest is `unicode-range`-gated, §4)                                                  |
-| Client components                       | ≤ 4                         | 3 (`ContactForm`, `Navbar`, `ThankYouContent`) ✅                                                                                 |
-| Runtime dependencies                    | ≤ 6                         | 4 ✅                                                                                                                              |
-| Third-party JS                          | ≤ 50 KB gzipped             | ⚠️ ~90 KB (GTM) — **breached by an accepted decision**, see [data-tracking-infrastructure.md](data-tracking-infrastructure.md) §2 |
+| Asset class                             | Budget                      | Current (2026-09-06)                                                                                                                |
+| --------------------------------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Total `out/`                            | ≤ 6,000,000 B               | **5,910,433 B — 98.5% of budget** ⚠️ 220 files                                                                                      |
+| ├ RSC segment payloads (`out/**/*.txt`) | _no budget — set one_       | **2,769,645 B / 158 files = 46.9% of the export**                                                                                   |
+| ├ HTML                                  | —                           | 1,984,248 B / 23 files                                                                                                              |
+| └ `out/_next` (JS, CSS, fonts)          | —                           | 936,350 B                                                                                                                           |
+| Any single JS chunk                     | ≤ 200 KB (204,800 B)        | **226,355 B** (`3j9pm5otqxm82.js`, the React/Next runtime) ⚠️ breached                                                              |
+| JS per route — framework floor          | _irreducible; not a target_ | 688,193 B across 9 chunks · 575,599 B modern-only (one 112,594 B chunk is `noModule`) · **168,200 B brotli on the wire**            |
+| JS per route — **delta**                | **+0 B**                    | ✅ every route loads the identical 9 chunks                                                                                         |
+| LCP image                               | ≤ 150 KB                    | `hero.webp` 33,210 B (828×670) ✅                                                                                                   |
+| Any single image                        | ≤ 250 KB                    | `og.png` 128,363 B (never rendered on-page) ✅                                                                                      |
+| Fonts preloaded per page                | ≤ 80 KB                     | 71,540 B — 4 faces ✅ (135,576 B on disk; the rest is `unicode-range`-gated, §4)                                                    |
+| Client components                       | ≤ 4                         | 4 (`ContactForm`, `Navbar`, `ThankYouContent`, `ConsentBanner` — re-counted 2026-10-12; the live surfaces add none) ✅ at the limit |
+| Runtime dependencies                    | ≤ 6                         | 4 ✅                                                                                                                                |
+| Third-party JS                          | ≤ 50 KB gzipped             | ⚠️ ~90 KB (GTM) — **breached by an accepted decision**, see [data-tracking-infrastructure.md](data-tracking-infrastructure.md) §2   |
 
 **On the RSC `.txt` payloads — the row that did not exist, which is how it grew unbudgeted.**
 Next 16 emits each route's flight payload for `<Link>` prefetching, and it emits it **twice**:
@@ -59,6 +59,18 @@ every route, which is why the export moved from ~3.9 MB to 5.91 MB when `/guides
 landed. **The 6 MB budget is now 98.5% consumed: the next silo breaches it.** Treat that as the
 trigger to decide whether to raise the budget deliberately or to constrain route growth — not as
 something to discover mid-sprint.
+
+**Re-measured 2026-10-12 (fleet live-kit review, CLAUDE.md §14) — the budget is breached, and
+raising it is the owner's decision.** The export deployed 2026-09-17 (`b954357`) is already
+**6,014,717 B / 220 files** — over by 14,717 B since that deploy, unrecorded until now. The live
+surfaces take a build to **6,927,304 B (115.5% of budget, +912,587 B; re-measured after the kit's
+fixes of 2026-10-12 and the consent-mark script)**: HTML +389,655 B (≈16.9 KB per page — the calm,
+head and consent-mark scripts, the bar carrying every line, and the card, each printed inline and
+again in the page's own flight data), RSC payloads +500,274 B (≈7.9 KB in each of `index.txt`,
+`__next._full.txt` and `__next._index.txt`, per route; 9.0 KB on the homepage, which adds the
+strip), CSS +5,138 B and `assets/live.js` 17,052 B. A page's first load grows by ≈5 KB gzipped. Every line ships on every page by the kit's design (a static export
+has no clock), so the adapter cannot trim it. Under this file's own rule the live surfaces do not
+ship until the owner raises this budget deliberately.
 
 **On the JS rows.** The old "≤ 120 KB per route, well under ✅" was never measured and is 4.7×
 wrong against its own stated unit. The framework floor is what Next 16.2.9 + React 19.2.4 cost on
@@ -91,6 +103,21 @@ that is exactly what the +0 B row catches.
 5. **No layout-shifting late content.** No client-injected banners, no post-hydration content swaps
    above the fold. See [mobile-ux-and-personalization.md](mobile-ux-and-personalization.md) §4 for
    why geo-personalisation must respect this.
+   _The live surfaces (owner decision 2026-10-11, fleet live-kit — CLAUDE.md §14) keep to it: the
+   announcement bar is in the HTML and its line is chosen by an inline `<head>` script **before**
+   first paint (35 px, in flow, above the sticky header, not sticky); the seasonal card is a native
+   `<dialog>` in the top layer, reserving no space; the homepage updates strip is server-rendered
+   and, once stale, hidden before first paint. The one after-paint change is the fleet status
+   switch removing the bar (`off`, `quiet` on a phone, or an unreadable switch) — a single shift
+   that the next page applies before paint from a cached answer. Until the switch's CORS list
+   includes this site's three origins the switch IS unreadable here: during a season a phone
+   visitor would see the bar appear and then go (again every 5 minutes, when the cached
+   "unreadable" expires), which is why the CORS step is part of the first deploy. **And a readable
+   switch that answers later than 1.5 s** (a slow phone connection) costs TWO shifts, on every page
+   view: in season the bar closes at the 1.5 s timeout and reopens when the late "normal" arrives —
+   measured 2026-10-12 at 390×844, 0.0383 each (CLS ≈ 0.077 from the bar alone). "normal" is never
+   cached, so the next page repeats it. That is the kit's timeout design (live.js), not this
+   site's to change here — reported upstream._
 6. **No render-blocking third-party anything.** Tags load async, after paint. One third party ships
    — GTM, via `next/script` `afterInteractive`, so the container is created after hydration and is
    absent from the static HTML entirely. That protects LCP and costs early-tap measurement; the
