@@ -162,12 +162,12 @@ that number back to text, where 4.5:1 applies and `/55` fails.
 
 - 44×44px minimum for anything tappable, with adequate spacing. **Measure against the emitted CSS**
   (`--spacing: .25rem`, and the `text-*` line-height), never by eye.
-- Already measured and passing: the menu trigger is `size-11` = exactly 44px (`Navbar.tsx:105`), the
-  mobile menu links are 44px (`:125`), the sticky bar halves are 56px (`StickyContact.tsx`), the
+- Already measured and passing: the menu trigger is `size-11` = exactly 44px (`Navbar.tsx:115`), the
+  mobile menu links are 44px (`:139`), the sticky bar halves are 56px (`StickyContact.tsx`), the
   `size="lg"` CTAs are 52px, and the FAQ summaries are 64px.
 - Still open (finding A11Y-4): the shared `md` size token at `components/CtaButton.tsx:11`
   (`px-5 py-2.5 text-sm`) measures **40px** — 10px + 10px padding around a 20px line box. It is visible
-  on mobile at `Navbar.tsx:130`, `app/pricing/page.tsx:94`/`:97` and `app/not-found.tsx:14`/`:17`.
+  on mobile at `Navbar.tsx:144`, `app/pricing/page.tsx:94`/`:97` and `app/not-found.tsx:14`/`:17`.
   44px is SC 2.5.5 (AAA in 2.1) and the AA bar in 2.2 is 2.5.8 at 24×24, which 40px clears — so this is
   drift against **our own** documented bar in `docs/mobile-ux-and-personalization.md` §"tap target", not
   a conformance break. `py-3` on that one token fixes all five call sites at once.

@@ -156,10 +156,10 @@ read-only.
    `aria-hidden` — the watermark numeral at `components/Process.tsx:52` and the bare `+` markers at
    `app/pricing/page.tsx:114` and `components/ArticleBody.tsx:122-125`.
 7. **Tap targets — measure against the emitted CSS** (`--spacing: .25rem` plus the `text-*` line
-   height), never by eye. Already at or above 44px: the menu trigger (`size-11`, `Navbar.tsx:105`), the
-   mobile menu links (`:125`), the sticky bar halves (56px), the `size="lg"` CTAs (52px) and the FAQ
+   height), never by eye. Already at or above 44px: the menu trigger (`size-11`, `Navbar.tsx:115`), the
+   mobile menu links (`:139`), the sticky bar halves (56px), the `size="lg"` CTAs (52px) and the FAQ
    summaries (64px). Open (A11Y-4): the shared `md` token at `components/CtaButton.tsx:11` measures
-   **40px** and is mobile-visible at `Navbar.tsx:130`, `app/pricing/page.tsx:94`/`:97` and
+   **40px** and is mobile-visible at `Navbar.tsx:144`, `app/pricing/page.tsx:94`/`:97` and
    `app/not-found.tsx:14`/`:17`. 44px is SC 2.5.5 (AAA) and WCAG 2.2's AA bar is 24×24, so report this as
    drift against `docs/mobile-ux-and-personalization.md`, not a conformance break. Also check reflow to
    320px and 200% zoom.

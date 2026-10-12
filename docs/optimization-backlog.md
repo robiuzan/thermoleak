@@ -503,10 +503,37 @@ statement. Fix: move the spacer onto the `<footer>` (or its bottom-bar container
 While there, give the sticky bar `pb-[env(safe-area-inset-bottom)]`; it has none today, so on a
 notched iPhone the home-indicator strip eats into the two primary CTAs as well.
 
-**8.7 🟡 (opened 2026-10-12) Between 768 and 820 px the header's call button wraps onto two
-lines — live in production.** Found during the fleet live-kit review. The owner approved the fix on
-2026-10-12 (fleet wording sign-off page) **as a separate change, after the live surfaces ship** — it
-is deliberately not part of the live-kit port (business-facts §G).
+**8.7 ✅ (fixed 2026-10-12 in `components/Navbar.tsx` — live from the next deploy) The header row
+wrapped from 768 to 970 px, wider and worse than first reported.** Found during the fleet live-kit
+review; the owner approved the fix on 2026-10-12 (fleet wording sign-off page) as a separate change
+after the live surfaces shipped (business-facts §G). Measured on production before the fix: the
+row's content needs 923 px (logo link 280 + nav 468 + call button 143 + two 16 px gaps) but has only
+720–922 px between 768 and 970 px, and flexbox made up the difference by wrapping. `055-660-1006`
+broke after its hyphens — three lines and an 80 px button overrunning the 64 px row at 768–822 px,
+two lines and 60 px at 823–970 px — and `אזורי שירות` / `צור קשר` broke at their spaces. The fix:
+the number is a `dir="ltr"` + `whitespace-nowrap` island, no nav link may wrap, and below `lg` the
+links sit closer (`px-2`, no gap; `lg:px-3 lg:gap-1` restore the old spacing), so the nav and the
+call button need 563 px and the logo link takes the rest (about 157 px at 768). Verified at every
+width from 320 to 1920 px, with the webfonts loaded and blocked and under touch emulation: one
+row, a 65 px header, the number on one line, no overflow. Below 768 px and from 1024 px the
+header's geometry matches production at every width, and its screenshots are byte-identical at
+320, 360, 390, 1024, 1280 and 1920 px and in the open mobile menu. The logo half of the cause is
+still open — §8.8.
+
+**8.8 🟠 (opened 2026-10-12) The logo is painted squashed on every page — `w-auto` never reaches
+the CSS.** `components/Logo.tsx` builds its class as `` `h-9 w-auto${onDark ? …}` ``, and
+Tailwind's extractor reads `h-9`, `brightness-0` and `invert` from that line but not `w-auto`
+(checked with `@tailwindcss/oxide`'s own `Scanner`; with a space after `w-auto` it is found). The
+built CSS has no `.w-auto` rule, so the image's `width="280"` attribute wins, `h-9` still sets the
+height, and the 280×70 (4:1) logo is painted into a 280×36 box with `object-fit: fill` — about half
+its proper height, in the header and in the footer (measured 2026-10-12: header 280×36 at 390 and
+1280 px, footer 242×36 at 1280 px). Where the header row is short of room the box narrows further
+(the image is `max-width: 100%`), so the logo's shape also changes with the window width. The same
+inflated 280 px link was 136 px of the 203 px shortfall behind §8.7. Fix: give `w-auto` a boundary
+the extractor can read — e.g. `"h-9 w-auto" + (onDark ? " brightness-0 invert" : "")` — and the
+logo paints at 144×36. **Deliberately not shipped with §8.7:** it changes the desktop header (the
+logo narrows by 136 px and the nav moves with it), which the §8.7 approval excluded, so it needs
+the owner's own sign-off on a before/after screenshot.
 
 **✅ Verified good (re-verified 2026-09-06):** click-to-call above the fold on every page; a sticky
 call/CTA sidebar on service pages; per-field validation with `aria-invalid` + `aria-describedby`;

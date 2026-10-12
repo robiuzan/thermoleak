@@ -74,12 +74,16 @@ export default function Navbar() {
           <Logo eager />
         </Link>
 
-        <nav aria-label="ניווט ראשי" className="hidden items-center gap-1 md:flex">
+        {/* Nothing in this row may wrap: from 768 to ~970 px the row had less room than its
+            content, and flexbox made it up by wrapping the links and the phone number — the call
+            button grew to 60–80 px inside this 64 px row (backlog §8.7). Below lg the links sit
+            closer (px-2, no gap) so the row fits at 768 px; from lg on it is exactly as before. */}
+        <nav aria-label="ניווט ראשי" className="hidden items-center gap-0 md:flex lg:gap-1">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="rounded-lg px-3 py-2 text-sm font-semibold text-ink/80 transition-colors hover:bg-brand/10 hover:text-brand"
+              className="rounded-lg px-2 py-2 text-sm font-semibold whitespace-nowrap text-ink/80 transition-colors hover:bg-brand/10 hover:text-brand lg:px-3"
             >
               {link.label}
             </Link>
@@ -95,7 +99,10 @@ export default function Navbar() {
             ariaLabel={`התקשרו אלינו: ${site.phone.display}`}
           >
             <Phone className="size-4" aria-hidden="true" />
-            {site.phone.display}
+            {/* An LTR island that never breaks: bare, "055-660-1006" broke after its hyphens. */}
+            <span dir="ltr" className="whitespace-nowrap">
+              {site.phone.display}
+            </span>
           </CtaButton>
         </div>
 
@@ -142,7 +149,9 @@ export default function Navbar() {
               ariaLabel={`התקשרו אלינו: ${site.phone.display}`}
             >
               <Phone className="size-4" aria-hidden="true" />
-              {site.phone.display}
+              <span dir="ltr" className="whitespace-nowrap">
+                {site.phone.display}
+              </span>
             </CtaButton>
           </Container>
         </div>
