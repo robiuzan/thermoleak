@@ -29,8 +29,10 @@ read-only.
 ## What to audit — performance
 
 1. **The export baseline, remeasured 2026-09-06.** `out/` is **5,910,433 B (5.64 MiB / 5.91 MB decimal)
-   across 220 files and 22 emitted routes** — not the "~3.9 MB" several docs still carry. That is 98.5%
-   of the 6 MB budget in `docs/performance-guidelines.md` §1. Composition:
+   across 220 files and 22 emitted routes** — not the "~3.9 MB" several docs still carry. That was
+   98.5% of the 6 MB budget of the day; the owner raised the budget in
+   `docs/performance-guidelines.md` §1 to **7.5 MB** on 2026-10-12, when the live surfaces took a
+   build to ≈6.93 MB. Composition:
 
    | Class                                | Bytes                   | Share |
    | ------------------------------------ | ----------------------- | ----- |
@@ -48,7 +50,7 @@ read-only.
    of the export is pure duplication across 158 files. Two things follow, and an honest audit says both:
    they are **navigation prefetch, not first paint, so they do not touch LCP**; and they are real deploy
    weight that grows ~115 KB per new route, which means the nine remaining cities in the 12-city plan
-   would push `out/` past 6 MB. Report it as a budget-and-planning finding, not an LCP finding.
+   would push `out/` past 7.5 MB. Report it as a budget-and-planning finding, not an LCP finding.
 
 2. **Images.** `next.config.ts` sets `images: { unoptimized: true }`, so every `next/image` renders a
    bare `<img>` with **no srcset**. **All four** service illustrations are SVG (1,166–1,379 B each), so

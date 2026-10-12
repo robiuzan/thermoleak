@@ -72,8 +72,8 @@ replaces the missing mechanism.
 (fleet live-kit, owner decision 2026-10-11; CLAUDE.md §14) — keep their wording in
 `content/live/_campaigns.mjs` and `_updates.mjs`, and their calm pages and ⛔ claim stems in
 `live.config.mjs` at the repo root. Their own gates turn every 🔶 row of `business-facts.md` into
-a build failure on any line that states it; the wording itself is 🔶 until the owner approves it
-(`business-facts.md` §G).
+a build failure on any line that states it; the wording itself was approved by the owner on
+2026-10-12, and any change to it needs a new approval (`business-facts.md` §G).
 
 ## Ground rules that override everything else
 

@@ -21,17 +21,17 @@ matching agent or skill will wire it into the right place.
 
 ## Already confirmed — do not re-flag these
 
-| Fact                | Value                                                      | Source                          |
-| ------------------- | ---------------------------------------------------------- | ------------------------------- |
-| Phone (display)     | `055-660-1006`                                             | roster — **real fleet number**  |
-| Phone (E.164 / tel) | `+972556601006`                                            | roster                          |
-| WhatsApp            | `972556601006` (same number)                               | roster                          |
-| Email               | `info@thermoleak.co.il`                                    | roster                          |
-| Brand name (he/en)  | טרמוליק / ThermoLeak                                       | roster                          |
-| Legal name          | **טרמוליק** — NOT `בע״מ`. Corrected 2026-09-17: no company registration exists. The roster still says `טרמוליק בע״מ` and is **wrong**; this file wins | owner, 2026-09-17 |
-| Year founded        | **2015** — the business is 11 years old. The founder's field experience is separate: ~2005 → "20+ בשטח" | roster `foundedYear` + owner |
-| Service area (text) | גוש דן והמרכז                                              | roster `schema.areaServed`      |
-| Search Console tag  | `BxQI2a7Ich4zF5TWYlTsXPCi7iAueoYlddQLGxW62p0`              | `app/layout.tsx:32` (live, public) |
+| Fact                | Value                                                                                                                                                 | Source                             |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| Phone (display)     | `055-660-1006`                                                                                                                                        | roster — **real fleet number**     |
+| Phone (E.164 / tel) | `+972556601006`                                                                                                                                       | roster                             |
+| WhatsApp            | `972556601006` (same number)                                                                                                                          | roster                             |
+| Email               | `info@thermoleak.co.il`                                                                                                                               | roster                             |
+| Brand name (he/en)  | טרמוליק / ThermoLeak                                                                                                                                  | roster                             |
+| Legal name          | **טרמוליק** — NOT `בע״מ`. Corrected 2026-09-17: no company registration exists. The roster still says `טרמוליק בע״מ` and is **wrong**; this file wins | owner, 2026-09-17                  |
+| Year founded        | **2015** — the business is 11 years old. The founder's field experience is separate: ~2005 → "20+ בשטח"                                               | roster `foundedYear` + owner       |
+| Service area (text) | גוש דן והמרכז                                                                                                                                         | roster `schema.areaServed`         |
+| Search Console tag  | `BxQI2a7Ich4zF5TWYlTsXPCi7iAueoYlddQLGxW62p0`                                                                                                         | `app/layout.tsx:32` (live, public) |
 
 > ⚠️ **The roster manifest is now behind this file on two facts** — it still carries
 > `טרמוליק בע״מ` as the legal name and has no record of the ₪350 price. The roster is a reference,
@@ -50,13 +50,13 @@ coordinator**, so `/accessibility/` no longer asserts one.
 > ⚠️ **A ❌ row is an answer, not a gap.** Three rows below are confirmed ABSENT. Do not re-open
 > them as "missing facts to chase", and never let a future agent refill them.
 
-| Field                          | Why it's needed                                             | Lands in                  | Value                              | Status |
-| ------------------------------ | ----------------------------------------------------------- | ------------------------- | ---------------------------------- | ------ |
-| Owner / founder name           | `Person` schema, author bylines, the About story            | `lib/site.ts` + `/about/` | **רונן דהן**                       | ✅     |
-| Owner's years in the trade     | The "experience" half of E-E-A-T                            | `lib/site.ts`             | **in the trade since ~2005** (10 years before founding in 2015) | ✅ |
-| Technician count / team shape  | "צוות" was implied but never quantified                     | `lib/site.ts`             | **2 people**                       | ✅     |
-| ח.פ. / ע.מ. number             | Was claimed via `בע״מ` with no number behind it             | `lib/site.ts`             | **none — not a registered company** | ❌    |
-| Permission to publish a photo  | A named face is the strongest single trust signal available | `public/images/`          |                                    | 🔶     |
+| Field                         | Why it's needed                                             | Lands in                  | Value                                                           | Status |
+| ----------------------------- | ----------------------------------------------------------- | ------------------------- | --------------------------------------------------------------- | ------ |
+| Owner / founder name          | `Person` schema, author bylines, the About story            | `lib/site.ts` + `/about/` | **רונן דהן**                                                    | ✅     |
+| Owner's years in the trade    | The "experience" half of E-E-A-T                            | `lib/site.ts`             | **in the trade since ~2005** (10 years before founding in 2015) | ✅     |
+| Technician count / team shape | "צוות" was implied but never quantified                     | `lib/site.ts`             | **2 people**                                                    | ✅     |
+| ח.פ. / ע.מ. number            | Was claimed via `בע״מ` with no number behind it             | `lib/site.ts`             | **none — not a registered company**                             | ❌     |
+| Permission to publish a photo | A named face is the strongest single trust signal available | `public/images/`          |                                                                 | 🔶     |
 
 > **On the two experience numbers.** The BUSINESS was founded 2015 (11 years). The FOUNDER has been
 > in the trade ~20 years. `site.stats.years` says "20+ שנות ניסיון **בשטח**" — the word בשטח is
@@ -69,17 +69,17 @@ coordinator**, so `/accessibility/` no longer asserts one.
 were all **removed**. The site no longer fabricates proof — but it now has **none**, which keeps
 this section the highest-priority ask. The rows below are what replaces them legitimately.
 
-| Field                                                  | Why it's needed                                                                 | Lands in               | Value                              | Status |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------- | ---------------------- | ---------------------------------- | ------ |
-| **Google Business Profile URL** (service-area profile) | The top local lever; `sameAs`; the only legitimate source for `aggregateRating` | `lib/site.ts` `social` | **does not exist yet** — owner will open one | 🔶 |
-| Facebook page URL                                      | `sameAs`; entity corroboration                                                  | `lib/site.ts` `social` |                                    | 🔶     |
-| Instagram URL                                          | `sameAs`; thermal imagery is a natural fit                                      | `lib/site.ts` `social` |                                    | 🔶     |
-| 5–10 real reviews (author, date, text, **source URL**) | Replaces the six fabricated ones                                                | a new `lib/reviews.ts` |                                    | 🔶     |
-| Real review count + average rating                     | `AggregateRating`. **Ships only with a verifiable public source**               | derived from the above |                                    | 🔶     |
-| Equipment — which thermal camera?                      | A specific model is a genuine expertise signal                                  | `lib/site.ts`          | **FLIR E8**                        | ✅     |
-| Insurance (ביטוח צד ג׳)                                | Standard trade trust signal                                                     | `lib/site.ts`          | **yes — held** (insurer and coverage amount not supplied, so no figure ships) | ✅ |
-| Thermography certification — issuing body + number     | Was claimed as "Thermography Level 1" with no certificate behind it             | `lib/site.ts`          | **none — no certificate held**     | ❌     |
-| Trade association membership                           | Authority signal                                                                | `lib/site.ts`          | **none**                           | ❌     |
+| Field                                                  | Why it's needed                                                                 | Lands in               | Value                                                                         | Status |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------- | ---------------------- | ----------------------------------------------------------------------------- | ------ |
+| **Google Business Profile URL** (service-area profile) | The top local lever; `sameAs`; the only legitimate source for `aggregateRating` | `lib/site.ts` `social` | **does not exist yet** — owner will open one                                  | 🔶     |
+| Facebook page URL                                      | `sameAs`; entity corroboration                                                  | `lib/site.ts` `social` |                                                                               | 🔶     |
+| Instagram URL                                          | `sameAs`; thermal imagery is a natural fit                                      | `lib/site.ts` `social` |                                                                               | 🔶     |
+| 5–10 real reviews (author, date, text, **source URL**) | Replaces the six fabricated ones                                                | a new `lib/reviews.ts` |                                                                               | 🔶     |
+| Real review count + average rating                     | `AggregateRating`. **Ships only with a verifiable public source**               | derived from the above |                                                                               | 🔶     |
+| Equipment — which thermal camera?                      | A specific model is a genuine expertise signal                                  | `lib/site.ts`          | **FLIR E8**                                                                   | ✅     |
+| Insurance (ביטוח צד ג׳)                                | Standard trade trust signal                                                     | `lib/site.ts`          | **yes — held** (insurer and coverage amount not supplied, so no figure ships) | ✅     |
+| Thermography certification — issuing body + number     | Was claimed as "Thermography Level 1" with no certificate behind it             | `lib/site.ts`          | **none — no certificate held**                                                | ❌     |
+| Trade association membership                           | Authority signal                                                                | `lib/site.ts`          | **none**                                                                      | ❌     |
 
 > ⚠️ **The certification row is ❌, not 🔶.** The owner confirmed 2026-09-17 there is no
 > thermography certificate, and the unbacked "Level 1" line was deleted from `site.credentials` on
@@ -128,24 +128,24 @@ boundary that prevents disputes.
    unless a return visit was offered and declined. This is the honest reading and it matches what
    the guides already tell readers.
 
-**On pricing:** keeping a stated *starting* price with the factors that move it published (as
+**On pricing:** keeping a stated _starting_ price with the factors that move it published (as
 `/pricing/` already does) beats "call for a quote" — price opacity is a conversion tax on a crisis
 purchase. **The owner confirmed ₪350 on 2026-09-17** (the site had been showing an unverified ₪350,
 so this was a real correction, not a rubber stamp).
 
-| Field                                     | Why it's needed                                         | Lands in                  | Value                | Status |
-| ----------------------------------------- | ------------------------------------------------------- | ------------------------- | -------------------- | ------ |
-| Starting price                            | Stated on the homepage, `/pricing/` and two services    | `lib/site.ts` `priceFrom` | **₪350**             | ✅     |
-| Guarantee: what counts as "מצאנו"         | Defines the entire promise                              | `lib/site.ts` + services  | ✅ published         | ✅     |
-| Guarantee: exclusions and call-out fee    | Reduces post-sale disputes                              | `lib/services.ts`         | ✅ no call-out fee   | ✅     |
-| Issues a חשבונית מס?                      | Conversion friction; ועדי בתים and businesses need it   | `lib/site.ts`             | **yes**              | ✅     |
-| What the ₪350 visit includes/excludes      | The #1 pre-purchase question; AEO answer-block material | `lib/site.ts` `visitScope` | **approved verbatim 2026-09-17** — renders on `/pricing/` | ✅ |
-| Report turnaround                         | Was only a vague "מספר ימי עסקים"                       | `lib/site.ts` `reportTurnaroundDays` | **3 business days** | ✅ |
-| Accepted payment methods                  | Card / transfer / Bit — none confirmed                  | `lib/site.ts`             |                      | 🔶     |
+| Field                                  | Why it's needed                                         | Lands in                             | Value                                                     | Status |
+| -------------------------------------- | ------------------------------------------------------- | ------------------------------------ | --------------------------------------------------------- | ------ |
+| Starting price                         | Stated on the homepage, `/pricing/` and two services    | `lib/site.ts` `priceFrom`            | **₪350**                                                  | ✅     |
+| Guarantee: what counts as "מצאנו"      | Defines the entire promise                              | `lib/site.ts` + services             | ✅ published                                              | ✅     |
+| Guarantee: exclusions and call-out fee | Reduces post-sale disputes                              | `lib/services.ts`                    | ✅ no call-out fee                                        | ✅     |
+| Issues a חשבונית מס?                   | Conversion friction; ועדי בתים and businesses need it   | `lib/site.ts`                        | **yes**                                                   | ✅     |
+| What the ₪350 visit includes/excludes  | The #1 pre-purchase question; AEO answer-block material | `lib/site.ts` `visitScope`           | **approved verbatim 2026-09-17** — renders on `/pricing/` | ✅     |
+| Report turnaround                      | Was only a vague "מספר ימי עסקים"                       | `lib/site.ts` `reportTurnaroundDays` | **3 business days**                                       | ✅     |
+| Accepted payment methods               | Card / transfer / Bit — none confirmed                  | `lib/site.ts`                        |                                                           | 🔶     |
 
 > ✅ **Both resolved the same day, and the route there is the point.** Asked what a visit includes
 > and how long a report takes, the owner first answered "use your experience" and "the standard".
-> That is **not an answer a site may publish** — they are facts about *this* business, and a
+> That is **not an answer a site may publish** — they are facts about _this_ business, and a
 > reasonable-sounding guess is still fabrication under golden rule 1. So a draft was written
 > **from claims already published** (`guaranteeTerms.excluded`, and the "מתומחרים בנפרד" lines on
 > the reports and panel services), put to the owner, and **approved verbatim**. Turnaround came
@@ -159,13 +159,14 @@ so this was a real correction, not a rubber stamp).
 
 `site.stats` renders in `TrustBar` on the homepage as the site's primary proof block.
 
-| Claim                              | Status                                                        | Lands in            | Value | Status |
-| ---------------------------------- | ------------------------------------------------------------- | ------------------- | ----- | ------ |
-| `20+ שנות ניסיון בשטח`             | **Confirmed 2026-09-17** — founder in the trade since ~2005. Raised from `10+`, which had been derived from the 2015 founding year. The label says **בשטח** because this is the founder's experience, not the company's age | `lib/site.ts` stats | ~2005 | ✅ |
-| `3,000+ בתים ועסקים`               | **Removed from the site 2026-08-17.** Returns only with a record behind it | `lib/site.ts` stats |  | 🔶     |
-| `97% איתור כבר בביקור הראשון`      | **Removed from the site 2026-08-17.** Returns only if actually measured    | `lib/site.ts` stats |  | 🔶     |
-| `4.9 דירוג לקוחות ממוצע`           | **Removed 2026-08-17 with the fabricated reviews** — see §B                | —                   |  | ❌     |
-| Emergency availability             | `emergencyNote` claims out-of-hours service for active leaks  | `lib/site.ts`       |       | 🔶     |
+| Claim                                                                   | Status                                                                                                                                                                                                                                                                                                                                                                                                    | Lands in                                                                                | Value        | Status |
+| ----------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | ------------ | ------ |
+| `20+ שנות ניסיון בשטח`                                                  | **Confirmed 2026-09-17** — founder in the trade since ~2005. Raised from `10+`, which had been derived from the 2015 founding year. The label says **בשטח** because this is the founder's experience, not the company's age                                                                                                                                                                               | `lib/site.ts` stats                                                                     | ~2005        | ✅     |
+| `3,000+ בתים ועסקים`                                                    | **Removed from the site 2026-08-17.** Returns only with a record behind it                                                                                                                                                                                                                                                                                                                                | `lib/site.ts` stats                                                                     |              | 🔶     |
+| `97% איתור כבר בביקור הראשון`                                           | **Removed from the site 2026-08-17.** Returns only if actually measured                                                                                                                                                                                                                                                                                                                                   | `lib/site.ts` stats                                                                     |              | 🔶     |
+| `4.9 דירוג לקוחות ממוצע`                                                | **Removed 2026-08-17 with the fabricated reviews** — see §B                                                                                                                                                                                                                                                                                                                                               | —                                                                                       |              | ❌     |
+| Emergency availability                                                  | `emergencyNote` claims out-of-hours service for active leaks                                                                                                                                                                                                                                                                                                                                              | `lib/site.ts`                                                                           |              | 🔶     |
+| `זמינות מהירה` · `זמינות מהירה גם למקרי חירום` · `ונחזור אליכם במהירות` | **Confirmed true by the owner 2026-10-12** (fleet wording sign-off page: "Yes, they are true — keep them"). They ship in the hero, `site.description`, `/about/` and `ContactCTA`. This confirms the three phrases as written — **not** the out-of-hours promise above and **not** a same-day radius (§E). The live surfaces still carry no availability, emergency or speed wording (the fleet rule, §G) | `components/Hero.tsx`, `lib/site.ts`, `app/about/page.tsx`, `components/ContactCTA.tsx` | as published | ✅     |
 
 ## E. Coverage & geo
 
@@ -181,20 +182,20 @@ been claiming. That figure was never confirmed and has been removed from `servic
 > this exact answer. **That gate is now lifted on distance.** Each city still has to clear the
 > doorway test on its own content — distance was never the only gate.
 
-| Field                                              | Why it's needed                                                      | Lands in                | Value | Status |
-| -------------------------------------------------- | -------------------------------------------------------------------- | ----------------------- | ----- | ------ |
-| Real operating base (or: drop `geo` entirely)      | A placeholder coordinate is worse than none for a service-area business | `lib/site.ts` `geo`   | `geo` removed 2026-08-17; no base supplied | 🔶 |
-| Is "שירות ארצי בתיאום מראש" true?                  | It's a coverage claim; a false `areaServed` is a liability            | `lib/site.ts`           | **yes — true** | ✅ |
-| Realistic travel reach                             | Gates which cities can honestly be claimed                           | `lib/site.ts` `serviceAreaText` | **up to ~2 hours' drive from Tel Aviv** | ✅ |
-| Which of the 12 cities have real job history?      | Decides which earn a location page at all (`/new-city` gate)          | `lib/locations.ts`      |       | 🔶     |
-| Realistic **same-day** radius                      | "זמינות מהירה" is claimed sitewide. Distinct from travel reach: two hours' drive is what he *will* travel, not what he can reach same-day | `lib/site.ts` |  | 🔶 |
-| Is there a Google Business Profile address to hide? | Service-area profiles must not contradict the site                   | GBP                     | no profile exists yet | 🔶 |
+| Field                                               | Why it's needed                                                                                                                                                                                                                        | Lands in                        | Value                                      | Status |
+| --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- | ------------------------------------------ | ------ |
+| Real operating base (or: drop `geo` entirely)       | A placeholder coordinate is worse than none for a service-area business                                                                                                                                                                | `lib/site.ts` `geo`             | `geo` removed 2026-08-17; no base supplied | 🔶     |
+| Is "שירות ארצי בתיאום מראש" true?                   | It's a coverage claim; a false `areaServed` is a liability                                                                                                                                                                             | `lib/site.ts`                   | **yes — true**                             | ✅     |
+| Realistic travel reach                              | Gates which cities can honestly be claimed                                                                                                                                                                                             | `lib/site.ts` `serviceAreaText` | **up to ~2 hours' drive from Tel Aviv**    | ✅     |
+| Which of the 12 cities have real job history?       | Decides which earn a location page at all (`/new-city` gate)                                                                                                                                                                           | `lib/locations.ts`              |                                            | 🔶     |
+| Realistic **same-day** radius                       | "זמינות מהירה" is claimed sitewide — the phrase itself was confirmed true by the owner 2026-10-12 (§D), but no radius was given. Distinct from travel reach: two hours' drive is what he _will_ travel, not what he can reach same-day | `lib/site.ts`                   |                                            | 🔶     |
+| Is there a Google Business Profile address to hide? | Service-area profiles must not contradict the site                                                                                                                                                                                     | GBP                             | no profile exists yet                      | 🔶     |
 
 ### 🔶 Location silo — 3 built, 9 deferred (gate run 2026-08-24)
 
 An adversarially-verified gate (49 agents: 12 assessments, 36 refutation passes across three
 lenses, 1 synthesis) found that **all 12 service areas have 3+ true, publicly verifiable,
-city-specific claims available.** That answered *could we* — not *should we*.
+city-specific claims available.** That answered _could we_ — not _should we_.
 
 **Built:** תל אביב-יפו · חולון · בת ים — chosen as a geographically contiguous cluster (so the
 `nearby` edges are honest), zero unverifiable claims each, and the largest combined market in
@@ -203,17 +204,17 @@ the core service area.
 **Deferred, with verified claims preserved** so the next batch is a data edit, not a re-run.
 Order is by strength of verified claim set:
 
-| City | km | Verified claims | Strongest local angle |
-| --- | --- | --- | --- |
-| רמת גן | 6 | 13 | רמת גן היא מהערים המובילות בישראל בהיקף פרויקטי תמ״א 38 והתחדשות עירונית. זה מייצר כאן שני סוגי קריאות שונים ל… |
-| גבעתיים | 5 | 11 | גבעתיים בנויה על ארבע גבעות — בורוכוב, קוזלובסקי, גבעת רמב״ם וגבעת פועלי הרכבת — וגבעת קוזלובסקי מתנשאת לכ-87 … |
-| הרצליה | 14 | 6 | בשכונת יד התשעה שבהרצליה עומדים כ-94 ״בנייני רכבת״ ישנים, בני שתיים־שלוש כניסות, שהוקמו ברובם בסוף שנות ה-50. … |
-| פתח תקווה | 12 | 9 | אם המושבות החדשה, בצפון-מערב פתח תקווה, החלה להיבנות ב-2003, ואופי הבנייה בה הוא בנייני מגורים בני 9–23 קומות … |
-| ראשון לציון | 20 | 4 | רמת אליהו נמצאת בתוך אחת מתכניות הפינוי־בינוי הגדולות בישראל, המשתרעת על כ־633 דונם — כך שבאותה שכונה עומדים ז… |
-| רעננה | 20 | 9 | שכונת קריית שרת שבצפון רעננה הוקמה בשנות ה־50 כשכונת עולים, וחלק ניכר ממנה עדיין בנוי מ״בנייני רכבת״ בני שלוש … |
-| כפר סבא | 23 | 11 | בכפר סבא המים אינם מסופקים על ידי תאגיד מים עירוני רגיל, אלא על ידי מפעל המים כפר סבא — אגודה חקלאית שיתופית ה… |
-| ראש העין | 25 | 11 | ראש העין הוקמה ב-1949 כמעברה לעולי תימן, ובתי הקבע הראשונים נבנו החל מ-1951 — כלומר חלק ניכר מהמלאי הוותיק במע… |
-| מודיעין | 40 | 10 | מודיעין היא עיר מתוכננת חדשה: הבנייה בה החלה ב-1994 והאכלוס הראשון היה ביולי 1996. משמעות הדבר היא שכל בנייני … |
+| City        | km  | Verified claims | Strongest local angle                                                                                           |
+| ----------- | --- | --------------- | --------------------------------------------------------------------------------------------------------------- |
+| רמת גן      | 6   | 13              | רמת גן היא מהערים המובילות בישראל בהיקף פרויקטי תמ״א 38 והתחדשות עירונית. זה מייצר כאן שני סוגי קריאות שונים ל… |
+| גבעתיים     | 5   | 11              | גבעתיים בנויה על ארבע גבעות — בורוכוב, קוזלובסקי, גבעת רמב״ם וגבעת פועלי הרכבת — וגבעת קוזלובסקי מתנשאת לכ-87 … |
+| הרצליה      | 14  | 6               | בשכונת יד התשעה שבהרצליה עומדים כ-94 ״בנייני רכבת״ ישנים, בני שתיים־שלוש כניסות, שהוקמו ברובם בסוף שנות ה-50. … |
+| פתח תקווה   | 12  | 9               | אם המושבות החדשה, בצפון-מערב פתח תקווה, החלה להיבנות ב-2003, ואופי הבנייה בה הוא בנייני מגורים בני 9–23 קומות … |
+| ראשון לציון | 20  | 4               | רמת אליהו נמצאת בתוך אחת מתכניות הפינוי־בינוי הגדולות בישראל, המשתרעת על כ־633 דונם — כך שבאותה שכונה עומדים ז… |
+| רעננה       | 20  | 9               | שכונת קריית שרת שבצפון רעננה הוקמה בשנות ה־50 כשכונת עולים, וחלק ניכר ממנה עדיין בנוי מ״בנייני רכבת״ בני שלוש … |
+| כפר סבא     | 23  | 11              | בכפר סבא המים אינם מסופקים על ידי תאגיד מים עירוני רגיל, אלא על ידי מפעל המים כפר סבא — אגודה חקלאית שיתופית ה… |
+| ראש העין    | 25  | 11              | ראש העין הוקמה ב-1949 כמעברה לעולי תימן, ובתי הקבע הראשונים נבנו החל מ-1951 — כלומר חלק ניכר מהמלאי הוותיק במע… |
+| מודיעין     | 40  | 10              | מודיעין היא עיר מתוכננת חדשה: הבנייה בה החלה ב-1994 והאכלוס הראשון היה ביולי 1996. משמעות הדבר היא שכל בנייני … |
 
 **⚠️ EVERY claim in this silo — built and deferred — needs owner confirmation.** They are
 adversarially checked against public sources, not sourced by someone who has worked in those
@@ -222,27 +223,37 @@ buildings. Verification is not truth. Correct anything wrong.
 **The one thing that would most strengthen every page:** a real job reference per city. That is
 the strongest doorway-test item and the only one research cannot supply.
 
-
 ## F. Infrastructure — owner-only changes
 
-| Field                              | Why it's needed                                                                                                                                                                        | Lands in         | Value | Status |
-| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ----- | ------ |
-| **Analytics decision**             | ✅ RESOLVED 2026-08-24 — join the shared fleet container. 10 of 12 fleet sites carry it; id verified HTTP 200. Installed via `components/Analytics.tsx` (`afterInteractive`). Accepted trade: ~90 KB exceeds the 50 KB tag budget; Zaraz stays the lighter option if that is ever enforced | `app/layout.tsx` | `GTM-KWGGH438` | ✅ |
-| GA4 measurement ID                 | Needed either way once the decision is made                                                                                                                                            | container / repo |       | 🔶     |
-| **AI-crawler stance**              | **✅ RESOLVED 2026-08-17.** The managed block (ClaudeBot/GPTBot/Google-Extended/CCBot Disallow) was confirmed live in the morning, the owner turned the toggle off, and the live `robots.txt` now serves the repo's blanket allow — verified. Re-verify after any Cloudflare plan/setting change | Cloudflare       | open  | ✅     |
-| Security headers approval          | HSTS shipped 2026-08-17 without `preload`/`includeSubDomains`; escalating either needs sign-off (near-irreversible)                                                                     | `public/_headers`  |     | 🔶     |
-| Roster sync                        | `thermoleak.json` records `googleSiteVerification: null` while the site ships a real token — update the roster                                                                          | roster           |       | 🔶     |
+| Field                     | Why it's needed                                                                                                                                                                                                                                                                                  | Lands in          | Value          | Status |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- | -------------- | ------ |
+| **Analytics decision**    | ✅ RESOLVED 2026-08-24 — join the shared fleet container. 10 of 12 fleet sites carry it; id verified HTTP 200. Installed via `components/Analytics.tsx` (`afterInteractive`). Accepted trade: ~90 KB exceeds the 50 KB tag budget; Zaraz stays the lighter option if that is ever enforced       | `app/layout.tsx`  | `GTM-KWGGH438` | ✅     |
+| GA4 measurement ID        | Needed either way once the decision is made                                                                                                                                                                                                                                                      | container / repo  |                | 🔶     |
+| **AI-crawler stance**     | **✅ RESOLVED 2026-08-17.** The managed block (ClaudeBot/GPTBot/Google-Extended/CCBot Disallow) was confirmed live in the morning, the owner turned the toggle off, and the live `robots.txt` now serves the repo's blanket allow — verified. Re-verify after any Cloudflare plan/setting change | Cloudflare        | open           | ✅     |
+| Security headers approval | HSTS shipped 2026-08-17 without `preload`/`includeSubDomains`; escalating either needs sign-off (near-irreversible)                                                                                                                                                                              | `public/_headers` |                | 🔶     |
+| Roster sync               | `thermoleak.json` records `googleSiteVerification: null` while the site ships a real token — update the roster                                                                                                                                                                                   | roster            |                | 🔶     |
 
 ## G. The live surfaces (fleet live-kit, owner decision 2026-10-11)
 
 The announcement bar, the seasonal card and the homepage updates strip (CLAUDE.md §14) print only
 sentences this site already shows, quoted in each line's `source`; `live.config.mjs` turns every 🔶
-and ❌ row above into a ⛔ stem the build enforces. Drafted 2026-10-12, not yet shown to the owner.
+and ❌ row above into a ⛔ stem the build enforces — and keeps doing so for the availability
+phrases §D now confirms, because the fleet rule bars availability, emergency and speed wording
+from the live surfaces whether or not it is true. Drafted 2026-10-12 and **approved by the owner
+the same day** on the fleet wording sign-off page; every answer he gave there is recorded below
+(the three availability phrases in §D).
 
-| Fact                                                | Current value                                                                  | Source                                                         | Status                                                                        |
-| --------------------------------------------------- | ------------------------------------------------------------------------------ | -------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| The live wording (bar lines, the card, the updates) | draft of 2026-10-12 in `content/live/` — six seasonal lines to 31/10/2027, one card (first rains) | quoted from `lib/services.ts`, `lib/articles.ts`, `lib/pricing.ts` | 🔶 awaiting the owner's approval (`approved` field in both registers)         |
-| Wartime line (`reduced` in `_campaigns.mjs`)        | `פועלים בכפוף להנחיות פיקוד העורף`, shown only in the switch's `reduced` mode  | worded for 3locksmiths, owner-confirmed there 2026-10-04       | 🔶 **does טרמוליק work under Home Front Command restrictions?** If not, the entry is deleted |
+| Fact                                                     | Current value                                                                                                                                                                                                                                  | Source                                                                                                                                                                          | Status                                                                |
+| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| The live wording (bar lines, the card, the updates)      | `content/live/` as approved — six seasonal lines to 31/10/2027, one card (first rains); fingerprint `86e30fc91128`, stamped in both registers' `approved` field                                                                                | owner, fleet wording sign-off page, 2026-10-12                                                                                                                                  | ✅ approved — a wording change needs a new approval                   |
+| Wartime line (`reduced` in `_campaigns.mjs`)             | `פועלים בכפוף להנחיות פיקוד העורף`, shown only in the switch's `reduced` mode                                                                                                                                                                  | worded for 3locksmiths (owner-confirmed there 2026-10-04); **confirmed for טרמוליק by the owner 2026-10-12** — the business keeps working under Home Front Command restrictions | ✅ confirmed                                                          |
+| The winter "document first" line (15/12/2026–15/01/2027) | the neutral `נזק מים בבית? חשוב לתעד לפני שמתקנים`, not the drafted `נזקי מים מהגשם? …` — beside the link to `/services/insurance-reports/` that could read as "rain damage is claimable" (often it is not covered — the sign-off page's note) | owner's choice, 2026-10-12                                                                                                                                                      | ✅ in the register                                                    |
+| The condensation line (15/01–01/03/2027)                 | keeps its link to `/guides/leak-detection-cost/` — the only page with its sentence, so the click lands on the cost guide                                                                                                                       | owner, 2026-10-12 ("keep it")                                                                                                                                                   | ✅                                                                    |
+| When the card may open                                   | at any hour the calendar allows — weekday evenings, Friday afternoon and Saturday night included, when nobody may answer the phone; its WhatsApp button still works then. Shabbat, chag and the quiet days still silence it                    | owner, fleet decision 2026-10-12 (every site)                                                                                                                                   | ✅                                                                    |
+| Counting the card in GTM                                 | **one shared trigger for the fleet** — `CE - popup events (3locksmiths)` keeps a hostname condition, widened to match every fleet site, this one included; not a trigger per site                                                              | owner, fleet decision 2026-10-12                                                                                                                                                | ✅ decided — the container edit is fleet ops, before the first deploy |
+| The homepage updates strip                               | ships as is, no new item (the owner left "anything to add?" empty). Its newest item is 17/09/2026, so it hides itself from 01/11/2026 until a real newer item is added                                                                         | owner, 2026-10-12                                                                                                                                                               | ✅                                                                    |
+| Export size budget                                       | raised from 6 MB to **7.5 MB** — [performance-guidelines.md](performance-guidelines.md) §1                                                                                                                                                     | owner, 2026-10-12 ("Raise the cap to 7.5 MB")                                                                                                                                   | ✅                                                                    |
+| Header call button wraps at 768–820 px (live today)      | fix approved **as a separate change, later** — not part of the live-kit port; [optimization-backlog.md](optimization-backlog.md) §8.7                                                                                                          | owner, 2026-10-12                                                                                                                                                               | ✅ decided — not fixed yet                                            |
 
 ---
 

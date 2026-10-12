@@ -5,9 +5,10 @@ Enforceable numbers, not aspirations. A change that breaks a budget here does no
 
 **Measure before optimising.** The user-facing baseline is genuinely healthy — static HTML on a
 global edge, one 33 KB raster, four SVGs — so do not manufacture findings to fill a report. But
-"healthy" is not the same as "inside every budget": as of the 2026-09-06 re-baseline the export sits
-at **98.5% of its size budget**, one JS chunk is over, and the tag budget is knowingly breached.
-Those three are real and are stated as such in §1. Everything else here is fine.
+"healthy" is not the same as "inside every budget": as of the 2026-09-06 re-baseline the export sat
+at **98.5% of its size budget** (then 6 MB — the owner raised it to 7.5 MB on 2026-10-12, §1), one
+JS chunk is over, and the tag budget is knowingly breached. Those three are real and are stated as
+such in §1. Everything else here is fine.
 
 ---
 
@@ -33,21 +34,21 @@ estimate. Where a row is over budget it says so — an honest breach is worth mo
 measured against the wrong yardstick, which is how the previous version of this table hid two of
 these.
 
-| Asset class                             | Budget                      | Current (2026-09-06)                                                                                                                |
-| --------------------------------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| Total `out/`                            | ≤ 6,000,000 B               | **5,910,433 B — 98.5% of budget** ⚠️ 220 files                                                                                      |
-| ├ RSC segment payloads (`out/**/*.txt`) | _no budget — set one_       | **2,769,645 B / 158 files = 46.9% of the export**                                                                                   |
-| ├ HTML                                  | —                           | 1,984,248 B / 23 files                                                                                                              |
-| └ `out/_next` (JS, CSS, fonts)          | —                           | 936,350 B                                                                                                                           |
-| Any single JS chunk                     | ≤ 200 KB (204,800 B)        | **226,355 B** (`3j9pm5otqxm82.js`, the React/Next runtime) ⚠️ breached                                                              |
-| JS per route — framework floor          | _irreducible; not a target_ | 688,193 B across 9 chunks · 575,599 B modern-only (one 112,594 B chunk is `noModule`) · **168,200 B brotli on the wire**            |
-| JS per route — **delta**                | **+0 B**                    | ✅ every route loads the identical 9 chunks                                                                                         |
-| LCP image                               | ≤ 150 KB                    | `hero.webp` 33,210 B (828×670) ✅                                                                                                   |
-| Any single image                        | ≤ 250 KB                    | `og.png` 128,363 B (never rendered on-page) ✅                                                                                      |
-| Fonts preloaded per page                | ≤ 80 KB                     | 71,540 B — 4 faces ✅ (135,576 B on disk; the rest is `unicode-range`-gated, §4)                                                    |
-| Client components                       | ≤ 4                         | 4 (`ContactForm`, `Navbar`, `ThankYouContent`, `ConsentBanner` — re-counted 2026-10-12; the live surfaces add none) ✅ at the limit |
-| Runtime dependencies                    | ≤ 6                         | 4 ✅                                                                                                                                |
-| Third-party JS                          | ≤ 50 KB gzipped             | ⚠️ ~90 KB (GTM) — **breached by an accepted decision**, see [data-tracking-infrastructure.md](data-tracking-infrastructure.md) §2   |
+| Asset class                             | Budget                                             | Current (2026-09-06)                                                                                                                |
+| --------------------------------------- | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Total `out/`                            | ≤ 7,500,000 B (owner, 2026-10-12; was 6,000,000 B) | **5,910,433 B — 98.5% of the 6 MB budget of the day** ⚠️ 220 files; re-measured 2026-10-12 below                                    |
+| ├ RSC segment payloads (`out/**/*.txt`) | _no budget — set one_                              | **2,769,645 B / 158 files = 46.9% of the export**                                                                                   |
+| ├ HTML                                  | —                                                  | 1,984,248 B / 23 files                                                                                                              |
+| └ `out/_next` (JS, CSS, fonts)          | —                                                  | 936,350 B                                                                                                                           |
+| Any single JS chunk                     | ≤ 200 KB (204,800 B)                               | **226,355 B** (`3j9pm5otqxm82.js`, the React/Next runtime) ⚠️ breached                                                              |
+| JS per route — framework floor          | _irreducible; not a target_                        | 688,193 B across 9 chunks · 575,599 B modern-only (one 112,594 B chunk is `noModule`) · **168,200 B brotli on the wire**            |
+| JS per route — **delta**                | **+0 B**                                           | ✅ every route loads the identical 9 chunks                                                                                         |
+| LCP image                               | ≤ 150 KB                                           | `hero.webp` 33,210 B (828×670) ✅                                                                                                   |
+| Any single image                        | ≤ 250 KB                                           | `og.png` 128,363 B (never rendered on-page) ✅                                                                                      |
+| Fonts preloaded per page                | ≤ 80 KB                                            | 71,540 B — 4 faces ✅ (135,576 B on disk; the rest is `unicode-range`-gated, §4)                                                    |
+| Client components                       | ≤ 4                                                | 4 (`ContactForm`, `Navbar`, `ThankYouContent`, `ConsentBanner` — re-counted 2026-10-12; the live surfaces add none) ✅ at the limit |
+| Runtime dependencies                    | ≤ 6                                                | 4 ✅                                                                                                                                |
+| Third-party JS                          | ≤ 50 KB gzipped                                    | ⚠️ ~90 KB (GTM) — **breached by an accepted decision**, see [data-tracking-infrastructure.md](data-tracking-infrastructure.md) §2   |
 
 **On the RSC `.txt` payloads — the row that did not exist, which is how it grew unbudgeted.**
 Next 16 emits each route's flight payload for `<Link>` prefetching, and it emits it **twice**:
@@ -68,9 +69,16 @@ fixes of 2026-10-12 and the consent-mark script)**: HTML +389,655 B (≈16.9 KB 
 head and consent-mark scripts, the bar carrying every line, and the card, each printed inline and
 again in the page's own flight data), RSC payloads +500,274 B (≈7.9 KB in each of `index.txt`,
 `__next._full.txt` and `__next._index.txt`, per route; 9.0 KB on the homepage, which adds the
-strip), CSS +5,138 B and `assets/live.js` 17,052 B. A page's first load grows by ≈5 KB gzipped. Every line ships on every page by the kit's design (a static export
-has no clock), so the adapter cannot trim it. Under this file's own rule the live surfaces do not
-ship until the owner raises this budget deliberately.
+strip), CSS +5,138 B and `assets/live.js` 17,052 B. A page's first load grows by ≈5 KB gzipped.
+Every line ships on every page by the kit's design (a static export has no clock), so the adapter
+cannot trim it. Under this file's own rule the live surfaces could not ship until the owner raised
+this budget deliberately.
+
+**Raised 2026-10-12 — the export budget is now 7,500,000 B.** The owner chose "Raise the cap to
+7.5 MB" over "Keep 6 MB — skip the bar on thermoleak" on the fleet wording sign-off page. The
+clean production build that ships the live surfaces (2026-10-12, approved registers) measures
+**6,926,868 B / 221 files** — 92.4% of the new budget, leaving 573,132 B — so the next silo is the
+next budget decision, exactly as the 6 MB note above said of the last one.
 
 **On the JS rows.** The old "≤ 120 KB per route, well under ✅" was never measured and is 4.7×
 wrong against its own stated unit. The framework floor is what Next 16.2.9 + React 19.2.4 cost on
@@ -235,8 +243,8 @@ The auditor reads the artifact; it does not measure a browser. For real numbers:
 The commands that reproduce every number in §1 — run them, do not re-estimate:
 
 ```bash
-# total export size, and the budget as an assertion (exit 1 = breached)
-find out -type f -printf '%s\n' | awk '{s+=$1;n++} END {print s" bytes / "n" files"; exit (s>6000000)}'
+# total export size, and the budget as an assertion (exit 1 = breached; 7.5 MB since 2026-10-12)
+find out -type f -printf '%s\n' | awk '{s+=$1;n++} END {print s" bytes / "n" files"; exit (s>7500000)}'
 # the asset class that is half the export
 find out -name '*.txt'    -printf '%s\n' | awk '{s+=$1;n++} END {print "txt   "s" / "n}'
 find out -name '*.html'   -printf '%s\n' | awk '{s+=$1;n++} END {print "html  "s" / "n}'

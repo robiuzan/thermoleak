@@ -8,20 +8,20 @@ finding id.
 **Measured baseline: 2026-09-06**, against a clean build (`npm run lint && npm run build` both
 green) with a freshly rebuilt `out/`. Every number below was measured, not estimated.
 
-| Measure                     | Value                                    |
-| --------------------------- | ---------------------------------------- |
-| Routes in the build table   | 26                                       |
-| `index.html` files emitted  | 22                                       |
-| URLs in `sitemap.xml`       | 19                                       |
-| Export size                 | 5,910,433 B (5.64 MiB)                   |
-| — RSC payloads (`**/*.txt`) | 2,769,645 B — **46.9%**                  |
-| — HTML                      | 1,984,248 B — 33.6%                      |
-| — JS                        | 722,262 B — 12.2%                        |
-| — all of `_next`            | 936,350 B — 15.8% (JS + CSS + fonts)     |
+| Measure                     | Value                                                   |
+| --------------------------- | ------------------------------------------------------- |
+| Routes in the build table   | 26                                                      |
+| `index.html` files emitted  | 22                                                      |
+| URLs in `sitemap.xml`       | 19                                                      |
+| Export size                 | 5,910,433 B (5.64 MiB)                                  |
+| — RSC payloads (`**/*.txt`) | 2,769,645 B — **46.9%**                                 |
+| — HTML                      | 1,984,248 B — 33.6%                                     |
+| — JS                        | 722,262 B — 12.2%                                       |
+| — all of `_next`            | 936,350 B — 15.8% (JS + CSS + fonts)                    |
 | Client components           | 4 (ContactForm, Navbar, ThankYouContent, ConsentBanner) |
-| Banned RTL utilities        | 0                                        |
-| `data-cta` attributes       | 13                                       |
-| Custom `dataLayer` pushes   | **0**                                    |
+| Banned RTL utilities        | 0                                                       |
+| `data-cta` attributes       | 13                                                      |
+| Custom `dataLayer` pushes   | **0**                                                   |
 
 > **On the RSC payload class.** Next 16 emits each route's flight payload **twice** — `index.txt`
 > and `__next._full.txt`, byte-identical — 158 files, ~1.38 MB of pure duplication. It is
@@ -77,24 +77,24 @@ rather than hidden inside a sprint's "done when".
 > includes/excludes**, and **report turnaround as a number**. Both were asked and came back as "use
 > your judgement", which is not an answer a site may publish. See business-facts §C.
 
-| #   | Ask                                                  | Status                                                                 | Unlocks                                                        | Backlog |
-| --- | ---------------------------------------------------- | ---------------------------------------------------------------------- | -------------------------------------------------------------- | ------- |
-| 1   | **Google Business Profile URL**                      | 🔶 **open** — none exists yet; owner will open one                      | first non-empty `sameAs`; map pack; the only legitimate route to a rating | §5.3 |
-| 2   | **Real reviews with source URLs**                    | 🔶 **open** — ask at the job; ~10 over 60 days                          | retires the `/reviews/` 301; `Review` + honest `AggregateRating` | §7.1 |
-| 3   | **Thermography certificate**                         | ❌ **closed — none held.** The "Level 1" badge was removed              | nothing. Do not re-ask; do not reintroduce a certification claim | §7.3   |
-| 4   | **Starting price**                                   | ✅ **₪350** (was an unverified ₪350)                                    | `Offer`/`PriceSpecification` once inclusions are known too    | §7.7    |
-| 5   | **Thermal camera model**                             | ✅ **FLIR E8**                                                          | model-level specificity; shipped in `site.credentials`          | §7.3    |
-| 6   | **Report turnaround as a number**                    | 🔶 **open** — answered "use the standard", which is not a fact about this business | a concrete answer block on `/services/insurance-reports/` | §7.7 |
-| 7   | **Travel reach**                                     | ✅ **~2 hours' drive from Tel Aviv** — lifts the batch-4 distance gate   | location batches 4–5 on distance                                 | §5.4    |
-| 8   | **Is "שירות ארצי בתיאום מראש" true?**                | ✅ **yes**                                                              | the clause it renders in 6 places is now backed                  | §5.4    |
-| 9   | **ח.פ. number**                                      | ❌ **closed — not a registered company.** `בע״מ` removed from `legalName` | nothing. Do not re-ask                                      | §7.3    |
-| 10  | **Third-party insurance (ביטוח צד ג׳)**              | ✅ **held** — insurer and amount not supplied, so no figure ships        | the signal ועדי בתים and property managers ask for                | §7.3    |
-| 11  | **Accessibility coordinator name**                   | ❌ **closed — none appointed.** `/accessibility/` no longer asserts one | nothing. Do not re-ask                                          | §11.2   |
-| 12  | **Owner photo + permission**                         | 🔶 **open**                                                             | author bio block; strongest single trust element on `/about/`   | §7.5    |
-| 13  | **One real job reference per city**                  | 🔶 **open** — operational                                               | the only doorway-test item research cannot supply                | §3.4    |
-| 14  | **Before/after thermal pairs with consent**          | 🔶 **open** — operational                                               | the E-E-A-T unfair advantage                                     | §7.1    |
-| 15  | **What the ₪350 visit includes / excludes**          | 🔶 **open** — answered "use your judgement"; a draft awaits approval    | the #1 pre-purchase question; `Offer` schema; AEO answer block  | §7.7    |
-| 16  | **Accepted payment methods**                         | 🔶 **open** — only "issues a חשבונית מס" is confirmed                   | removes a conversion objection for ועדי בתים                      | §7.7    |
+| #   | Ask                                         | Status                                                                             | Unlocks                                                                   | Backlog |
+| --- | ------------------------------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | ------- |
+| 1   | **Google Business Profile URL**             | 🔶 **open** — none exists yet; owner will open one                                 | first non-empty `sameAs`; map pack; the only legitimate route to a rating | §5.3    |
+| 2   | **Real reviews with source URLs**           | 🔶 **open** — ask at the job; ~10 over 60 days                                     | retires the `/reviews/` 301; `Review` + honest `AggregateRating`          | §7.1    |
+| 3   | **Thermography certificate**                | ❌ **closed — none held.** The "Level 1" badge was removed                         | nothing. Do not re-ask; do not reintroduce a certification claim          | §7.3    |
+| 4   | **Starting price**                          | ✅ **₪350** (was an unverified ₪350)                                               | `Offer`/`PriceSpecification` once inclusions are known too                | §7.7    |
+| 5   | **Thermal camera model**                    | ✅ **FLIR E8**                                                                     | model-level specificity; shipped in `site.credentials`                    | §7.3    |
+| 6   | **Report turnaround as a number**           | 🔶 **open** — answered "use the standard", which is not a fact about this business | a concrete answer block on `/services/insurance-reports/`                 | §7.7    |
+| 7   | **Travel reach**                            | ✅ **~2 hours' drive from Tel Aviv** — lifts the batch-4 distance gate             | location batches 4–5 on distance                                          | §5.4    |
+| 8   | **Is "שירות ארצי בתיאום מראש" true?**       | ✅ **yes**                                                                         | the clause it renders in 6 places is now backed                           | §5.4    |
+| 9   | **ח.פ. number**                             | ❌ **closed — not a registered company.** `בע״מ` removed from `legalName`          | nothing. Do not re-ask                                                    | §7.3    |
+| 10  | **Third-party insurance (ביטוח צד ג׳)**     | ✅ **held** — insurer and amount not supplied, so no figure ships                  | the signal ועדי בתים and property managers ask for                        | §7.3    |
+| 11  | **Accessibility coordinator name**          | ❌ **closed — none appointed.** `/accessibility/` no longer asserts one            | nothing. Do not re-ask                                                    | §11.2   |
+| 12  | **Owner photo + permission**                | 🔶 **open**                                                                        | author bio block; strongest single trust element on `/about/`             | §7.5    |
+| 13  | **One real job reference per city**         | 🔶 **open** — operational                                                          | the only doorway-test item research cannot supply                         | §3.4    |
+| 14  | **Before/after thermal pairs with consent** | 🔶 **open** — operational                                                          | the E-E-A-T unfair advantage                                              | §7.1    |
+| 15  | **What the ₪350 visit includes / excludes** | 🔶 **open** — answered "use your judgement"; a draft awaits approval               | the #1 pre-purchase question; `Offer` schema; AEO answer block            | §7.7    |
+| 16  | **Accepted payment methods**                | 🔶 **open** — only "issues a חשבונית מס" is confirmed                              | removes a conversion objection for ועדי בתים                              | §7.7    |
 
 **Two asks are fleet decisions, not facts:**
 
@@ -407,22 +407,23 @@ why the `/locations/` hub went unmeasured.
 
 ### Phase B — extend, in this order
 
-| Batch           | City                      | km      | Claims | Why here                                                                                                                                                                                     |
-| --------------- | ------------------------- | ------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 2               | **רמת גן**                | 6       | 13     | Most claims of any deferred city; contiguous with the built cluster so `nearby` stays honest; תמ״א 38 / התחדשות עירונית generates two genuinely distinct call types                          |
-| 2               | **גבעתיים**               | 5       | 11     | Nearest deferred city; the four-hills topography (גבעת קוזלובסקי at ~87 m) is a physically distinct leak story no other page can borrow                                                      |
-| 3               | **פתח תקווה**             | 12      | 9      | 9–23-storey new-build stock from 2003 on is the **inverse** of the three shipped pages, which all lean on old stock — easy substitution-test pass, and it widens the cluster's topical range |
+| Batch           | City                      | km      | Claims | Why here                                                                                                                                                                                      |
+| --------------- | ------------------------- | ------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2               | **רמת גן**                | 6       | 13     | Most claims of any deferred city; contiguous with the built cluster so `nearby` stays honest; תמ״א 38 / התחדשות עירונית generates two genuinely distinct call types                           |
+| 2               | **גבעתיים**               | 5       | 11     | Nearest deferred city; the four-hills topography (גבעת קוזלובסקי at ~87 m) is a physically distinct leak story no other page can borrow                                                       |
+| 3               | **פתח תקווה**             | 12      | 9      | 9–23-storey new-build stock from 2003 on is the **inverse** of the three shipped pages, which all lean on old stock — easy substitution-test pass, and it widens the cluster's topical range  |
 | 4               | **כפר סבא**               | 23      | 11     | Water supplied by an agricultural cooperative, not a municipal corporation — a genuinely unique infrastructure angle. **Distance gate LIFTED 2026-09-17** (reach confirmed ~2h from Tel Aviv) |
 | 4               | **ראש העין**              | 25      | 11     | 1949–51 permanent housing stock. Same distance gate, also lifted — still must clear the doorway test on its own content                                                                       |
-| 5 — at most one | **רעננה** _or_ **הרצליה** | 20 / 14 | 9 / 6  | Both rest on the same בנייני רכבת typology — shipping both is exactly what the substitution test punishes. Prefer רעננה on claim count                                                       |
-| Hold            | **ראשון לציון**           | 20      | 4      | 4 claims is no margin, and its urban-renewal angle duplicates בת ים's frame                                                                                                                  |
-| Hold            | **מודיעין**               | 40      | 10     | Good claims, but at 40 km it has **no contiguous partner** — its `nearby` block renders empty — and it is outside any plausible same-day radius                                              |
+| 5 — at most one | **רעננה** _or_ **הרצליה** | 20 / 14 | 9 / 6  | Both rest on the same בנייני רכבת typology — shipping both is exactly what the substitution test punishes. Prefer רעננה on claim count                                                        |
+| Hold            | **ראשון לציון**           | 20      | 4      | 4 claims is no margin, and its urban-renewal angle duplicates בת ים's frame                                                                                                                   |
+| Hold            | **מודיעין**               | 40      | 10     | Good claims, but at 40 km it has **no contiguous partner** — its `nearby` block renders empty — and it is outside any plausible same-day radius                                               |
 
 **Every city must clear the doorway gate in [content-standards.md](content-standards.md) §2 before
 it ships.** The gate is re-run per city, not inherited from batch 1.
 
 > **Budget note:** at roughly 305 KB of export per location page, the nine remaining cities would
-> add ~2.7 MB and breach a 6 MB export ceiling. Add the export-size assertion to the `/new-city`
+> add ~2.7 MB and breach the export ceiling (6 MB when this was written; 7.5 MB since the owner
+> raised it on 2026-10-12 — still breached). Add the export-size assertion to the `/new-city`
 > gate now, not after it breaks.
 
 ### Done when
@@ -530,12 +531,12 @@ for `.claude/` and then tracked only the code.
 
 ### Per-commit (automatic)
 
-| What                                                                                                        | Mechanism                                                                                   |
-| ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| Route counts, sitemap parity, orphans, fabrication greps, `og:image`/`og:url`, `text-ink/<70`, export ≤6 MB | `/qa-build-gate` — **derived assertions, not `# expect N` comments**                        |
-| Sitemap ↔ emitted tree ↔ `llms.txt` parity                                                                  | `npm run check:sitemap`                                                                     |
-| Sitemap `lastModified` vs `git log -1` on each backing file                                                 | gate line                                                                                   |
-| Prettier on changed files                                                                                   | `.claude/hooks/format-changed.ps1` — a deliberate no-op until `prettier` is a devDependency |
+| What                                                                                                          | Mechanism                                                                                   |
+| ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Route counts, sitemap parity, orphans, fabrication greps, `og:image`/`og:url`, `text-ink/<70`, export ≤7.5 MB | `/qa-build-gate` — **derived assertions, not `# expect N` comments**                        |
+| Sitemap ↔ emitted tree ↔ `llms.txt` parity                                                                    | `npm run check:sitemap`                                                                     |
+| Sitemap `lastModified` vs `git log -1` on each backing file                                                   | gate line                                                                                   |
+| Prettier on changed files                                                                                     | `.claude/hooks/format-changed.ps1` — a deliberate no-op until `prettier` is a devDependency |
 
 ### Per-sprint (blocking)
 

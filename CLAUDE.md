@@ -401,7 +401,8 @@ Israeli calendar — memorial days and fasts silence it, Shabbat and chag silenc
 and by the fleet status switch (`https://imgquarry.com/status/fleet.json`: quiet / reduced / off).
 One seasonal card: a native `<dialog>` — 2nd page of a visit (after 4 s) or 20 s plus a scroll on
 the first, never from a search engine, once per 14 days, never on calm or no-card pages, never while
-a form field has focus, the mobile menu is open or the consent question is unanswered. The homepage
+a form field has focus, the mobile menu is open or the consent question is unanswered — and at any
+hour the calendar allows, evenings included (owner, fleet decision 2026-10-12). The homepage
 shows an updates strip after the method explainer; it hides itself 45 days after the newest item.
 
 - **Edit here:** `content/live/_campaigns.mjs` (the lines, their windows, the card) and
@@ -435,7 +436,8 @@ shows an updates strip after the method explainer; it hides itself 45 days after
   held back); `ConsentBanner` lifts it when the visitor answers (the kit README, step 5).
 - **Gates:** `prebuild` = check-live-copy → check-live-register → check-live-schedule;
   `postbuild` = check-live-out (the built pages must carry exactly what the registers say). CI
-  (`deploy.yml`) runs `npm run build`, so it is red until the registers are approved. The orphan
+  (`deploy.yml`) runs `npm run build`, so it goes red whenever a register lacks the owner's
+  `approved` stamp (both carry it since 2026-10-12). The orphan
   recipes in the `qa-build-gate` and `internal-linking` skills strip the bar and the cards as chrome.
   `.github/workflows/remind.yml` reads production weekly and pushes to the owner's phone (ntfy)
   only when THIS site needs something (the switch unreadable from its origin, deploy drift, the
@@ -448,12 +450,15 @@ shows an updates strip after the method explainer; it hides itself 45 days after
   pre-rendered, in the top layer, no shift, no urgency wording (the claim gate enforces it). The owner's
   2026-10-11 decision is recorded there and in
   [mobile-ux-and-personalization.md](docs/mobile-ux-and-personalization.md).
-- **Before the first deploy (owner):** approve the wording (business-facts §G); re-sync the kit from
-  a committed 3locksmiths (`live-kit.lock.json` says `+dirty` today — it must name a commit); add the
-  three origins (apex, www, `.pages.dev`) to the status switch's CORS list — without it the switch
-  is unreadable here, every seasonal line and the card stay off, and a phone visitor sees a seasonal
-  bar open and then close; widen the GTM trigger `CE - popup events (3locksmiths)` to this hostname;
-  set `NTFY_TOPIC`; and raise the export budget deliberately — the live surfaces take `out/` from
-  6.01 MB (already over the 6 MB budget) to 6.93 MB, measured in
-  [performance-guidelines.md](docs/performance-guidelines.md) §1, and a change that breaks a budget
-  there does not ship. Order and commands: the kit README, "Before a site's first deploy".
+- **Before the first deploy — answered by the owner 2026-10-12** (fleet wording sign-off page;
+  business-facts §G): the wording is **approved** (fingerprint `86e30fc91128`, stamped in both
+  registers), the wartime line is **confirmed** for this business, and the export budget is
+  **raised from 6 MB to 7.5 MB** ([performance-guidelines.md](docs/performance-guidelines.md) §1 —
+  the live surfaces take `out/` to ≈6.93 MB). The kit is synced from a committed 3locksmiths
+  (`live-kit.lock.json` names `cf3a5460aa8b`, no `+dirty`). **Still to do, outside this repo
+  (fleet ops):** add the three origins (apex, www, `.pages.dev`) to the status switch's CORS list —
+  without it the switch is unreadable here, every seasonal line and the card stay off, and a phone
+  visitor sees a seasonal bar open and then close; widen the GTM trigger
+  `CE - popup events (3locksmiths)` so its hostname condition matches this site — **one shared
+  trigger for the whole fleet** (owner decision 2026-10-12), not a trigger per site; and set
+  `NTFY_TOPIC`. Order and commands: the kit README, "Before a site's first deploy".

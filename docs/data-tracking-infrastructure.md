@@ -96,9 +96,13 @@ prefilled text), so the PII rule below holds.
 The seasonal card also pushes the site's only custom events, from the static `public/assets/live.js`
 (a fleet file, not a component): `surface_view` (`surface: "dialog"`, `variant`: the line's id) when
 it opens and `surface_dismiss` (+ `method`: `button` | `backdrop` | `esc` | `expired` | `action` |
-`nav`) when it closes. Ids only — never personal data. **Owner step before the first deploy:** the
-container's trigger `CE - popup events (3locksmiths)` is hostname-scoped to 3locksmiths.co.il; it
-must include `thermoleak.co.il`, or these two events reach the dataLayer and go nowhere. The card
+`nav`) when it closes. Ids only — never personal data. **Fleet-ops step before the first deploy:**
+the container's trigger `CE - popup events (3locksmiths)` is hostname-scoped to 3locksmiths.co.il;
+it must include `thermoleak.co.il`, or these two events reach the dataLayer and go nowhere. **Owner
+decision 2026-10-12 (fleet wording sign-off page): one shared trigger for the whole fleet** — that
+trigger keeps a hostname condition, widened to match every fleet site, rather than a trigger per
+site; the blast-radius rule (optimization-backlog §13.1) still holds, because the edit stays
+hostname-scoped. The card
 never opens before the consent question is answered (`data-live-block` — set on `<html>` before
 first paint by `app/layout.tsx` when no answer is stored, lifted by `ConsentBanner` on a choice); for
 a visitor who declined, the events go out cookieless under Consent Mode, so the counts under-read.

@@ -503,6 +503,11 @@ statement. Fix: move the spacer onto the `<footer>` (or its bottom-bar container
 While there, give the sticky bar `pb-[env(safe-area-inset-bottom)]`; it has none today, so on a
 notched iPhone the home-indicator strip eats into the two primary CTAs as well.
 
+**8.7 🟡 (opened 2026-10-12) Between 768 and 820 px the header's call button wraps onto two
+lines — live in production.** Found during the fleet live-kit review. The owner approved the fix on
+2026-10-12 (fleet wording sign-off page) **as a separate change, after the live surfaces ship** — it
+is deliberately not part of the live-kit port (business-facts §G).
+
 **✅ Verified good (re-verified 2026-09-06):** click-to-call above the fold on every page; a sticky
 call/CTA sidebar on service pages; per-field validation with `aria-invalid` + `aria-describedby`;
 focus moved to the first invalid field on submit (`ContactForm`, with a comment saying why); an
@@ -549,7 +554,9 @@ these edges and they were never added.
 **10.1 🟡 Re-baselined 2026-09-06 — the export is at 98.5% of its budget.** `out/` measures
 **5,910,433 bytes across 220 files**, not the "3.9 MB" this line claimed for three sprints, against
 the 6 MB budget in [performance-guidelines.md](performance-guidelines.md). The delta is almost
-exactly the two new silos: `out/guides` and `out/locations` are about 1.87 MB together.
+exactly the two new silos: `out/guides` and `out/locations` are about 1.87 MB together. _(2026-10-12:
+the owner raised that budget to 7.5 MB — the live surfaces take a build to ≈6.93 MB; see
+performance-guidelines.md §1.)_
 
 Composition matters here, because 47% of the export is a class neither budget table has a row for.
 **RSC segment payloads — the `.txt` files — are 2,769,645 B across 158 files, 46.9% of the whole
