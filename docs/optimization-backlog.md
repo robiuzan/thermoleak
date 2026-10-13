@@ -520,20 +520,28 @@ header's geometry matches production at every width, and its screenshots are byt
 320, 360, 390, 1024, 1280 and 1920 px and in the open mobile menu. The logo half of the cause is
 still open — §8.8.
 
-**8.8 🟠 (opened 2026-10-12) The logo is painted squashed on every page — `w-auto` never reaches
-the CSS.** `components/Logo.tsx` builds its class as `` `h-9 w-auto${onDark ? …}` ``, and
-Tailwind's extractor reads `h-9`, `brightness-0` and `invert` from that line but not `w-auto`
-(checked with `@tailwindcss/oxide`'s own `Scanner`; with a space after `w-auto` it is found). The
-built CSS has no `.w-auto` rule, so the image's `width="280"` attribute wins, `h-9` still sets the
+**8.8 🟠 (opened 2026-10-12) The logo is painted squashed on every page — its auto-width class never
+reaches the CSS.** `components/Logo.tsx` builds its class as `` `h-9 w-auto${onDark ? …}` `` (quoted
+exactly: glued to the interpolation, the class cannot be read here either), and Tailwind's extractor
+reads `h-9`, `brightness-0` and `invert` from that line but not the auto-width class (checked with
+`@tailwindcss/oxide`'s own `Scanner`; with a space before the interpolation it is found). The built
+CSS has no auto-width rule, so the image's `width="280"` attribute wins, `h-9` still sets the
 height, and the 280×70 (4:1) logo is painted into a 280×36 box with `object-fit: fill` — about half
 its proper height, in the header and in the footer (measured 2026-10-12: header 280×36 at 390 and
 1280 px, footer 242×36 at 1280 px). Where the header row is short of room the box narrows further
 (the image is `max-width: 100%`), so the logo's shape also changes with the window width. The same
-inflated 280 px link was 136 px of the 203 px shortfall behind §8.7. Fix: give `w-auto` a boundary
-the extractor can read — e.g. `"h-9 w-auto" + (onDark ? " brightness-0 invert" : "")` — and the
-logo paints at 144×36. **Deliberately not shipped with §8.7:** it changes the desktop header (the
-logo narrows by 136 px and the nav moves with it), which the §8.7 approval excluded, so it needs
-the owner's own sign-off on a before/after screenshot.
+inflated 280 px link was 136 px of the 203 px shortfall behind §8.7. Fix: give the auto-width class
+a boundary the extractor can read — a space before the interpolation, or a plain string joined with
+`+` — and the logo paints at 144×36. **Deliberately not shipped with §8.7:** it changes the desktop
+header (the logo narrows by 136 px and the nav moves with it), which the §8.7 approval excluded, so
+it needs the owner's own sign-off on a before/after screenshot.
+
+⚠️ **Until this ships, never write that class name readably anywhere in the repo — this file,
+`.claude/`, a code comment.** Tailwind v4 reads class names from every file git does not ignore,
+Markdown included, so one readable mention emits the rule and silently applies this fix to every
+page. The first draft of this entry did exactly that (caught in review, 2026-10-12): it named the
+class seven times, six of them in a form the extractor reads, and a build of that commit painted
+the logo at 144×36 in the header at every width from 320 to 1920 px, and in the footer.
 
 **✅ Verified good (re-verified 2026-09-06):** click-to-call above the fold on every page; a sticky
 call/CTA sidebar on service pages; per-field validation with `aria-invalid` + `aria-describedby`;
