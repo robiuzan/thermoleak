@@ -24,6 +24,7 @@ required:
 // lib/services.ts
 export interface Service {
   slug: string; // ASCII, kebab-case — matches the /services/{slug}/ route
+  lastModified: string; // ISO date of the last MEANINGFUL visible change — the sitemap's <lastmod>
   icon: LucideIcon; // imported from lucide-react at the top of the file
   image: string; // path in /public — all four shipped services use an SVG illustration
   title: string; // short, for nav/cards/footer/form select
@@ -78,8 +79,9 @@ are derived from the array, so nothing else needs registering.
 Adding an entry gives you, with no other edits: the `/services/{slug}/` route via
 `generateStaticParams` · the card on `/` (`ServicePillars`) and on `/services/` · the row on
 `/pricing/`, which renders `priceModel` · the footer services column · the `<select>` in `ContactForm`
-· the related-services strip on every other service page · the sitemap entry via `serviceSlugs` ·
-`Service` + `FAQPage` + `BreadcrumbList` JSON-LD.
+· the related-services strip on every other service page · the sitemap entry via `services`, dated
+from its own `lastModified` (set it to the first deploy day; when **deepening** a service, bump it in
+the same commit — since 2026-10-19, backlog §1.3) · `Service` + `FAQPage` + `BreadcrumbList` JSON-LD.
 
 That is a well-built data layer. Use it rather than adding a bespoke page.
 

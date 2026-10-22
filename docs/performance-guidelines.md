@@ -34,21 +34,22 @@ estimate. Where a row is over budget it says so — an honest breach is worth mo
 measured against the wrong yardstick, which is how the previous version of this table hid two of
 these.
 
-| Asset class                             | Budget                                             | Current (2026-09-06)                                                                                                                |
-| --------------------------------------- | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| Total `out/`                            | ≤ 7,500,000 B (owner, 2026-10-12; was 6,000,000 B) | **5,910,433 B — 98.5% of the 6 MB budget of the day** ⚠️ 220 files; re-measured 2026-10-12 below                                    |
-| ├ RSC segment payloads (`out/**/*.txt`) | _no budget — set one_                              | **2,769,645 B / 158 files = 46.9% of the export**                                                                                   |
-| ├ HTML                                  | —                                                  | 1,984,248 B / 23 files                                                                                                              |
-| └ `out/_next` (JS, CSS, fonts)          | —                                                  | 936,350 B                                                                                                                           |
-| Any single JS chunk                     | ≤ 200 KB (204,800 B)                               | **226,355 B** (`3j9pm5otqxm82.js`, the React/Next runtime) ⚠️ breached                                                              |
-| JS per route — framework floor          | _irreducible; not a target_                        | 688,193 B across 9 chunks · 575,599 B modern-only (one 112,594 B chunk is `noModule`) · **168,200 B brotli on the wire**            |
-| JS per route — **delta**                | **+0 B**                                           | ✅ every route loads the identical 9 chunks                                                                                         |
-| LCP image                               | ≤ 150 KB                                           | `hero.webp` 33,210 B (828×670) ✅                                                                                                   |
-| Any single image                        | ≤ 250 KB                                           | `og.png` 128,363 B (never rendered on-page) ✅                                                                                      |
-| Fonts preloaded per page                | ≤ 80 KB                                            | 71,540 B — 4 faces ✅ (135,576 B on disk; the rest is `unicode-range`-gated, §4)                                                    |
-| Client components                       | ≤ 4                                                | 4 (`ContactForm`, `Navbar`, `ThankYouContent`, `ConsentBanner` — re-counted 2026-10-12; the live surfaces add none) ✅ at the limit |
-| Runtime dependencies                    | ≤ 6                                                | 4 ✅                                                                                                                                |
-| Third-party JS                          | ≤ 50 KB gzipped                                    | ⚠️ ~90 KB (GTM) — **breached by an accepted decision**, see [data-tracking-infrastructure.md](data-tracking-infrastructure.md) §2   |
+| Asset class                             | Budget                                                  | Current (2026-09-06)                                                                                                                |
+| --------------------------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Total `out/`                            | ≤ 7,500,000 B (owner, 2026-10-12; was 6,000,000 B)      | **5,910,433 B — 98.5% of the 6 MB budget of the day** ⚠️ 220 files; re-measured 2026-10-12 below                                    |
+| ├ RSC segment payloads (`out/**/*.txt`) | _no budget — set one_                                   | **2,769,645 B / 158 files = 46.9% of the export**                                                                                   |
+| ├ HTML                                  | —                                                       | 1,984,248 B / 23 files                                                                                                              |
+| └ `out/_next` (JS, CSS, fonts)          | —                                                       | 936,350 B                                                                                                                           |
+| Carried earlier-build chunks            | **outside Total `out/`** (2026-10-19, owner to confirm) | ≈100 KB per deploy that changes JS (2026-10-12 → 10-13: 5 files, 100,343 B); held ≤ 60 days — see the note below                    |
+| Any single JS chunk                     | ≤ 200 KB (204,800 B)                                    | **226,355 B** (`3j9pm5otqxm82.js`, the React/Next runtime) ⚠️ breached                                                              |
+| JS per route — framework floor          | _irreducible; not a target_                             | 688,193 B across 9 chunks · 575,599 B modern-only (one 112,594 B chunk is `noModule`) · **168,200 B brotli on the wire**            |
+| JS per route — **delta**                | **+0 B**                                                | ✅ every route loads the identical 9 chunks                                                                                         |
+| LCP image                               | ≤ 150 KB                                                | `hero.webp` 33,210 B (828×670) ✅                                                                                                   |
+| Any single image                        | ≤ 250 KB                                                | `og.png` 128,363 B (never rendered on-page) ✅                                                                                      |
+| Fonts preloaded per page                | ≤ 80 KB                                                 | 71,540 B — 4 faces ✅ (135,576 B on disk; the rest is `unicode-range`-gated, §4)                                                    |
+| Client components                       | ≤ 4                                                     | 4 (`ContactForm`, `Navbar`, `ThankYouContent`, `ConsentBanner` — re-counted 2026-10-12; the live surfaces add none) ✅ at the limit |
+| Runtime dependencies                    | ≤ 6                                                     | 4 ✅                                                                                                                                |
+| Third-party JS                          | ≤ 50 KB gzipped                                         | ⚠️ ~90 KB (GTM) — **breached by an accepted decision**, see [data-tracking-infrastructure.md](data-tracking-infrastructure.md) §2   |
 
 **On the RSC `.txt` payloads — the row that did not exist, which is how it grew unbudgeted.**
 Next 16 emits each route's flight payload for `<Link>` prefetching, and it emits it **twice**:
@@ -79,6 +80,16 @@ this budget deliberately.
 clean production build that ships the live surfaces (2026-10-12, approved registers) measures
 **6,926,868 B / 221 files** — 92.4% of the new budget, leaving 573,132 B — so the next silo is the
 next budget decision, exactly as the 6 MB note above said of the last one.
+
+**Carried chunks are measured on their own row (2026-10-19 — the owner may overrule).** Since
+2026-10-19 `scripts/keep-previous-assets.mjs` (postbuild, CLAUDE.md §10) copies earlier builds'
+`/_next/static` files into every export for 60 days, so that HTML Google crawled before a deploy can
+still render after it. No current page references a carried file: no visitor downloads it, and it
+touches no first-load or per-navigation number here — it is deploy weight only. Counted inside Total
+`out/` it would eat the 573,132 B headroom in about five JS-changing deploys and block the next silo
+for a file nobody fetches, so it is counted separately. The script prints the carried bytes on every
+build; **Total `out/` = `du -sb out` minus that figure.** If the owner would rather count them, the
+alternative is a shorter keep window, not dropping the script.
 
 **On the JS rows.** The old "≤ 120 KB per route, well under ✅" was never measured and is 4.7×
 wrong against its own stated unit. The framework floor is what Next 16.2.9 + React 19.2.4 cost on

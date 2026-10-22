@@ -165,6 +165,15 @@ honest exception: `app/sitemap.ts` reads `article.dateModified` straight from `l
 that derivation is the pattern to generalise. A stale hand-maintained date is a smaller lie than a
 build-time stamp, but it is still a lie.
 
+**1.3 ✅ (2026-10-19) Generalised and re-baselined.** By then 17 of 19 dates were wrong (11 missed
+the 2026-09-17 fact changes, 6 pre-dated their 2026-08-30 publication — checked against git and the
+fleet deploy log). Services and cities now carry their own `lastModified` in `lib/services.ts` and
+`lib/locations.ts`, read by `app/sitemap.ts` the way guides read `dateModified` — a required field,
+so a new service or city cannot build without one. `leak-detection-cost` moved to `dateModified`
+2026-09-17 (its answer's price changed), and the eight `staticRoutes` dates were reset. What stays
+manual: bump a date in the same commit as a meaningful content change — markup, OG tags and the
+live-kit strip do not count.
+
 **1.4 🔵 `app/robots.ts` still emits a `host` directive** — `host: site.domain`, unchanged through
 four sprints. Yandex deprecated `Host` in 2018, so no crawler reads it either way: this is register
 hygiene, not SEO. Close it by actually taking one of the two branches — delete the line, or keep it
@@ -581,6 +590,12 @@ services. So the three city pages, the newest and most expensively gated silo on
 no descriptive-anchor link from the pages that are topically closest to them. This is a mesh-depth
 gap, not an orphan; the `internal-linking` skill's own pre-ship requirement for the silo asked for
 these edges and they were never added.
+
+**9.6 🟡 Footer half shipped 2026-10-19.** `components/Footer.tsx` now lists every city
+(`איתור נזילות {prefixed}` → `/locations/{slug}/`), so each is one hop from every page. It went in as
+part of the indexing diagnosis: URL Inspection that day had Google calling `/locations/` and all
+three cities "URL is unknown to Google" — their only inbound links sat on a hub Google had never
+fetched. Still open: the service pages' `related.links` point at no city.
 
 ---
 

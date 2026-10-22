@@ -276,7 +276,7 @@ export const articles: Article[] = [
     description:
       "פירוט שקוף של עלות איתור נזילות: ממה מורכב המחיר, מה מייקר ומה לא, מתי נדרש דו״ח לביטוח, ולמה מחיר שנמסר רק בסוף הביקור הוא סימן אזהרה.",
     datePublished: "2026-08-24",
-    dateModified: "2026-08-24",
+    dateModified: "2026-09-17", // the answer's price went ₪450 → ₪350 (4beb407)
     author: "רונן דהן",
     blocks: [
       {
@@ -296,7 +296,11 @@ export const articles: Article[] = [
           ["גודל הנכס", "משמעותית", "שטח גדול יותר = זמן סריקה ארוך יותר"],
           ["מספר מוקדים חשודים", "משמעותית", "כל מוקד נסרק ומאומת בנפרד"],
           ["דו״ח מפורט לביטוח", "בינונית", "עבודת עריכה ותיעוד מעבר לבדיקה"],
-          ["גישה לאזור הבדיקה", "נמוכה עד בינונית", "אזורים חסומים מאריכים את העבודה"],
+          [
+            "גישה לאזור הבדיקה",
+            "נמוכה עד בינונית",
+            "אזורים חסומים מאריכים את העבודה",
+          ],
           ["דחיפות / מחוץ לשעות", "משתנה", "נזילה פעילה שדורשת הגעה מיידית"],
         ],
       },
@@ -406,7 +410,9 @@ export function articleFaqs(article: Article): { q: string; a: string }[] {
   const answer = article.blocks.find((b) => b.kind === "answer");
   const faq = article.blocks.find((b) => b.kind === "faq");
   return [
-    ...(answer && answer.kind === "answer" ? [{ q: answer.q, a: answer.a }] : []),
+    ...(answer && answer.kind === "answer"
+      ? [{ q: answer.q, a: answer.a }]
+      : []),
     ...(faq && faq.kind === "faq" ? faq.items : []),
   ];
 }

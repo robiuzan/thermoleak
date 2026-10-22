@@ -32,6 +32,12 @@ export interface LocationClaim {
 export interface Location {
   /** ASCII kebab-case, matching the /services/ convention. */
   slug: string;
+  /**
+   * ISO date of the last MEANINGFUL change to what this page shows — for a new city, the day it
+   * first deploys. app/sitemap.ts emits it as <lastmod>; bump it in the same commit as the change.
+   * A metaDescription or OG edit does not count.
+   */
+  lastModified: string;
   /** Display name, e.g. תל אביב */
   name: string;
   /** Drives City vs AdministrativeArea in the schema. */
@@ -69,6 +75,7 @@ export interface Location {
 export const locations: Location[] = [
   {
     slug: "tel-aviv",
+    lastModified: "2026-08-30", // first deploy (7c9bbda)
     name: "תל אביב",
     kind: "city",
     // NOT "בתל אביב-יפו" — that reads badly in a title. This is exactly why the field exists.
@@ -127,6 +134,7 @@ export const locations: Location[] = [
   },
   {
     slug: "holon",
+    lastModified: "2026-08-30", // first deploy (7c9bbda)
     name: "חולון",
     kind: "city",
     prefixed: "בחולון",
@@ -180,6 +188,7 @@ export const locations: Location[] = [
   },
   {
     slug: "bat-yam",
+    lastModified: "2026-08-30", // first deploy (7c9bbda)
     name: "בת ים",
     kind: "city",
     prefixed: "בבת ים",
@@ -237,4 +246,6 @@ export function getLocation(slug: string): Location | undefined {
   return locations.find((location) => location.slug === slug);
 }
 
-export const locationSlugs: string[] = locations.map((location) => location.slug);
+export const locationSlugs: string[] = locations.map(
+  (location) => location.slug,
+);

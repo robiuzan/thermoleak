@@ -23,6 +23,14 @@
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
   Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; connect-src 'self' https://www.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://imgquarry.com; img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; object-src 'none'; frame-src https://www.googletagmanager.com; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
 
+# The production pages.dev alias serves the whole site as an indexable 200 duplicate (measured
+# 2026-10-19). This absolute-URL rule is Cloudflare's documented fix and matches on the request HOST,
+# so thermoleak.co.il and www are untouched. Preview deployments already send noindex by default.
+# After a deploy: `curl -sI https://thermoleak.pages.dev/` shows X-Robots-Tag: noindex, and
+# `curl -sI https://thermoleak.co.il/` shows NO X-Robots-Tag — if it does, roll back at once.
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex
+
 # Fingerprinted build assets are immutable by construction.
 /_next/static/*
   Cache-Control: public, max-age=31536000, immutable

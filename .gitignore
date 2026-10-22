@@ -17,6 +17,8 @@
 /.next/
 /out/
 /out.prev/
+# earlier builds' /_next/static, carried into each export (scripts/keep-previous-assets.mjs)
+/.static-archive/
 
 # production
 /build

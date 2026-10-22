@@ -67,10 +67,11 @@ sprints 2 and 3 — audit them as live surface, never as work still to do.
    per guide as two unrelated entities (AEO-6, open, cheap).
 5. **Freshness and authorship.** **Shipped on the guides:** each of the three carries
    `datePublished`, `dateModified` and a real `author` (רונן דהן), and `app/sitemap.ts` derives
-   their `lastModified` from `article.dateModified` — that is the pattern to defend. Still open:
-   service and location pages carry no dates at all, and the hand-maintained `staticRoutes` dates in
-   `app/sitemap.ts` now under-report freshness against content that changed 2026-08-30 (SEO-04).
-   Never propose inventing a date or a byline to close either gap.
+   their `lastModified` from `article.dateModified` — that is the pattern to defend. Since
+   2026-10-19 services and cities feed the sitemap the same way (`service.lastModified`,
+   `location.lastModified`) and the `staticRoutes` dates were re-baselined (SEO-04 closed). Still
+   open: service and location pages show no visible date or `dateModified` in their schema.
+   Never propose inventing a date or a byline to close that gap.
 6. **`llms.txt`.** It exists at `public/llms.txt` (added 2026-08-17) and is served verbatim — but it
    **predates both silos**: its inventory lists only the four service URLs plus `/pricing/` and the
    homepage, with no `/guides/` and no `/locations/` entries, so it routes an assistant away from

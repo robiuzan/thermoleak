@@ -6,7 +6,7 @@
     "dev": "next dev",
     "prebuild": "node scripts/live/check-live-copy.mjs && node scripts/live/check-live-register.mjs && node scripts/live/check-live-schedule.mjs",
     "build": "next build",
-    "postbuild": "node scripts/live/check-live-out.mjs",
+    "postbuild": "node scripts/live/check-live-out.mjs && node scripts/keep-previous-assets.mjs",
     "start": "next start",
     "lint": "eslint",
     "check:sitemap": "node scripts/check-sitemap-parity.mjs",

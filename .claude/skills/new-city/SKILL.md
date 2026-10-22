@@ -118,8 +118,9 @@ a route that skips this works in dev and 404s in production.
    §1 command; site chrome measures 116 words on `out/404.html`, and the shared `ContactCTA` a further
    ~113, so subtract before comparing).
 8. **The sitemap is derived, not hand-maintained, for this silo.** `app/sitemap.ts` maps over
-   `locations`, so a new entry appears automatically — there is nothing to add. See Gotchas for the
-   date it stamps.
+   `locations`, so a new entry appears automatically — there is nothing to add. Set the city's
+   required `lastModified` to the day it first deploys, and bump it whenever its visible content
+   meaningfully changes (a `metaDescription` or OG edit does not count).
 9. `npm run lint && npm run build`, then `npm run check:sitemap`, then confirm the route exists in
    `out/` **and** in `out/sitemap.xml`.
 
@@ -144,12 +145,13 @@ a route that skips this works in dev and 404s in production.
 - Never invent a neighbourhood, a landmark, or a local job. Unverified → `// 🔶 confirm` +
   `docs/business-facts.md` §E. Every claim already in the file is adversarially checked against public
   sources, **not** sourced by someone who has worked in those buildings — verification is not truth.
-- **Open code defect — the sitemap stamps a hardcoded date on locations.** `app/sitemap.ts` writes
-  `lastModified: "2026-08-24"` for the hub and for every city, so a city added later ships a
-  `lastModified` older than itself. `Location` has no date field to derive one from — unlike
-  `Article`, whose real `dateModified` the same file reads. Raise it as a code change (a `lastModified`
-  field on `Location`, read in `app/sitemap.ts`); do not just retype the literal to today's date and
-  leave the next city with the same problem.
+- **Fixed 2026-10-19 — the sitemap no longer stamps one hardcoded date on every city.** `Location`
+  now has a required `lastModified`, which `app/sitemap.ts` reads (the three shipped cities carry
+  2026-08-30, their first deploy). The `/locations/` hub keeps its own date in `app/sitemap.ts`;
+  bump it too if the hub's visible content changes.
+- **Wire the new city's inbound links in the same commit.** The footer's `אזורי שירות` list maps
+  over `locations`, so it links the new city automatically (since 2026-10-19). The service pages
+  still do not link to any city (LOC-2, internal-linking skill §3).
 - **Open code defect — the same city is named two ways in two schema nodes.** `site.serviceAreas` gives
   the `LocalBusiness` node `areaServed: "תל אביב-יפו"` while `locations[].name` gives the page's
   `Service` node `areaServed: "תל אביב"`, and both ship on the same page (finding LOC-11). If your new

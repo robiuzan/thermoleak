@@ -1,6 +1,6 @@
 ---
 name: internal-linking
-description: Build the link mesh on thermoleak — a header that reaches all four services in one hop, the shipped in-copy links on the service pages, hub prose still missing on /services/, related-service relevance, the location silo's one-way mesh (nothing links INTO the three city pages with a descriptive anchor), breadcrumbs emitted by PageHero itself, and a zero-orphan check. Use when wiring related links, fixing orphans, or auditing navigation. Triggers "internal linking", "orphan pages", "navigation", "related links", "footer links", "breadcrumbs", "anchor text".
+description: Build the link mesh on thermoleak — a header that reaches all four services in one hop, the shipped in-copy links on the service pages, hub prose still missing on /services/, related-service relevance, the location silo's half-built mesh (the footer links every city page; no service page does yet), breadcrumbs emitted by PageHero itself, and a zero-orphan check. Use when wiring related links, fixing orphans, or auditing navigation. Triggers "internal linking", "orphan pages", "navigation", "related links", "footer links", "breadcrumbs", "anchor text".
 ---
 
 # Internal linking
@@ -16,12 +16,12 @@ the location edges**.
 | ------------------------- | ------------------------------------------------------------------------------------------------------ |
 | Orphans                   | **zero** ✅ (`/404/`, `/_not-found/`, `/thank-you/` are intentional)                                   |
 | Header                    | 7 nav links (`navLinks`) — services, pricing, locations and guides indexes; individual services **no** |
-| Footer                    | all 4 services + all 7 nav links + both legal pages ✅ — but **no locations column**                   |
+| Footer                    | all 4 services + all 7 nav links + both legal pages + all 3 cities (`אזורי שירות`, 2026-10-19) ✅      |
 | Related services          | `services.filter(s => s.slug !== current)` → all 3 others. Correct at 4 services; revisit at 8+        |
 | Contextual in-copy links  | ✅ shipped — a `links` array per service (`lib/services.ts`), 2 descriptive anchors each               |
 | Hub prose on `/services/` | **still none** — the index is a card grid plus the PageHero subtitle                                   |
 | Breadcrumbs               | ✅ `PageHero` renders the trail **and** emits `BreadcrumbList` from the same array — 18 pages          |
-| Location silo             | ships (3 cities) — the mesh is **one-way**: cities link out to all 4 services, nothing links in        |
+| Location silo             | ships (3 cities) — cities link out to all 4 services; in: the hub and the footer, no service page yet  |
 
 ## 1. Header
 
@@ -44,8 +44,10 @@ Constraints if you build one:
 Already renders every service, every nav link and both legal pages — **no `slice()`, no truncation**.
 Don't add one. Two notes:
 
-- **There is no locations column.** Adding one (`אזורי שירות`, mapping `locations` to
-  `/locations/{slug}/`) is the cheapest half of the LOC-2 fix below. The social icons that used to sit
+- **The locations list shipped 2026-10-19** — `אזורי שירות` under the hours column maps every entry
+  of `locations` to `/locations/{slug}/` with the anchor `איתור נזילות {prefixed}`, the footer half of
+  LOC-2. Until then the cities' only inbound links were `/locations/` and each other, and Google had
+  crawled none of the four (URL Inspection 2026-10-19: "URL is unknown to Google"). The social icons that used to sit
   here were removed 2026-08-17 along with the fabricated reviews; `components/Footer.tsx` carries a
   comment saying they come back only with real profile URLs from `docs/business-facts.md` §B. Don't
   restore them from memory.
@@ -60,8 +62,8 @@ descriptive Hebrew anchors — e.g. water-leak-detection → `דו״ח תרמו�
 link out to all four services the same way.
 
 The remaining gap is the reverse edge: **no commercial page links into a city page with a descriptive
-anchor** (LOC-2). `/locations/` itself is in the header and the footer, so the cities are two hops from
-every page and nothing is orphaned — but the four pages that monetise a local query send no relevance
+anchor** (LOC-2). Since 2026-10-19 the footer's `אזורי שירות` list puts every city one hop from every
+page, so nothing is orphaned — but that is chrome, and the four pages that monetise a local query send no relevance
 signal to the page targeting it.
 
 The anchor-text rules, wherever the link lives:
@@ -104,9 +106,9 @@ Three cities shipped 2026-08-24 (`/new-city`). What the mesh was supposed to hav
 - ✅ Every location page links to its **nearby** cities from the `nearby` field, and the edges are
   bidirectional — verify that when you add a fourth; a one-way `nearby` is a modelling error.
 - ❌ No service page links to any location.
-- ❌ The footer has no locations column.
+- ✅ The footer links every location (2026-10-19).
 
-Those two ❌ rows are LOC-2 and are the mesh work outstanding. When a fourth city lands, wire its
+The ❌ row is what remains of LOC-2. When a fourth city lands, wire its
 inbound links **in the same commit** — the roadmap, `/new-city` and `docs/keyword-map.md` §6 all say
 "before it ships", and sprint 3 is the reason that instruction now has a counter-example.
 

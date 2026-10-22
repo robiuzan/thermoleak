@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // The fleet deploy script preserves the previous export here for one-command rollback.
     "out.prev/**",
+    // Earlier builds' minified /_next/static files, kept by scripts/keep-previous-assets.mjs.
+    ".static-archive/**",
     // Fleet live-kit copies — byte-locked (scripts/live/check-live-copy.mjs fails the build on any
     // local edit), so a lint rule may never demand a change in them (CLAUDE.md §14).
     "lib/live/**",

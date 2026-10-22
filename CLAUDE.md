@@ -161,7 +161,7 @@ content/live/   # ⭐ the live registers: _campaigns.mjs, _updates.mjs (+ the sy
 live.config.mjs # the live surfaces' calm / no-card pages, NAP restated, this site's ⛔ claim stems (§14)
 public/         # copied verbatim into out/ — _headers, _redirects, llms.txt, og.png, images/
                 #   assets/live.js is a fleet live-kit copy (§14)
-scripts/        # check-sitemap-parity.mjs (`npm run check:sitemap`)
+scripts/        # check-sitemap-parity.mjs (`npm run check:sitemap`), keep-previous-assets.mjs (postbuild, §10)
   live/         # the live-kit gates (prebuild + postbuild) and the weekly reminder (§14)
 docs/           # the acceptance bars every agent cites
 ```
@@ -305,9 +305,21 @@ check exists and why this section must never be edited from memory: **verify the
 believe it.**
 
 - **Rollback:** `out.prev/` + `npx wrangler pages deploy .\out.prev --project-name thermoleak
---branch main`, or the Pages dashboard's previous-deployment rollback.
+--branch main`, or the Pages dashboard's previous-deployment rollback. `out.prev/` lacks the newest
+  build's chunks, so carry them in first: `robocopy out\_next\static out.prev\_next\static /E /XC /XN /XO`.
 - HTML is served `DYNAMIC` by Pages; assets are content-hashed and cached immutable via
   `public/_headers`. There is nothing to purge on deploy.
+- **A deploy must not delete chunks that already-crawled HTML still needs.** Google renders crawled
+  HTML later, from a queue, and a Pages deploy replaces every file — the 2026-10-12 build's chunks
+  answered 404 the day after the 2026-10-13 deploy. On gagoline.co.il (same stack, same script) such a
+  late render most likely gave Google Next's "Application error" page, and Google filed that homepage
+  under an unrelated site's canonical. `scripts/keep-previous-assets.mjs` (postbuild, since
+  2026-10-19, ported from gagoline) keeps every build's `/_next/static` in the gitignored
+  `.static-archive/` and carries it into each export for 60 days after that build stopped being live.
+  Never delete `.static-archive/` — a fresh clone or another machine starts it empty. `-DeployOnly`
+  skips postbuild, so it carries nothing; and a local build that was never deployed is archived and
+  shipped too (harmless JS/CSS — to purge one, delete its files from `.static-archive/`, `out/` and
+  `out.prev/`).
 
 Run `/qa-build-gate` before shipping. **Deploying is a production mutation — always ask first.**
 See the `deploy-thermoleak` skill.
@@ -329,7 +341,8 @@ See the `deploy-thermoleak` skill.
 
 There is no `typecheck` or `format` script. **Build gate: `npm run lint && npm run build`** — `next
 build` type-checks the whole app. Always run it before declaring work done. `npm run build` also
-runs the live-kit gates (§14) in `prebuild` and `postbuild`; they fail on unapproved live wording, so
+runs the live-kit gates (§14) in `prebuild` and `postbuild`, then carries earlier builds' chunks into
+`out/` (`scripts/keep-previous-assets.mjs`, §10). The live-kit gates fail on unapproved live wording, so
 a draft can only be previewed with `LIVE_DRAFT=1 npm run build` — and a draft `out/` (it carries
 `out/.live-draft`) must never be deployed. `ops/deploy-site.ps1` refuses it, `-DeployOnly` included
 (fixed 2026-10-12), and discards a draft `out/` instead of rotating it into `out.prev/`, the
@@ -435,7 +448,8 @@ shows an updates strip after the method explainer; it hides itself 45 days after
   `app/layout.tsx` (the server cannot know who answered, so a returning visitor who did is never
   held back); `ConsentBanner` lifts it when the visitor answers (the kit README, step 5).
 - **Gates:** `prebuild` = check-live-copy → check-live-register → check-live-schedule;
-  `postbuild` = check-live-out (the built pages must carry exactly what the registers say). CI
+  `postbuild` = check-live-out (the built pages must carry exactly what the registers say), then
+  keep-previous-assets (§10), which must run after it. CI
   (`deploy.yml`) runs `npm run build`, so it goes red whenever a register lacks the owner's
   `approved` stamp (both carry it since 2026-10-12). The orphan
   recipes in the `qa-build-gate` and `internal-linking` skills strip the bar and the cards as chrome.

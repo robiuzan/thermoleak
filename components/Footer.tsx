@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import { navLinks, site, telHref, mailHref } from "@/lib/site";
 import { services } from "@/lib/services";
+import { locations } from "@/lib/locations";
 import Container from "./Container";
 import EmailOff from "./EmailOff";
 import Logo from "./Logo";
@@ -24,7 +25,9 @@ export default function Footer() {
         {/* Brand + contact */}
         <div>
           <Logo onDark />
-          <p className="mt-3 text-sm leading-relaxed text-white/70">{site.tagline}</p>
+          <p className="mt-3 text-sm leading-relaxed text-white/70">
+            {site.tagline}
+          </p>
           <ul className="mt-4 space-y-2 text-sm">
             <li>
               <a
@@ -69,11 +72,16 @@ export default function Footer() {
 
         {/* Services */}
         <nav aria-label="שירותים">
-          <p className="text-sm font-bold uppercase tracking-wide text-white">שירותים</p>
+          <p className="text-sm font-bold uppercase tracking-wide text-white">
+            שירותים
+          </p>
           <ul className="mt-4 space-y-2 text-sm">
             {services.map((service) => (
               <li key={service.slug}>
-                <Link href={`/services/${service.slug}/`} className="text-white/70 hover:text-white">
+                <Link
+                  href={`/services/${service.slug}/`}
+                  className="text-white/70 hover:text-white"
+                >
                   {service.title}
                 </Link>
               </li>
@@ -83,11 +91,16 @@ export default function Footer() {
 
         {/* Navigation */}
         <nav aria-label="ניווט">
-          <p className="text-sm font-bold uppercase tracking-wide text-white">ניווט</p>
+          <p className="text-sm font-bold uppercase tracking-wide text-white">
+            ניווט
+          </p>
           <ul className="mt-4 space-y-2 text-sm">
             {navLinks.map((link) => (
               <li key={link.href}>
-                <Link href={link.href} className="text-white/70 hover:text-white">
+                <Link
+                  href={link.href}
+                  className="text-white/70 hover:text-white"
+                >
                   {link.label}
                 </Link>
               </li>
@@ -97,7 +110,9 @@ export default function Footer() {
 
         {/* Hours + area */}
         <div>
-          <p className="text-sm font-bold uppercase tracking-wide text-white">שעות פעילות</p>
+          <p className="text-sm font-bold uppercase tracking-wide text-white">
+            שעות פעילות
+          </p>
           <ul className="mt-4 space-y-2 text-sm text-white/70">
             {site.hours.map((entry) => (
               <li key={entry.days} className="flex items-center gap-2">
@@ -109,6 +124,27 @@ export default function Footer() {
             ))}
             <li className="pt-2 text-white/60">{site.serviceAreaText}</li>
           </ul>
+
+          {/* Every city page, one hop from every page. Before this the only links into them were
+              /locations/ and each other — the footer half of LOC-2 (internal-linking skill §2).
+              Every location, no slice: a fourth city gets its link here automatically. */}
+          <nav aria-label="אזורי שירות" className="mt-6">
+            <p className="text-sm font-bold uppercase tracking-wide text-white">
+              אזורי שירות
+            </p>
+            <ul className="mt-4 space-y-2 text-sm">
+              {locations.map((location) => (
+                <li key={location.slug}>
+                  <Link
+                    href={`/locations/${location.slug}/`}
+                    className="text-white/70 hover:text-white"
+                  >
+                    איתור נזילות {location.prefixed}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </div>
       </Container>
 

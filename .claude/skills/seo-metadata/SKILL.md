@@ -102,17 +102,19 @@ deliberately has none: it is `robots: { index: false }` and absent from the site
 
 ## Sitemap
 
-`app/sitemap.ts` derives service entries from `serviceSlugs`, guide entries from `articles` and the
+`app/sitemap.ts` derives service entries from `services`, guide entries from `articles` and the
 whole location silo from `locations` — those three cannot go missing. `staticRoutes` is still a
 **hand-maintained array of 8** (backlog §1.2): add a top-level page and it builds fine while being
 silently absent from the sitemap. `npm run check:sitemap` (`scripts/check-sitemap-parity.mjs`) is the
 backstop — run it after adding any route.
 
 `lastModified: new Date()` was replaced with real per-route dates on 2026-08-17 (§1.3), and the comment
-at the top of `app/sitemap.ts` records why. The **new** failure mode is the opposite one: those eight
-dates are hand-maintained and nobody bumps them, so routes changed in later sprints still advertise an
-older date (SEO-04). If you meaningfully change a route's content, bump its date in the same commit.
-The guide entries are the honest pattern — they read `article.dateModified` from `lib/articles.ts`.
+at the top of `app/sitemap.ts` records why. The opposite failure — dates nobody bumps (SEO-04) — was
+closed 2026-10-19 (§1.3 ✅): services, guides and cities read their own date from `lib/`
+(`service.lastModified`, `article.dateModified`, `location.lastModified`), and the eight
+`staticRoutes` dates were re-baselined against git. Those eight, the `/locations/` hub and every
+`lib/` date are still bumped by hand: **if you meaningfully change what a route shows, bump its date
+in the same commit.** Markup, OG tags and the live-kit strip do not count.
 
 Never hand-maintain a second URL list anywhere.
 

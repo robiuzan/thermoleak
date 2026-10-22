@@ -65,10 +65,11 @@ Next.js 16 static export (`output: "export"`, `trailingSlash: true`). You audit 
    files** — `/404/`, `/_not-found/` and the noindex `/thank-you/` are correctly excluded (the
    double 404 emission remains finding §1.1; both forms 301 to `/` in `public/_redirects`).
    `staticRoutes` is still hand-maintained at 8 entries (§1.2). `lastModified` uses real per-route
-   dates — flag any regression to `new Date()`, but note the opposite drift is now live (SEO-04,
-   open): the eight static routes are pinned to 2026-08-17/2026-08-02 and the whole locations silo
-   to 2026-08-24, while their backing content last changed 2026-08-30. Only the guides derive
-   `lastModified` from `article.dateModified`, which is the pattern the others should follow.
+   dates — flag any regression to `new Date()`. The opposite drift (SEO-04) was closed 2026-10-19
+   (backlog §1.3 ✅): services, guides and cities derive their date from `lib/`
+   (`service.lastModified`, `article.dateModified`, `location.lastModified`), and the eight static
+   dates were re-baselined against git. Flag any date older than the last meaningful visible change
+   to its route (`git log -1` on its backing files, ignoring markup/OG-only commits).
    **Also fetch the live `/robots.txt`** — the Cloudflare managed AI-crawler block was live until
    2026-08-17, when the owner toggled it off. Verified again 2026-09-06: the live file matches
    `out/robots.txt` byte for byte (blanket `Allow: /`, plus an explicit allow group for the eleven
