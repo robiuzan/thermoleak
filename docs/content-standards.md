@@ -216,7 +216,10 @@ until confirmed:
 - Superlatives: "המובילים", "הטובים ביותר", "מספר 1"
 
 **Never permitted:** an invented customer name or quote; a rating without a public source; a
-certification the business doesn't hold; a photo presented as our work that isn't.
+certification the business doesn't hold; a photo presented as our work that isn't. The one
+owner-decided exception is the homepage gallery's AI illustrations (`lib/gallery.ts`, shown with no
+label since 2026-10-26): its limits are in [eeat-and-trust.md](eeat-and-trust.md) §5, and it covers
+no other image or page.
 
 **Permanently barred, not merely unconfirmed.** `3,000+ בתים ועסקים`, `97% איתור כבר בביקור הראשון`,
 the 4.9 rating, the six testimonials, and the placeholder `facebook.com`/`instagram.com` links were

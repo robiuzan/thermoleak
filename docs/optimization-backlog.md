@@ -636,6 +636,9 @@ images on the whole site are `public/images/hero.webp` at 33,210 B and the 18,48
 `public/images/` is about 80 KB in total. The hero is 828×670 intrinsic and renders at ≤448 CSS px,
 which is already correct for a 2× display and comfortably inside the LCP-image budget. The "remove
 `sizes` or make it real" half is moot too: there is no `sizes=` anywhere in `app/` or `components/`.
+_(2026-10-22: no longer the only rasters — the homepage gallery adds four 720×1200 WebP files,
+185,682 B, lazy and below the fold, one size each by the hero's reasoning; performance-guidelines §1
+and §3.)_
 
 Keep the rule — don't pass `sizes` to an unoptimized image, it looks correct and does nothing — but
 do not spend a sprint slot here. §10.1 is where the bytes are.

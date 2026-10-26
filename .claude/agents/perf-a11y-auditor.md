@@ -54,8 +54,10 @@ read-only.
 
 2. **Images.** `next.config.ts` sets `images: { unoptimized: true }`, so every `next/image` renders a
    bare `<img>` with **no srcset**. **All four** service illustrations are SVG (1,166–1,379 B each), so
-   the entire raster surface of the site is two files: `public/images/hero.webp` (33,210 B, 828×670) and
-   `public/images/thermoleak_logo.webp` (18,480 B) — `public/images/` totals ~80 KB. The hero is already
+   the raster surface was two files until 2026-10-22: `public/images/hero.webp` (33,210 B, 828×670) and
+   `public/images/thermoleak_logo.webp` (18,480 B). The homepage gallery then added four lazy 720×1200
+   WebP files below the fold (`public/images/gallery/`, 185,682 B), so `public/images/` totals
+   ~240 KB. The hero is already
    4.5× inside the 150 KB LCP-image budget and there is no `sizes=` attribute anywhere in `app/` or
    `components/`. **There is no image-weight crisis here; do not open one.**
 3. **LCP.** Identify the real LCP element per route type — they differ. The homepage preloads
@@ -208,7 +210,8 @@ lab numbers need a real Lighthouse or PSI run, and any a11y item you computed ra
 - Give measured numbers — real byte sizes, real computed contrast ratios. Never estimate and present it
   as measurement. Where you could not measure, say so qualitatively instead of inventing a figure.
 - **Distinguish first-paint cost from deploy weight.** The runtime experience here is genuinely healthy
-  — ~80 KB of images, four font preloads, an LCP image preload, four client components — while the
+  — ~240 KB of images (most of it the lazy, below-the-fold gallery), four font preloads, an LCP
+  image preload, four client components — while the
   _export_ sits at 98.5% of its budget on prefetch payloads that never touch a rendering metric. Say
   both. A verdict that calls 5.91 MB an LCP problem is as wrong as one that ignores it.
 - Don't manufacture findings to fill a section. But don't hunt closed ones either: `text-ink/50`, the

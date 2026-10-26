@@ -136,11 +136,13 @@ app/
   locations/ locations/[city]/  # local silo — 3 gated cities only (lib/locations.ts)
   thank-you/              # noindex post-form conversion page; absent from the sitemap on purpose
   about/ contact/ accessibility/ privacy/
-components/               # FLAT — 26 files, one component per file, PascalCase, no subfolders
+components/               # FLAT — 28 files, one component per file, PascalCase, no subfolders
   Navbar Footer StickyContact          # chrome
+  ConsentBanner                        # the Consent Mode v2 question (client, §7)
   Container CtaButton SectionHeading PageHero Breadcrumbs Logo JsonLd
   Hero TrustBar MethodExplainer ServicePillars ServiceCard Process Faq ContactCTA
   ServiceChooser                       # homepage symptom→service decision aid (lib/services.ts)
+  Gallery                              # homepage scene pairs (lib/gallery.ts) — AI images; no label of any kind (owner, 2026-10-26)
   ArticleBody                          # renders the typed blocks — the reason FAQPage can be DERIVED
   GuaranteeTerms                       # the bounded guarantee on /pricing/, from site.guaranteeTerms
   ContactForm ThankYouContent          # the form + its post-submit page
@@ -155,6 +157,7 @@ lib/
   pricing.ts    # /pricing/ copy — per-service prices stay in services.ts, never restated here
   articles.ts   # /guides/ typed blocks — FAQPage is DERIVED from them, so schema cannot drift
   locations.ts  # ⭐ the 3 gated cities. READ its header before adding a 4th
+  gallery.ts    # the homepage gallery: files, alt text, provenance — scripts/optimize-gallery.mjs reads it
   jsonld.ts     # every JSON-LD builder
   live/         # fleet live-kit copies — byte-locked, never edit (§14)
 content/live/   # ⭐ the live registers: _campaigns.mjs, _updates.mjs (+ the synced calendar) (§14)
@@ -162,7 +165,9 @@ live.config.mjs # the live surfaces' calm / no-card pages, NAP restated, this si
 public/         # copied verbatim into out/ — _headers, _redirects, llms.txt, og.png, images/
                 #   assets/live.js is a fleet live-kit copy (§14)
 scripts/        # check-sitemap-parity.mjs (`npm run check:sitemap`), keep-previous-assets.mjs (postbuild, §10)
+                #   optimize-gallery.mjs — assets/gallery/ masters → public/images/gallery/*.webp (by hand)
   live/         # the live-kit gates (prebuild + postbuild) and the weekly reminder (§14)
+assets/gallery/ # gallery masters: gitignored, never shipped — its README.md is the per-image register
 docs/           # the acceptance bars every agent cites
 ```
 

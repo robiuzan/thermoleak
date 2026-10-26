@@ -195,6 +195,20 @@ trade can fake: a normal photo and its thermal twin, side by side, with the leak
 - **Accessibility**: thermal images need real `alt` describing the _finding_, since colour is the
   entire information channel and a colourblind or screen-reader user gets nothing from it otherwise.
 
+> **Scoped exception — 2026-10-22, changed 2026-10-26 (owner; business-facts §A).** The homepage
+> gallery (`components/Gallery.tsx`, `lib/gallery.ts`) shows four AI-generated illustrations of
+> עומר, the second technician — not the founder (business-facts §A) — each scene a wide shot plus a
+> close-up of the camera in use. That format is allowed for them only within these limits: no
+> label of any kind since the owner's decision of 2026-10-26 (no note or tags on the page, no הדמיה
+> in the alt text, no AI marker in the files), so `source.kind` in `lib/gallery.ts` is the only
+> record of their provenance; captions name an activity, never a symptom or a finding; a screen is
+> never presented as a reading; they are not Experience evidence (§1) and never appear in schema,
+> `og:image` or a Google
+> Business Profile. The before/after evidence gallery above stays real-jobs-only, and real job
+> photos replace the illustrations as they arrive. Accepted risk: Gemini embeds Google's invisible
+> SynthID watermark, so a visitor can still find out the images are AI-made — the "credibility
+> liability once noticed" this section warns about.
+
 ---
 
 ## 6. Credentials, badges and the guarantee
@@ -271,6 +285,8 @@ Before adding urgency copy, badges, counters or scarcity to any page, check busi
 - [ ] Every `Article` author resolves to the `about/#founder` `Person` node, and the visible byline
       links to it.
 - [ ] Every image has known provenance and permission.
+- [ ] The homepage gallery's AI illustrations stay inside the §5 exception's limits, and no AI
+      image ships anywhere else.
 - [ ] The guarantee states scope, exclusions and call-out policy — and every page that makes the
       promise puts those terms one tap away.
 - [ ] Nothing self-issued renders as a credential (`certifications` holds certifications only).

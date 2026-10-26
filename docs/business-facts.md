@@ -45,7 +45,12 @@ matching agent or skill will wire it into the right place.
 **Resolved 2026-08-24: the founder is רונן דהן.** **Resolved 2026-09-17 (owner, in conversation):**
 years in the trade, team size — and, importantly, two **negative** answers. There is **no company
 registration and no ח.פ.**, so `site.legalName` dropped `בע״מ`; and there is **no accessibility
-coordinator**, so `/accessibility/` no longer asserts one.
+coordinator**, so `/accessibility/` no longer asserts one. **Resolved 2026-10-22 (in conversation):**
+the AI images of the team (`lib/gallery.ts`) may be published. They show עומר, the second
+technician, not the founder (named 2026-10-26; first name only, because this repo is public).
+**Changed 2026-10-26 (in conversation):** they ship with no label at all — no visible note or tags,
+no הדמיה in the alt text, no AI marker in the files. עומר agreed himself, including to the
+unlabelled version (confirmed 2026-10-26, in conversation).
 
 > ⚠️ **A ❌ row is an answer, not a gap.** Three rows below are confirmed ABSENT. Do not re-open
 > them as "missing facts to chase", and never let a future agent refill them.
@@ -57,6 +62,7 @@ coordinator**, so `/accessibility/` no longer asserts one.
 | Technician count / team shape | "צוות" was implied but never quantified                     | `lib/site.ts`             | **2 people**                                                    | ✅     |
 | ח.פ. / ע.מ. number            | Was claimed via `בע״מ` with no number behind it             | `lib/site.ts`             | **none — not a registered company**                             | ❌     |
 | Permission to publish a photo | A named face is the strongest single trust signal available | `public/images/`          |                                                                 | 🔶     |
+| AI images of the team         | 4 on the homepage; need the depicted person's OK            | `lib/gallery.ts`          | **עומר** (2nd tech) — agreed himself; no label (2026-10-26)     | ✅     |
 
 > **On the two experience numbers.** The BUSINESS was founded 2015 (11 years). The FOUNDER has been
 > in the trade ~20 years. `site.stats.years` says "20+ שנות ניסיון **בשטח**" — the word בשטח is

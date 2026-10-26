@@ -19,6 +19,9 @@
 /out.prev/
 # earlier builds' /_next/static, carried into each export (scripts/keep-previous-assets.mjs)
 /.static-archive/
+# full-size gallery masters, never shipped: public repo, unpublished likeness (scripts/optimize-gallery.mjs)
+/assets/gallery/*
+!/assets/gallery/README.md
 
 # production
 /build

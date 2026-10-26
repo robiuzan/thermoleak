@@ -280,8 +280,8 @@ du -sb out/_next                                                                
 
 The current shape, so a surprise is recognisable: **5,910,433 B total (5.64 MiB)** — `.txt`
 2,769,645 B (46.9%), `.html` 1,984,248 B (33.6%), `.js` 722,262 B (12.2%), the rest fonts, `og.png`,
-CSS and icons. Largest JS chunk **226,355 B**; `public/images/` is only ~80 KB because the service art
-is SVG.
+CSS and icons. Largest JS chunk **226,355 B**; `public/images/` was only ~80 KB because the service art
+is SVG — since 2026-10-22 the homepage gallery adds four WebP files (185,682 B).
 
 That `.txt` figure is not a defect to chase. It is Next 16's RSC flight payloads, emitted **twice per
 route** — `index.txt` and `__next._full.txt`, byte-identical, 158 files — so roughly 1.38 MB is pure

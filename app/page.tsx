@@ -5,6 +5,7 @@ import MethodExplainer from "@/components/MethodExplainer";
 import ServicePillars from "@/components/ServicePillars";
 import ServiceChooser from "@/components/ServiceChooser";
 import Process from "@/components/Process";
+import Gallery from "@/components/Gallery";
 import Faq from "@/components/Faq";
 import ContactCTA from "@/components/ContactCTA";
 import JsonLd from "@/components/JsonLd";
@@ -36,7 +37,14 @@ export default function HomePage() {
       <ServicePillars />
       <ServiceChooser />
       <Process />
-      <Faq faqs={generalFaqs} eyebrow="שאלות נפוצות" title="שאלות שחשוב שתדעו" />
+      {/* The four steps, then what a visit looks like: white between Process and the FAQ, which
+          are both bg-paper. Far below the fold, so its lazy images never touch LCP. */}
+      <Gallery />
+      <Faq
+        faqs={generalFaqs}
+        eyebrow="שאלות נפוצות"
+        title="שאלות שחשוב שתדעו"
+      />
       <ContactCTA />
     </>
   );

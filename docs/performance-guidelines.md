@@ -91,6 +91,19 @@ for a file nobody fetches, so it is counted separately. The script prints the ca
 build; **Total `out/` = `du -sb out` minus that figure.** If the owner would rather count them, the
 alternative is a shorter keep window, not dropping the script.
 
+**Re-measured 2026-10-22, after the homepage gallery (`components/Gallery.tsx`).** 7,451,593 B raw
+minus 216,092 B carried (17 files) = **7,235,501 B — 96.5% of the budget, leaving 264,499 B.** The
+gallery cost ≈213 KB: its four WebP files (187,546 B) plus ≈25 KB of markup, because the section is
+emitted four times (the HTML and three RSC `.txt` payloads). A content page costs 288–316 KB in this
+export, so **the next location, service or guide page needs a budget decision first.** The §7
+command still sums raw bytes, carried chunks included — at 99.4% it turns red after the next
+JS-changing deploy while Total `out/` is still inside the budget; subtract the carried figure the
+build prints. _(2026-10-26, after every הדמיה label was removed — the note, the tags, the alt prefix
+and the files' AI marker: the four files are 185,682 B again and the section's markup ≈20 KB
+across the same payloads, so the gallery costs ≈206 KB. Total `out/` = 7,504,154 B raw minus
+276,290 B carried (27 files) = **7,227,864 B — 96.4%, leaving 272,136 B**. The raw figure is now
+past 7,500,000 B, so the §7 command already exits 1, on carried chunks alone.)_
+
 **On the JS rows.** The old "≤ 120 KB per route, well under ✅" was never measured and is 4.7×
 wrong against its own stated unit. The framework floor is what Next 16.2.9 + React 19.2.4 cost on
 any route; it is not something this site can tune. So the enforceable budget is the **delta**: a new
@@ -149,8 +162,9 @@ that is exactly what the +0 B row catches.
 `next.config.ts` sets `images: { unoptimized: true }` — `next/image` emits a bare `<img>` with **no
 srcset**. Consequence: passing `sizes` is _misleading_, it does nothing.
 
-**All four** service illustrations are **SVG**, where this costs nothing. `public/images/` is
-80 KB in total. What actually matters:
+**All four** service illustrations are **SVG**, where this costs nothing. `public/images/` was
+80 KB in total until the homepage gallery's four WebP files landed (2026-10-22, 185,682 B). What
+actually matters:
 
 - **`hero.webp`** — the one raster LCP candidate. Measured: **33,210 B, 828×670 intrinsic**,
   rendered at ≤ 448 CSS px (`max-w-md`) on desktop and ~358 px on mobile, and preloaded. That is
@@ -161,6 +175,10 @@ srcset**. Consequence: passing `sizes` is _misleading_, it does nothing.
 - **`thermoleak_logo.webp`** — 18,480 B, fetched on every route. Not a weight problem; see §2 rule 3
   for its `loading` state.
 - **`og.png`** — 128,363 B, never rendered on-page; its weight does not affect CWV.
+- **`gallery/*.webp`** (2026-10-22) — four 720×1200 WebP q85, 29–55 KB each, lazy and far below
+  the fold on the homepage (`components/Gallery.tsx`), each tile at most ~345 CSS px wide (the
+  one-column layout just under 768 px), so one size serves DPR 2 like the hero. `scripts/optimize-gallery.mjs` builds them from masters kept out of
+  `public/`; its header records the measurement behind q85 (q75 blotches the thermal ramps).
 
 **If a genuinely large raster ever lands, two viable paths — pick one deliberately, never mix:**
 

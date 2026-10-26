@@ -20,8 +20,9 @@ read-only and you never invent a fact to close a gap.
   row there. §A and §B carry the ranked list of what is still unsourced; start from it instead of
   rediscovering it.
 - `docs/content-standards.md` §6 — which claims may be stated freely and which are gated.
-- `docs/eeat-and-trust.md` — the dimension's specification. §2 (the review engine) and §6
-  (credentials, badges and the guarantee) are your standing targets; §7 is the trust gate the
+- `docs/eeat-and-trust.md` — the dimension's specification. §2 (the review engine), §5 (the
+  homepage gallery's AI-image exception) and §6 (credentials, badges and the guarantee) are your
+  standing targets; §7 is the trust gate the
   CRO auditor applies downstream of you.
 - `lib/site.ts`, `lib/services.ts`, `lib/faqs.ts`, `lib/articles.ts` (bylines and dates),
   `lib/locations.ts` (the per-city claims, all 🔶), `components/GuaranteeTerms.tsx`, every
@@ -40,6 +41,10 @@ read-only and you never invent a fact to close a gap.
    percentage, or a "sample". Sweep the whole tree, not just the pages that carried them: `/guides/`
    and `/locations/` shipped after the purge and are the likeliest place a number arrives unsourced.
    Any reappearance without a verifiable public source is **Critical**.
+   The homepage gallery's four AI illustrations (`lib/gallery.ts`) are not a reappearance: they are
+   the owner's scoped exception (`docs/eeat-and-trust.md` §5; business-facts §A). Audit its limits —
+   none appears in schema, `og:image` or a GBP, no other page shows one, captions stay activities —
+   and never re-file the absent label: the owner removed every label, visible and hidden, 2026-10-26.
 2. **The stats block.** `site.stats` now carries four verified-or-restated tiles (10+ years from the
    2015 founding; duration, method and report claims that restate existing site copy). Audit that any
    NEW tile meets the same bar: verified in the roster/business-facts, or a restatement of an
