@@ -3,8 +3,8 @@
 // public/images/gallery/*.webp, so the files that ship and the words that describe them cannot
 // drift apart.
 //
-// PROVENANCE IS DATA, NOT A COMMENT. Every image below is AI-generated (Google Gemini, 2026-10-22)
-// from reference portraits of the team (עומר — docs/business-facts.md §A). docs/content-standards.md
+// PROVENANCE IS DATA, NOT A COMMENT. Every image below is AI-generated (Google Gemini, 2026-10-22
+// and 2026-10-27) from reference portraits of the team (עומר — docs/business-facts.md §A). docs/content-standards.md
 // §6 never permits "a photo presented as our work that isn't"; docs/eeat-and-trust.md §5 records the
 // owner's scoped exception for this gallery: the likeness approved 2026-10-22, and on 2026-10-26
 // every label dropped — no note or tags on the page, no הדמיה in the alt text, no AI marker in the
@@ -56,6 +56,12 @@ const gemini: GallerySource = {
   created: "2026-10-22",
 };
 
+const geminiBatch2: GallerySource = {
+  kind: "ai-generated",
+  tool: "Google Gemini",
+  created: "2026-10-27",
+};
+
 export const galleryScenes: GalleryScene[] = [
   {
     caption: "סריקה תרמית סביב כיור המטבח",
@@ -94,6 +100,24 @@ export const galleryScenes: GalleryScene[] = [
           crop: { left: 127, top: 126, width: 781, height: 1302 },
         },
         source: gemini,
+      },
+    ],
+  },
+  {
+    caption: "סריקה תרמית של התקרה",
+    service: "water-leak-detection",
+    images: [
+      {
+        slug: "ceiling-thermal-scan",
+        alt: "טכנאי בחולצת טרמוליק כורע על רצפת אריחים בהירה ומרים מצלמה תרמית אל כתם רטיבות חום בתקרה, ליד חלון עם תריס גלילה ונוף של בנייני אבן.",
+        master: { file: "Gemini_Generated_Image_46ln7y46ln7y46ln.jpg" },
+        source: geminiBatch2,
+      },
+      {
+        slug: "ceiling-thermal-screen",
+        alt: "טכנאי מחזיק מצלמה תרמית בחדר לבן ומאחוריו כתם רטיבות בתקרה; על המסך רקע כתום וכתם סגול כהה במרכזו.",
+        master: { file: "Gemini_Generated_Image_qaueaxqaueaxqaue.jpg" },
+        source: geminiBatch2,
       },
     ],
   },

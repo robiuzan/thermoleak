@@ -62,7 +62,7 @@ unlabelled version (confirmed 2026-10-26, in conversation).
 | Technician count / team shape | "צוות" was implied but never quantified                     | `lib/site.ts`             | **2 people**                                                    | ✅     |
 | ח.פ. / ע.מ. number            | Was claimed via `בע״מ` with no number behind it             | `lib/site.ts`             | **none — not a registered company**                             | ❌     |
 | Permission to publish a photo | A named face is the strongest single trust signal available | `public/images/`          |                                                                 | 🔶     |
-| AI images of the team         | 4 on the homepage; need the depicted person's OK            | `lib/gallery.ts`          | **עומר** (2nd tech) — agreed himself; no label (2026-10-26)     | ✅     |
+| AI images of the team         | 6 on the homepage; need the depicted person's OK            | `lib/gallery.ts`          | **עומר** (2nd tech) — agreed himself; no label (2026-10-26)     | ✅     |
 
 > **On the two experience numbers.** The BUSINESS was founded 2015 (11 years). The FOUNDER has been
 > in the trade ~20 years. `site.stats.years` says "20+ שנות ניסיון **בשטח**" — the word בשטח is

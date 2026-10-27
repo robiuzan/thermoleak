@@ -21,7 +21,7 @@ const staticRoutes: {
   priority: number;
   freq: "weekly" | "monthly" | "yearly";
 }[] = [
-  { path: "", lastModified: "2026-10-26", priority: 1, freq: "weekly" },
+  { path: "", lastModified: "2026-10-27", priority: 1, freq: "weekly" },
   {
     path: "/services",
     lastModified: "2026-08-17",

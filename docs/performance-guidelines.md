@@ -104,6 +104,12 @@ across the same payloads, so the gallery costs ≈206 KB. Total `out/` = 7,504,1
 276,290 B carried (27 files) = **7,227,864 B — 96.4%, leaving 272,136 B**. The raw figure is now
 past 7,500,000 B, so the §7 command already exits 1, on carried chunks alone.)_
 
+**Re-measured 2026-10-27, after the gallery's third scene (two more WebP files, 84,454 B).**
+7,598,553 B raw minus 277,730 B carried (36 files) = **7,320,823 B — 97.6% of the budget, leaving
+179,177 B.** The scene cost ≈93 KB (its two files plus its share of the four emissions of the
+section's markup). A fourth scene would leave ≈86 KB; any content page already needs a budget
+decision first.
+
 **On the JS rows.** The old "≤ 120 KB per route, well under ✅" was never measured and is 4.7×
 wrong against its own stated unit. The framework floor is what Next 16.2.9 + React 19.2.4 cost on
 any route; it is not something this site can tune. So the enforceable budget is the **delta**: a new
@@ -163,7 +169,8 @@ that is exactly what the +0 B row catches.
 srcset**. Consequence: passing `sizes` is _misleading_, it does nothing.
 
 **All four** service illustrations are **SVG**, where this costs nothing. `public/images/` was
-80 KB in total until the homepage gallery's four WebP files landed (2026-10-22, 185,682 B). What
+80 KB in total until the homepage gallery's WebP files landed (four on 2026-10-22, 185,682 B; six
+since 2026-10-27, 270,136 B). What
 actually matters:
 
 - **`hero.webp`** — the one raster LCP candidate. Measured: **33,210 B, 828×670 intrinsic**,
@@ -175,7 +182,7 @@ actually matters:
 - **`thermoleak_logo.webp`** — 18,480 B, fetched on every route. Not a weight problem; see §2 rule 3
   for its `loading` state.
 - **`og.png`** — 128,363 B, never rendered on-page; its weight does not affect CWV.
-- **`gallery/*.webp`** (2026-10-22) — four 720×1200 WebP q85, 29–55 KB each, lazy and far below
+- **`gallery/*.webp`** (2026-10-22; a third scene 2026-10-27) — six 720×1200 WebP q85, 29–55 KB each, lazy and far below
   the fold on the homepage (`components/Gallery.tsx`), each tile at most ~345 CSS px wide (the
   one-column layout just under 768 px), so one size serves DPR 2 like the hero. `scripts/optimize-gallery.mjs` builds them from masters kept out of
   `public/`; its header records the measurement behind q85 (q75 blotches the thermal ramps).
