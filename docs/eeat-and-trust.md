@@ -196,9 +196,10 @@ trade can fake: a normal photo and its thermal twin, side by side, with the leak
   entire information channel and a colourblind or screen-reader user gets nothing from it otherwise.
 
 > **Scoped exception — 2026-10-22, changed 2026-10-26 (owner; business-facts §A).** The homepage
-> gallery (`components/Gallery.tsx`, `lib/gallery.ts`) shows six AI-generated illustrations of
-> עומר (four made 2026-10-22, a third scene added 2026-10-27), the second technician — not the founder (business-facts §A) — each scene a wide shot plus a
-> close-up of the camera in use. That format is allowed for them only within these limits: no
+> gallery (`components/Gallery.tsx`, `lib/gallery.ts`) shows eleven AI-generated illustrations of
+> עומר (four made 2026-10-22, seven from the 2026-10-27 batch — the owner approved its "maybe"
+> frames that day), the second technician — not the founder (business-facts §A) — each scene a wide shot plus one or two
+> closer shots of the camera in use. That format is allowed for them only within these limits: no
 > label of any kind since the owner's decision of 2026-10-26 (no note or tags on the page, no הדמיה
 > in the alt text, no AI marker in the files), so `source.kind` in `lib/gallery.ts` is the only
 > record of their provenance; captions name an activity, never a symptom or a finding; a screen is

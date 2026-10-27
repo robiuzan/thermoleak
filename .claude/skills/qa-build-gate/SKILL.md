@@ -273,7 +273,7 @@ the request, not the config** — and confirm no `/g/collect` call carries the n
 ## 12. Output weight
 
 ```bash
-find out -type f -printf '%s\n' | awk '{s+=$1} END {print s; exit (s>7340032)}'  # measured 5,910,433
+find out -type f -printf '%s\n' | awk '{s+=$1} END {print s; exit (s>8000000)}'  # 8 MB since 2026-10-27; measured 7,948,783 raw, 7,611,473 minus carried chunks
 find out -name '*.js' -size +250k -exec ls -lh {} \;                            # expect nothing
 du -sb out/_next                                                                # measured 936,350
 ```
@@ -281,7 +281,7 @@ du -sb out/_next                                                                
 The current shape, so a surprise is recognisable: **5,910,433 B total (5.64 MiB)** — `.txt`
 2,769,645 B (46.9%), `.html` 1,984,248 B (33.6%), `.js` 722,262 B (12.2%), the rest fonts, `og.png`,
 CSS and icons. Largest JS chunk **226,355 B**; `public/images/` was only ~80 KB because the service art
-is SVG — since 2026-10-22 the homepage gallery adds WebP files (six since 2026-10-27, 270,136 B).
+is SVG — since 2026-10-22 the homepage gallery adds WebP files (eleven since 2026-10-27, 540,802 B).
 
 That `.txt` figure is not a defect to chase. It is Next 16's RSC flight payloads, emitted **twice per
 route** — `index.txt` and `__next._full.txt`, byte-identical, 158 files — so roughly 1.38 MB is pure

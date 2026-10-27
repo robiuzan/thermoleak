@@ -6,7 +6,8 @@ Enforceable numbers, not aspirations. A change that breaks a budget here does no
 **Measure before optimising.** The user-facing baseline is genuinely healthy — static HTML on a
 global edge, one 33 KB raster, four SVGs — so do not manufacture findings to fill a report. But
 "healthy" is not the same as "inside every budget": as of the 2026-09-06 re-baseline the export sat
-at **98.5% of its size budget** (then 6 MB — the owner raised it to 7.5 MB on 2026-10-12, §1), one
+at **98.5% of its size budget** (then 6 MB — the owner raised it to 7.5 MB on 2026-10-12 and to
+8 MB on 2026-10-27, §1), one
 JS chunk is over, and the tag budget is knowingly breached. Those three are real and are stated as
 such in §1. Everything else here is fine.
 
@@ -36,7 +37,7 @@ these.
 
 | Asset class                             | Budget                                                  | Current (2026-09-06)                                                                                                                |
 | --------------------------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| Total `out/`                            | ≤ 7,500,000 B (owner, 2026-10-12; was 6,000,000 B)      | **5,910,433 B — 98.5% of the 6 MB budget of the day** ⚠️ 220 files; re-measured 2026-10-12 below                                    |
+| Total `out/`                            | ≤ 8,000,000 B (owner, 2026-10-27; was 7,500,000 B)      | **5,910,433 B — 98.5% of the 6 MB budget of the day** ⚠️ 220 files; re-measured 2026-10-12 below                                    |
 | ├ RSC segment payloads (`out/**/*.txt`) | _no budget — set one_                                   | **2,769,645 B / 158 files = 46.9% of the export**                                                                                   |
 | ├ HTML                                  | —                                                       | 1,984,248 B / 23 files                                                                                                              |
 | └ `out/_next` (JS, CSS, fonts)          | —                                                       | 936,350 B                                                                                                                           |
@@ -110,6 +111,15 @@ past 7,500,000 B, so the §7 command already exits 1, on carried chunks alone.)_
 section's markup). A fourth scene would leave ≈86 KB; any content page already needs a budget
 decision first.
 
+**Raised 2026-10-27 — the export budget is now 8,000,000 B.** The owner approved the six "maybe"
+frames of the 2026-10-27 batch (assets/gallery/README.md) and chose "Raise limit to 8 MB" over
+"Keep 7.5 MB, add one pair": the five that went on (#38 stayed a spare) weigh 270,666 B, and only
+179,177 B was left. The build that ships them measures 7,948,783 B raw minus 337,310 B carried (43
+files) = **7,611,473 B — 95.1% of the new budget, leaving 388,527 B.** They cost ≈291 KB: the five
+files plus ≈20 KB of markup across the section's four emissions. One content page (288–316 KB)
+fits; the second is the next budget decision. The raw figure is 51 KB under 8,000,000 B, so the §7
+command turns red after the next JS-changing deploy or two, on carried chunks alone.
+
 **On the JS rows.** The old "≤ 120 KB per route, well under ✅" was never measured and is 4.7×
 wrong against its own stated unit. The framework floor is what Next 16.2.9 + React 19.2.4 cost on
 any route; it is not something this site can tune. So the enforceable budget is the **delta**: a new
@@ -169,8 +179,8 @@ that is exactly what the +0 B row catches.
 srcset**. Consequence: passing `sizes` is _misleading_, it does nothing.
 
 **All four** service illustrations are **SVG**, where this costs nothing. `public/images/` was
-80 KB in total until the homepage gallery's WebP files landed (four on 2026-10-22, 185,682 B; six
-since 2026-10-27, 270,136 B). What
+80 KB in total until the homepage gallery's WebP files landed (four on 2026-10-22, 185,682 B;
+eleven since 2026-10-27, 540,802 B). What
 actually matters:
 
 - **`hero.webp`** — the one raster LCP candidate. Measured: **33,210 B, 828×670 intrinsic**,
@@ -182,9 +192,10 @@ actually matters:
 - **`thermoleak_logo.webp`** — 18,480 B, fetched on every route. Not a weight problem; see §2 rule 3
   for its `loading` state.
 - **`og.png`** — 128,363 B, never rendered on-page; its weight does not affect CWV.
-- **`gallery/*.webp`** (2026-10-22; a third scene 2026-10-27) — six 720×1200 WebP q85, 29–55 KB each, lazy and far below
+- **`gallery/*.webp`** (2026-10-22; three more scenes and a third kitchen image 2026-10-27) — eleven 720×1200 WebP q85, 29–71 KB each, lazy and far below
   the fold on the homepage (`components/Gallery.tsx`), each tile at most ~345 CSS px wide (the
-  one-column layout just under 768 px), so one size serves DPR 2 like the hero. `scripts/optimize-gallery.mjs` builds them from masters kept out of
+  one-column layout just under 768 px; a three-image scene's tiles are ≈330 px on desktop), so one
+  size serves DPR 2 like the hero. `scripts/optimize-gallery.mjs` builds them from masters kept out of
   `public/`; its header records the measurement behind q85 (q75 blotches the thermal ramps).
 
 **If a genuinely large raster ever lands, two viable paths — pick one deliberately, never mix:**
@@ -279,8 +290,8 @@ The auditor reads the artifact; it does not measure a browser. For real numbers:
 The commands that reproduce every number in §1 — run them, do not re-estimate:
 
 ```bash
-# total export size, and the budget as an assertion (exit 1 = breached; 7.5 MB since 2026-10-12)
-find out -type f -printf '%s\n' | awk '{s+=$1;n++} END {print s" bytes / "n" files"; exit (s>7500000)}'
+# total export size, and the budget as an assertion (exit 1 = breached; 8 MB since 2026-10-27)
+find out -type f -printf '%s\n' | awk '{s+=$1;n++} END {print s" bytes / "n" files"; exit (s>8000000)}'
 # the asset class that is half the export
 find out -name '*.txt'    -printf '%s\n' | awk '{s+=$1;n++} END {print "txt   "s" / "n}'
 find out -name '*.html'   -printf '%s\n' | awk '{s+=$1;n++} END {print "html  "s" / "n}'

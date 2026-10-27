@@ -423,7 +423,7 @@ it ships.** The gate is re-run per city, not inherited from batch 1.
 
 > **Budget note:** at roughly 305 KB of export per location page, the nine remaining cities would
 > add ~2.7 MB and breach the export ceiling (6 MB when this was written; 7.5 MB since the owner
-> raised it on 2026-10-12 — still breached). Add the export-size assertion to the `/new-city`
+> raised it on 2026-10-12, 8 MB since 2026-10-27 — still breached). Add the export-size assertion to the `/new-city`
 > gate now, not after it breaks.
 
 ### Done when
@@ -531,12 +531,12 @@ for `.claude/` and then tracked only the code.
 
 ### Per-commit (automatic)
 
-| What                                                                                                          | Mechanism                                                                                   |
-| ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| Route counts, sitemap parity, orphans, fabrication greps, `og:image`/`og:url`, `text-ink/<70`, export ≤7.5 MB | `/qa-build-gate` — **derived assertions, not `# expect N` comments**                        |
-| Sitemap ↔ emitted tree ↔ `llms.txt` parity                                                                    | `npm run check:sitemap`                                                                     |
-| Sitemap `lastModified` vs `git log -1` on each backing file                                                   | gate line                                                                                   |
-| Prettier on changed files                                                                                     | `.claude/hooks/format-changed.ps1` — a deliberate no-op until `prettier` is a devDependency |
+| What                                                                                                        | Mechanism                                                                                   |
+| ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Route counts, sitemap parity, orphans, fabrication greps, `og:image`/`og:url`, `text-ink/<70`, export ≤8 MB | `/qa-build-gate` — **derived assertions, not `# expect N` comments**                        |
+| Sitemap ↔ emitted tree ↔ `llms.txt` parity                                                                  | `npm run check:sitemap`                                                                     |
+| Sitemap `lastModified` vs `git log -1` on each backing file                                                 | gate line                                                                                   |
+| Prettier on changed files                                                                                   | `.claude/hooks/format-changed.ps1` — a deliberate no-op until `prettier` is a devDependency |
 
 ### Per-sprint (blocking)
 

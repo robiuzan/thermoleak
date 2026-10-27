@@ -32,7 +32,7 @@ read-only.
    across 220 files and 22 emitted routes** — not the "~3.9 MB" several docs still carry. That was
    98.5% of the 6 MB budget of the day; the owner raised the budget in
    `docs/performance-guidelines.md` §1 to **7.5 MB** on 2026-10-12, when the live surfaces took a
-   build to ≈6.93 MB. Composition:
+   build to ≈6.93 MB, and to **8 MB** on 2026-10-27, for the gallery's approved images. Composition:
 
    | Class                                | Bytes                   | Share |
    | ------------------------------------ | ----------------------- | ----- |
@@ -50,14 +50,14 @@ read-only.
    of the export is pure duplication across 158 files. Two things follow, and an honest audit says both:
    they are **navigation prefetch, not first paint, so they do not touch LCP**; and they are real deploy
    weight that grows ~115 KB per new route, which means the nine remaining cities in the 12-city plan
-   would push `out/` past 7.5 MB. Report it as a budget-and-planning finding, not an LCP finding.
+   would push `out/` past 8 MB. Report it as a budget-and-planning finding, not an LCP finding.
 
 2. **Images.** `next.config.ts` sets `images: { unoptimized: true }`, so every `next/image` renders a
    bare `<img>` with **no srcset**. **All four** service illustrations are SVG (1,166–1,379 B each), so
    the raster surface was two files until 2026-10-22: `public/images/hero.webp` (33,210 B, 828×670) and
    `public/images/thermoleak_logo.webp` (18,480 B). The homepage gallery then added lazy 720×1200
-   WebP files below the fold (`public/images/gallery/`; six since 2026-10-27, 270,136 B), so
-   `public/images/` totals ~327 KB. The hero is already
+   WebP files below the fold (`public/images/gallery/`; eleven since 2026-10-27, 540,802 B), so
+   `public/images/` totals ~597 KB. The hero is already
    4.5× inside the 150 KB LCP-image budget and there is no `sizes=` attribute anywhere in `app/` or
    `components/`. **There is no image-weight crisis here; do not open one.**
 3. **LCP.** Identify the real LCP element per route type — they differ. The homepage preloads
@@ -210,7 +210,7 @@ lab numbers need a real Lighthouse or PSI run, and any a11y item you computed ra
 - Give measured numbers — real byte sizes, real computed contrast ratios. Never estimate and present it
   as measurement. Where you could not measure, say so qualitatively instead of inventing a figure.
 - **Distinguish first-paint cost from deploy weight.** The runtime experience here is genuinely healthy
-  — ~327 KB of images (most of it the lazy, below-the-fold gallery), four font preloads, an LCP
+  — ~597 KB of images (most of it the lazy, below-the-fold gallery), four font preloads, an LCP
   image preload, four client components — while the
   _export_ sits at 98.5% of its budget on prefetch payloads that never touch a rendering metric. Say
   both. A verdict that calls 5.91 MB an LCP problem is as wrong as one that ignores it.

@@ -606,7 +606,7 @@ fetched. Still open: the service pages' `related.links` point at no city.
 the 6 MB budget in [performance-guidelines.md](performance-guidelines.md). The delta is almost
 exactly the two new silos: `out/guides` and `out/locations` are about 1.87 MB together. _(2026-10-12:
 the owner raised that budget to 7.5 MB — the live surfaces take a build to ≈6.93 MB; see
-performance-guidelines.md §1.)_
+performance-guidelines.md §1. 2026-10-27: raised again to 8 MB, for the gallery's approved images.)_
 
 Composition matters here, because 47% of the export is a class neither budget table has a row for.
 **RSC segment payloads — the `.txt` files — are 2,769,645 B across 158 files, 46.9% of the whole

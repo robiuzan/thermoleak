@@ -40,8 +40,13 @@ export interface GalleryScene {
   caption: string;
   /** A slug from lib/services.ts — the service the scene illustrates. */
   service: string;
-  /** The scene, then a close-up of the camera in use — an illustration, never a reading. */
-  images: readonly [GalleryImage, GalleryImage];
+  /**
+   * The scene, then closer shots of the camera in use — an illustration, never a reading. A
+   * three-image scene spans the gallery's full width (components/Gallery.tsx).
+   */
+  images:
+    | readonly [GalleryImage, GalleryImage]
+    | readonly [GalleryImage, GalleryImage, GalleryImage];
 }
 
 /** The section's own words. */
@@ -74,6 +79,12 @@ export const galleryScenes: GalleryScene[] = [
         source: gemini,
       },
       {
+        slug: "kitchen-tap-thermal-scan",
+        alt: "טכנאי בחולצת טרמוליק מחזיק מצלמה תרמית ליד ברז של כיור מטבח מנירוסטה; על המסך רקע סגול ופס צהוב וכתום שיורד לאורך מרכזו.",
+        master: { file: "Gemini_Generated_Image_lv1gxwlv1gxwlv1g.jpg" },
+        source: geminiBatch2,
+      },
+      {
         slug: "kitchen-sink-thermal-screen",
         alt: "טכנאי מחזיק מצלמה תרמית מעל כיור מטבח כפול; על המסך רקע סגול ופס אנכי צהוב וכתום במרכזו, שקצהו העליון לבן.",
         master: { file: "3Gemini_Generated_Image_hqx5nnhqx5nnhqx5.png" },
@@ -104,6 +115,24 @@ export const galleryScenes: GalleryScene[] = [
     ],
   },
   {
+    caption: "סריקה תרמית של רצפת המקלחת",
+    service: "water-leak-detection",
+    images: [
+      {
+        slug: "shower-floor-thermal-scan",
+        alt: "טכנאי בחולצת טרמוליק ובמשקפי מגן כורע בתא מקלחת עם דלת זכוכית ומכוון מצלמה תרמית אל רצפת המקלחת.",
+        master: { file: "Gemini_Generated_Image_99484a99484a9948.jpg" },
+        source: geminiBatch2,
+      },
+      {
+        slug: "shower-floor-thermal-screen",
+        alt: "טכנאי מחזיק מצלמה תרמית מעל רצפת מקלחת אפורה עם תעלת ניקוז, ליד דופן זכוכית; על המסך רקע סגול וצורה צהובה וכתומה במרכזו.",
+        master: { file: "Gemini_Generated_Image_1fnqcj1fnqcj1fnq.jpg" },
+        source: geminiBatch2,
+      },
+    ],
+  },
+  {
     caption: "סריקה תרמית של התקרה",
     service: "water-leak-detection",
     images: [
@@ -117,6 +146,24 @@ export const galleryScenes: GalleryScene[] = [
         slug: "ceiling-thermal-screen",
         alt: "טכנאי מחזיק מצלמה תרמית בחדר לבן ומאחוריו כתם רטיבות בתקרה; על המסך רקע כתום וכתם סגול כהה במרכזו.",
         master: { file: "Gemini_Generated_Image_qaueaxqaueaxqaue.jpg" },
+        source: geminiBatch2,
+      },
+    ],
+  },
+  {
+    caption: "סריקה תרמית של קיר בסלון",
+    service: "moisture-detection",
+    images: [
+      {
+        slug: "living-room-wall-thermal-scan",
+        alt: "טכנאי בחולצת טרמוליק כורע ברך על רצפת אריחים בהירה ומכוון מצלמה תרמית אל כתמים חיוורים בקיר לבן, ליד דלתות הזזה מזכוכית בסלון מואר.",
+        master: { file: "Gemini_Generated_Image_a8lc69a8lc69a8lc.jpg" },
+        source: geminiBatch2,
+      },
+      {
+        slug: "living-room-wall-thermal-camera",
+        alt: "טכנאי בחולצת טרמוליק עומד ליד קיר לבן ומכוון מצלמה תרמית אל כתם רטיבות גדול עם שוליים חומים.",
+        master: { file: "Gemini_Generated_Image_sfxqbdsfxqbdsfxq.jpg" },
         source: geminiBatch2,
       },
     ],

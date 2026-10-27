@@ -142,7 +142,7 @@ components/               # FLAT — 28 files, one component per file, PascalCas
   Container CtaButton SectionHeading PageHero Breadcrumbs Logo JsonLd
   Hero TrustBar MethodExplainer ServicePillars ServiceCard Process Faq ContactCTA
   ServiceChooser                       # homepage symptom→service decision aid (lib/services.ts)
-  Gallery                              # homepage scene pairs (lib/gallery.ts) — AI images; no label of any kind (owner, 2026-10-26)
+  Gallery                              # homepage scenes, 2–3 images each (lib/gallery.ts) — AI images; no label of any kind (owner, 2026-10-26)
   ArticleBody                          # renders the typed blocks — the reason FAQPage can be DERIVED
   GuaranteeTerms                       # the bounded guarantee on /pricing/, from site.guaranteeTerms
   ContactForm ThankYouContent          # the form + its post-submit page
@@ -473,7 +473,8 @@ shows an updates strip after the method explainer; it hides itself 45 days after
   business-facts §G): the wording is **approved** (fingerprint `86e30fc91128`, stamped in both
   registers), the wartime line is **confirmed** for this business, and the export budget is
   **raised from 6 MB to 7.5 MB** ([performance-guidelines.md](docs/performance-guidelines.md) §1 —
-  the live surfaces take `out/` to ≈6.93 MB). The kit is synced from a committed 3locksmiths
+  the live surfaces take `out/` to ≈6.93 MB; raised again to 8 MB on 2026-10-27, for the
+  gallery's approved images). The kit is synced from a committed 3locksmiths
   (`live-kit.lock.json` names `cf3a5460aa8b`, no `+dirty`). **Still to do, outside this repo
   (fleet ops):** add the three origins (apex, www, `.pages.dev`) to the status switch's CORS list —
   without it the switch is unreadable here, every seasonal line and the card stay off, and a phone

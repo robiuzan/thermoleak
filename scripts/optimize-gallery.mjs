@@ -3,7 +3,7 @@
  *
  * WHY MASTERS LIVE OUTSIDE public/
  *
- * public/ is copied verbatim into out/, and every byte of out/ counts against the 7,500,000 B export
+ * public/ is copied verbatim into out/, and every byte of out/ counts against the 8,000,000 B export
  * budget (docs/performance-guidelines.md §1). The masters are 0.2–2.6 MB generator images — the
  * first batch (31 files, 55,195,544 B) was dropped straight into public/images/ on 2026-10-22, which
  * would have shipped 8× the whole site's weight on the next deploy. So masters sit in
@@ -13,8 +13,9 @@
  *
  * ONE SIZE, ONE FORMAT — measured 2026-10-22, not assumed
  *
- * Every image is cover-cropped to 720×1200 (3:5 — the masters are ~0.59, so the crop trims a few
- * pixels, after the optional `master.crop` that cuts clutter away) and encoded as WebP q85. The
+ * Every image is cover-cropped to 720×1200 (3:5 — most masters are 0.56–0.59, so the crop trims a
+ * few pixels; a 3:4 master loses a fifth of its width, which the drift warning below flags), after
+ * the optional `master.crop` that cuts clutter away, and encoded as WebP q85. The
  * gallery's tiles render at most ~345 CSS px wide, so 720 px is right for a 2× screen — the same
  * single-size reasoning as hero.webp (§3); a srcset ladder would double the deploy weight for a few
  * KB per visitor. q85 because thermal colour ramps band below q80 (§3): at q75 the camera screen's

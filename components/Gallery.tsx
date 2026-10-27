@@ -11,8 +11,9 @@ import { getService } from "@/lib/services";
 import Container from "./Container";
 import SectionHeading from "./SectionHeading";
 
-// Homepage gallery: each scene pairs a wide shot with a close-up of the thermal camera in use. The
-// images are AI illustrations that, by the owner's decision of 2026-10-26, carry no label at all —
+// Homepage gallery: each scene pairs a wide shot with a close-up of the thermal camera in use; a
+// three-image scene takes the full row from md up. The images are AI illustrations that, by the
+// owner's decision of 2026-10-26, carry no label at all —
 // not on the page, not in the alt text, not in the files (docs/eeat-and-trust.md §5). Their
 // provenance lives only in `source.kind` (lib/gallery.ts). Below the fold everywhere: lazy,
 // dimensioned, no client JS.
@@ -29,10 +30,16 @@ export default function Gallery() {
                 `lib/gallery.ts: no service with the slug '${scene.service}'`,
               );
             }
+            const triple = scene.images.length === 3;
             return (
-              <li key={scene.caption}>
+              <li
+                key={scene.caption}
+                className={triple ? "md:col-span-2" : undefined}
+              >
                 <figure className="h-full rounded-2xl border border-ink/10 bg-white p-3 shadow-sm">
-                  <div className="grid grid-cols-2 gap-2">
+                  <div
+                    className={`grid gap-2 ${triple ? "grid-cols-3" : "grid-cols-2"}`}
+                  >
                     {scene.images.map((image) => (
                       <Image
                         key={image.slug}

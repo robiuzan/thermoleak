@@ -48,7 +48,7 @@ nobody is serving.
 with **no srcset**. On most sites that is the headline finding. Here it is close to irrelevant: **all
 four** service illustrations are SVGs (`/images/services/*.svg`, ~1.2 KB each), where srcset is
 meaningless, and `public/images/` was about **80 KB** until the homepage gallery added lazy
-720×1200 WebP files below the fold (four on 2026-10-22; six since 2026-10-27, 270,136 B).
+720×1200 WebP files below the fold (four on 2026-10-22; eleven since 2026-10-27, 540,802 B).
 
 What actually matters:
 

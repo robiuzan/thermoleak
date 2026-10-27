@@ -41,7 +41,7 @@ read-only and you never invent a fact to close a gap.
    percentage, or a "sample". Sweep the whole tree, not just the pages that carried them: `/guides/`
    and `/locations/` shipped after the purge and are the likeliest place a number arrives unsourced.
    Any reappearance without a verifiable public source is **Critical**.
-   The homepage gallery's six AI illustrations (`lib/gallery.ts`) are not a reappearance: they are
+   The homepage gallery's eleven AI illustrations (`lib/gallery.ts`) are not a reappearance: they are
    the owner's scoped exception (`docs/eeat-and-trust.md` §5; business-facts §A). Audit its limits —
    none appears in schema, `og:image` or a GBP, no other page shows one, captions stay activities —
    and never re-file the absent label: the owner removed every label, visible and hidden, 2026-10-26.
