@@ -548,8 +548,15 @@ deriving them from `site.guaranteeTerms`, which is drift waiting to happen. This
 old §7.4, not better: an undefined promise is vague, but a promise whose published scope is
 unreachable from seven of the eight places it is made is a dispute.
 
-**7.9 🔴 (opened 2026-10-28, by the post-deploy review of the 12-city deploy) — the site publishes
-an out-of-hours availability promise that this repo's own register marks unconfirmed.**
+**7.9 ✅ (opened 2026-10-28, by the post-deploy review of the 12-city deploy; closed the same day) —
+the site published an out-of-hours availability promise that this repo's own register marked
+unconfirmed.**
+
+**Closed 2026-10-28 — outcome 1 below.** Asked whether the business answers active-leak calls outside
+opening hours, the owner answered "yes" (in the Claude Code session that ran the 12-city deploy).
+business-facts §D now records it as ✅ with that provenance, beside the 2026-10-12 row whose narrower
+sign-off is why this was flagged. The copy stays exactly as published. The live-kit registers still
+carry no availability or emergency wording: that is the fleet rule (§G), not a question of truth.
 
 `site.emergencyNote` reads **`שירות חירום לנזילות פעילות — זמינים גם מעבר לשעות הפעילות`** and renders
 on two live pages: `app/contact/page.tsx:78`, in a highlighted box directly under the published
@@ -566,9 +573,10 @@ presented as fact — and it sits on `/contact/`, the page a person reads at the
 whether to call tonight. Every other 🔶 on this list is a claim nobody acts on immediately; this one
 asks someone with water coming through a ceiling at 21:00 to rely on it.
 
-**Note the rulebook contradicts itself here, so do not "resolve" this from CLAUDE.md §1.** §1 lists
-the hours as "ראשון–חמישי 08:00–18:00, שישי 08:00–13:00, plus out-of-hours for active leaks" — stating
-the promise as settled — while §14 and business-facts §D both say it is not. §1 is the stale side.
+**The rulebook contradicted itself here.** §1 lists the hours as "ראשון–חמישי 08:00–18:00, שישי
+08:00–13:00, plus out-of-hours for active leaks", stating the promise as settled, while §14 and
+business-facts §D said it was not. The owner's answer shows §1 was right; §14's "unconfirmed" was
+the stale line, and was corrected on 2026-10-28.
 
 **This is the owner's to answer, not an agent's.** Two outcomes, and an agent may not pick:
 
@@ -582,9 +590,8 @@ leads — that is why this is a question and not a fix. Until it is answered, tr
 load-bearing and unverified, and do not copy it into a new page, a city page, or the live registers.
 
 **✅ Verified good:** the privacy policy and accessibility statement are real, substantive documents,
-not boilerplate stubs. Service area and contact routes are clear and consistent. (This line used to
-vouch for "hours" too; §7.9 is precisely a problem with what sits next to the published hours, so
-hours are no longer covered by this line.)
+not boilerplate stubs. Service area and contact routes are clear and consistent. The published hours and
+the out-of-hours line beside them are owner-confirmed since 2026-10-28 (§7.9).
 
 ---
 

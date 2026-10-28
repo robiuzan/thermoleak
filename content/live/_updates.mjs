@@ -13,16 +13,25 @@
  * the page's content.
  *
  * ✅ APPROVED by the owner on 2026-10-12, on the fleet wording sign-off page — approved fingerprint
- *   86e30fc91128 (sha256 of _campaigns.mjs + _updates.mjs as approved). A wording change needs a
- *   new approval; the build refuses a register without its `approved` stamp.
- * ⚠ The newest item is 17/09/2026: from 01/11/2026 the strip hides itself until a newer real item
- *   is added (it ships visible only if the site is deployed before then).
+ *   86e30fc91128 (sha256 of _campaigns.mjs + _updates.mjs as approved) — and again on 2026-10-28,
+ *   when the owner approved adding the city-pages item. A wording change needs a new approval; the
+ *   build refuses a register without its `approved` stamp.
+ * ⚠ The newest item is 28/10/2026: from 12/12/2026 the strip hides itself until a newer real item
+ *   is added.
  */
 const updates = {
   approved:
-    "2026-10-12 — Robi (owner), fleet wording sign-off page, fingerprint 86e30fc91128 (with the neutral line the owner chose there: ״נזק מים בבית? חשוב לתעד לפני שמתקנים״)",
+    "2026-10-28 — Robi (owner), in a Claude Code session: approved adding one new item (the 2026-10-28 city-pages line), drafted from the published pages and shown to the owner in the deploy report. Earlier wording: 2026-10-12, fleet wording sign-off page, fingerprint 86e30fc91128 (with the neutral line the owner chose there: ״נזק מים בבית? חשוב לתעד לפני שמתקנים״)",
   heading: "עדכוני האתר",
   items: [
+    {
+      date: "2026-10-28",
+      text: "הוספנו עמודים שמסבירים איך אופי הבנייה המקומית — שיכונים ותיקים, מגדלים חדשים ובתים על מדרון — משפיע על חיפוש נזילה.",
+      href: "/locations/",
+      linkLabel: "לעמודי האזור",
+      source:
+        "app/locations/page.tsx — ״עמודי אזור״ — the hub lists every city page from lib/locations.ts; nine were added on 2026-10-28 (commit a419de9) and deployed the same day (ops logs/deploys.csv 2026-10-28T13:40:18Z)",
+    },
     {
       date: "2026-09-17",
       text: "פרסמנו פירוט של מה כולל ביקור איתור ומה לא נכלל בו.",

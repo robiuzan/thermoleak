@@ -461,7 +461,8 @@ shows an updates strip after the method explainer; it hides itself 45 days after
   `source` (a `lib/articles.ts` / `lib/services.ts` quote must link to the page that shows it — the
   gate checks the slug it sits under); nothing 🔶, no hours, availability, emergency, speed, price,
   the guarantee's slogan, coverage, credentials, counts or reviews — the business is closed on
-  Shabbat and its out-of-hours service is unconfirmed. Calm / no-card pages, the NAP and this site's
+  Shabbat, and its out-of-hours service for active leaks (owner-confirmed 2026-10-28) is still
+  availability wording, which the fleet rule keeps off these surfaces. Calm / no-card pages, the NAP and this site's
   own ⛔ claim stems: `live.config.mjs`. Both registers need the owner's
   `approved: "YYYY-MM-DD — who, how"`, or the build fails (`LIVE_DRAFT=1 npm run build` previews a
   draft locally only — never deploy that output).
