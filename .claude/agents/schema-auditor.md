@@ -94,9 +94,11 @@ date or licence.
 9. **Validity, and property domains.** Every block parses; required fields per `@type` present; no
    dangling `@id`. The `WebSite` node and the `LocalBusiness` node both ship globally and
    cross-reference correctly. Also check that each property is in schema.org's declared domain for its
-   type — one known exception is already logged: `inLanguage` on a plain `Service` (**SD-9**, 7 nodes),
-   silent in Google's Rich Results Test but a warning in the schema.org validator. Report it with that
-   id rather than as a new finding.
+   type. **`SD-9` is CLOSED (2026-10-28) — do not report it.** `inLanguage` on a plain `Service` was
+   the graph's only out-of-domain property, across 7 nodes; it was removed from both `Service`
+   builders in `lib/jsonld.ts`. It is still correct on `WebSite`, the page nodes and `Article`, which
+   are creative works. If you find `inLanguage` inside a `Service` node again, that is a **new
+   regression**, not SD-9.
 
 ## Method
 

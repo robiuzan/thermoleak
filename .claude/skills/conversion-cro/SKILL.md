@@ -6,9 +6,12 @@ description: Lead conversion on thermoleak — click-to-call above the fold, the
 # Conversion
 
 Three actions, in priority order: **phone call → WhatsApp → contact form.** The structural basics are
-right, and the form's old failure path is closed. What is left is one mobile layout defect, one PII
-defect, and the fact that **nothing measures any of it yet** — the container ships but no conversion
-event fires (`/tracking-analytics`, finding AN-1).
+right, and the form's old failure path is closed. **Updated 2026-10-28:** the mobile layout defect
+(the sticky bar over the footer's legal row) and the PII defect (SEC-3) were both fixed in Sprint 4,
+and Sprint 6 wired the three conversion events a container cannot observe. What is left is that
+**the container still measures only `page_view`** — the repo pushes `lead_whatsapp_open`,
+`lead_handoff_blocked` and `thank_you_view`, but no GTM tag listens for them, and the four
+`[data-cta]` click events have no trigger at all (`/tracking-analytics`, finding §13.5).
 
 Mobile-specific rules — thumb zone, tap targets, bar height — come from
 `docs/mobile-ux-and-personalization.md`; this skill is the funnel, that doc is the ergonomics.
@@ -112,18 +115,24 @@ grep -rn 'telHref\|whatsappHref(\|mailHref' app components | grep -v 'data-cta\|
 
 Two things are genuinely open:
 
-1. **Nothing reads them.** The container has zero click triggers and the repo has zero `dataLayer`
-   pushes, so every CTA click on this site is unmeasured (finding AN-1). That is the real gap — not
-   the attributes.
+1. **Nothing reads them.** The container has zero click triggers, so every CTA *click* on this site
+   is still unmeasured (finding §13.5) — `call_click`, the number-one conversion goal, included.
+   **Note what changed 2026-10-28:** the repo is no longer silent. `lib/analytics.ts` pushes three
+   events from code, so "the repo has zero `dataLayer` pushes" is no longer true. Those three are
+   deliberately the only ones in code — the click events belong in the container, because two
+   sources for one click produce two numbers. The gap is the container, not the attributes.
 2. **The newer silos have no attribution of their own.** `/guides/` and `/locations/` shipped after
    the inventory, and their CTAs come from the shared components — so a click from a location page is
    indistinguishable from one anywhere else. If per-silo attribution matters, that needs
    `location-*` / `guide-*` values, which do not exist. Whether you need them is a judgement call;
    decide it deliberately rather than assuming coverage is complete.
 
-**One attribute is a trap:** `data-cta="thankyou-whatsapp"` sits on a link whose href contains the
-visitor's name and phone. Never put it in a click trigger until that href is fixed
-(`/tracking-analytics`, findings SEC-3 / AN-2).
+**The `thankyou-whatsapp` trap is CLOSED — do not treat it as a blocker (SEC-3 / AN-2, fixed
+2026-09-17).** That anchor used to carry the visitor's name and phone in its `href`. It now renders
+the generic `whatsappHref()` and opens the prefilled conversation from an `onClick`, so the personal
+URL never enters the DOM. **A `[data-cta]` click trigger is safe to build**, and nothing in the repo
+is still waiting on this. Two standing rules remain: read `data-cta`, **never** Click URL; and any new
+control needing personal data in a URL builds it at click time, never in an attribute.
 
 ## Gap 7 — page-level CTA coverage
 

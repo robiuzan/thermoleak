@@ -38,12 +38,15 @@ against that fact.
    `Strict-Transport-Security: max-age=31536000` (no preload/includeSubDomains — deliberate,
    business-facts §F), `X-Frame-Options: SAMEORIGIN`, `nosniff`,
    `Referrer-Policy: strict-origin-when-cross-origin`,
-   `Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()`, a
+   `Permissions-Policy: camera=(), microphone=(), geolocation=(), browsing-topics=()`, a
    `Content-Security-Policy-Report-Only` (see 2), plus immutable caching on `/_next/static/*`.
-   Verify presence **and** values; Pages merges its own defaults. Two live nits worth reporting:
-   `interest-cohort=()` targets FLoC, which Chrome removed — its live successor `browsing-topics=()`
-   is absent, and a Google tag now runs here that could read Topics (SEC-7, open); and `payment`,
-   `usb`, `display-capture` and friends are unused by this site and free to deny.
+   Verify presence **and** values; Pages merges its own defaults. **`SEC-7` is CLOSED (2026-10-28):**
+   `interest-cohort=()` targeted FLoC, which Chrome removed, and was replaced by `browsing-topics=()`.
+   Do not report it as open, and do not propose restoring `interest-cohort` — it governs nothing.
+   One nit remains worth reporting: `payment`, `usb`, `display-capture` and friends are unused by this
+   site and free to deny. Also closed the same day: `connect-src` gained `https://*.google-analytics.com`
+   for GA4's regional collect hosts (SEC-4), and the unexecutable promote-to-enforcing gate was
+   replaced with a Pages-preview walkthrough (SEC-2 / §12.7). Promotion itself is still undone.
 2. **The CSP — shipped, report-only, and the gate to enforcing is the real work.** `public/_headers`
    ships `Content-Security-Policy-Report-Only`, verified live, and it **already allowlists
    `https://www.googletagmanager.com` in `script-src`, `img-src` and `frame-src`** plus the GA4

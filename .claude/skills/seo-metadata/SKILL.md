@@ -73,13 +73,24 @@ Two live gaps against that spec, both **code** defects, both open:
   as the **card blurb** — so they run well short of 150 chars and carry no phone CTA (SEO-03). Most
   other routes are short too, so this is a site-wide convention rather than a regression; fixing it
   properly means a separate `metaDescription` field, the way `lib/articles.ts` already splits it.
-- The three location descriptions are a raw `location.answer.slice(0, 155)`, which cuts mid-word on all
-  three pages and disagrees with the untruncated `og:description` beside it (SEO-02). The keyword-map
-  §5 Location formula is not implemented at all.
+- ✅ **The location descriptions were fixed in Sprint 4 (SEO-02) — do not reapply the old recipe.**
+  They used to be a raw `location.answer.slice(0, 155)`, which cut mid-word on all three pages
+  (בת ים's severed its own name). `Location` now carries an **authored `metaDescription`** field,
+  written to the keyword-map §5 Location formula and ending in the phone number; the three shipped
+  values measure 158, 152 and 153 characters. Two reasons not to go back: `location.answer` became
+  `{ q, a }` on 2026-10-28, so `.slice` on it is a **type error**; and the answer block already
+  appears in the first visible paragraph, so reusing it wastes the one field that can carry a
+  distinct hook.
 
-Only claim what `docs/business-facts.md` confirms. Still 🔶 and unusable in a description: the ₪450
-price, the certifications, the equipment model, the report turnaround. The guarantee scope and the
-no-call-out-fee terms **are** confirmed — `site.guaranteeTerms` is the only permitted source for them.
+Only claim what `docs/business-facts.md` confirms. **This list was corrected 2026-10-28 — most of it
+is now confirmed, and re-gating a confirmed fact is as wrong as inventing one.** CONFIRMED and usable:
+the **₪350** entry price (read `site.priceFrom`, never the literal), the **FLIR E8** camera, a
+two-person team, third-party insurance, national service by prior arrangement (~2 hours from Tel
+Aviv), tax invoices, the **3-day** report turnaround, and what the visit includes/excludes
+(`site.visitScope`). CONFIRMED ABSENT — never write them: a **ח.פ. or `בע״מ`**, a thermography
+**certificate**, and an accessibility coordinator. Still 🔶: accepted payment methods, and the
+insurer's name and coverage amount. The guarantee scope and the no-call-out-fee terms **are**
+confirmed — `site.guaranteeTerms` is the only permitted source for them.
 The purged claims (a rating, a job count, a success rate) must never come back in any field.
 
 ## Canonicals

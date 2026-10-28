@@ -13,7 +13,7 @@ description: Security posture for a static export on Cloudflare Pages — public
 > against the retired server for 15 days (see `/deploy-thermoleak`), so **always verify headers
 > against the live response, never against the repo's intent.**
 
-## What ships today (`public/_headers`, verified against the live response 2026-09-06)
+## What ships today (`public/_headers`, repo state 2026-10-28 — RE-VERIFY LIVE AFTER DEPLOY)
 
 ```
 /*
@@ -21,15 +21,28 @@ description: Security posture for a static export on Cloudflare Pages — public
   X-Frame-Options: SAMEORIGIN
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
-  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; connect-src 'self' https://www.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; object-src 'none'; frame-src https://www.googletagmanager.com; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), browsing-topics=()
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://imgquarry.com; img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; object-src 'none'; frame-src https://www.googletagmanager.com; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
 
 /_next/static/*
   Cache-Control: public, max-age=31536000, immutable
+
+/images/*
+  Cache-Control: public, max-age=2592000
 ```
 
-That is the entire file, comment header aside — **including a CSP**. A `curl` of the live site
-returned exactly these six `/*` headers on 2026-09-06.
+There are two more `/*`-style blocks the snippet above omits for brevity: an absolute-URL rule
+sending `X-Robots-Tag: noindex` on `https://:project.pages.dev/*`, and the comment header. **Read
+the real file rather than this block** — it has been stale twice.
+
+**Changed 2026-10-28 (Sprint 6), and the reason each matters:**
+- `browsing-topics=()` replaced `interest-cohort=()`. FLoC was withdrawn, so the old directive
+  governed nothing; Topics is what the tag manager running here could actually read.
+- `connect-src` gained `https://*.google-analytics.com` for GA4's regional `regionN.` collect hosts,
+  which matched neither the exact `www.` host nor `*.analytics.google.com` (a different registrable
+  domain). Done before enforcement rather than discovered by it.
+- `https://imgquarry.com` has been in `connect-src` since 2026-10-12 for the live-kit status switch.
+- `/images/*` caching landed in Sprint 4.
 
 Notes on the choices:
 
@@ -38,14 +51,21 @@ Notes on the choices:
 - `SAMEORIGIN` over `DENY` leaves room for a future embed of the site itself.
 - Cloudflare Pages merges `_headers` with its own defaults (`nosniff`, `referrer-policy`); it does
   not replace them. Duplicates are harmless.
-- ⚠️ **The comment header inside `public/_headers` (lines 6–9) is itself stale.** It says the CSP
-  was shipped "BEFORE any analytics lands" and that the site "currently has zero third-party
-  scripts" — untrue since `f06aab8`. Lines 10–11, the promote-to-enforcing gate, are still accurate.
-  Correcting that comment is a `public/_headers` edit; it changes no served header.
-- ⚠️ **`interest-cohort=()` is a dead directive.** FLoC was withdrawn; the successor it was meant to
-  block is the Topics API, gated by `browsing-topics=()`. Nothing breaks today — the header simply
-  opts out of nothing. Adding `browsing-topics=()` is a one-token change to `public/_headers`;
-  it is open, not done.
+- ✅ **The stale comment header was rewritten 2026-10-28.** It used to say the CSP shipped "BEFORE
+  any analytics lands" and that the site has "zero third-party scripts" — untrue since `f06aab8`.
+  **Do not cite line numbers from it**; that is what made this skill wrong twice.
+- ✅ **`interest-cohort=()` → `browsing-topics=()` is DONE (2026-10-28, SEC-7).** Do not report it as
+  open, and do not "restore" `interest-cohort` — it is inert, not a fallback.
+- ⚠️ **The promote-to-enforcing gate was replaced 2026-10-28, because the old one was impossible.**
+  It said "a full week of real traffic with no legitimate violations", but the header has no
+  `report-uri` and no `report-to`, so it had never collected one report and never would (§12.7).
+  The gate is now a deterministic Pages-preview walkthrough, written out in the file itself. Two
+  things to know before running it: the enforcing policy is an **edit to `public/_headers`**, and
+  `ops/deploy-site.ps1` deploys to `--branch main` — so use a throwaway branch and `wrangler` by
+  hand, and never run the ops script while the file says enforcing.
+- ⚠️ **`'unsafe-inline'` in `script-src` is STRUCTURAL under `output: "export"`** and cannot be
+  removed: Next streams the RSC flight payload as inline `<script>` tags, there is no server to mint
+  a nonce, and a hash policy cannot survive a rebuild. Tightening it breaks hydration on every route.
 
 Verify after any deploy:
 

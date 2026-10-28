@@ -10,6 +10,15 @@
  * actually matters: every emitted route is either IN the sitemap or on an explicit exclusion list.
  * Adding a page therefore forces a deliberate choice — index it, or state why not.
  *
+ * It ALSO asserts `public/llms.txt` ⊆ `sitemap.xml`. CLAUDE.md §3 has always stated that rule, and
+ * the roadmap claimed this script enforced it — it did not, and nothing else read llms.txt either.
+ * The cost showed up on 2026-10-28, when nine `/locations/` URLs for pages that were not built sat
+ * in llms.txt and passed every check green. llms.txt is hand-maintained **because `output: "export"`
+ * forbids the route handler that would generate it**, so it is the one file in the repo with no
+ * mechanical link to reality — which is exactly why it needs a gate rather than a convention.
+ * A dead URL here is worse than a dead URL anywhere else: this file exists to be read by answer
+ * engines, so every entry is a promise that the page is there.
+ *
  * Run after `npm run build`. Exits non-zero on drift.
  */
 import { readFileSync, readdirSync, statSync } from "node:fs";
@@ -64,9 +73,38 @@ for (const route of stale) {
   console.error(`FAIL: ${route} is in sitemap.xml but no longer emitted — remove it from app/sitemap.ts.`);
 }
 
-if (missing.length || stale.length) process.exit(1);
+// public/llms.txt ⊆ sitemap.xml (CLAUDE.md §3). Read from out/ so it is the SHIPPED copy that is
+// checked, not the source — they are the same file today, but out/ is what Pages serves.
+let llmsDead = [];
+let llmsCount = 0;
+try {
+  const llms = readFileSync(join(OUT, "llms.txt"), "utf8");
+  const urls = [...new Set([...llms.matchAll(/https?:\/\/thermoleak\.co\.il(\/[^\s)\]>,"']*)/g)].map((m) => m[1]))];
+  llmsCount = urls.length;
+  llmsDead = urls.filter((u) => {
+    const route = u.endsWith("/") ? u : `${u}/`;
+    // A file reference (sitemap.xml, robots.txt, llms.txt itself) is not a route — check it exists.
+    if (/\.[a-z0-9]+$/i.test(u)) {
+      try { statSync(join(OUT, u.replace(/^\//, ""))); return false; } catch { return true; }
+    }
+    return !inSitemap.has(route);
+  });
+} catch {
+  console.error("FAIL: out/llms.txt not found. It is hand-maintained in public/ and must ship.");
+  process.exit(1);
+}
+
+for (const url of llmsDead) {
+  console.error(
+    `FAIL: llms.txt advertises ${url}, which is not in sitemap.xml and not a shipped file.\n` +
+      `      Answer engines read this file as a promise that the page exists. Either ship the page\n` +
+      `      (and index it) or remove the line — CLAUDE.md §3: llms.txt must stay a SUBSET of the sitemap.`,
+  );
+}
+
+if (missing.length || stale.length || llmsDead.length) process.exit(1);
 
 console.log(
   `sitemap parity OK — ${emitted.length} routes emitted, ${inSitemap.size} indexed, ` +
-    `${INTENTIONALLY_EXCLUDED.size} deliberately excluded.`,
+    `${INTENTIONALLY_EXCLUDED.size} deliberately excluded; llms.txt ${llmsCount} URL(s), all live.`,
 );

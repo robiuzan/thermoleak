@@ -407,14 +407,38 @@ All five were checked against a fresh export on 2026-10-28. ✅ = verified, with
   and no `interest-cohort`. **Verified in `out/_headers`; still to be confirmed live after deploy** —
   headers come from Cloudflare Pages, so the repo is not evidence (CLAUDE.md §10).
 
-### Owner-gated verification (separate step — needs GA4 access and a deploy)
+### Verification after deploy — what is actually runnable, in order
 
-- A real submit from a phone produces, in GA4 Realtime within 60 seconds: one `lead_whatsapp_open`
-  (or `lead_handoff_blocked`) carrying `service` and `handoff_ok`, and one `thank_you_view`.
-- The same submit produces **no** `/g/collect` request containing the tester's name or phone —
-  **inspect the request, not the config.** This check has been specified since Sprint 1 and has
-  never actually been run.
-- The enforcing-CSP preview walkthrough produces zero console violations across all 19 routes.
+⚠️ **The GA4 Realtime assertion that used to head this list has moved to "Blocked on" below.** It was
+not an owner-access problem: there is no GA4 tag listening for these three event names, so a real
+submit produces nothing in Realtime and the result is indistinguishable from a broken `pushEvent`.
+Asking the owner to run it would have had them conclude the sprint was broken.
+
+1. `curl -sI https://thermoleak.co.il/ | grep -i permissions-policy` → contains `browsing-topics=()`
+   and no `interest-cohort`. **Repo evidence does not count** — Pages merges its own headers
+   (CLAUDE.md §10).
+2. `curl -o /dev/null -w '%{http_code}' "https://www.googletagmanager.com/gtm.js?id=GTM-KWGGH438"`
+   → `200`. A snippet in the HTML proves nothing; this fleet lost 18 days of analytics to two
+   fabricated container IDs.
+3. **A real submit from a phone, with the Network tab or GTM Preview open.** Assert both halves:
+   the three pushes appear in `window.dataLayer` carrying `service` and `handoff_ok`, **and** no
+   `/g/collect` request contains the tester's name, phone, area or message. **Inspect the request,
+   not the config.** Both halves are observable with no container change, and the PII half has been
+   specified since Sprint 1 and **has still never actually been run**.
+4. Reload `/thank-you/` and press back into it: `thank_you_view` must **not** push again. Submit the
+   form a second time: it must push again, with the second lead's `service`.
+5. Click a guide byline → it must land on `/about/#founder` with the founder heading **below** the
+   sticky header, not behind it.
+
+### Blocked on
+
+- **A GA4 tag for the three pushed events.** Fleet-ops: a Custom Event trigger per event name in the
+  shared container, plus confirmation that `thermoleak.co.il` is in the container's GA4 hostname
+  RegEx table (`components/Analytics.tsx`). Until then the pushes reach `window.dataLayer` and stop
+  there, and **GA4 Realtime will show nothing** — that is the expected state, not a defect.
+- **The enforcing-CSP preview walkthrough** (zero console violations across all 19 routes). Needs a
+  throwaway branch, because the enforcing policy is an edit to `public/_headers` and
+  `ops/deploy-site.ps1` deploys to `--branch main`.
 
 ---
 
