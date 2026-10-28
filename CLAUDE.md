@@ -508,10 +508,27 @@ shows an updates strip after the method explainer; it hides itself 45 days after
   **raised from 6 MB to 7.5 MB** ([performance-guidelines.md](docs/performance-guidelines.md) §1 —
   the live surfaces take `out/` to ≈6.93 MB; raised again to 8 MB on 2026-10-27, for the
   gallery's approved images, and to 15 MB on 2026-10-28, for the nine remaining city pages). The kit is synced from a committed 3locksmiths
-  (`live-kit.lock.json` names `cf3a5460aa8b`, no `+dirty`). **Still to do, outside this repo
-  (fleet ops):** add the three origins (apex, www, `.pages.dev`) to the status switch's CORS list —
-  without it the switch is unreadable here, every seasonal line and the card stay off, and a phone
-  visitor sees a seasonal bar open and then close; widen the GTM trigger
+  (`live-kit.lock.json` names `cf3a5460aa8b`, no `+dirty`).
+- **The status switch's CORS list is DONE — verified against production 2026-10-28.** All three
+  origins answer with a matching `Access-Control-Allow-Origin`:
+
+  ```bash
+  for o in https://thermoleak.co.il https://www.thermoleak.co.il https://thermoleak.pages.dev; do
+    curl -sSD - -o /dev/null -H "Origin: $o" https://imgquarry.com/status/fleet.json | grep -i allow-origin
+  done
+  ```
+
+  The switch reads `{"mode":"normal"}`, and the served homepage carries a real seasonal line
+  (`data-campaign="first-rains"` inside `<div class="live-topbar">`). This bullet used to sit in the
+  "still to do" list below and say the switch was **unreadable here, every seasonal line and the card
+  stay off, and a phone visitor sees a seasonal bar open and then close** — all three of those are now
+  false, and an agent who believed them would go looking for a live-surface bug that does not exist, or
+  "fix" a bar that is working. Re-check with the loop above before ever reopening it; do not restore
+  the old wording from memory.
+
+- **Still to do, outside this repo (fleet ops):** widen the GTM trigger
   `CE - popup events (3locksmiths)` so its hostname condition matches this site — **one shared
   trigger for the whole fleet** (owner decision 2026-10-12), not a trigger per site; and set
-  `NTFY_TOPIC`. Order and commands: the kit README, "Before a site's first deploy".
+  `NTFY_TOPIC`. Neither is verifiable from outside (one is container config, one a repo secret), so
+  neither may be marked done by inspection the way the CORS line was. Order and commands: the kit
+  README, "Before a site's first deploy".

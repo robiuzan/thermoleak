@@ -168,10 +168,12 @@ that is exactly what the +0 B row catches.
    `<dialog>` in the top layer, reserving no space; the homepage updates strip is server-rendered
    and, once stale, hidden before first paint. The one after-paint change is the fleet status
    switch removing the bar (`off`, `quiet` on a phone, or an unreadable switch) — a single shift
-   that the next page applies before paint from a cached answer. Until the switch's CORS list
-   includes this site's three origins the switch IS unreadable here: during a season a phone
-   visitor would see the bar appear and then go (again every 5 minutes, when the cached
-   "unreadable" expires), which is why the CORS step is part of the first deploy. **And a readable
+   that the next page applies before paint from a cached answer. **The CORS step is DONE —
+   verified against production 2026-10-28:** all three origins (apex, www, `.pages.dev`) get a
+   matching `Access-Control-Allow-Origin` and the switch answers `{"mode":"normal"}`, so the
+   "bar appears and then goes, again every 5 minutes as the cached 'unreadable' expires" failure
+   this paragraph used to predict is **not** what a phone visitor gets. CLAUDE.md §14 carries the
+   one-line re-check; do not restore the old claim from memory. **And a readable
    switch that answers later than 1.5 s** (a slow phone connection) costs TWO shifts, on every page
    view: in season the bar closes at the 1.5 s timeout and reopens when the late "normal" arrives —
    measured 2026-10-12 at 390×844, 0.0383 each (CLS ≈ 0.077 from the bar alone). "normal" is never
