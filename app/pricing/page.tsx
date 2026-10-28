@@ -3,7 +3,13 @@ import Link from "next/link";
 import { ArrowLeft, Check, Wallet, X } from "lucide-react";
 import { services } from "@/lib/services";
 import { pricing } from "@/lib/pricing";
-import { site, telHref, whatsappHref, defaultWhatsappMessage, pageOpenGraph } from "@/lib/site";
+import {
+  site,
+  telHref,
+  whatsappHref,
+  defaultWhatsappMessage,
+  pageOpenGraph,
+} from "@/lib/site";
 import { faqPageJsonLd } from "@/lib/jsonld";
 import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
@@ -15,10 +21,13 @@ import GuaranteeTerms from "@/components/GuaranteeTerms";
 
 export const metadata: Metadata = {
   title: "מחירון איתור נזילות",
-  description:
-    `כמה עולה איתור נזילות? ביקור איתור החל מ-₪${site.priceFrom}, מחיר סופי שקוף שנמסר מראש לפי גודל הנכס והיקף הבדיקה. כל המחירים וההסברים — בעמוד אחד.`,
+  description: `כמה עולה איתור נזילות? ביקור איתור החל מ-₪${site.priceFrom}, מחיר סופי שקוף שנמסר מראש לפי גודל הנכס והיקף הבדיקה. כל המחירים וההסברים — בעמוד אחד.`,
   alternates: { canonical: "/pricing/" },
-  ...pageOpenGraph({ path: "/pricing", title: `מחירון איתור נזילות | ${site.nameHe}`, description: `כמה עולה איתור נזילות? ביקור איתור החל מ-₪${site.priceFrom}, מחיר סופי שקוף שנמסר מראש לפי גודל הנכס והיקף הבדיקה. כל המחירים וההסברים — בעמוד אחד.` }),
+  ...pageOpenGraph({
+    path: "/pricing",
+    title: `מחירון איתור נזילות | ${site.nameHe}`,
+    description: `כמה עולה איתור נזילות? ביקור איתור החל מ-₪${site.priceFrom}, מחיר סופי שקוף שנמסר מראש לפי גודל הנכס והיקף הבדיקה. כל המחירים וההסברים — בעמוד אחד.`,
+  }),
 };
 
 export default function PricingPage() {
@@ -42,7 +51,9 @@ export default function PricingPage() {
           {/* The AEO answer block — also part of this page's FAQPage graph. */}
           <div className="rounded-2xl border-s-4 border-brand bg-paper p-6">
             <h2 className="text-xl font-bold text-brand">{pricing.answer.q}</h2>
-            <p className="mt-3 leading-relaxed text-ink/80">{pricing.answer.a}</p>
+            <p className="mt-3 leading-relaxed text-ink/80">
+              {pricing.answer.a}
+            </p>
           </div>
 
           {/* What the base visit covers. Owner-approved terms from site.visitScope — the #1
@@ -57,19 +68,33 @@ export default function PricingPage() {
                 <h3 className="text-sm font-bold text-ink">כולל</h3>
                 <ul className="mt-2 space-y-2">
                   {site.visitScope.includes.map((item) => (
-                    <li key={item} className="flex items-start gap-2 text-ink/80">
-                      <Check className="mt-0.5 size-5 shrink-0 text-brand" aria-hidden="true" />
+                    <li
+                      key={item}
+                      className="flex items-start gap-2 text-ink/80"
+                    >
+                      <Check
+                        className="mt-0.5 size-5 shrink-0 text-brand"
+                        aria-hidden="true"
+                      />
                       {item}
                     </li>
                   ))}
                 </ul>
               </div>
               <div>
-                <h3 className="text-sm font-bold text-ink">לא כולל — מתומחר בנפרד</h3>
+                <h3 className="text-sm font-bold text-ink">
+                  לא כולל — מתומחר בנפרד
+                </h3>
                 <ul className="mt-2 space-y-2">
                   {site.visitScope.excludes.map((item) => (
-                    <li key={item} className="flex items-start gap-2 text-ink/80">
-                      <X className="mt-0.5 size-5 shrink-0 text-accent-strong" aria-hidden="true" />
+                    <li
+                      key={item}
+                      className="flex items-start gap-2 text-ink/80"
+                    >
+                      <X
+                        className="mt-0.5 size-5 shrink-0 text-accent-strong"
+                        aria-hidden="true"
+                      />
                       {item}
                     </li>
                   ))}
@@ -78,7 +103,9 @@ export default function PricingPage() {
             </div>
           </section>
 
-          <h2 className="mt-12 text-2xl font-extrabold text-brand">{pricing.ratesHeading}</h2>
+          <h2 className="mt-12 text-2xl font-extrabold text-brand">
+            {pricing.ratesHeading}
+          </h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
             {services.map((service) => {
               const Icon = service.icon;
@@ -90,8 +117,12 @@ export default function PricingPage() {
                   <span className="inline-flex size-11 items-center justify-center rounded-xl bg-brand/10 text-brand">
                     <Icon className="size-5" aria-hidden="true" />
                   </span>
-                  <h3 className="mt-3 text-lg font-bold text-brand">{service.title}</h3>
-                  <p className="mt-2 flex-1 text-sm leading-relaxed text-ink/75">{service.priceModel}</p>
+                  <h3 className="mt-3 text-lg font-bold text-brand">
+                    {service.title}
+                  </h3>
+                  <p className="mt-2 flex-1 text-sm leading-relaxed text-ink/75">
+                    {service.priceModel}
+                  </p>
                   <Link
                     href={`/services/${service.slug}/`}
                     className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand underline underline-offset-2"
@@ -110,9 +141,14 @@ export default function PricingPage() {
           </h2>
           <ul className="mt-6 grid gap-4 sm:grid-cols-2">
             {pricing.factors.items.map((factor) => (
-              <li key={factor.title} className="rounded-xl border border-ink/10 bg-white p-5">
+              <li
+                key={factor.title}
+                className="rounded-xl border border-ink/10 bg-white p-5"
+              >
                 <h3 className="font-bold text-brand">{factor.title}</h3>
-                <p className="mt-1 text-sm leading-relaxed text-ink/70">{factor.desc}</p>
+                <p className="mt-1 text-sm leading-relaxed text-ink/70">
+                  {factor.desc}
+                </p>
               </li>
             ))}
           </ul>
@@ -121,12 +157,16 @@ export default function PricingPage() {
             <div>
               <p className="text-lg font-bold">רוצים מחיר מדויק לנכס שלכם?</p>
               <p className="mt-1 text-sm text-white/80">
-                תארו לנו את הבעיה בטלפון או בוואטסאפ — ותקבלו מחיר מראש. {site.guarantee}.
+                תארו לנו את הבעיה בטלפון או בוואטסאפ — ותקבלו מחיר מראש.{" "}
+                {site.guarantee}.
               </p>
             </div>
             <div className="mt-4 flex shrink-0 flex-col gap-3 sm:mt-0 sm:flex-row">
               <CtaButton href={telHref} variant="accent" dataCta="pricing-call">
-                חייגו: {site.phone.display}
+                חייגו:{" "}
+                <span dir="ltr" className="whitespace-nowrap">
+                  {site.phone.display}
+                </span>
               </CtaButton>
               <CtaButton
                 href={whatsappHref(defaultWhatsappMessage)}
@@ -139,15 +179,21 @@ export default function PricingPage() {
             </div>
           </div>
 
-          <h2 className="mt-12 text-2xl font-extrabold text-brand">שאלות על מחיר</h2>
+          <h2 className="mt-12 text-2xl font-extrabold text-brand">
+            שאלות על מחיר
+          </h2>
           <div className="mt-6 divide-y divide-ink/10 overflow-hidden rounded-2xl border border-ink/10 bg-white">
             {pricing.faqs.map((faq) => (
               <details key={faq.q} className="group">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 text-base font-bold text-brand [&::-webkit-details-marker]:hidden">
                   {faq.q}
-                  <span className="text-accent-strong transition-transform group-open:rotate-45">+</span>
+                  <span className="text-accent-strong transition-transform group-open:rotate-45">
+                    +
+                  </span>
                 </summary>
-                <p className="px-5 pb-5 text-sm leading-relaxed text-ink/75">{faq.a}</p>
+                <p className="px-5 pb-5 text-sm leading-relaxed text-ink/75">
+                  {faq.a}
+                </p>
               </details>
             ))}
           </div>

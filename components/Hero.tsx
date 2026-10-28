@@ -41,7 +41,10 @@ export default function Hero() {
               dataCta="hero-call"
             >
               <Phone className="size-5" aria-hidden="true" />
-              חייגו עכשיו: {site.phone.display}
+              חייגו עכשיו:{" "}
+              <span dir="ltr" className="whitespace-nowrap">
+                {site.phone.display}
+              </span>
             </CtaButton>
             <CtaButton
               href={whatsappHref(defaultWhatsappMessage)}

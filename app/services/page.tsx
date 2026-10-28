@@ -15,7 +15,12 @@ export const metadata: Metadata = {
   description:
     "השירותים של טרמוליק: איתור נזילות מים, איתור רטיבות ובידוד, בדיקת לוחות חשמל ודו״ח תרמוגרפי לחברות ביטוח. הכול במצלמה תרמית, ללא הרס.",
   alternates: { canonical: "/services/" },
-  ...pageOpenGraph({ path: "/services", title: `שירותים — איתור נזילות, רטיבות ותרמוגרפיה | ${site.nameHe}`, description: "השירותים של טרמוליק: איתור נזילות מים, איתור רטיבות ובידוד, בדיקת לוחות חשמל ודו״ח תרמוגרפי לחברות ביטוח. הכול במצלמה תרמית, ללא הרס." }),
+  ...pageOpenGraph({
+    path: "/services",
+    title: `שירותים — איתור נזילות, רטיבות ותרמוגרפיה | ${site.nameHe}`,
+    description:
+      "השירותים של טרמוליק: איתור נזילות מים, איתור רטיבות ובידוד, בדיקת לוחות חשמל ודו״ח תרמוגרפי לחברות ביטוח. הכול במצלמה תרמית, ללא הרס.",
+  }),
 };
 
 export default function ServicesPage() {
@@ -51,12 +56,22 @@ export default function ServicesPage() {
                     <Icon className="size-7" aria-hidden="true" />
                   </span>
                   <div>
-                    <h2 className="text-xl font-bold text-brand">{service.title}</h2>
-                    <p className="mt-1 text-sm leading-relaxed text-ink/70">{service.summary}</p>
+                    <h2 className="text-xl font-bold text-brand">
+                      {service.title}
+                    </h2>
+                    <p className="mt-1 text-sm leading-relaxed text-ink/70">
+                      {service.summary}
+                    </p>
                     <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-1">
                       {service.benefits.slice(0, 3).map((benefit) => (
-                        <li key={benefit} className="flex items-center gap-1.5 text-sm text-ink/75">
-                          <CheckCircle2 className="size-4 shrink-0 text-accent-strong" aria-hidden="true" />
+                        <li
+                          key={benefit}
+                          className="flex items-center gap-1.5 text-sm text-ink/75"
+                        >
+                          <CheckCircle2
+                            className="size-4 shrink-0 text-accent-strong"
+                            aria-hidden="true"
+                          />
                           {benefit}
                         </li>
                       ))}
@@ -75,7 +90,11 @@ export default function ServicesPage() {
           </div>
 
           <p className="mt-10 text-center text-ink/70">
-            לא בטוחים איזה שירות מתאים לכם? התקשרו {site.phone.display} ונשמח להכווין.
+            לא בטוחים איזה שירות מתאים לכם? התקשרו{" "}
+            <span dir="ltr" className="whitespace-nowrap">
+              {site.phone.display}
+            </span>{" "}
+            ונשמח להכווין.
           </p>
         </Container>
       </section>

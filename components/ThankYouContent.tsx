@@ -183,7 +183,10 @@ export default function ThankYouContent() {
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-6 py-3.5 text-base font-bold text-white transition-colors hover:bg-brand-dark"
             >
               <Phone className="size-5" aria-hidden="true" />
-              או חייגו: {site.phone.display}
+              או חייגו:{" "}
+              <span dir="ltr" className="whitespace-nowrap">
+                {site.phone.display}
+              </span>
             </a>
           </div>
 

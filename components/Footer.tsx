@@ -36,7 +36,9 @@ export default function Footer() {
                 className="inline-flex items-center gap-2 hover:text-white"
               >
                 <Phone className="size-4" aria-hidden="true" />
-                {site.phone.display}
+                <span dir="ltr" className="whitespace-nowrap">
+                  {site.phone.display}
+                </span>
               </a>
             </li>
             <li>
@@ -59,7 +61,7 @@ export default function Footer() {
                   className="inline-flex items-center gap-2 hover:text-white"
                 >
                   <Mail className="size-4" aria-hidden="true" />
-                  {site.email}
+                  <span dir="ltr">{site.email}</span>
                 </a>
               </EmailOff>
             </li>
