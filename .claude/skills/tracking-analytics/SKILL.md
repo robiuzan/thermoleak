@@ -208,7 +208,7 @@ thank-you views are client-side navigations**. The same applies to internal jour
   default and is the setting that turns the thank-you href into a live PII leak.
 - **Search Console:** the verification token ships at `app/layout.tsx:34`, and the roster now carries
   the same value — the two agree. Confirm the property is verified, then submit
-  `https://thermoleak.co.il/sitemap.xml` (**19 URLs**; `/thank-you/` is deliberately noindex and
+  `https://thermoleak.co.il/sitemap.xml` (**28 URLs** in the 2026-10-28 build; `/thank-you/` is deliberately noindex and
   excluded) and watch Coverage for the `/404/` + `/_not-found/` duplication (backlog §1.1), which
   `public/_redirects` now collapses onto `/`.
 
@@ -238,7 +238,7 @@ thank-you views are client-side navigations**. The same applies to internal jour
 - [ ] `thank_you_view` is built on a client-side navigation, not a page load.
 - [ ] Every CTA that should be attributable carries a `data-cta` (re-grep after new routes).
 - [ ] Container edits are hostname-scoped so other fleet sites are unaffected.
-- [ ] GA4 Key events marked; Search Console verified and the 19-URL sitemap submitted.
+- [ ] GA4 Key events marked; Search Console verified and the sitemap submitted — resubmit it whenever routes are added.
 
 ## Gotchas
 

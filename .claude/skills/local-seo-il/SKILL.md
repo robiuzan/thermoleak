@@ -1,12 +1,13 @@
 ---
 name: local-seo-il
-description: Israeli local-SEO doctrine for טרמוליק — NAP for a service-area business with no premises, the 12 named service areas of which 3 have pages and 9 are still chips, the 4×12 matrix and its expansion cap, Hebrew ב+city grammar, sameAs and geo both empty by design until a real GBP lands, Google עסק שלי as the top lever, and the doorway-page policy that gates any city page. Use when planning local coverage or auditing local visibility. Triggers "local SEO", "NAP", "city pages", "Google עסק שלי", "doorway pages", "areaServed", "add a city".
+description: Israeli local-SEO doctrine for טרמוליק — NAP for a service-area business with no premises, the 12 named service areas — all with a page since 2026-10-28 and none yet with a real job reference — the 4×12 matrix and its expansion cap, Hebrew ב+city grammar, sameAs and geo both empty by design until a real GBP lands, Google עסק שלי as the top lever, and the doorway-page policy that gates any city page. Use when planning local coverage or auditing local visibility. Triggers "local SEO", "NAP", "city pages", "Google עסק שלי", "doorway pages", "areaServed", "add a city".
 ---
 
 # Local SEO — Israel
 
-One business, **no public premises**, 12 named service areas, **3 of them with location pages**
-(תל אביב, חולון, בת ים — shipped 2026-08-24). Everything below follows from that.
+One business, **no public premises**, 12 named service areas, **all 12 with location pages** —
+תל אביב, חולון, בת ים since 2026-08-30 (`7c9bbda`), the other nine added 2026-10-28 at the owner's
+request. Everything below follows from that.
 
 The doctrine in this file is stable. The **status** paragraphs are the part that rots — every one of
 them was wrong for two weeks after sprint 3. Verify against `lib/locations.ts` and `out/` before
@@ -47,29 +48,34 @@ stop-ship, not a shortcut (golden rule 3, `/schema-structured-data`).
 This is a `docs/business-facts.md` §B blocker, not a code task. Escalate it rather than working around
 it. Once supplied, the URL goes in `lib/site.ts` and flows to `sameAs` and the footer from there.
 
-## 3. The Tier-2 layer — three of twelve
+## 3. The Tier-2 layer — twelve of twelve
 
 `site.serviceAreas` names twelve cities:
 
 > תל אביב-יפו · רמת גן · גבעתיים · הרצליה · פתח תקווה · ראשון לציון · חולון · בת ים · רעננה ·
 > כפר סבא · ראש העין · מודיעין
 
-Three of them — **תל אביב, חולון, בת ים** — have routes at `/locations/{slug}/` behind them. The other
-nine still render as **plain text chips with no route**. All twelve are enumerated as `City` nodes in
-`areaServed`, so the schema claims more coverage than the site expresses.
+Every one has a route at `/locations/{slug}/` since 2026-10-28, so the `איתור נזילות ב{city}` layer —
+the way most local demand is actually typed — is fully expressed, and the schema's twelve `City`
+nodes no longer claim more than the site shows. The open local work is **page strength**, not page
+count:
 
-So two thirds of the `איתור נזילות ב{city}` layer — the way most local demand is actually typed — is
-still unexpressed. That is the largest remaining local opportunity, and §4 is why it is not simply a
-backlog of nine pages waiting to be typed.
+- **No real job reference in any city.** It is the strongest doorway-test item and the one research
+  cannot supply (business-facts §E).
+- **Every claim is 🔶 until the owner confirms it.** §E lists the weakest, single-source claim per
+  city to confirm first.
+- **No service page links to any city** (LOC-2, §8).
+- **No Google Business Profile** (§2) — still the top lever.
 
 ## 4. The doorway policy — non-negotiable
 
 > Replace the city name with another city name. Is the page now correct and publishable for that other
 > city? If yes, it is a doorway page.
 
-The three shipped cities passed this gate on 2026-08-24 and are the standard to match — read
-`lib/locations.ts`'s header comment, which records why the batch stopped at three even though all
-twelve could clear the bar. To pass, a location page needs **three or more** true, specific items:
+All twelve pages passed this gate — the first three on 2026-08-24, the nine on 2026-10-28, each read
+side by side with the other eleven. `lib/locations.ts`'s header records why the list once stopped at
+three even though all twelve could clear the bar, and keeps those reasons as the risk the owner
+accepted in lifting the cap. To pass, a location page needs **three or more** true, specific items:
 
 - Named neighbourhoods, streets or landmarks.
 - Housing-stock reality — 60s שיכונים with old galvanised plumbing, towers with pressurised systems and
@@ -86,9 +92,12 @@ The shipped model carries that audit trail in the data: each claim is a `Locatio
 `category` of `"housing-stock" | "neighbourhood" | "travel" | "infrastructure"`, so a reviewer can see
 **why** a claim was considered city-specific. Keep that when you add a city — see `/new-city`.
 
-> ⚠️ **Batch 2 is not a data edit.** What survives for the nine deferred cities in business-facts §E is
-> one truncated angle each, not the research behind them (LOC-1). Adding a fourth city means re-running
-> the gate for that city, not copying a row.
+> ⚠️ **Batch 2 was not a data edit, and was not run as one.** The 2026-08-24 claim texts were never
+> saved (LOC-1), so on 2026-10-28 each of the nine was researched afresh and given two independent
+> fact-checks (one against the cited live pages, one blind). The re-check overturned two queued leads:
+> הרצליה's "94 בנייני רכבת ביד התשעה" (no source) and רעננה's "קריית שרת 1950s railway buildings"
+> (refuted). Every statement's source is in `docs/location-sources/{slug}.md`; the first three cities
+> have no register yet. A thirteenth area means the same fresh pass — see `/new-city`.
 
 ## 5. Hebrew grammar per location
 
@@ -112,8 +121,9 @@ full interface from the file rather than from any doc, this one included.
 
 4 services × 12 areas = 48 possible cells. **Do not build them.** Order of operations:
 
-1. Build location pages **only** for cities where §4 can be satisfied — 3 ship, and the ceiling is
-   3–5, not 12.
+1. Build location pages **only** for cities where §4 can be satisfied. All 12 have one since
+   2026-10-28 — the owner's decision, replacing the old 3–5 ceiling. An area beyond the twelve goes
+   through `/new-city`.
 2. Each earns its depth per content-standards §3 before the next one starts.
 3. Only then consider a service × location second tier, and only for services with genuine local
    demand — `water-leak-detection` and `moisture-detection`, not `insurance-reports` (which is a
@@ -123,10 +133,12 @@ A cell exists when there is something true and specific to say in it. Not before
 
 ## 7. Coverage honesty
 
-`site.serviceAreaText` claims "גוש דן והמרכז, ברדיוס של עד 60 ק״מ · שירות ארצי בתיאום מראש" while
-`areaServed` enumerates twelve cities and the `Service` nodes claim the region. An `areaServed` the
-business cannot service produces leads it can't serve and a claim it can't defend. Confirm the national
-claim via business-facts §E before it becomes a keyword.
+`site.serviceAreaText` reads "גוש דן והמרכז · שירות ארצי בתיאום מראש" while `areaServed` enumerates
+twelve cities and the `Service` nodes claim the region. An `areaServed` the business cannot service
+produces leads it can't serve and a claim it can't defend. The national clause was **confirmed
+2026-09-17** (business-facts §E: reach is about two hours' drive from Tel Aviv), and the unconfirmed
+"עד 60 ק״מ" was removed the same day — do not restore a radius. The realistic **same-day** radius is
+still 🔶, which is why only the four nearest city pages say "נשתדל להגיע באותו יום".
 
 ## 8. Internal equity
 
@@ -134,15 +146,16 @@ The mesh shipped **half wired** (LOC-2), and this is the standing local gap:
 
 - ✅ `/locations/` is in `navLinks` and in the footer's navigation column, so every page reaches the hub
   and nothing is orphaned.
-- ✅ Each city page links out to all four services, and `nearby` edges between the three cities are
-  bidirectional.
-- ❌ No footer locations column.
+- ✅ Each city page links out to all four services, and `nearby` edges between the cities are
+  bidirectional — build-enforced since 2026-10-28 (an unknown or one-way slug fails the build).
+- ✅ The footer's `אזורי שירות` list links all twelve cities on every page (since 2026-10-19), and the
+  hub shows twelve cards — each city page is linked from 30 other pages. That is chrome, though.
 - ❌ No service page links to any city with a descriptive anchor — the four pages that monetise a local
   query send no relevance signal to the page targeting it.
 
 Wire the inbound links **in the same commit** as any new city; `/new-city`, the roadmap and
-`docs/keyword-map.md` §6 all say "before it ships", and sprint 3 is the counter-example. See
-`/internal-linking`.
+`docs/keyword-map.md` §6 all say "before it ships", and sprint 3 and the 2026-10-28 batch are the
+counter-examples. See `/internal-linking`.
 
 ## Checklist
 
@@ -161,5 +174,7 @@ Wire the inbound links **in the same commit** as any new city; `/new-city`, the 
   honest count.
 - Never invent a review, rating, neighbourhood or coordinate to fill a local-SEO checkbox. This site
   shipped invented ones once and paid to remove them; the empty fields are the fix, not the defect.
-- Adding twelve city pages in one batch is not a local-SEO strategy; it is a doorway cluster waiting
-  for a deploy — and there is no staging environment between the ops script and production.
+- Nine city pages landed together on 2026-10-28 at the owner's request — the doorway pattern,
+  accepted knowingly (header of `lib/locations.ts`), not a template for the next batch. Every page
+  still has to pass §4 on its own, and there is no staging environment between the ops script and
+  production.

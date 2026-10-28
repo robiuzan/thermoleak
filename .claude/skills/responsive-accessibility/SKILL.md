@@ -82,10 +82,12 @@ Recompute against the **real background**, not against white by default — the 
 
 ## Semantics
 
-- **One `<h1>` per page** — verified correct on all **22 emitted pages** (19 of them in the sitemap;
-  `/thank-you/` is deliberately noindex, plus the two 404 forms). Heading order unbroken.
+- **One `<h1>` per page** — verified correct on all **31 emitted pages** (28 of them in the sitemap,
+  2026-10-28 build; `/thank-you/` is deliberately noindex, plus the two 404 forms). Heading order
+  unbroken.
 - Landmarks: `header`, `nav` (with `aria-label`), `main#main`, `footer` — all present. The footer has
-  two labelled `<nav>` regions (`שירותים`, `ניווט`), which is the right pattern.
+  three labelled `<nav>` regions (`שירותים`, `ניווט`, `אזורי שירות` — the 12-city list), which is the
+  right pattern.
 - A **skip link** ships in `app/layout.tsx` (`דלג לתוכן המרכזי`), visible on focus. Don't remove it.
 - Real `<button>` / `<a>`, never a clickable `div`.
 - Watch for wrapper components interposed between a list and its `<li>`s — it breaks list semantics.
@@ -146,7 +148,7 @@ that number back to text, where 4.5:1 applies and `/55` fails.
 
 - Meaningful Hebrew `alt` on content images; `alt=""` only for decorative.
 - Icon-only links carry `aria-label`. **There are no social icons in the footer** — the `sameAs` links
-  were purged 2026-08-17 and the footer is two labelled `<nav>` regions plus contact links. Don't cite
+  were purged 2026-08-17 and the footer is three labelled `<nav>` regions plus contact links. Don't cite
   Facebook/Instagram icons as an example; they do not exist.
 - Decorative `lucide` icons carry `aria-hidden="true"` consistently — good, keep it.
 - The old `alt={service.h1}` redundancy on service pages is **fixed**: `app/services/[slug]/page.tsx:81`

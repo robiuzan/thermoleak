@@ -1,6 +1,6 @@
 ---
 name: seo-metadata
-description: Per-route metadata for thermoleak — the Hebrew title and description formulas, the layout template rule and the two brand-token traps it sets (both fixed 2026-08-17, both easy to reintroduce), self-referencing trailing-slash canonicals, the openGraph shallow-merge trap that costs ten routes their og:image, Search Console verification, and the hand-maintained staticRoutes array in sitemap.ts. Use when writing metadata for a route, fixing duplicate or malformed titles, or auditing on-page SEO. Triggers "set the metadata", "titles and descriptions", "canonical", "brand suffix", "sitemap", "one H1".
+description: Per-route metadata for thermoleak — the Hebrew title and description formulas, the layout template rule and the two brand-token traps it sets (both fixed 2026-08-17, both easy to reintroduce), self-referencing trailing-slash canonicals, the openGraph shallow-merge trap (fixed 2026-09-17 by pageOpenGraph(), easy to reintroduce), Search Console verification, and the hand-maintained staticRoutes array in sitemap.ts. Use when writing metadata for a route, fixing duplicate or malformed titles, or auditing on-page SEO. Triggers "set the metadata", "titles and descriptions", "canonical", "brand suffix", "sitemap", "one H1".
 ---
 
 # Per-route SEO metadata
@@ -49,14 +49,14 @@ check the **rendered** `<title>` in `out/`, not the source string.
 
 ## Titles
 
-| Route          | What you write                                                               |
-| -------------- | ---------------------------------------------------------------------------- |
-| Home           | a complete title including the brand — the template will not add it          |
-| Service        | `service.h1` — e.g. `איתור נזילות מים במצלמה תרמית`                          |
-| Services index | `שירותים — איתור נזילות, רטיבות ותרמוגרפיה`                                  |
-| Static         | the page name — `צור קשר`, `אודות`, `הצהרת נגישות`                           |
-| Location       | `איתור נזילות ב{prefixed}` — shipped on the three gated cities (`/new-city`) |
-| Article        | the question verbatim — `article.title` (`/new-article`)                     |
+| Route          | What you write                                                            |
+| -------------- | ------------------------------------------------------------------------- |
+| Home           | a complete title including the brand — the template will not add it       |
+| Service        | `service.h1` — e.g. `איתור נזילות מים במצלמה תרמית`                       |
+| Services index | `שירותים — איתור נזילות, רטיבות ותרמוגרפיה`                               |
+| Static         | the page name — `צור קשר`, `אודות`, `הצהרת נגישות`                        |
+| Location       | `איתור נזילות ב{prefixed}` — all 12 service areas; a 13th via `/new-city` |
+| Article        | the question verbatim — `article.title` (`/new-article`)                  |
 
 Keep the **rendered** title under ~60 characters. Hebrew is compact, and no route is close to the limit
 today — a title that gets there is usually trap 1 coming back.
@@ -64,7 +64,7 @@ today — a title that gets there is usually trap 1 coming back.
 ## Descriptions
 
 150–160 chars, unique per route, following keyword-map §5: what it is + where, one **true**
-differentiator, then an action with the phone. All 19 indexable routes are currently unique — verify
+differentiator, then an action with the phone. All 28 indexable routes are currently unique — verify
 that still holds after any change.
 
 Two live gaps against that spec, both **code** defects, both open:
@@ -76,11 +76,14 @@ Two live gaps against that spec, both **code** defects, both open:
 - ✅ **The location descriptions were fixed in Sprint 4 (SEO-02) — do not reapply the old recipe.**
   They used to be a raw `location.answer.slice(0, 155)`, which cut mid-word on all three pages
   (בת ים's severed its own name). `Location` now carries an **authored `metaDescription`** field,
-  written to the keyword-map §5 Location formula and ending in the phone number; the three shipped
-  values measure 158, 152 and 153 characters. Two reasons not to go back: `location.answer` became
+  written to the keyword-map §5 Location formula and ending in the phone number; the twelve values
+  measure 152–158 characters (2026-10-28). Two reasons not to go back: `location.answer` became
   `{ q, a }` on 2026-10-28, so `.slice` on it is a **type error**; and the answer block already
   appears in the first visible paragraph, so reusing it wastes the one field that can carry a
-  distinct hook.
+  distinct hook. **Availability is per city:** only תל אביב, חולון, בת ים and רמת גן say
+  `לנזילה פעילה נשתדל להגיע באותו יום`; the other eight schedule the visit in advance with no time
+  promised. A description never promises more than its page — three of them said
+  `נגיע`/`הגעה באותו יום` until 2026-10-28, when they became `נשתדל`.
 
 Only claim what `docs/business-facts.md` confirms. **This list was corrected 2026-10-28 — most of it
 is now confirmed, and re-gating a confirmed fact is as wrong as inventing one.** CONFIRMED and usable:
@@ -103,7 +106,7 @@ alternates: {
 }
 ```
 
-All 19 indexable routes carry a correct self-referencing one — verified in `out/`. `/thank-you/`
+All 28 indexable routes carry a correct self-referencing one — verified in `out/`. `/thank-you/`
 deliberately has none: it is `robots: { index: false }` and absent from the sitemap. Two notes:
 
 - `app/page.tsx` sets `alternates: { canonical: "/" }` while `app/layout.tsx` already does — redundant,
@@ -129,23 +132,22 @@ in the same commit.** Markup, OG tags and the live-kit strip do not count.
 
 Never hand-maintain a second URL list anywhere.
 
-## The `openGraph` shallow-merge trap (SEO-01 — open)
+## The `openGraph` shallow-merge trap (SEO-01 — fixed 2026-09-17)
 
 Next **replaces** a top-level metadata key rather than deep-merging it: a page that declares its own
 `openGraph` object loses **everything** the layout's `openGraph` supplied, `images` included.
 
-That is live today. `app/services/[slug]/page.tsx`, `app/guides/[slug]/page.tsx` and
-`app/locations/[city]/page.tsx` each declare `openGraph` without `images`, so **ten routes** (4 services,
-3 guides, 3 cities) emit no `og:image`, no `og:type`, no `og:locale` and no `og:site_name` — a link
-shared to WhatsApp renders as a bare text row with no preview card. The mirror half: the routes that
-declare **no** `openGraph` inherit the layout's `url: site.domain`, so eight indexable pages assert
-`og:url` = the homepage. Every one of those pages carries a correct `rel=canonical`, so that half is a
-weak duplicate hint, not an indexing problem — fix it for tidiness, rank it below the missing images.
+That shipped for three sprints: the three dynamic routes declared `openGraph` without `images`, so
+**ten routes** of the day (4 services, 3 guides, 3 cities) emitted no `og:image`, `og:type`,
+`og:locale` or `og:site_name` — a link shared to WhatsApp rendered as a bare text row. The mirror
+half: routes that declared **no** `openGraph` inherited the layout's `url: site.domain`, so eight
+indexable pages asserted `og:url` = the homepage.
 
-The fix is a shared helper in `lib/site.ts` returning the common block merged with a per-page
-title/description/url, spread into every route, plus dropping `url` from the layout (a layout-level
-absolute `og:url` can only ever be right on one route). **Whenever you touch a page's `openGraph`,
-restate the whole block.** Then check the emitted HTML, which is the only place this is visible:
+Fixed 2026-09-17 (`b954357`) by `pageOpenGraph()` in `lib/site.ts`: one block with `images`, a
+per-page `og:url` from `canonicalUrl(path)`, and a matching `twitter` block. Every indexed route
+except `/` spreads it — all twelve city pages included — and both halves check clean on the
+2026-10-28 build. **A new route uses the helper; never hand-write an `openGraph` object.** Then check
+the emitted HTML, which is the only place this is visible:
 
 ```bash
 grep -o '<meta property="og:[^>]*>' out/services/water-leak-detection/index.html
@@ -169,16 +171,16 @@ See `/aeo-answer-content`.
 - **Search Console:** `app/layout.tsx` hardcodes `verification: { google: "BxQI2a7…" }` while the
   roster manifest carries `googleSiteVerification: null`. The tag is real and public by design; the
   divergence is a documentation gap, not a leak. Record the token in `docs/business-facts.md` §F.
-- OG images come from `/og.png` (1200×630, in `public/`). Twitter tags are set **only** in the layout,
-  so every route's `twitter:title` is the generic site title even where `og:title` is page-specific.
-  Setting a per-page `twitter` block alongside `openGraph` is part of the SEO-01 fix above.
+- OG images come from `/og.png` (1200×630, in `public/`). `pageOpenGraph()` returns a `twitter`
+  block alongside `openGraph`, so `twitter:title` matches `og:title` on every route that uses it (it
+  was the generic site title everywhere until the SEO-01 fix above).
 - `viewport.themeColor` is `#0b3d5c`, the brand token, hardcoded as a literal. Acceptable (Next needs a
   static value there), but if the brand colour changes, this is the second place to update.
 
 ## One H1 per page
 
 Exactly one `<h1>`, matching the title's intent. Everything else `<h2>`/`<h3>`, no skipped levels.
-Currently correct on all 22 emitted pages — keep it that way.
+Currently correct on all 31 emitted pages — keep it that way.
 
 ## Checklist
 
@@ -187,7 +189,7 @@ Currently correct on all 22 emitted pages — keep it that way.
 - [ ] `alternates.canonical` set, with a trailing slash, built via `canonicalUrl()` / a literal path.
 - [ ] The route is in the sitemap — derived from a data array, or added to `staticRoutes` by hand with
       a real `lastModified`. Confirm with `npm run check:sitemap`.
-- [ ] If the page declares `openGraph`, it restates the **whole** block, `images` included.
+- [ ] Open Graph and Twitter come from `pageOpenGraph()` — never a hand-written `openGraph` object.
 - [ ] Exactly one `<h1>`; heading order unbroken.
 - [ ] `npm run build`, then `grep -rho '<title>[^<]*</title>' out --include=index.html` and read them.
 

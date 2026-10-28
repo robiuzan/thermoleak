@@ -37,10 +37,11 @@
 #      --branch main. So do it on a throwaway git branch and deploy that branch by hand with
 #      wrangler (`npx wrangler pages deploy .\out --project-name thermoleak --branch csp-test`).
 #      Never run the ops script while this file says enforcing, and never merge the test branch.
-#   2. With the console open, walk all 19 routes; open the mobile menu, the consent banner and the
-#      seasonal card; and submit the form through to /thank-you/. Each of those exercises a distinct
-#      directive — the tag manager, GA4's regional endpoint, the status switch, the inline live
-#      scripts and the WhatsApp handoff — and ONLY a real submit reaches /thank-you/.
+#   2. With the console open, walk every indexable route (28 on the 2026-10-28 build); open the
+#      mobile menu, the consent banner and the seasonal card; and submit the form through to
+#      /thank-you/. Each of those exercises a distinct directive — the tag manager, GA4's regional
+#      endpoint, the status switch, the inline live scripts and the WhatsApp handoff — and ONLY a
+#      real submit reaches /thank-you/.
 #   3. Zero violations across all of it is the gate. A violation means a directive is wrong, not
 #      that the console is noisy.
 #   4. Only then drop "-Report-Only" here, deploy, and re-walk the same list on production.

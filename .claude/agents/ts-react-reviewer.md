@@ -61,7 +61,7 @@ authority — not recollection. Check them before flagging or endorsing any fram
      three reaches production inside `FAQPage` JSON-LD via the derived guide FAQs. The price itself is
      **unconfirmed** (`docs/business-facts.md` §C) — which is exactly why it must have one source.
    - `app/page.tsx` hardcodes the brand in its title string where every other route uses
-     `${site.nameHe}`. A rename would update 25 routes and silently miss the highest-traffic one.
+     `${site.nameHe}`. A rename would update every other route and silently miss the highest-traffic one.
    - `site.currency` and `site.legalName` are defined in `lib/site.ts` and referenced nowhere. Say so;
      do not thread `currency` through the six price strings as a "fix" — that is churn.
 6. **Brand tokens.** Colours come from the `@theme` block via Tailwind classes (`bg-brand`,

@@ -6,7 +6,7 @@ description: Start-here orientation for thermoleak.co.il — the lib/site.ts →
 # thermoleak.co.il architecture
 
 טרמוליק — thermal (infrared) leak and moisture detection, גוש דן והמרכז. Hebrew RTL marketing site,
-**20 content routes** (19 indexable + `/thank-you/`), Next.js 16 App Router compiled to static HTML.
+**29 content routes** (28 indexable + `/thank-you/`), Next.js 16 App Router compiled to static HTML.
 Read this before changing anything.
 
 ## The stack, and what it forbids
@@ -44,7 +44,7 @@ lib/site.ts        site · navLinks · telHref · mailHref · whatsappHref() · 
         ├─► lib/services.ts   the 4 services: copy, answer block, limits, steps, FAQs, in-copy links
         ├─► lib/faqs.ts       the general FAQ
         ├─► lib/articles.ts   the 3 /guides/ articles as typed blocks + real dates and byline
-        ├─► lib/locations.ts  the 3 gated cities — read its header comment before adding a 4th
+        ├─► lib/locations.ts  all 12 service areas — read its header comment before adding a 13th
         ├─► lib/pricing.ts    /pricing/ copy (per-service prices stay in services.ts)
         ├─► lib/jsonld.ts     every JSON-LD builder, reading from the above
         ▼
@@ -60,7 +60,7 @@ roster **is** the deploy authority: `roster.json` carries `localPath` and `pages
 fleet ops script resolves when shipping. Read the manifest to learn what the fleet believes is true
 (its `_needsConfirmation` array is the honest list), then edit `lib/site.ts` by hand.
 
-## Routes — 19 indexable, 22 emitted `index.html`
+## Routes — 28 indexable, 31 emitted `index.html`
 
 | Route                                                           | Source                           | Count |
 | --------------------------------------------------------------- | -------------------------------- | ----- |
@@ -70,24 +70,28 @@ fleet ops script resolves when shipping. Read the manifest to learn what the fle
 | `/guides/`                                                      | `app/guides/page.tsx`            | 1     |
 | `/guides/{slug}/`                                               | `app/guides/[slug]/page.tsx`     | 3     |
 | `/locations/`                                                   | `app/locations/page.tsx`         | 1     |
-| `/locations/{city}/`                                            | `app/locations/[city]/page.tsx`  | 3     |
+| `/locations/{city}/`                                            | `app/locations/[city]/page.tsx`  | 12    |
 | `/pricing/` `/about/` `/contact/` `/accessibility/` `/privacy/` | one dir each under `app/`        | 5     |
 | `/thank-you/`                                                   | noindex, post-form conversion    | 1     |
 | `/404/` + `/_not-found/`                                        | `app/not-found.tsx`              | 2     |
 | `/sitemap.xml` `/robots.txt`                                    | `app/sitemap.ts` `app/robots.ts` | —     |
 
-The export emits **22** `index.html` files; the sitemap lists **19** (`/thank-you/` is noindex and
-deliberately absent, the two 404 forms are excluded — the double 404 emission is backlog §1.1, and
-both forms now 301 to `/` in `public/_redirects`; Pages serves the root `404.html` natively).
+The 2026-10-28 export emits **31** `index.html` files; the sitemap lists **28** (`/thank-you/` is
+noindex and deliberately absent, the two 404 forms are excluded — the double 404 emission is backlog
+§1.1, and both forms now 301 to `/` in `public/_redirects`; Pages serves the root `404.html` natively).
 `/reviews/` was removed 2026-08-17 and 301s to `/about/` via `public/_redirects`.
 
-The `/guides/` and `/locations/` silos shipped in sprints 2 and 3. **Three** cities have pages
-(תל אביב, חולון, בת ים); the other nine service areas are gated in `docs/business-facts.md` §E and
-render as text chips only. `lib/locations.ts` carries the reasoning in its header comment — read it
-before adding a fourth.
+The `/guides/` and `/locations/` silos shipped in sprints 2 and 3. **All 12** service areas now have
+a city page: תל אביב, חולון, בת ים shipped 2026-08-30; the other nine (owner decision 2026-10-28) are
+built and verified locally but **not yet committed or deployed**. Each must pass the doorway test on
+its own; claim sources are in `docs/location-sources/{slug}.md` (none yet for the first three); and
+`nearby` edges are bidirectional, with a module-scope check that fails the build on a one-way or
+unknown slug. A 13th area goes through `/new-city` — read the header comment in `lib/locations.ts`
+first.
 
 `npm run check:sitemap` (`scripts/check-sitemap-parity.mjs`) asserts the emitted tree and
-`sitemap.xml` agree, so a new route can no longer go missing silently.
+`sitemap.xml` agree, so a new route can no longer go missing silently — and that every URL in
+`public/llms.txt` is in the sitemap.
 
 The URL taxonomy is **all-English paths with Hebrew content** (`/services/water-leak-detection/`), which
 is the opposite of the Hebrew-slug fleet sites. That is the live scheme and it stays — renaming a slug

@@ -27,8 +27,9 @@ synonym-split service pages usually do.
 competition, commercial intent. Target: homepage + the matching service page. Won with authority and
 depth, not with more pages.
 
-**Tier 2 — local.** `{service} ב{city}` — איתור נזילות בתל אביב, איתור רטיבות ברמת גן. **Partially expressed since 2026-08-24:** תל אביב, חולון and בת ים have pages; the other nine
-service areas remain plain-text chips. Expansion is deliberately gated — see §6.
+**Tier 2 — local.** `{service} ב{city}` — איתור נזילות בתל אביב, איתור רטיבות ברמת גן. **Expressed for all 12 service areas since 2026-10-28:** תל אביב, חולון and בת ים have had pages
+since 2026-08-30; the other nine were added 2026-10-28. Each page must pass the doorway test on its
+own — see §6.
 
 **Tier 3 — long-tail / problem-led.** The questions people actually type, and where this business's real
 expertise pays:
@@ -78,8 +79,8 @@ brand-token bugs this section used to describe (brandless home, double-branded `
 | Contact         | `צור קשר`                                   | `צור קשר \| טרמוליק`                             |
 | Article         | the question verbatim                       | `מה מצלמה תרמית באמת רואה? \| טרמוליק`           |
 
-Keep the **rendered** title under ~60 characters. Hebrew is compact and 18 of the 19 indexed routes
-sit at 15–59. The one over is `/guides/find-leak-without-breaking/` at **64**, because §4 requires
+Keep the **rendered** title under ~60 characters. Hebrew is compact and 27 of the 28 indexed routes
+sit at 15–59 (the twelve city titles at 29–35). The one over is `/guides/find-leak-without-breaking/` at **64**, because §4 requires
 the article title to be the question verbatim and that question is long. Two rules genuinely collide
 there; prefer the verbatim question and shorten the _question_ in `lib/articles.ts` if it ever needs
 to come down — never bolt a truncation onto the title.
@@ -109,7 +110,7 @@ Note the deliberate asymmetry on hubs and indexes: the `<title>` carries the key
 — איתור נזילות ורטיבות`) because that is what a SERP shows, while the `<h1>` stays a short label
 because that is what a visitor reads at the top of the page. Don't "fix" one to match the other.
 
-Exactly one `<h1>` per page — verified correct on all 22 emitted routes. Everything below is `<h2>`/`<h3>` with no
+Exactly one `<h1>` per page — verified correct on all 31 emitted routes. Everything below is `<h2>`/`<h3>` with no
 skipped levels.
 
 ---
@@ -117,36 +118,34 @@ skipped levels.
 ## 5. Description formulas
 
 150–160 characters, unique per route. Lead with **what it is + where**, add **one true**
-differentiator, close with an action. Never reuse a description across two routes. All 19 indexed
+differentiator, close with an action. Never reuse a description across two routes. All 28 indexed
 routes are currently unique.
 
 - **Service:** `{what it is in one clause}. {method or duration}. {one true differentiator}. חייגו {phone}.`
-- **Location:** `איתור נזילות ב{prefixed} — {method}, {speed}. שירות ל{audience}. חייגו {phone}.`
+- **Location:** `איתור נזילות ב{prefixed} — {method}, {availability}. שירות ל{audience}. חייגו {phone}.`
+  `{availability}` is only what that page itself says: `לנזילה פעילה נשתדל להגיע באותו יום` on
+  תל אביב, חולון, בת ים and רמת גן alone; the other eight schedule the visit in advance with no time
+  promised. Never a firm same-day promise.
 - **Article:** answer the question in the first clause, then say what the page covers.
 
 ### Where the code does not yet implement these formulas
 
-**The formulas above are the spec. Two route types diverge from them in code — the spec is right and
-the code is wrong.** Do not "reconcile" this section downwards to match what ships.
+**The formulas above are the spec. One route type still diverges from them in code — the spec is
+right and the code is wrong.** Do not "reconcile" this section downwards to match what ships.
 
-- **Location pages.** `app/locations/[city]/page.tsx:30` sets
-  `description: location.answer.slice(0, 155)`, so all three cities emit a description that is
-  exactly 155 characters and stops **mid-word** (תל אביב cuts inside `בבנייה`, חולון inside
-  `ומסתיימת`, בת ים inside `בת ים`). The formula above is implemented nowhere. It also duplicates the
-  on-page answer block, and `og:description` on the same page uses the _untruncated_ answer, so the
-  two disagree. **Finding SEO-02 — fix in code:** add a typed `metaDescription` to the `Location`
-  interface in `lib/locations.ts` (the pattern `lib/articles.ts` already uses for its own
-  `description`), write one per city to the Location formula, and read it at
-  `app/locations/[city]/page.tsx:30`. The phone comes from `site.phone` — never a literal.
+- ✅ **Location pages — fixed 2026-09-17 (SEO-02).** They used to emit
+  `location.answer.slice(0, 155)`, cut mid-word on all three cities of the day. `Location` now
+  carries a required, authored `metaDescription`; all twelve follow the formula above and end in the
+  phone. Do not go back to deriving it from the answer.
 - **Service pages.** `app/services/[slug]/page.tsx:30` feeds `service.summary` straight into
   `description`. That field is commented `// card description` in `lib/services.ts:37` and is doing
   two jobs: the four summaries measure **85–92 characters** and none carries a `חייגו` CTA. Same fix
   shape — split a `metaDescription` off `summary` rather than stretching one string to serve a card
   blurb and a SERP snippet (finding SEO-03).
 
-Measured in the current export: the three location pages are the only routes reaching 150–160, and
-they reach it by truncation. The other sixteen run **99–138**. Treat 150–160 as the target to write
-to, not as a description of what ships.
+Measured 2026-10-28: the twelve location pages are the only routes reaching 150–160 (**152–158**,
+authored). The other sixteen run **85–138**. Treat 150–160 as the target to write to, not as a
+description of what ships.
 
 Only claim what [business-facts.md](business-facts.md) confirms. Prices, certifications, any rating or
 review count, and job/success-rate figures are all 🔶 — and the specific fabricated stats this site
@@ -158,22 +157,28 @@ once carried are listed there as permanently barred, not merely unconfirmed.
 
 4 services × 12 service areas = 48 possible cells. **Do not build them.**
 
-The site has **three** location pages. An adversarially-verified gate (2026-08-24) found all 12
-areas _could_ qualify, so the cap is a depth decision rather than a claim shortage: sibling sites in
-this fleet generated one page per city from a shared paragraph and all of them now fail the doorway
-test in [content-standards.md](content-standards.md) §2. The penalty lands on the domain.
+All **12** service areas have a location page since 2026-10-28 — the owner's decision, superseding
+the earlier cap of "3–5 that pass the doorway test, or none". The cap was a depth decision rather
+than a claim shortage (an adversarially-verified gate on 2026-08-24 found all 12 _could_ qualify):
+sibling sites in this fleet generated one page per city from a shared paragraph and all of them now
+fail the doorway test in [content-standards.md](content-standards.md) §2. The penalty lands on the
+domain — which is why every one of the twelve must still pass that test on its own. The risk the
+owner accepted is recorded in the header of `lib/locations.ts`.
 
 **The expansion order:**
 
 1. ✅ **Done.** Deepen the four service pages to their 450-word floor first — they are the pages with
    commercial intent. All four now clear it (content-standards §1), each with an answer block, an
    honest-limits section and its own FAQ.
-2. **Partly done (3 of a realistic 3–5).** Build location pages **only** for cities where three true,
-   specific things can be said (content-standards §2). תל אביב, חולון and בת ים shipped 2026-08-24;
-   the other nine are queued in business-facts §E with their verified claims intact. Before adding a
-   fourth, read the header of `lib/locations.ts` — it records _why_ the cap held at three even though
-   all twelve cleared the gate.
-3. Each earns its depth before the next starts. Wire its inbound links before it ships.
+2. ✅ **Done 2026-10-28 (12 of 12, owner decision).** A location page exists **only** where three
+   true, specific things can be said (content-standards §2). תל אביב, חולון and בת ים shipped
+   2026-08-30; the other nine were researched afresh on 2026-10-28 (the 2026-08-24 claim texts were
+   never saved), fact-checked twice per page and read side by side for the doorway test. Every
+   statement's source is in `docs/location-sources/{slug}.md` (the first three have no register
+   yet). A new area beyond the 12 goes through `/new-city`.
+3. Each earns its depth and its inbound links before it ships. The footer lists all 12 cities on
+   every page and the `/locations/` hub shows 12 cards; **no service page links to a city yet**
+   (LOC-2, open).
 4. Only then consider a service × location second tier, and only for services with genuine local demand
    — `water-leak-detection` and `moisture-detection`. Not `insurance-reports`, which is a document, not
    a place.
@@ -184,7 +189,7 @@ A cell exists when there is something true and specific to say in it. Not before
 
 ## 7. Route → primary keyword
 
-All **19 indexed routes**, in sitemap order. This table is the whole indexable surface — if a route is
+All **28 indexed routes**, in sitemap order. This table is the whole indexable surface — if a route is
 not here, it is not indexed.
 
 | Route                                 | Primary target                                 | Tier |
@@ -204,6 +209,15 @@ not here, it is not indexed.
 | `/locations/tel-aviv/`                | איתור נזילות בתל אביב                          | 2    |
 | `/locations/holon/`                   | איתור נזילות בחולון                            | 2    |
 | `/locations/bat-yam/`                 | איתור נזילות בבת ים                            | 2    |
+| `/locations/ramat-gan/`               | איתור נזילות ברמת גן                           | 2    |
+| `/locations/givatayim/`               | איתור נזילות בגבעתיים                          | 2    |
+| `/locations/herzliya/`                | איתור נזילות בהרצליה                           | 2    |
+| `/locations/petah-tikva/`             | איתור נזילות בפתח תקווה                        | 2    |
+| `/locations/rishon-lezion/`           | איתור נזילות בראשון לציון                      | 2    |
+| `/locations/raanana/`                 | איתור נזילות ברעננה                            | 2    |
+| `/locations/kfar-saba/`               | איתור נזילות בכפר סבא                          | 2    |
+| `/locations/rosh-haayin/`             | איתור נזילות בראש העין                         | 2    |
+| `/locations/modiin/`                  | איתור נזילות במודיעין                          | 2    |
 | `/about/`                             | brand + entity terms                           | —    |
 | `/contact/`                           | brand + "איתור נזילות טלפון"                   | —    |
 | `/accessibility/`                     | none — legal, indexed for trust                | —    |

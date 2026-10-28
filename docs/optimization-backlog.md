@@ -57,6 +57,10 @@ is deliberately noindex and excluded; the two 404 artifacts are not content) · 
 `ThankYouContent`, `ConsentBanner`) · **zero** banned RTL utilities · **zero** `aggregateRating`, `Review`, `sameAs`
 and `GeoCoordinates` nodes.
 
+_(2026-10-28, with all 12 city pages built locally — not yet committed or deployed: 31 emitted
+`index.html` · 28 URLs in `sitemap.xml` · `out/` 10,643,189 B net of carried chunks, 71.0% of the
+15,000,000 B budget. See §3.4 and §10.1.)_
+
 **Updated 2026-10-28 — Sprint 6 shipped.** Item 1 is now **half** resolved — the half that lives
 in this repo. Items 2 and 3 were resolved in Sprint 4.
 
@@ -187,6 +191,8 @@ what has kept a 🔵 in the register for a month.
 
 **1.5 ✅ (2026-08-17) `public/llms.txt` written.** See §6.5 — and note it has not been updated since
 the `/guides/` and `/locations/` silos shipped, so it no longer lists everything in the sitemap.
+_(2026-10-28: it lists all 12 city URLs, and `npm run check:sitemap` checks it —
+`llms.txt 29 URL(s), all live`.)_
 
 **1.6 🟠 `out/` on disk is routinely stale.** At the first audit it was built 2026-07-30 against a
 repo last committed 2026-08-02. Any audit, grep or word count run against it measures an artifact
@@ -198,7 +204,8 @@ usable. This item stays open because the discipline is the deliverable, not any 
 with a trailing slash; `sitemap.xml` lists **19** URLs matching the 19 indexable routes exactly, and
 `npm run check:sitemap` now asserts it; `robots.txt` is emitted; `trailingSlash: true` is
 consistent; `export const dynamic = "force-static"` is correctly set on both `sitemap.ts` and
-`robots.ts`.
+`robots.ts`. _(2026-10-28: 28 URLs for 28 indexable routes — "31 routes emitted, 28 indexed, 3
+deliberately excluded".)_
 
 ---
 
@@ -283,6 +290,22 @@ shortage. Each page: 674–745 unique words (floor 350), a 40–60 word answer b
 claims, 2 local FAQs, bidirectional `nearby`, and `Service` + `City` areaServed (never a
 per-city `LocalBusiness`). Doorway test verified in the export — the three pages share no proper
 nouns. The other 9 are queued with claims intact in business-facts §E.
+
+**3.4 🟠 → 12 of 12 built (2026-10-28) — not yet committed or deployed.** The owner decided to build
+pages for the nine remaining areas and raised the export budget to 15 MB (§10.1), superseding the
+cap to three. Added: רמת גן, גבעתיים, הרצליה, פתח תקווה, ראשון לציון, רעננה, כפר סבא, ראש העין,
+מודיעין. "Claims intact" above was wrong — the 2026-08-24 claim texts were never saved — so each city
+was researched afresh, given two independent fact-checks (one against the cited live pages, one
+blind), and read by an editor side by side with the other eleven for the doorway test. Every
+statement's source is in `docs/location-sources/{slug}.md` ([index](location-sources/README.md));
+**the first three have no register yet.** The re-check overturned two old leads: הרצליה's "94
+בנייני רכבת ביד התשעה" (no source) and רעננה's "קריית שרת 1950s railway buildings" (refuted).
+Depth: the nine carry 446–469 unique non-chrome words, the first three 409–461 (floor 350). Each
+page emits `Service` (`areaServed` typed `City`), a `FAQPage` of 3 Questions and `PageHero`'s
+`BreadcrumbList` — still no per-city `LocalBusiness`. `nearby` is now enforced bidirectional at
+build time; מודיעין has no edge. The same day the first three pages lost their job-history and
+same-day-promise wording (business-facts §E). **Still open:** service → city links (§9.6), the first
+three registers, the owner's confirmation of every claim (business-facts §E), and the deploy.
 
 **3.5 🟠 Shipped, two of three under floor (2026-08-24).** `/guides/` is live with three articles
 built on a typed block model (`lib/articles.ts`) so `FAQPage` is DERIVED from the copy and cannot
@@ -372,6 +395,13 @@ roster) and appear only via `lib/site.ts` — no literals anywhere. The address-
 chips that previously left every `{service} ב{city}` query unexpressed. Expansion is gated on
 depth being sustained, and on the one thing research cannot supply: a real job reference per city.
 
+**2026-10-28:** expansion went ahead by owner decision before any job reference arrived — all 12
+areas now have a page (built, not yet deployed; §3.4). The gap stands: a real job reference per city
+(Track O #13) is still the one doorway-test item research cannot supply, and the first three pages
+lost the wording that implied job history the same day. Availability is now explicit per page: only
+תל אביב, חולון, בת ים and רמת גן say "לנזילה פעילה נשתדל להגיע באותו יום"; the other eight schedule
+the visit in advance, with no time promised.
+
 **5.3 🔴 No Google Business Profile link anywhere.** For a service-area trade business this is the top
 local lever: the map pack, the review surface, and the only legitimate source for the rating in §4.1.
 Blocked on business-facts §B — this is an owner action, not a code task.
@@ -398,9 +428,9 @@ production**. Gate 1 of the AEO work is open. Standing rule: re-fetch the live `
 start of any AEO audit — it is edge state a dashboard change can flip back without a deploy.
 
 **6.2 ✅ (2026-08-17 → 2026-08-24) Answer blocks ship.** All four service pages, all three location
-pages, `/pricing/` and all three guides now open with a question-form heading and a short
-extractable answer, held in `lib/services.ts`, `lib/locations.ts`, `lib/pricing.ts` and
-`lib/articles.ts`. **All of them now fold theirs into the `FAQPage` graph** (locations joined
+pages (all twelve since 2026-10-28), `/pricing/` and all three guides now open with a question-form
+heading and a short extractable answer, held in `lib/services.ts`, `lib/locations.ts`,
+`lib/pricing.ts` and `lib/articles.ts`. **All of them now fold theirs into the `FAQPage` graph** (locations joined
 2026-10-28 — they were the last page type whose answer block never reached the FAQ graph, finding
 AEO-5), so the markup and the visible text cannot drift. `Location.answer` changed from a bare
 string to the same `{ q, a }` pair the other three use, and the route renders `answer.q` as its H2 —
@@ -648,6 +678,10 @@ part of the indexing diagnosis: URL Inspection that day had Google calling `/loc
 three cities "URL is unknown to Google" — their only inbound links sat on a hub Google had never
 fetched. Still open: the service pages' `related.links` point at no city.
 
+**2026-10-28, with all 12 cities built:** the footer lists all 12 on every page, the `/locations/`
+hub shows 12 cards, every city page links to all four services, and every city page is linked from
+30 other pages. **Still open (LOC-2):** no service page links to a city.
+
 ---
 
 ## §10 Performance
@@ -657,7 +691,8 @@ fetched. Still open: the service pages' `related.links` point at no city.
 the 6 MB budget in [performance-guidelines.md](performance-guidelines.md). The delta is almost
 exactly the two new silos: `out/guides` and `out/locations` are about 1.87 MB together. _(2026-10-12:
 the owner raised that budget to 7.5 MB — the live surfaces take a build to ≈6.93 MB; see
-performance-guidelines.md §1. 2026-10-27: raised again to 8 MB, for the gallery's approved images.)_
+performance-guidelines.md §1. 2026-10-27: raised again to 8 MB, for the gallery's approved images.
+2026-10-28: raised to 15 MB, for the nine remaining city pages.)_
 
 Composition matters here, because 47% of the export is a class neither budget table has a row for.
 **RSC segment payloads — the `.txt` files — are 2,769,645 B across 158 files, 46.9% of the whole
@@ -670,11 +705,19 @@ old "healthy" verdict was not wrong about user-facing speed. What it is: deploy 
 round trips, since Pages serves them `DYNAMIC` with `max-age=0` and no prefetch policy is set
 anywhere in the codebase.
 
-**Why it now matters:** the nine remaining cities in the 12-city plan would add roughly 2.7 MB at
-the measured ~305 KB per location, taking the export past the budget. Nothing would catch it — the
-`qa-build-gate` size check is a bare comment with no assertion, and its JS check greps for chunks
-over 500 KB when the documented budget is 200 KB. Kill that 500 KB folklore wherever it appears; it
-is not this site's budget.
+**Why it mattered (2026-09-06):** the nine remaining cities in the 12-city plan would have added
+roughly 2.7 MB at the measured ~305 KB per location, taking the export past the budget. Nothing would
+have caught it — the `qa-build-gate` size check was a bare comment with no assertion, and its JS
+check grepped for chunks over 500 KB when the documented budget is 200 KB. Kill that 500 KB folklore
+wherever it appears; it is not this site's budget. (2026-10-28: the nine are built at 302–308 KB
+each, the budget is 15 MB, and `qa-build-gate` §12 and `performance-guidelines` §7 both assert
+`exit (s>15000000)`.)
+
+**Measured 2026-10-28, with the nine built (not yet deployed):** each city page costs 302–308 KB,
+in line with the estimate. The export is 11,212,389 B raw / 378 files, of which 569,200 B (65 files)
+are earlier builds' carried chunks — net **10,643,189 B, 71.0% of the 15,000,000 B budget** the
+owner set for these pages, leaving 4,356,811 B. The raw assertion in performance-guidelines.md §7 is
+now `exit (s>15000000)`.
 
 **Still true and worth protecting:** no dev-only artifacts; four runtime dependencies; exactly four
 client components (`ContactForm`, `Navbar`, `ThankYouContent`); a FAQ built on `<details>` with zero
@@ -843,10 +886,10 @@ Cloudflare's NEL; it cannot receive CSP reports.)
 **✅ RESOLVED 2026-10-28 — by replacing the criterion, not by adding an endpoint.** The gate in
 `public/_headers` is now a deterministic walkthrough that needs no collector: deploy the policy as
 **enforcing to a Pages preview branch** (previews already send `X-Robots-Tag: noindex`), then with
-the console open walk all 19 routes, open the mobile menu, the consent banner and the seasonal card,
-and submit the form through to `/thank-you/` — each of those exercises a different directive, and
-only a real submit reaches `/thank-you/`. Zero violations is the gate; then drop `-Report-Only`,
-deploy, and re-walk on production. The same edit records that `'unsafe-inline'` in `script-src` is
+the console open walk all 19 routes (28 indexed since 2026-10-28), open the mobile menu, the
+consent banner and the seasonal card, and submit the form through to `/thank-you/` — each of those
+exercises a different directive, and only a real submit reaches `/thank-you/`. Zero violations is
+the gate; then drop `-Report-Only`, deploy, and re-walk on production. The same edit records that `'unsafe-inline'` in `script-src` is
 **structural** under `output: "export"` (inline RSC flight scripts, no server, no nonce, and a hash
 policy cannot survive a rebuild), so nobody "tightens" it into a hydration break. `connect-src` was
 fixed in the same commit — see §12.2. **Promotion itself is still not done**; what changed is that it
@@ -873,8 +916,9 @@ attributes live in `app/` + `components/`, plus the values passed through `CtaBu
 prop — 18 distinct values are visible in a fresh `out/` (`hero-*`, `header-call`, `service-*`,
 `pricing-*`, `finalcta-*`, `footer-*`, `sticky-*`, `form-whatsapp`, `thankyou-*`), and `menu-call` is
 rendered client-side by `Navbar`. **The hooks exist and nothing consumes them** — that is §13.5, not
-this item. One real gap remains here: the three `/locations/` pages carry no `location-*` value of
-their own, so a city-page conversion is indistinguishable from any other page's.
+this item. One real gap remains here: the `/locations/` pages (three then, twelve since 2026-10-28)
+carry no `location-*` value of their own, so a city-page conversion is indistinguishable from any
+other page's.
 
 **13.3 ✅ Roster updated.** The roster now carries the real Search Console verification token, so it
 no longer contradicts `app/layout.tsx`.
@@ -1079,7 +1123,8 @@ the reconciliation opened. For sequencing and gates, see
 **Phase 4 — expand, carefully** — ✅ shipped
 
 14. ✅ §3.5 — three guides, with real bylines.
-15. ✅ §3.4 / §5.2 — three cities, not twelve.
+15. ✅ §3.4 / §5.2 — three cities, not twelve. _(2026-10-28: twelve, by owner decision — each through
+    its own doorway test, the nine new ones each with a source register; built, not yet deployed.)_
 16. ✅ §10.3 (logo `priority` dropped) and §10.4 (never needed at all); §10.2 downgraded to 🔵.
 17. ✅ §12.1 — security headers. ⏳ CSP enforcement, blocked by §12.7 rather than by time.
 
@@ -1094,7 +1139,8 @@ the reconciliation opened. For sequencing and gates, see
 22. §2.4 — `pageOpenGraph()`, plus the `og:image`/`og:url` assertion added to the build gate.
 23. §12.7 / §7.8 / §9.6 / §10.1 — a CSP reporting endpoint, the guarantee's reach, the
     service → location edges, and a real export-size assertion **before** a fourth city is even
-    considered.
+    considered. _(2026-10-28: the assertion exists — performance-guidelines.md §7 — and all twelve
+    cities are built; the service → location edges are still open, §9.6.)_
 24. §14 — and do all of the above with the instruction files updated in the same commit.
 
 **Never:** build 12 thin city pages; invent a review, rating, statistic, credential or byline to

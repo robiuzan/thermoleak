@@ -177,7 +177,7 @@ so this was a real correction, not a rubber stamp).
 ## E. Coverage & geo
 
 The placeholder `geo` (Tel Aviv city centre, for a business with **no public premises**) was removed
-2026-08-17. `site.serviceAreas` names 12 cities; 3 have pages.
+2026-08-17. `site.serviceAreas` names 12 cities; all 12 have pages since 2026-10-28.
 
 **Resolved 2026-09-17:** the national clause is **true**, and the real reach is **about two hours'
 drive from Tel Aviv** — which is most of the country and far beyond the "עד 60 ק״מ" the site had
@@ -193,41 +193,60 @@ been claiming. That figure was never confirmed and has been removed from `servic
 | Real operating base (or: drop `geo` entirely)       | A placeholder coordinate is worse than none for a service-area business                                                                                                                                                                | `lib/site.ts` `geo`             | `geo` removed 2026-08-17; no base supplied | 🔶     |
 | Is "שירות ארצי בתיאום מראש" true?                   | It's a coverage claim; a false `areaServed` is a liability                                                                                                                                                                             | `lib/site.ts`                   | **yes — true**                             | ✅     |
 | Realistic travel reach                              | Gates which cities can honestly be claimed                                                                                                                                                                                             | `lib/site.ts` `serviceAreaText` | **up to ~2 hours' drive from Tel Aviv**    | ✅     |
-| Which of the 12 cities have real job history?       | Decides which earn a location page at all (`/new-city` gate)                                                                                                                                                                           | `lib/locations.ts`              |                                            | 🔶     |
+| Which of the 12 cities have real job history?       | All 12 have a page since 2026-10-28, built on public research; a real job reference is the strongest doorway-test item for each                                                                                                        | `lib/locations.ts`              |                                            | 🔶     |
 | Realistic **same-day** radius                       | "זמינות מהירה" is claimed sitewide — the phrase itself was confirmed true by the owner 2026-10-12 (§D), but no radius was given. Distinct from travel reach: two hours' drive is what he _will_ travel, not what he can reach same-day | `lib/site.ts`                   |                                            | 🔶     |
 | Is there a Google Business Profile address to hide? | Service-area profiles must not contradict the site                                                                                                                                                                                     | GBP                             | no profile exists yet                      | 🔶     |
 
-### 🔶 Location silo — 3 built, 9 deferred (gate run 2026-08-24)
+### 🔶 Location silo — all 12 built (3 on 2026-08-30, 9 on 2026-10-28)
 
-An adversarially-verified gate (49 agents: 12 assessments, 36 refutation passes across three
-lenses, 1 synthesis) found that **all 12 service areas have 3+ true, publicly verifiable,
-city-specific claims available.** That answered _could we_ — not _should we_.
+**Owner decision, 2026-10-28:** "build new city pages to the all other 9 cities left". Every
+service area now has a page. This overrides the earlier "build 3–5 that pass the doorway test, or
+none" guardrail. The risk the owner accepted is written into the header of `lib/locations.ts`:
+the claims are public research, not job history, and nine pages landing together is the doorway
+pattern even when each page passes on its own.
 
-**Built:** תל אביב-יפו · חולון · בת ים — chosen as a geographically contiguous cluster (so the
-`nearby` edges are honest), zero unverifiable claims each, and the largest combined market in
-the core service area.
+**How the first three were chosen (2026-08-24).** An adversarially-verified gate (49 agents) found
+that all 12 areas had 3+ true, city-specific public claims. Three were built as a contiguous
+cluster: תל אביב-יפו, חולון, בת ים. The other nine were queued here with one truncated line each,
+and their full claim texts were never saved.
 
-**Deferred, with verified claims preserved** so the next batch is a data edit, not a re-run.
-Order is by strength of verified claim set:
+**How the nine were built (2026-10-28).** Each city was researched afresh, given two independent
+fact-checks (one against the cited live pages, one blind), and read side by side with the other
+eleven for the doorway test. Every statement and its source is in
+[location-sources/](location-sources/README.md). The re-check overturned two of the old queued
+leads. הרצליה's "about 94 בנייני רכבת in יד התשעה" has no source and is not on the page. רעננה's
+"קריית שרת, a 1950s immigrant neighbourhood of railway buildings" is refuted: it is mostly private
+houses. Three distances in the old table were wrong or unsourced. The pages say what the sources
+support: פתח תקווה about 11 km, הרצליה about 10 km north, מודיעין about 35 km. ראשון לציון states
+no distance.
 
-| City        | km  | Verified claims | Strongest local angle                                                                                           |
-| ----------- | --- | --------------- | --------------------------------------------------------------------------------------------------------------- |
-| רמת גן      | 6   | 13              | רמת גן היא מהערים המובילות בישראל בהיקף פרויקטי תמ״א 38 והתחדשות עירונית. זה מייצר כאן שני סוגי קריאות שונים ל… |
-| גבעתיים     | 5   | 11              | גבעתיים בנויה על ארבע גבעות — בורוכוב, קוזלובסקי, גבעת רמב״ם וגבעת פועלי הרכבת — וגבעת קוזלובסקי מתנשאת לכ-87 … |
-| הרצליה      | 14  | 6               | בשכונת יד התשעה שבהרצליה עומדים כ-94 ״בנייני רכבת״ ישנים, בני שתיים־שלוש כניסות, שהוקמו ברובם בסוף שנות ה-50. … |
-| פתח תקווה   | 12  | 9               | אם המושבות החדשה, בצפון-מערב פתח תקווה, החלה להיבנות ב-2003, ואופי הבנייה בה הוא בנייני מגורים בני 9–23 קומות … |
-| ראשון לציון | 20  | 4               | רמת אליהו נמצאת בתוך אחת מתכניות הפינוי־בינוי הגדולות בישראל, המשתרעת על כ־633 דונם — כך שבאותה שכונה עומדים ז… |
-| רעננה       | 20  | 9               | שכונת קריית שרת שבצפון רעננה הוקמה בשנות ה־50 כשכונת עולים, וחלק ניכר ממנה עדיין בנוי מ״בנייני רכבת״ בני שלוש … |
-| כפר סבא     | 23  | 11              | בכפר סבא המים אינם מסופקים על ידי תאגיד מים עירוני רגיל, אלא על ידי מפעל המים כפר סבא — אגודה חקלאית שיתופית ה… |
-| ראש העין    | 25  | 11              | ראש העין הוקמה ב-1949 כמעברה לעולי תימן, ובתי הקבע הראשונים נבנו החל מ-1951 — כלומר חלק ניכר מהמלאי הוותיק במע… |
-| מודיעין     | 40  | 10              | מודיעין היא עיר מתוכננת חדשה: הבנייה בה החלה ב-1994 והאכלוס הראשון היה ביולי 1996. משמעות הדבר היא שכל בנייני … |
+**Corrected on the three first pages, the same day:** sentences that described our call history
+or job mix in a city were removed. These were חולון intro[1] and claims[5], בת ים faqs[1] and
+claims[5], and תל אביב faqs[1]. They were job history we do not have (golden rule 1). Three meta
+descriptions promised a same-day arrival ("נגיע באותו יום", "הגעה באותו יום"); they now say
+"נשתדל", like the rest of each page.
 
-**⚠️ EVERY claim in this silo — built and deferred — needs owner confirmation.** They are
-adversarially checked against public sources, not sourced by someone who has worked in those
-buildings. Verification is not truth. Correct anything wrong.
+**Availability on the twelve pages.** Only the four nearest cities (תל אביב, חולון, בת ים, רמת גן)
+say "לנזילה פעילה נשתדל להגיע באותו יום". Every other city schedules the visit in advance, with
+no time promised. The real same-day radius is still the open row in the table above.
 
-**The one thing that would most strengthen every page:** a real job reference per city. That is
-the strongest doorway-test item and the only one research cannot supply.
+**⚠️ Every claim on all twelve pages still needs owner confirmation.** Public sources are not
+someone who has worked in those buildings. Start with the weakest, each resting on a single source:
+
+| City        | Confirm first                                                                                       |
+| ----------- | --------------------------------------------------------------------------------------------------- |
+| רמת גן      | Railway buildings in רמת עמידר (one source); the January 2026 flood on רחוב התפוצות (one source)    |
+| גבעתיים     | The four- and six-flat buildings in the בראשית compound (one trade site)                            |
+| הרצליה      | גליל ים's start year and flat counts (one real-estate site)                                         |
+| פתח תקווה   | About 5,900 flats in אם המושבות החדשה, the hub-card claim (one source)                              |
+| ראשון לציון | כצנלסון's building ages (a style description, not a date)                                           |
+| רעננה       | קריית שרת as mainly private houses (one article, written with a developer)                          |
+| כפר סבא     | The stepped houses on רחוב ויצמן and their flat layout (FAQ 1 depends on it)                        |
+| ראש העין    | The +73% housing growth 2015–2020, the hub-card claim (one Calcalist sentence)                      |
+| מודיעין     | Two-family houses in השבטים and מוריה (FAQ 1 and the travel note depend on it; mainly he.wikipedia) |
+
+**The one thing that would most strengthen every page** is still a real job reference per city.
+It is the strongest doorway-test item, and the only one research cannot supply.
 
 ## F. Infrastructure — owner-only changes
 
@@ -258,7 +277,7 @@ the same day** on the fleet wording sign-off page; every answer he gave there is
 | When the card may open                                   | at any hour the calendar allows — weekday evenings, Friday afternoon and Saturday night included, when nobody may answer the phone; its WhatsApp button still works then. Shabbat, chag and the quiet days still silence it                    | owner, fleet decision 2026-10-12 (every site)                                                                                                                                   | ✅                                                                    |
 | Counting the card in GTM                                 | **one shared trigger for the fleet** — `CE - popup events (3locksmiths)` keeps a hostname condition, widened to match every fleet site, this one included; not a trigger per site                                                              | owner, fleet decision 2026-10-12                                                                                                                                                | ✅ decided — the container edit is fleet ops, before the first deploy |
 | The homepage updates strip                               | ships as is, no new item (the owner left "anything to add?" empty). Its newest item is 17/09/2026, so it hides itself from 01/11/2026 until a real newer item is added                                                                         | owner, 2026-10-12                                                                                                                                                               | ✅                                                                    |
-| Export size budget                                       | raised from 6 MB to 7.5 MB (2026-10-12), then to **8 MB** — [performance-guidelines.md](performance-guidelines.md) §1                                                                                                                          | owner, 2026-10-12 ("Raise the cap to 7.5 MB"); owner, 2026-10-27 ("Raise limit to 8 MB")                                                                                        | ✅                                                                    |
+| Export size budget                                       | raised from 6 MB to 7.5 MB (2026-10-12), to 8 MB (2026-10-27), then to **15 MB** (2026-10-28) — [performance-guidelines.md](performance-guidelines.md) §1                                                                                      | owner, 2026-10-12 ("Raise the cap to 7.5 MB"); owner, 2026-10-27 ("Raise limit to 8 MB"); owner, 2026-10-28 ("increase size limit to 15M")                                      | ✅                                                                    |
 | Header call button wraps at 768–820 px (live today)      | fix approved **as a separate change, later** — not part of the live-kit port; [optimization-backlog.md](optimization-backlog.md) §8.7                                                                                                          | owner, 2026-10-12                                                                                                                                                               | ✅ decided — not fixed yet                                            |
 
 ---

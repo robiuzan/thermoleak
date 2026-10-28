@@ -76,7 +76,7 @@ aspirational. The two globals are on top of everything else on every row.
 | `/guides/`                    | `CollectionPage` + `BreadcrumbList`                                   | ✅            |
 | `/guides/{slug}/` ×3          | `Article` + `FAQPage` + `BreadcrumbList`                              | ✅            |
 | `/locations/`                 | `CollectionPage` + `BreadcrumbList`                                   | ✅            |
-| `/locations/{city}/` ×3       | `Service` + `FAQPage` + `BreadcrumbList`                              | ✅            |
+| `/locations/{city}/` ×12      | `Service` + `FAQPage` (3 Questions) + `BreadcrumbList`                | ✅            |
 | `/pricing/`                   | `FAQPage` + `BreadcrumbList`                                          | ✅            |
 | `/about/`                     | `AboutPage` + `BreadcrumbList` (the `Person` is on the business node) | ✅            |
 | `/contact/`                   | `ContactPage` + `BreadcrumbList`                                      | ✅            |
@@ -116,7 +116,7 @@ Two rules follow, and they are the whole of the breadcrumb work now:
    only importer outside `lib/jsonld.ts` is `PageHero` itself — keep it that way.
 2. **A page with a visible trail uses `PageHero`.** Hand-rolled crumbs get a trail with no schema.
 
-**18 of the 22 emitted `index.html` files carry `BreadcrumbList`.** The four without it are `/` (the
+**27 of the 31 emitted `index.html` files carry `BreadcrumbList`.** The four without it are `/` (the
 root has no trail), `/thank-you/` and the two 404 artifacts. That is the expected number, not a gap.
 
 ## Service nodes
@@ -129,7 +129,7 @@ serviceJsonLd(service);
 
 `AdministrativeArea` is correct for a region. The location silo has landed, and
 `locationServiceJsonLd` derives the type from `location.kind` — `City` for a genuine city,
-`AdministrativeArea` for a region. All three shipped locations are `kind: "city"`, so all three emit
+`AdministrativeArea` for a region. All twelve locations are `kind: "city"`, so all twelve emit
 `City`; typing a region as a `City` is a factual error in the graph, which is the entire reason the
 field exists (`/new-city`).
 
@@ -142,13 +142,15 @@ honest count, and a node per city is a recognised local-spam pattern.
    the gate above returns zero files. Keep it that way; see the three re-entry routes above.
 2. **Schema must match visible content.** A `FAQPage` question not rendered on the page is a violation.
    Any `Offer` price must equal the visible price text. Never mark up hidden content.
-3. **`FAQPage` only where FAQs are visible.** Twelve pages qualify today — `/`, the four service
-   pages, the three guides, the three location pages and `/pricing/` — because every one renders its
+3. **`FAQPage` only where FAQs are visible.** Twenty-one pages qualify today — `/`, the four service
+   pages, the three guides, the twelve location pages and `/pricing/` — because every one renders its
    questions in native `<details>/<summary>`, so all answers ship in the DOM. Keep that property in any
    new accordion; a client-state accordion that conditionally renders answers breaks this rule.
    The safest constructions are the derived ones: guides build their FAQ entities from the article's
-   own `answer` and `faq` blocks via `articleFaqs()` (`lib/articles.ts`), and `/pricing/` from
-   `[pricing.answer, ...pricing.faqs]` — so schema and page read from one array and cannot drift.
+   own `answer` and `faq` blocks via `articleFaqs()` (`lib/articles.ts`), `/pricing/` from
+   `[pricing.answer, ...pricing.faqs]` and each city from `[location.answer, ...location.faqs]`
+   (`answer.q` is the visible H2; 3 Questions per city), so schema and page read from one array and
+   cannot drift.
 4. **No dangling `@id`s.** `serviceJsonLd`, `locationServiceJsonLd` and `articleJsonLd` all wire back
    to `${site.domain}/#business`, and the page nodes to `${site.domain}/#website` — both of which the
    root layout always emits. Don't invent refs.
@@ -169,12 +171,14 @@ price and the four per-service `priceModel` strings being confirmed (business-fa
 
 Real, and none of them a fabrication. Describe them as open; cite the id.
 
-| id   | What                                                                                                                                                                                                                                                               | Where                                    |
-| ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------- |
-| SD-6 | `Article` carries no `image`, which the target graph asks for. The guide pages render no image, and rule 2 above forbids marking up what the reader cannot see — so the fix is a real representative image (`/og.png` is the site's own asset), not an unseen URL. | `articleJsonLd`                          |
-| SD-9 | `inLanguage` on a plain `Service` is outside schema.org's declared domain for that type — 7 nodes (4 services + 3 locations). Silent in Google's Rich Results Test, a warning in the schema.org validator.                                                         | `serviceJsonLd`, `locationServiceJsonLd` |
-| SD-8 | `/guides/{slug}/` emits `FAQPage` ungated while `/locations/{city}/` gates on `faqs.length > 0`. Latent, not live: an article with no `answer` and no `faq` block would ship an empty `FAQPage`.                                                                   | `app/guides/[slug]/page.tsx`             |
-| SD-5 | The article `author` is an anonymous `Person`; the business `founder` is the same real human at `about/#founder`. 22 Person nodes carry that `@id`, the 3 article authors do not — so a consumer can only merge them by string-matching a name.                    | `articleJsonLd`                          |
+| id   | What                                                                                                                                                                                                                                                               | Where           |
+| ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------- |
+| SD-6 | `Article` carries no `image`, which the target graph asks for. The guide pages render no image, and rule 2 above forbids marking up what the reader cannot see — so the fix is a real representative image (`/og.png` is the site's own asset), not an unseen URL. | `articleJsonLd` |
+
+**Closed 2026-10-28 (`e6d4111`) — do not report them as open.** SD-9: `inLanguage` is gone from both
+`Service` builders (it stays on the creative works). SD-8: `faqPageJsonLd` returns `null` for an
+empty list, so neither the guide nor the city route needs a length guard. SD-5: an article author who
+is the founder carries the founder's `@id` (`…/about/#founder`).
 
 ## Checklist
 
@@ -191,8 +195,8 @@ Real, and none of them a fabrication. Describe them as open; cite the id.
 
 ```bash
 grep -rL 'application/ld+json' out --include=index.html          # pages with no schema — expect none
-find out -name index.html | wc -l                                # 22 emitted pages
-grep -rl 'BreadcrumbList' out --include=index.html | wc -l       # expect 18 of the 22
+find out -name index.html | wc -l                                # 31 emitted pages
+grep -rl 'BreadcrumbList' out --include=index.html | wc -l       # expect 27 of the 31
 grep -rl 'aggregateRating\|"@type":"Review"\|sameAs\|GeoCoordinates' out --include=index.html | wc -l  # expect 0
 ```
 

@@ -15,7 +15,7 @@ to every page that renders it. The floor is judged against **Unique**.
 | ------------------------------ | ----- | --------- | ------- | ------------------------------------------------ |
 | Homepage                       | 800   | 972       | 860     | ✅                                               |
 | Service page                   | 450   | 475–571   | 363–459 | ⚠️ only `water-leak-detection` clears            |
-| Location page                  | 350   | 696–766   | 584–654 | ✅ all three                                     |
+| Location page                  | 350   | 696–766   | 584–654 | ✅ all three; all 12 on 2026-10-28 (below)       |
 | Article                        | 900   | 798–936   | 686–824 | ❌ all three short — see the note below          |
 | Hub `/services/`               | 250   | 367       | 255     | ✅ on the line                                   |
 | Hub `/locations/`              | 250   | 357       | 245     | ⚠️ on the line                                   |
@@ -24,6 +24,10 @@ to every page that renders it. The floor is judged against **Unique**.
 | About                          | 500   | 610       | 498     | ⚠️ on the line                                   |
 | Contact                        | 200   | 275       | n/a     | ✅ the CTA **is** the page here, so no deduction |
 | Legal (privacy, accessibility) | none  | 171 / 154 | —       | fine as-is                                       |
+
+**Location pages, 2026-10-28.** The row above is the first three on 2026-09-06. On the build that
+added the other nine, those nine carry 446–469 unique non-chrome words (949–997 raw, chrome
+included) and the first three 409–461 — all twelve clear the 350 floor.
 
 **On the article shortfall.** All three guides carry real substance — an answer block, tables, an
 honest-limits section, a real byline. The gap is depth, not padding: close it with a section that
@@ -62,18 +66,22 @@ The four service pages **currently pass** — each has its own `intro`, `benefit
 block, honest-limits section and FAQs. That is genuinely better than the fleet siblings, and it is the
 property to protect when adding a fifth.
 
-**Three location pages ship** — תל אביב, חולון and בת ים, since 2026-08-24. They passed this gate on
+**All twelve service areas have a location page** — תל אביב, חולון and בת ים since 2026-08-30 (gate
+run 2026-08-24), the other nine added 2026-10-28 at the owner's request. Each passed this gate on
 typed, per-city `claims` (see `LocationClaim` in `lib/locations.ts`, whose `category` field exists
-precisely so an auditor can re-check _why_ each claim counted as city-specific). The remaining nine
-service areas stay plain-text chips and are queued in [business-facts.md](business-facts.md) §E with
-their verified claims intact.
+precisely so an auditor can re-check _why_ each claim counted as city-specific). The nine were
+researched afresh — the 2026-08-24 claim texts were never saved — and each had two independent
+fact-checks, one against the cited live pages and one blind; an editor then read all twelve side by
+side for this test. Every statement's source is in
+[location-sources/](location-sources/README.md) — the first three have no register yet.
 
-**Why three and not twelve, when an adversarially-verified assessment found all twelve could
-qualify:** the header of `lib/locations.ts` records the reasoning in full, and it is required reading
-before a fourth city. In short — the claims are public research, not job history; twelve pages
-launched from one research pass _is_ the doorway pattern even where each page is individually
-defensible; and three pages that stay current beat twelve that rot. Sibling sites in this fleet
-generated one page per city from a shared paragraph and all of them now fail.
+**Why it stopped at three until 2026-10-28, when an adversarially-verified assessment had found all
+twelve could qualify:** the claims are public research, not job history; many pages launched from
+one research pass _is_ the doorway pattern even where each page is individually defensible; and depth
+has to be sustained. The owner lifted the cap knowingly, and the header of `lib/locations.ts` keeps
+those reasons as the risk accepted — required reading before changing an entry or adding an area
+beyond the twelve (`/new-city`). Sibling sites in this fleet generated one page per city from a
+shared paragraph and all of them now fail.
 
 To pass, a location page needs at least **three** of these, and they must be true:
 
@@ -110,13 +118,18 @@ list.
    which is prose with inline links, not a card row. The card row below it is _additional_.
 9. CTA.
 
-**Location page** — all seven ship on all three cities.
+**Location page** — all seven ship on all twelve cities.
 
 1. H1 = `איתור נזילות ב{prefixed}`.
-2. Answer block — do we serve this city, how fast, at what cost.
-3. Local substance — at least three items from §2.
+2. Answer block — `answer: { q, a }`; `q` is the visible H2 and a `FAQPage` `Question`. Do we serve
+   this city, how soon, at what cost. "How soon" must be honest for the distance: only תל אביב, חולון,
+   בת ים and רמת גן say "לנזילה פעילה נשתדל להגיע באותו יום"; the other eight schedule the visit in
+   advance with no time promised.
+3. Local substance — at least three items from §2, each sourced in the city's
+   [location-sources](location-sources/README.md) register (the first three cities have none yet).
 4. Full service list with links.
-5. Nearby locations (2–4 links, bidirectional).
+5. Nearby locations — real adjacent areas only, 0–4 links, bidirectional (the build fails on a
+   one-way or unknown edge). מודיעין has none, and that is correct.
 6. City-specific FAQ, 2–3 questions.
 7. CTA.
 
@@ -164,7 +177,8 @@ featured snippet lifts.
 - **≈35–60 Hebrew words**, and the count is a guide-rail, not a gate. Shorter than ~30 reads as thin;
   past ~60 it stops being extractable. Stated in _Hebrew_ words and recalibrated 2026-09-06 from
   "40–60": Hebrew fuses prepositions and articles onto the following word, so a 36-word Hebrew answer
-  is already a full English 50. Shipped today: services 45–48, locations 43–46, guides 36–41; the
+  is already a full English 50. Shipped at that recalibration: services 45–48, locations 43–46 (the
+  first three; the nine added 2026-10-28 were not measured here), guides 36–41; the
   model answer below is 32 and is fine, because it is **complete**. Completeness decides, length only
   advises — **never pad an answer to reach a number.**
 - Answers the question **completely in the first sentence.** No "יש כמה גורמים שמשפיעים" preamble.
@@ -230,7 +244,8 @@ removed. See business-facts §B/§D.
 > `lib/reviews.ts`, the six invented testimonials, the `aggregateRating` they fed and the `/reviews/`
 > route were all removed (`/reviews/` now 301s to `/about/` in `public/_redirects`). Verified in the
 > current export: **zero** occurrences of `aggregateRating`, `Review`, `sameAs` or `GeoCoordinates`
-> across all 22 emitted pages. `lib/reviews.ts` no longer exists — if you are looking for it to
+> across all 22 emitted pages of that export (31 since 2026-10-28 — `/qa-build-gate` re-runs the
+> greps). `lib/reviews.ts` no longer exists — if you are looking for it to
 > delete it, stop; the work is done. Reintroducing any of it, **including as sample or seed data**,
 > is a stop-ship. The legitimate route to real reviews is a Google Business Profile — business-facts §B.
 

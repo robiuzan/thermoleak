@@ -44,10 +44,10 @@ decision, not on a sprint.
 | 1 — Measurement, schema, a11y delta           | ✅ shipped `ff2545c` (with gaps — see Sprint 4)      |
 | 2 — Content depth + `/guides/`                | ✅ shipped `047180c`                                 |
 | 3 — The local silo (3 of 12 cities)           | ✅ shipped `7c9bbda`                                 |
-| **4 — Stop the bleeding**                     | **next, fully unblocked**                            |
+| **4 — Stop the bleeding**                     | ✅ **shipped 2026-09-17** (see below)                |
 | **5 — Re-arm the instruments**                | ✅ **shipped 2026-09-06** (see below)                |
-| **6 — Make the funnel measurable**            | after 4                                              |
-| **7 — Repair the location silo, then extend** | after 6                                              |
+| **6 — Make the funnel measurable**            | ✅ **shipped 2026-10-28** (`e6d4111`)                |
+| **7 — Repair the location silo, then extend** | ⏳ **12 of 12 built 2026-10-28**, not yet deployed   |
 | **8 — The second guide triplet**              | after 7                                              |
 | **9 — Owner-gated upside**                    | a queue, not a sequence                              |
 
@@ -436,13 +436,23 @@ Asking the owner to run it would have had them conclude the sprint was broken.
   shared container, plus confirmation that `thermoleak.co.il` is in the container's GA4 hostname
   RegEx table (`components/Analytics.tsx`). Until then the pushes reach `window.dataLayer` and stop
   there, and **GA4 Realtime will show nothing** — that is the expected state, not a defect.
-- **The enforcing-CSP preview walkthrough** (zero console violations across all 19 routes). Needs a
-  throwaway branch, because the enforcing policy is an edit to `public/_headers` and
-  `ops/deploy-site.ps1` deploys to `--branch main`.
+- **The enforcing-CSP preview walkthrough** (zero console violations across every indexed route — 19
+  when written, 28 since the 2026-10-28 city pages). Needs a throwaway branch, because the enforcing
+  policy is an edit to `public/_headers` and `ops/deploy-site.ps1` deploys to `--branch main`.
 
 ---
 
 ## Sprint 7 — Repair the location silo, then extend it
+
+> **Status 2026-10-28 — Phase B built in one pass, by owner decision; not yet committed or
+> deployed.** The owner asked for pages for all nine remaining service areas and raised the export
+> budget to 15,000,000 B, superseding the "build 3–5 that pass the doorway test, or none" guardrail.
+> The batch order below was not followed. Each city was researched afresh (the 2026-08-24 claim
+> texts were never saved), given two independent fact-checks (one against the cited live pages, one
+> blind), and read by an editor side by side with the other eleven for the doorway test. Every
+> statement's source is in [location-sources/](location-sources/README.md); the first three cities
+> have no register yet. **Phase B went ahead with Phase A's link mesh still half done** — LOC-2 is
+> open. Per-line status is under "Done when".
 
 **Goal:** make the three shipped city pages earn their keep, then add only the cities the evidence
 supports.
@@ -458,6 +468,12 @@ Fix the link mesh, the `nearby` reciprocity, and the `Service.areaServed` type m
 `location.kind`. Add a **Location index** row to the content-standards word table — its absence is
 why the `/locations/` hub went unmeasured.
 
+_2026-10-28:_ `nearby` reciprocity is **enforced** — a module-scope check in `lib/locations.ts` fails
+the build on an unknown or one-way slug (מודיעין has no edge; רמת גן and פתח תקווה do not border).
+Every city page's `Service` types `areaServed` as `City`. The mesh is half done: the footer lists
+all 12 cities on every page, the hub shows 12 cards and each city links to all four services — but
+no service page links to a city (LOC-2 · backlog §9.6).
+
 ### Phase B — extend, in this order
 
 | Batch           | City                      | km      | Claims | Why here                                                                                                                                                                                      |
@@ -471,21 +487,44 @@ why the `/locations/` hub went unmeasured.
 | Hold            | **ראשון לציון**           | 20      | 4      | 4 claims is no margin, and its urban-renewal angle duplicates בת ים's frame                                                                                                                   |
 | Hold            | **מודיעין**               | 40      | 10     | Good claims, but at 40 km it has **no contiguous partner** — its `nearby` block renders empty — and it is outside any plausible same-day radius                                               |
 
+> **Superseded 2026-10-28 — every row was built, together.** The order, batch 5's "at most one" and
+> both holds no longer apply; the km and claim columns are the old leads' figures (business-facts §E
+> records which distances the pages actually state). The fresh research overturned two of those
+> leads — הרצליה's "94 בנייני רכבת ביד התשעה" has no source, and רעננה's "קריית שרת 1950s railway
+> buildings" is refuted — so batch 5's shared-typology warning rests on claims neither page makes.
+> מודיעין still has no `nearby` partner. Only תל אביב, חולון, בת ים and רמת גן say
+> "לנזילה פעילה נשתדל להגיע באותו יום"; the other eight schedule the visit in advance.
+
 **Every city must clear the doorway gate in [content-standards.md](content-standards.md) §2 before
 it ships.** The gate is re-run per city, not inherited from batch 1.
 
-> **Budget note:** at roughly 305 KB of export per location page, the nine remaining cities would
-> add ~2.7 MB and breach the export ceiling (6 MB when this was written; 7.5 MB since the owner
-> raised it on 2026-10-12, 8 MB since 2026-10-27 — still breached). Add the export-size assertion to the `/new-city`
-> gate now, not after it breaks.
+> **Budget note (as written):** at roughly 305 KB of export per location page, the nine remaining
+> cities would add ~2.7 MB and breach the export ceiling (6 MB when this was written; 7.5 MB since
+> the owner raised it on 2026-10-12, 8 MB since 2026-10-27 — still breached). Add the export-size
+> assertion to the `/new-city` gate now, not after it breaks.
+>
+> **Measured 2026-10-28:** the owner raised the budget to 15,000,000 B for these pages. Each city
+> page costs 302–308 KB. The build with all twelve is 11,212,389 B raw / 378 files, less 569,200 B
+> (65 files) of carried earlier-build chunks = **10,643,189 B — 71.0%**, leaving 4,356,811 B. The
+> raw assertion in [performance-guidelines.md](performance-guidelines.md) §7 is now
+> `exit (s>15000000)`.
 
 ### Done when
 
+Status against the local build of 2026-10-28 (31 emitted routes, 28 indexed; not yet deployed):
+
 - Every shipped city passes the substitution test; ≥350 unique words each; zero orphans.
+  ✅ The nine new pages carry 446–469 unique non-chrome words, the first three 409–461; an editor
+  read all 12 side by side for the doorway test; every city page is linked from 30 other pages.
 - `Service.areaServed` name matches `LocalBusiness.areaServed` byte-for-byte on every city page.
-- `du -sb out` under 6,291,456 bytes.
+  ⏳ Not part of the 2026-10-28 verification.
+- `du -sb out` under 6,291,456 bytes. **Superseded** by the owner's 15,000,000 B budget — see the
+  budget note.
 - Claim research for each new city is recorded with untruncated source text, and business-facts §E
-  links to it.
+  links to it. ✅ For the nine: `docs/location-sources/{slug}.md`, linked from §E. ⏳ The first
+  three still have no register.
+- ✅ `nearby` is bidirectional, enforced at build time (Phase A).
+- ❌ Service pages link to a city — LOC-2, still open (backlog §9.6).
 
 ---
 
@@ -501,7 +540,8 @@ and a repaired mesh to plug into (Sprint 7).
 
 1. **למה כתם הרטיבות כמעט אף פעם לא נמצא מתחת לנזילה** — water tracking along pipes and slabs. The
    most quotable-verbatim fact the business owns, and the natural inbound-link target from every
-   service page. Today it appears only as a single location claim.
+   service page. Today it appears only in city-page copy (the תל אביב riser claim and FAQ; since
+   2026-10-28 the רמת גן and כפר סבא FAQs).
 2. **מה חברת ביטוח באמת דורשת בדו״ח נזילה — ומה גורם לדחיית תביעה** → links down to
    `/services/insurance-reports/`, the page sitting closest to its word floor. Turnaround as a
    number is Track O #6 — **write around it; do not invent it.**
@@ -538,7 +578,7 @@ Start any row the day its fact lands. None blocks another.
 | Price confirmed (#4)                                                            | `Offer`/`PriceSpecification`; clears 🔶 on 5 routes                                                                                                     | §7.7       |
 | FLIR model (#5)                                                                 | Replace the generic equipment phrasing; author-bio line                                                                                                 | §7.3       |
 | Turnaround (#6)                                                                 | Concrete answer block on `/services/insurance-reports/`                                                                                                 | §7.7       |
-| Radius (#7)                                                                     | Unblocks location batch 4                                                                                                                               | §5.4       |
+| Radius (#7)                                                                     | Unblocked location batch 4 — built 2026-10-28 with the rest of Phase B                                                                                  | §5.4       |
 | National claim (#8)                                                             | Restore the clause, or leave it removed permanently                                                                                                     | §5.4       |
 | ח.פ. (#9)                                                                       | `legalName` on the business node                                                                                                                        | §7.3       |
 | Insurance (#10)                                                                 | The signal ועדי בתים and property managers ask for                                                                                                      | §7.3       |
@@ -584,12 +624,12 @@ for `.claude/` and then tracked only the code.
 
 ### Per-commit (automatic)
 
-| What                                                                                                        | Mechanism                                                                                   |
-| ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| Route counts, sitemap parity, orphans, fabrication greps, `og:image`/`og:url`, `text-ink/<70`, export ≤8 MB | `/qa-build-gate` — **derived assertions, not `# expect N` comments**                        |
-| Sitemap ↔ emitted tree ↔ `llms.txt` parity                                                                  | `npm run check:sitemap`                                                                     |
-| Sitemap `lastModified` vs `git log -1` on each backing file                                                 | gate line                                                                                   |
-| Prettier on changed files                                                                                   | `.claude/hooks/format-changed.ps1` — a deliberate no-op until `prettier` is a devDependency |
+| What                                                                                                       | Mechanism                                                                                   |
+| ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Route counts, sitemap parity, orphans, fabrication greps, `og:image`/`og:url`, `text-ink/<70`, export size | `/qa-build-gate` — **derived assertions, not `# expect N` comments**                        |
+| Sitemap ↔ emitted tree ↔ `llms.txt` parity                                                                 | `npm run check:sitemap`                                                                     |
+| Sitemap `lastModified` vs `git log -1` on each backing file                                                | gate line                                                                                   |
+| Prettier on changed files                                                                                  | `.claude/hooks/format-changed.ps1` — a deliberate no-op until `prettier` is a devDependency |
 
 ### Per-sprint (blocking)
 

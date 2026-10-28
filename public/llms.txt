@@ -1,7 +1,7 @@
 # טרמוליק (ThermoLeak) — thermoleak.co.il
 
 איתור נזילות מים ורטיבות במצלמה תרמית (תרמוגרפיה), ללא הרס — שירות עד בית הלקוח בגוש דן והמרכז,
-ברדיוס של עד 60 ק״מ. פועלים משנת 2015. נוסד ומנוהל על ידי רונן דהן. עסק בשירות עד הבית, ללא משרד
+ושירות ארצי בתיאום מראש. פועלים משנת 2015. נוסד ומנוהל על ידי רונן דהן. עסק בשירות עד הבית, ללא משרד
 קבלה.
 
 Thermal (infrared) leak and moisture detection in central Israel (Gush Dan and the Merkaz).
@@ -33,7 +33,15 @@ walk-in office.
 - איתור נזילות בתל אביב: https://thermoleak.co.il/locations/tel-aviv/
 - איתור נזילות בחולון: https://thermoleak.co.il/locations/holon/
 - איתור נזילות בבת ים: https://thermoleak.co.il/locations/bat-yam/
-- יתר הערים ברשימת אזורי השירות למטה מקבלות את אותו שירות, ללא עמוד ייעודי.
+- איתור נזילות ברמת גן: https://thermoleak.co.il/locations/ramat-gan/
+- איתור נזילות בגבעתיים: https://thermoleak.co.il/locations/givatayim/
+- איתור נזילות בהרצליה: https://thermoleak.co.il/locations/herzliya/
+- איתור נזילות בפתח תקווה: https://thermoleak.co.il/locations/petah-tikva/
+- איתור נזילות בראשון לציון: https://thermoleak.co.il/locations/rishon-lezion/
+- איתור נזילות ברעננה: https://thermoleak.co.il/locations/raanana/
+- איתור נזילות בכפר סבא: https://thermoleak.co.il/locations/kfar-saba/
+- איתור נזילות בראש העין: https://thermoleak.co.il/locations/rosh-haayin/
+- איתור נזילות במודיעין: https://thermoleak.co.il/locations/modiin/
 
 ## אחריות / Guarantee
 האחריות מנוסחת בתנאים כתובים — מה נחשב איתור, מה אינו נכלל ומתי היא אינה חלה. הנוסח המלא והמחייב

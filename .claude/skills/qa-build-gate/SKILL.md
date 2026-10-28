@@ -10,8 +10,9 @@ start of this gate, not the end of it.
 
 Run the sections **in order**. §1 establishes that `out/` is the build you think it is; every
 assertion after it is worthless if that one is skipped. Numbers below were measured 2026-09-06 on a
-clean build at `d712419`, and a section that says "expect N" means N passed that day — if yours
-differs, reconcile it, don't quietly adopt it.
+clean build at `d712419`, except the route counts, parity output and export weight, re-measured
+2026-10-28 on the local build that added nine city pages. A section that says "expect N" means N
+passed that day — if yours differs, reconcile it, don't quietly adopt it.
 
 Pushing to `main` does **not** deploy (build-only CI); production ships via `/deploy-thermoleak`
 (wrangler → Cloudflare Pages). Run this gate before every deploy — and still before commits, since
@@ -50,31 +51,38 @@ only gate. Add `npx tsc --noEmit` if you want the type errors faster than a full
 
 `npm run check:sitemap` (`scripts/check-sitemap-parity.mjs`) belongs in the same breath as the build.
 It is cited all over this repo and is cheap; run it every time rather than assuming it passed. It
-currently prints `sitemap parity OK — 22 routes emitted, 19 indexed, 3 deliberately excluded.`
+currently prints `sitemap parity OK — 31 routes emitted, 28 indexed, 3 deliberately excluded; llms.txt 29 URL(s), all live.`
+
+The build can also fail on the city graph: since 2026-10-28 a module-scope check in
+`lib/locations.ts` rejects an unknown or one-way `nearby` slug. Fix the edge on both cities; never
+remove the check.
 
 **The `rm -rf .next` matters.** A polluted `.next/` from a `next dev` session can leak dev-only chunks
-into the export. The last clean build measured **5,910,433 bytes (5.64 MiB), largest JS chunk 226 KB**
-— if you see multi-megabyte `main.js` or `fallback/*` files, that's the cause, and deleting files from
-`out/` afterwards is not the fix.
+into the export. The 2026-09-06 clean build measured **5,910,433 bytes (5.64 MiB), largest JS chunk
+226 KB** (2026-10-28: 11,212,389 B raw, §12) — if you see multi-megabyte `main.js` or `fallback/*`
+files, that's the cause, and deleting files from `out/` afterwards is not the fix.
 
 ## 3. Route count
 
 ```bash
-find out -name index.html | wc -l          # expect 22 (19 indexable + /thank-you/ + /404/ + /_not-found/)
-grep -c '<url>' out/sitemap.xml            # expect 19 (/thank-you/ is noindex and excluded)
+find out -name index.html | wc -l          # expect 31 (28 indexable + /thank-you/ + /404/ + /_not-found/)
+grep -c '<url>' out/sitemap.xml            # expect 28 (/thank-you/ is noindex and excluded)
 test -f out/robots.txt && echo ok
 test -f out/llms.txt && echo ok
 test -f out/404.html && echo ok            # Cloudflare Pages serves this as the custom 404
 test -f out/_headers && test -f out/_redirects && echo ok   # Pages headers/redirects shipped
 ```
 
-The 19 indexed routes, in full — anything else in the sitemap is new and wants explaining:
+The 28 indexed routes, in full — anything else in the sitemap is new and wants explaining:
 
 `/` · `/services/` · `/services/water-leak-detection/` · `/services/moisture-detection/` ·
 `/services/electrical-thermography/` · `/services/insurance-reports/` · `/pricing/` · `/guides/` ·
 `/guides/what-a-thermal-camera-sees/` · `/guides/find-leak-without-breaking/` ·
 `/guides/leak-detection-cost/` · `/locations/` · `/locations/tel-aviv/` · `/locations/holon/` ·
-`/locations/bat-yam/` · `/about/` · `/contact/` · `/accessibility/` · `/privacy/`
+`/locations/bat-yam/` · `/locations/ramat-gan/` · `/locations/givatayim/` · `/locations/herzliya/` ·
+`/locations/petah-tikva/` · `/locations/rishon-lezion/` · `/locations/raanana/` ·
+`/locations/kfar-saba/` · `/locations/rosh-haayin/` · `/locations/modiin/` · `/about/` ·
+`/contact/` · `/accessibility/` · `/privacy/`
 
 If the counts move, something was added or dropped. Reconcile before shipping — `staticRoutes` in
 `app/sitemap.ts` is hand-maintained, so a new page can build fine and be silently absent from the
@@ -101,10 +109,10 @@ Also confirm no two **indexed** routes share a `<title>` or a `<meta name="descr
 clean: the only duplicate group is `/404/`, `/_not-found/` and `/thank-you/`, which share the site
 defaults and are all excluded from the sitemap.
 
-One caveat while you are in the head tags: the ten routes that declare their own `openGraph` never
-override `twitter`, so their `twitter:title` is still the generic site title while their `og:title`
-is page-specific — `/services/water-leak-detection/` sends `טרמוליק | איתור נזילות תרמי` to Twitter
-and a different title to everything else. Same root cause as §6 (SEO-01); fix both together.
+While you are in the head tags: `twitter:title` used to stay generic on the routes that set their
+own `og:title` (part of SEO-01, §6). It was fixed with the rest of SEO-01 on 2026-09-17:
+`pageOpenGraph()` returns one block for both `openGraph` and `twitter`, so the two now match. A
+generic `twitter:title` on a content route is a regression.
 
 ## 5. Canonicals
 
@@ -135,16 +143,13 @@ for f in $(find out -name index.html); do
 done
 ```
 
-**Both currently fail — this is a known-open code defect, finding SEO-01, not a regression you
-caused.** Check (a) returns the ten routes that declare their own `openGraph`: the four
-`/services/{slug}/`, the three `/guides/{slug}/` and the three `/locations/{city}/`. Check (b)
-returns eight hub and static routes whose `og:url` says `https://thermoleak.co.il/` because they
-inherit the layout's absolute `url`: `/services/`, `/guides/`, `/locations/`, `/pricing/`, `/about/`,
-`/contact/`, `/privacy/`, `/accessibility/`.
-
-Until SEO-01 is fixed, record the two outputs and confirm they have not **grown**. Once it is fixed,
-both must return empty and a non-empty result becomes a stop-ship. Every one of the 19 indexed routes
-does carry a correct self-referencing `rel=canonical`, so this costs link-preview cards, not indexing.
+**Both must return empty; a non-empty result is a stop-ship.** This was finding SEO-01, fixed
+2026-09-17 (`b954357`): every indexed route except `/` (which keeps the layout's block) builds its
+tags with `pageOpenGraph()` in `lib/site.ts`. Both checks return empty on the 2026-10-28 build of 31 routes. Before the fix, check
+(a) returned the ten routes that declared their own `openGraph` (four services, three guides, the
+three cities of the day), and check (b) eight hub and static routes whose `og:url` was the homepage.
+A new route that hand-writes its `openGraph` instead of calling the helper is how it comes back.
+Every one of the 28 indexed routes also carries a correct self-referencing `rel=canonical`.
 
 ## 7. One H1
 
@@ -154,13 +159,13 @@ for f in $(find out -name index.html); do
 done
 ```
 
-Expect no output. Currently clean on all 22 pages.
+Expect no output. Currently clean on all 31 pages.
 
 ## 8. Structured data — including the stop-ship
 
 ```bash
 grep -rL 'application/ld+json' out --include=index.html      # pages with no schema — expect none
-grep -rl 'BreadcrumbList' out --include=index.html | wc -l   # expect 18 (every PageHero page — all but /, /thank-you/ and the two 404 artifacts)
+grep -rl 'BreadcrumbList' out --include=index.html | wc -l   # expect 27 (every PageHero page — all but /, /thank-you/ and the two 404 artifacts)
 grep -rl 'aggregateRating' out --include=index.html | wc -l  # MUST be 0 until sourced (removed 2026-08-17)
 grep -rl '"@type":"Review"' out --include=index.html | wc -l # MUST be 0 — same purge
 grep -rl 'sameAs\|GeoCoordinates' out --include=index.html | wc -l  # MUST be 0 until real values exist
@@ -174,7 +179,8 @@ non-zero on any of them is a stop-ship. The fabricated 4.9 rating, the six inven
 return only with real, verifiable values from `docs/business-facts.md` §B/§E.
 
 The purged **statistics** need a text-scoped grep, not a raw one — `4.9` matches SVG path data and
-`97%` matches inline CSS on every page, so a naive `grep -rl` reports 22 false positives:
+`97%` matches inline CSS on every page, so a naive `grep -rl` reports one false positive per page
+(31 on 2026-10-28):
 
 ```bash
 for f in $(find out -name index.html); do
@@ -195,7 +201,7 @@ A page calling `breadcrumbJsonLd` directly is a double-emission bug.
 
 ```bash
 npm run check:sitemap
-# sitemap parity OK — 22 routes emitted, 19 indexed, 3 deliberately excluded.
+# sitemap parity OK — 31 routes emitted, 28 indexed, 3 deliberately excluded; llms.txt 29 URL(s), all live.
 ```
 
 `scripts/check-sitemap-parity.mjs` is the assertion; it exits non-zero on drift. It does not just
@@ -219,12 +225,12 @@ grep -o '<loc>[^<]*</loc>' out/sitemap.xml | sed 's|</\?loc>||g' | sort \
   | while read -r u; do grep -qF "$u" out/llms.txt || echo "missing from llms.txt: $u"; done
 ```
 
-`public/llms.txt` is a **pointer file, not a mirror** — the legal pages are legitimately absent. What
-is not legitimate is the content silo: it currently omits `/guides/`, all three `/guides/{slug}/`,
-`/locations/` and all three `/locations/{city}/`, because the file was written 2026-08-17 and neither
-sprint updated it (findings AEO-1 / SEO-06 / LOC-10, all rated low, all still open). Advisory, not a
-stop-ship — but a new route that reaches production without an llms.txt line is how it drifted in the
-first place.
+`public/llms.txt` is a **pointer file, not a mirror** — the legal pages may legitimately be absent.
+The other direction (every llms.txt URL is in the sitemap) is enforced by `npm run check:sitemap`;
+this loop is the advisory half. It prints nothing on the 2026-10-28 build: the file lists every
+sitemap URL, all 12 city pages included. It once omitted the whole `/guides/` and `/locations/` silo
+for two sprints (AEO-1 / SEO-06 / LOC-10) — a new route without an llms.txt line in the same commit
+is how that happened.
 
 ## 10. Orphans
 
@@ -273,15 +279,19 @@ the request, not the config** — and confirm no `/g/collect` call carries the n
 ## 12. Output weight
 
 ```bash
-find out -type f -printf '%s\n' | awk '{s+=$1} END {print s; exit (s>8000000)}'  # 8 MB since 2026-10-27; measured 7,948,783 raw, 7,611,473 minus carried chunks
+find out -type f -printf '%s\n' | awk '{s+=$1} END {print s; exit (s>15000000)}'  # 15 MB since 2026-10-28; measured 11,212,389 raw, 10,643,189 minus carried chunks
 find out -name '*.js' -size +250k -exec ls -lh {} \;                            # expect nothing
 du -sb out/_next                                                                # measured 936,350
 ```
 
-The current shape, so a surprise is recognisable: **5,910,433 B total (5.64 MiB)** — `.txt`
+The shape on 2026-09-06, so a surprise is recognisable: **5,910,433 B total (5.64 MiB)** — `.txt`
 2,769,645 B (46.9%), `.html` 1,984,248 B (33.6%), `.js` 722,262 B (12.2%), the rest fonts, `og.png`,
 CSS and icons. Largest JS chunk **226,355 B**; `public/images/` was only ~80 KB because the service art
 is SVG — since 2026-10-22 the homepage gallery adds WebP files (eleven since 2026-10-27, 540,802 B).
+
+**2026-10-28, with all 12 city pages:** 11,212,389 B raw / 378 files, of which 569,200 B (65 files)
+are earlier builds' carried chunks — **10,643,189 B, 71.0% of the 15,000,000 B budget**, leaving
+4,356,811 B. Each city page costs 302–308 KB, so that is the unit to budget a new content page at.
 
 That `.txt` figure is not a defect to chase. It is Next 16's RSC flight payloads, emitted **twice per
 route** — `index.txt` and `__next._full.txt`, byte-identical, 158 files — so roughly 1.38 MB is pure
@@ -325,6 +335,11 @@ was measured on the 404 page, which carries no breadcrumb trail and no related-l
 understates chrome on a guide. Verify against `docs/content-standards.md` §1 before shipping a change
 to either.
 
+_2026-10-28:_ the table predates the nine new city pages, which measure 949–997 raw (446–469 unique
+non-chrome words); the first three now measure 409–461 unique. The footer has listed all 12 cities on
+every page since then, so the chrome constant has grown too — re-measure it on `/404/` before
+subtracting.
+
 ## 14. Auditor sweep
 
 For a substantive change, run the relevant agents against the fresh `out/`:
@@ -354,11 +369,12 @@ someone shipping the code and leaving the sentence.
 - The 4.9 rating, the 3,000+ job count or the 97% success rate back in visible copy (§8).
 - A `<title>` with the brand zero times or twice.
 - A missing or non-self-referencing canonical.
+- A route with no `og:image`, or an `og:url` that is not its own canonical (§6 — SEO-01 regressing).
 - Zero or multiple `<h1>` on any page.
 - A route in `out/` missing from `sitemap.xml` — i.e. `npm run check:sitemap` exiting non-zero.
 - A new orphan beyond `/404/`, `/_not-found/` and `/thank-you/`.
 - A `data-cta` href carrying a visitor's name, phone or email (§11).
-- `out/` growing past ~7 MB, or any JS chunk over 250 KB.
+- `out/` past the 15,000,000 B budget (§12), or any JS chunk over 250 KB.
 - Any unreferenced file over 1 MB under `out/`.
 - `lint` or `build` failing.
 - A live claim that `docs/business-facts.md` marks 🔶.
@@ -366,9 +382,10 @@ someone shipping the code and leaving the sentence.
 - An article edited without its `dateModified` bumped — `app/sitemap.ts` feeds that date straight to
   the sitemap, so a stale one tells crawlers nothing changed.
 
-Not on this list, deliberately: the **open** defects §6 and §11 describe (SEO-01, SEC-3). They are
-tracked, they predate your change, and blocking every release on them would only teach the next agent
-to skip the gate. Confirm they have not grown; do not let them stop a shipment they did not cause.
+Not on this list, deliberately: the **open** defect §11 describes (SEC-3). (SEO-01, which this line
+also named, was fixed 2026-09-17 and §6 is a stop-ship now.) It is tracked, it predates your change,
+and blocking every release on it would only teach the next agent to skip the gate. Confirm it has not
+grown; do not let it stop a shipment it did not cause.
 
 ## Then
 

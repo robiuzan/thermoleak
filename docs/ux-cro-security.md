@@ -100,8 +100,8 @@ copy already comes from `site.guaranteeTerms`, so it costs nothing new.
   rule working. A silo the nav does not acknowledge will not be crawled or used. Seven items is the
   practical ceiling for a single-row Hebrew nav; the next silo takes a slot from something else
   rather than adding an eighth.
-- **No mega-menu.** Four services and a handful of locations do not justify one, and it would push
-  more of the tree client-side.
+- **No mega-menu.** Four services and twelve city pages — which the footer already lists on every
+  page — do not justify one, and it would push more of the tree client-side.
 
 ### The mobile menu contract
 

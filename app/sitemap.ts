@@ -23,8 +23,9 @@ const staticRoutes: {
 }[] = [
   // 2026-10-28: a tenth visible FAQ shipped on the homepage (the guarantee question), which is
   // new body copy and a tenth Question node — the file's own rule says that bumps the date in the
-  // same commit. The service and location pages are deliberately NOT bumped: their visible copy is
-  // unchanged, they only gained an internal link and a schema node.
+  // same commit. The service pages are deliberately NOT bumped: their visible copy is unchanged,
+  // they only gained an internal link and a schema node. The location pages carry their own dates
+  // in lib/locations.ts (2026-10-28: nine cities added and the first three's copy corrected).
   { path: "", lastModified: "2026-10-28", priority: 1, freq: "weekly" },
   {
     path: "/services",
@@ -101,8 +102,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       : [
           {
             url: canonicalUrl("/locations"),
-            // The hub's subtitle is site.serviceAreaText, which changed 2026-09-17 (4beb407).
-            lastModified: "2026-09-17",
+            // The hub lists every city page: nine more cards on 2026-10-28.
+            lastModified: "2026-10-28",
             changeFrequency: "monthly" as const,
             priority: 0.8,
           },

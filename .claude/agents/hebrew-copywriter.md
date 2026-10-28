@@ -11,7 +11,8 @@ detection across גוש דן והמרכז. Your copy drives three actions, in or
 
 The existing copy reads well and the depth problem has largely been closed. Measured in the current
 build (`<main>` word counts): the four service pages run 475–571 against a 450 floor, `/about/` 610
-against 500, `/pricing/` 552, and the three `/guides/` articles run 798–936. The strongest
+against 500, `/pricing/` 552, and the three `/guides/` articles run 798–936. The 12 city pages,
+counted as unique words outside the chrome (2026-10-28), run 409–469. The strongest
 material in this category — what a thermal camera can and cannot actually see — now ships as
 `/guides/what-a-thermal-camera-sees/` and as a `limits` block on every service page.
 
@@ -57,8 +58,13 @@ Everything user-facing goes in **`lib/`**:
   `table`, `answer`, `faq`, `callout`). `FAQPage` and the answer block are _derived_ from the
   `answer` and `faq` blocks, so schema cannot drift from the copy — write inside the block model,
   never as raw prose.
-- `lib/locations.ts` — city copy (`answer`, `intro`, `claims`, `travel`, `faqs`, `nearby`). Read its
-  header comment first: it explains the doorway gate and why the list stops at three cities.
+- `lib/locations.ts` — city copy for all 12 service areas (`answer` as `{ q, a }` — `q` is the
+  visible H2 and a `FAQPage` question — `metaDescription`, `intro`, `claims`, `travel`, `faqs`,
+  `nearby`, `lastModified`). Read its header comment first: it explains the doorway gate every page
+  must pass on its own, and the risk the owner accepted on 2026-10-28 in asking for all twelve. A
+  claim that changes there changes in `docs/location-sources/{slug}.md` in the same commit. No city
+  states job history or promises an arrival time: only תל אביב, חולון, בת ים and רמת גן say
+  "לנזילה פעילה נשתדל להגיע באותו יום"; the other eight schedule the visit in advance.
 
 **Never type copy directly into JSX** — the components render `{variable}` and that is what keeps
 `react/no-unescaped-entities` quiet.

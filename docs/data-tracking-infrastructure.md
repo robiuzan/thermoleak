@@ -9,9 +9,9 @@ the architecture and the contracts.
 ## 1. Current state: `page_view` plus the three events the container cannot see
 
 **GTM-KWGGH438 ships on every page.** `components/Analytics.tsx` is mounted from the root layout,
-so all 23 emitted HTML files carry the container (verified in the fresh export and against the live
-origin), and the container resolves `thermoleak.co.il` → GA4 **G-5YWLZ07PEC** through its hostname
-RegEx table. Installed in `f06aab8`, 2026-08-30.
+so every emitted HTML file carries the container (23 when this was verified in the fresh export and
+against the live origin; 32 in the 2026-10-28 build), and the container resolves `thermoleak.co.il`
+→ GA4 **G-5YWLZ07PEC** through its hostname RegEx table. Installed in `f06aab8`, 2026-08-30.
 
 **Container-side, exactly one event still flows: `page_view`.** The container holds a single tag —
 the GA4 config tag, firing on `gtm.init`. There are no click triggers and no event tags, and nothing

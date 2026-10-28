@@ -1,6 +1,6 @@
 ---
 name: perf-a11y-auditor
-description: Read-only Core Web Vitals and WCAG 2.0 AA / IS 5568 audit of the static export in one pass with two verdicts — the 5.91 MB export and its 47% RSC .txt payloads, LCP and the disabled image pipeline, CLS reserves, INP client-JS budget, plus computed colour contrast on the live ink/55 and ink/60 call sites and the accent tokens, tap targets, keyboard and focus order, form labelling, and whether the published accessibility statement is still true. Invoke with "perf audit", "a11y audit", "check Core Web Vitals", or "בדיקת נגישות". Never edits.
+description: Read-only Core Web Vitals and WCAG 2.0 AA / IS 5568 audit of the static export in one pass with two verdicts — the export against its 15 MB budget and its duplicated RSC .txt payloads, LCP and the disabled image pipeline, CLS reserves, INP client-JS budget, plus computed colour contrast on the live ink/55 and ink/60 call sites and the accent tokens, tap targets, keyboard and focus order, form labelling, and whether the published accessibility statement is still true. Invoke with "perf audit", "a11y audit", "check Core Web Vitals", or "בדיקת נגישות". Never edits.
 model: sonnet
 tools: Read, Grep, Glob, Bash, WebFetch
 ---
@@ -32,7 +32,8 @@ read-only.
    across 220 files and 22 emitted routes** — not the "~3.9 MB" several docs still carry. That was
    98.5% of the 6 MB budget of the day; the owner raised the budget in
    `docs/performance-guidelines.md` §1 to **7.5 MB** on 2026-10-12, when the live surfaces took a
-   build to ≈6.93 MB, and to **8 MB** on 2026-10-27, for the gallery's approved images. Composition:
+   build to ≈6.93 MB, to **8 MB** on 2026-10-27, for the gallery's approved images, and to **15 MB** on
+   2026-10-28, for the nine remaining city pages. Composition:
 
    | Class                                | Bytes                   | Share |
    | ------------------------------------ | ----------------------- | ----- |
@@ -49,8 +50,13 @@ read-only.
    and `__next._full.txt` are byte-identical (verified with `cmp` on several routes), so roughly 1.38 MB
    of the export is pure duplication across 158 files. Two things follow, and an honest audit says both:
    they are **navigation prefetch, not first paint, so they do not touch LCP**; and they are real deploy
-   weight that grows ~115 KB per new route, which means the nine remaining cities in the 12-city plan
-   would push `out/` past 8 MB. Report it as a budget-and-planning finding, not an LCP finding.
+   weight that grows ~115 KB per new route — the reason the nine remaining cities needed the 15 MB
+   budget (owner, 2026-10-28). Report it as a budget-and-planning finding, not an LCP finding.
+
+   **2026-10-28 build (all 12 cities, local — not yet deployed):** 31 emitted routes, 11,212,389 B
+   raw across 378 files, of which 569,200 B (65 files) are carried earlier-build chunks; the budgeted
+   total is **10,643,189 B = 71.0% of 15,000,000 B**, leaving 4,356,811 B. Each city page costs
+   302–308 KB. The composition table above was not re-measured.
 
 2. **Images.** `next.config.ts` sets `images: { unoptimized: true }`, so every `next/image` renders a
    bare `<img>` with **no srcset**. **All four** service illustrations are SVG (1,166–1,379 B each), so
@@ -61,10 +67,10 @@ read-only.
    4.5× inside the 150 KB LCP-image budget and there is no `sizes=` attribute anywhere in `app/` or
    `components/`. **There is no image-weight crisis here; do not open one.**
 3. **LCP.** Identify the real LCP element per route type — they differ. The homepage preloads
-   `/images/hero.webp` (`<link rel="preload" as="image">` is in the emitted HTML); on the other 21
-   routes the LCP is the `PageHero` H1 text (`components/PageHero.tsx`). `Logo` no longer ships
+   `/images/hero.webp` (`<link rel="preload" as="image">` is in the emitted HTML); on every other
+   route the LCP is the `PageHero` H1 text (`components/PageHero.tsx`). `Logo` no longer ships
    `priority` — backlog §10.3 dropped it, and because `next/image` defaults to lazy the navbar wordmark
-   is now `loading="lazy"` above the fold on all 22 routes (finding PERF-5, OPEN — a perceived-speed
+   is now `loading="lazy"` above the fold on every route (finding PERF-5, OPEN — a perceived-speed
    nit, not a CWV failure; the `width`/`height` reserve the box so there is no CLS).
 4. **Fonts — already done, verify rather than prescribe.** Heebo + Assistant are self-hosted via
    `next/font/google` (`app/fonts.ts`), and the build **already emits four
@@ -129,8 +135,8 @@ read-only.
    themselves. That is exposure under IS 5568, not a pixel bug. Note also that the page's "last updated"
    line still reads ביוני 2026 while the a11y posture changed in August; the correct sequence is **fix,
    then re-date** — flag any re-dating that runs ahead of the fixes.
-3. **Semantics.** Landmarks (`header`/`nav`/`main`/`footer`) present; exactly one `<h1>` on all **22
-   emitted pages** (19 of them in the sitemap); heading order unbroken. A skip link ships in
+3. **Semantics.** Landmarks (`header`/`nav`/`main`/`footer`) present; exactly one `<h1>` on all **31
+   emitted pages** (28 of them in the sitemap, 2026-10-28 build); heading order unbroken. A skip link ships in
    `app/layout.tsx`. Confirm rather than assume.
 4. **Keyboard.** `:focus-visible` is styled globally in `app/globals.css:45-49` with a 3px `brand-light`
    outline — don't remove it, and note that `CtaButton`'s `focus-visible:outline-none` does not beat it
@@ -212,8 +218,9 @@ lab numbers need a real Lighthouse or PSI run, and any a11y item you computed ra
 - **Distinguish first-paint cost from deploy weight.** The runtime experience here is genuinely healthy
   — ~597 KB of images (most of it the lazy, below-the-fold gallery), four font preloads, an LCP
   image preload, four client components — while the
-  _export_ sits at 98.5% of its budget on prefetch payloads that never touch a rendering metric. Say
-  both. A verdict that calls 5.91 MB an LCP problem is as wrong as one that ignores it.
+  _export_ (10,643,189 B, 71.0% of its 15 MB budget on the 2026-10-28 build) carries deploy weight,
+  much of it prefetch payloads, that never touches a rendering metric. Say both. A verdict that
+  calls the export size an LCP problem is as wrong as one that ignores it.
 - Don't manufacture findings to fill a section. But don't hunt closed ones either: `text-ink/50`, the
   mobile-menu focus trap, the form's first-invalid-field focus, the `alt={service.h1}` redundancy and the
   missing font preload are all **fixed**. Report the ones that are actually live.

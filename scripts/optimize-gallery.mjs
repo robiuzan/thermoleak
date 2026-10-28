@@ -3,8 +3,8 @@
  *
  * WHY MASTERS LIVE OUTSIDE public/
  *
- * public/ is copied verbatim into out/, and every byte of out/ counts against the 8,000,000 B export
- * budget (docs/performance-guidelines.md §1). The masters are 0.2–2.6 MB generator images — the
+ * public/ is copied verbatim into out/, and every byte of out/ counts against the 15,000,000 B
+ * export budget (docs/performance-guidelines.md §1). The masters are 0.2–2.6 MB generator images — the
  * first batch (31 files, 55,195,544 B) was dropped straight into public/images/ on 2026-10-22, which
  * would have shipped 8× the whole site's weight on the next deploy. So masters sit in
  * assets/gallery/ (the fleet's convention — galbath.co.il does the same), and that folder is

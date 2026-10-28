@@ -60,8 +60,8 @@ export const site = {
   },
   // The national clause is CONFIRMED (owner, 2026-09-17) — he travels up to about two hours from
   // Tel Aviv, which covers most of the country. The old "עד 60 ק״מ" understated the real reach and
-  // was never confirmed, so it is gone. גוש דן stays named first because it is the core area and
-  // the only one with location pages.
+  // was never confirmed, so it is gone. גוש דן stays named first because it is the core area; since
+  // 2026-10-28 all 12 service areas have a location page, inside גוש דן and beyond it.
   serviceAreaText: "גוש דן והמרכז · שירות ארצי בתיאום מראש",
   serviceAreas: [
     "תל אביב-יפו",

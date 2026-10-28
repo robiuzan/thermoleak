@@ -5,10 +5,10 @@ description: Build the link mesh on thermoleak — a header that reaches all fou
 
 # Internal linking
 
-Nineteen indexable routes (22 emitted), and the graph is **orphan-free** — the only unlinked emitted
-files are `/404/`, `/_not-found/` and `/thank-you/`, all three deliberate. That is genuinely better
-than most sites this size. The gap is not reachability; it is **anchor-text depth and the direction of
-the location edges**.
+Twenty-eight indexable routes (31 emitted, 2026-10-28 build), and the graph is **orphan-free** — the
+only unlinked emitted files are `/404/`, `/_not-found/` and `/thank-you/`, all three deliberate. That
+is genuinely better than most sites this size. The gap is not reachability; it is **anchor-text depth
+and the direction of the location edges**.
 
 ## Current state (backlog §9)
 
@@ -16,12 +16,12 @@ the location edges**.
 | ------------------------- | ------------------------------------------------------------------------------------------------------ |
 | Orphans                   | **zero** ✅ (`/404/`, `/_not-found/`, `/thank-you/` are intentional)                                   |
 | Header                    | 7 nav links (`navLinks`) — services, pricing, locations and guides indexes; individual services **no** |
-| Footer                    | all 4 services + all 7 nav links + both legal pages + all 3 cities (`אזורי שירות`, 2026-10-19) ✅      |
+| Footer                    | all 4 services + all 7 nav links + both legal pages + all 12 cities (`אזורי שירות`, 2026-10-19) ✅     |
 | Related services          | `services.filter(s => s.slug !== current)` → all 3 others. Correct at 4 services; revisit at 8+        |
 | Contextual in-copy links  | ✅ shipped — a `links` array per service (`lib/services.ts`), 2 descriptive anchors each               |
 | Hub prose on `/services/` | **still none** — the index is a card grid plus the PageHero subtitle                                   |
-| Breadcrumbs               | ✅ `PageHero` renders the trail **and** emits `BreadcrumbList` from the same array — 18 pages          |
-| Location silo             | ships (3 cities) — cities link out to all 4 services; in: the hub and the footer, no service page yet  |
+| Breadcrumbs               | ✅ `PageHero` renders the trail **and** emits `BreadcrumbList` from the same array — 27 pages          |
+| Location silo             | 12 cities — each links out to all 4 services; in: hub, footer, `nearby` (30 pages), no service page    |
 
 ## 1. Header
 
@@ -46,8 +46,9 @@ Don't add one. Two notes:
 
 - **The locations list shipped 2026-10-19** — `אזורי שירות` under the hours column maps every entry
   of `locations` to `/locations/{slug}/` with the anchor `איתור נזילות {prefixed}`, the footer half of
-  LOC-2. Until then the cities' only inbound links were `/locations/` and each other, and Google had
-  crawled none of the four (URL Inspection 2026-10-19: "URL is unknown to Google"). The social icons that used to sit
+  LOC-2; it lists all twelve since 2026-10-28. Until then the cities' only inbound links were
+  `/locations/` and each other, and Google had crawled none of the four (URL Inspection 2026-10-19:
+  "URL is unknown to Google"). The social icons that used to sit
   here were removed 2026-08-17 along with the fabricated reviews; `components/Footer.tsx` carries a
   comment saying they come back only with real profile URLs from `docs/business-facts.md` §B. Don't
   restore them from memory.
@@ -58,7 +59,7 @@ Don't add one. Two notes:
 
 Each of the four services carries a `links` array in `lib/services.ts` rendered inside the prose, with
 descriptive Hebrew anchors — e.g. water-leak-detection → `דו״ח תרמוגרפי לחברות הביטוח` and
-`איתור רטיבות וכשלי בידוד`. **Match that pattern; don't invent a second one.** The three city pages
+`איתור רטיבות וכשלי בידוד`. **Match that pattern; don't invent a second one.** All twelve city pages
 link out to all four services the same way.
 
 The remaining gap is the reverse edge: **no commercial page links into a city page with a descriptive
@@ -73,7 +74,7 @@ The anchor-text rules, wherever the link lives:
 - ❌ "לחצו כאן", "למידע נוסף", a bare URL
 
 The edges that are still missing, all of them into the location silo: `/services/` → a strip linking
-the three cities; each `/services/{slug}/` → the cities it covers. Options for the last one, pick one
+the twelve cities; each `/services/{slug}/` → the cities it covers. Options for the last one, pick one
 and apply it to all four: a shared nearby-locations block rendered from `lib/locations.ts`, or an
 optional `locations?: string[]` field on `Service`. Do not hand-write city links into one service page
 only — a bespoke shape on one of four is how the mesh rots.
@@ -85,7 +86,7 @@ Copy lives in `lib/services.ts` and `lib/locations.ts`; a new link is a data edi
 `/services/` is the natural hub and is still a `PageHero` subtitle above a card grid — no linking
 prose. Give it an intro that links contextually into its children and explains **how the four services
 relate** — one camera, one visit, four different questions it can answer — and use the same block to
-carry the three city links from §3. Content-standards §1 sets a 250-word floor for index pages; the
+carry the city links from §3. Content-standards §1 sets a 250-word floor for index pages; the
 value here is the anchor text, not the word count. `/locations/` has the same shape of gap: its hub
 prose is short and its card blurbs are lifted verbatim from the child pages (LOC-7).
 
@@ -93,24 +94,29 @@ prose is short and its card blurbs are lifted verbatim from the child pages (LOC
 
 `components/PageHero.tsx` takes one `crumbs` array and does both jobs from it: it renders the visible
 trail through `Breadcrumbs` **and** emits `BreadcrumbList` itself, mapping `href` → `url`. They cannot
-drift. 18 emitted pages carry both (every route except `/`, `/thank-you/` and the two 404 artifacts).
+drift. 27 emitted pages carry both on the 2026-10-28 build (every route except `/`, `/thank-you/` and
+the two 404 artifacts; 18 before the nine cities).
 
 **A page must never call `breadcrumbJsonLd` directly** — that double-emits. Pass `crumbs` to
 `PageHero` and nothing else. See `/schema-structured-data`.
 
 ## 6. The location mesh — half built
 
-Three cities shipped 2026-08-24 (`/new-city`). What the mesh was supposed to have, and where it stands:
+Twelve cities: three since 2026-08-30, nine added 2026-10-28 (`/new-city`). What the mesh was
+supposed to have, and where it stands:
 
 - ✅ Every location page links to all 4 services with descriptive anchors.
 - ✅ Every location page links to its **nearby** cities from the `nearby` field, and the edges are
-  bidirectional — verify that when you add a fourth; a one-way `nearby` is a modelling error.
+  bidirectional — build-enforced since 2026-10-28: a module-scope check in `lib/locations.ts` fails
+  the build on an unknown or one-way slug. מודיעין has no `nearby` (no adjacent area), and that is
+  correct.
 - ❌ No service page links to any location.
-- ✅ The footer links every location (2026-10-19).
+- ✅ The footer links every location (2026-10-19) — all twelve, so each city page is linked from 30
+  other pages.
 
-The ❌ row is what remains of LOC-2. When a fourth city lands, wire its
-inbound links **in the same commit** — the roadmap, `/new-city` and `docs/keyword-map.md` §6 all say
-"before it ships", and sprint 3 is the reason that instruction now has a counter-example.
+The ❌ row is what remains of LOC-2. When a new area lands, wire its inbound links **in the same
+commit** — the roadmap, `/new-city` and `docs/keyword-map.md` §6 all say "before it ships", and
+sprint 3 and the 2026-10-28 batch are the counter-examples.
 
 ## Zero-orphan check
 

@@ -6,8 +6,8 @@ Enforceable numbers, not aspirations. A change that breaks a budget here does no
 **Measure before optimising.** The user-facing baseline is genuinely healthy — static HTML on a
 global edge, one 33 KB raster, four SVGs — so do not manufacture findings to fill a report. But
 "healthy" is not the same as "inside every budget": as of the 2026-09-06 re-baseline the export sat
-at **98.5% of its size budget** (then 6 MB — the owner raised it to 7.5 MB on 2026-10-12 and to
-8 MB on 2026-10-27, §1), one
+at **98.5% of its size budget** (then 6 MB — the owner raised it to 7.5 MB on 2026-10-12, to
+8 MB on 2026-10-27 and to 15 MB on 2026-10-28, §1), one
 JS chunk is over, and the tag budget is knowingly breached. Those three are real and are stated as
 such in §1. Everything else here is fine.
 
@@ -37,7 +37,7 @@ these.
 
 | Asset class                             | Budget                                                  | Current (2026-09-06)                                                                                                                |
 | --------------------------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| Total `out/`                            | ≤ 8,000,000 B (owner, 2026-10-27; was 7,500,000 B)      | **5,910,433 B — 98.5% of the 6 MB budget of the day** ⚠️ 220 files; re-measured 2026-10-12 below                                    |
+| Total `out/`                            | ≤ 15,000,000 B (owner, 2026-10-28; was 8,000,000 B)     | **5,910,433 B — 98.5% of the 6 MB budget of the day** ⚠️ 220 files; re-measured 2026-10-12 below                                    |
 | ├ RSC segment payloads (`out/**/*.txt`) | _no budget — set one_                                   | **2,769,645 B / 158 files = 46.9% of the export**                                                                                   |
 | ├ HTML                                  | —                                                       | 1,984,248 B / 23 files                                                                                                              |
 | └ `out/_next` (JS, CSS, fonts)          | —                                                       | 936,350 B                                                                                                                           |
@@ -59,9 +59,9 @@ set alone is 1,415,029 B, so roughly 1.38 MB of the export is pure duplication. 
 prefetch, not first paint — it does not touch LCP** and should never be "optimised" by deleting
 files from `out/`. It is deploy weight and a per-navigation origin fetch (§5), and it grows with
 every route, which is why the export moved from ~3.9 MB to 5.91 MB when `/guides/` and `/locations/`
-landed. **The 6 MB budget is now 98.5% consumed: the next silo breaches it.** Treat that as the
-trigger to decide whether to raise the budget deliberately or to constrain route growth — not as
-something to discover mid-sprint.
+landed. **On 2026-09-06 the 6 MB budget was 98.5% consumed, so the next silo would breach it.**
+Treat that as the trigger to decide whether to raise the budget deliberately or to constrain route
+growth — not as something to discover mid-sprint.
 
 **Re-measured 2026-10-12 (fleet live-kit review, CLAUDE.md §14) — the budget is breached, and
 raising it is the owner's decision.** The export deployed 2026-09-17 (`b954357`) is already
@@ -120,6 +120,17 @@ files plus ≈20 KB of markup across the section's four emissions. One content p
 fits; the second is the next budget decision. The raw figure is 51 KB under 8,000,000 B, so the §7
 command turns red after the next JS-changing deploy or two, on carried chunks alone.
 
+**Raised 2026-10-28 — the export budget is now 15,000,000 B.** The owner asked for the nine
+remaining city pages in the same message ("increase size limit to 15M"). The build that ships all
+twelve (31 emitted routes, 28 indexed) measures 11,212,389 B raw / 378 files minus 569,200 B carried
+(65 files) = **10,643,189 B — 71.0% of the new budget, leaving 4,356,811 B.** Each new city page
+costs 302,328–307,771 B in `out/locations/{slug}/` (2,745,903 B for the nine), in line with the
+288–316 KB a content page was costing. The other ≈286 KB since 2026-10-27 is spread across the site:
+the footer's nine new city links and the hub's nine new cards, printed in every page's HTML and its
+RSC payloads, plus Sprint 6's own additions (`e6d4111`) in the same build. The raw figure is
+3.8 MB under the budget, so the §7 command is green again. About fourteen more content pages would
+fit.
+
 **On the JS rows.** The old "≤ 120 KB per route, well under ✅" was never measured and is 4.7×
 wrong against its own stated unit. The framework floor is what Next 16.2.9 + React 19.2.4 cost on
 any route; it is not something this site can tune. So the enforceable budget is the **delta**: a new
@@ -142,8 +153,8 @@ that is exactly what the +0 B row catches.
    above-the-fold image that is _not_ the LCP element must still be `loading="eager"`.** The second
    clause exists because the first one was over-applied: dropping the navbar logo's `priority`
    (correctly — it was preloading a ~40 px wordmark in competition with the hero) left it on
-   `next/image`'s default, so the emitted markup is `loading="lazy"` on the topmost element of all
-   22 routes. Lazy-loading an in-viewport image hides it from the preload scanner and the wordmark
+   `next/image`'s default, so the emitted markup is `loading="lazy"` on the topmost element of every
+   route. Lazy-loading an in-viewport image hides it from the preload scanner and the wordmark
    pops in after first paint. There is no CLS (the box is reserved), so this is a polish defect, not
    a budget breach — but it is the swing the rule now names. Open: `components/Logo.tsx` needs a
    `loading` pass-through, `components/Navbar.tsx` an eager instance; the footer copy stays lazy.
@@ -290,8 +301,8 @@ The auditor reads the artifact; it does not measure a browser. For real numbers:
 The commands that reproduce every number in §1 — run them, do not re-estimate:
 
 ```bash
-# total export size, and the budget as an assertion (exit 1 = breached; 8 MB since 2026-10-27)
-find out -type f -printf '%s\n' | awk '{s+=$1;n++} END {print s" bytes / "n" files"; exit (s>8000000)}'
+# total export size, and the budget as an assertion (exit 1 = breached; 15 MB since 2026-10-28)
+find out -type f -printf '%s\n' | awk '{s+=$1;n++} END {print s" bytes / "n" files"; exit (s>15000000)}'
 # the asset class that is half the export
 find out -name '*.txt'    -printf '%s\n' | awk '{s+=$1;n++} END {print "txt   "s" / "n}'
 find out -name '*.html'   -printf '%s\n' | awk '{s+=$1;n++} END {print "html  "s" / "n}'
@@ -327,7 +338,8 @@ curl -sSI "https://thermoleak.co.il$(grep -o '/_next/static/media/[^"]*\.woff2' 
 - Tag manager / analytics installation ← **the highest-risk change on this list**
 - Any `_headers` edit
 - **A new route silo** — `/guides/` and `/locations/` together added ~1.87 MB to the export, almost
-  all of it RSC payload (§1). At 98.5% of budget this is now the trigger that matters most
+  all of it RSC payload (§1). A content page costs about 302–308 KB and the 2026-10-28 build sits at
+  71.0% of the 15 MB budget, so re-measure with §7 whenever pages are added
 - The i18n build landing (doubles the route count)
 
 > **This list only works if someone runs it.** It did not run once between 2026-08-30 and

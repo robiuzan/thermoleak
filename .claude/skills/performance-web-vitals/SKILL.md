@@ -1,6 +1,6 @@
 ---
 name: performance-web-vitals
-description: Core Web Vitals for a static export on Cloudflare Pages — the measured 5.91 MB export and why nearly half of it is duplicated RSC .txt payloads that never touch first paint, what images.unoptimized actually costs on a site whose service art is all SVG, the shipped hero and font preloads, the CLS reserve that does not actually cover the footer, and the four-client-component JS budget now that GTM ships. Use before shipping or when LCP, CLS or INP regress. Triggers "perf pass", "Core Web Vitals", "LCP slow", "image optimization", "bundle size", "srcset".
+description: Core Web Vitals for a static export on Cloudflare Pages — the 5.91 MB export measured 2026-09-06 (10.64 MB = 71.0% of the 15 MB budget on 2026-10-28) and why nearly half of it is duplicated RSC .txt payloads that never touch first paint, what images.unoptimized actually costs on a site whose service art is all SVG, the shipped hero and font preloads, the CLS reserve that does not actually cover the footer, and the four-client-component JS budget now that GTM ships. Use before shipping or when LCP, CLS or INP regress. Triggers "perf pass", "Core Web Vitals", "LCP slow", "image optimization", "bundle size", "srcset".
 ---
 
 # Core Web Vitals
@@ -32,8 +32,9 @@ duplication. All of it is fetched on **client-side navigation prefetch**, never 
 of it touches LCP on any route. It is deploy weight and cache footprint, not a Core Web Vitals problem.
 Do not "fix" it by disabling prefetch; measure a real navigation first.
 
-The budgets that do matter: **no JS chunk over 200 KB** (one is at 226 KB today), and no unreferenced
-file over 1 MB.
+The budgets that do matter: **no JS chunk over 200 KB** (one is at 226 KB today), no unreferenced
+file over 1 MB, and the export total stays under **15,000,000 B** (performance-guidelines.md §1/§7;
+a content page costs ~300 KB).
 
 This site does **not** have the multi-megabyte dev-chunk problem some fleet siblings carry. If you see
 one, the cause is a polluted `.next/` — `rm -rf .next out` and rebuild before investigating further.

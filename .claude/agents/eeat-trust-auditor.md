@@ -25,8 +25,8 @@ read-only and you never invent a fact to close a gap.
   standing targets; §7 is the trust gate the
   CRO auditor applies downstream of you.
 - `lib/site.ts`, `lib/services.ts`, `lib/faqs.ts`, `lib/articles.ts` (bylines and dates),
-  `lib/locations.ts` (the per-city claims, all 🔶), `components/GuaranteeTerms.tsx`, every
-  `app/**/page.tsx`. There is no `lib/reviews.ts` — it was deleted 2026-08-17 with the testimonials.
+  `lib/locations.ts` (the per-city claims, all 🔶) with `docs/location-sources/` (each claim's
+  source, nine cities so far), `components/GuaranteeTerms.tsx`, every `app/**/page.tsx`. There is no `lib/reviews.ts` — it was deleted 2026-08-17 with the testimonials.
 - `Israeli services sites/roster/sites/thermoleak.json` — the fleet manifest. Its `_needsConfirmation`
   array is authoritative about what is real: phone, WhatsApp and email are **real fleet values** (the
   repo's CLAUDE.md agrees — that warning was corrected); **prices, certifications, stats and reviews
@@ -91,18 +91,26 @@ read-only and you never invent a fact to close a gap.
    but also no map, no GBP link, no company number, and no complaints or cancellation path. The
    accessibility statement and privacy policy exist and are substantive — credit that, but check the
    privacy page still describes the site truthfully now that GTM and GA4 ship on every route.
-9. **The location silo's claims.** `/locations/` and its three city pages shipped after the purge and
-   carry per-city factual claims, all marked 🔶 in `lib/locations.ts` and business-facts §E. They are
-   researched against public sources, **not sourced by someone who worked in those buildings** —
-   verification is not truth. Audit that none has quietly graduated into an unhedged assertion, and
-   that no city page states a coverage or job-history claim the data does not carry.
+9. **The location silo's claims.** `/locations/` now has a page for all 12 service areas (owner
+   decision 2026-10-28): three shipped 2026-08-30, nine are built locally and **not yet deployed**.
+   Every city's claims are marked 🔶 in `lib/locations.ts` and business-facts §E and **all still
+   need owner confirmation**. For the nine, each statement's source is in
+   `docs/location-sources/{slug}.md` (index: its `README.md`), after two independent fact-checks per
+   page; the first three have no register yet, so their claims trace to nothing on file. All of it is
+   research against public sources, **not sourced by someone who worked in those buildings** —
+   verification is not truth. Audit that no claim has graduated into an unhedged assertion, that each
+   of the nine still matches its register, and that neither lead the re-check overturned has returned
+   (Herzliya's "94 בנייני רכבת ביד התשעה" — no source; Ra'anana's "קריית שרת 1950s railway
+   buildings" — refuted). No city page may state job history (removed from the first three 2026-10-28) or
+   a time promise beyond "לנזילה פעילה נשתדל להגיע באותו יום", which only tel-aviv, holon, bat-yam and
+   ramat-gan carry; the other eight schedule in advance.
 
 ## Method
 
 1. Grep the repo for every superlative and quantified claim: `\d+\+?`, `%`, מוביל, הטוב, מומחה, מוסמך,
    רישיון, ביטוח, אחריות, and every price literal.
-2. For each hit, trace it to `lib/site.ts`, the roster manifest, `docs/business-facts.md`, or nothing.
-   "Nothing" is the finding.
+2. For each hit, trace it to `lib/site.ts`, the roster manifest, `docs/business-facts.md` (for a city
+   claim, `docs/location-sources/{slug}.md`), or nothing. "Nothing" is the finding.
 3. Read `lib/jsonld.ts` against the **emitted** `out/**/index.html` — the gate is what actually ships,
    not what the builders intend. Confirm zero `aggregateRating`, zero `Review`, zero `sameAs`, zero
    `GeoCoordinates`. Check `out/` is newer than the last commit before you trust it (CLAUDE.md rule

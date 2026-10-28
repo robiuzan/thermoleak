@@ -19,7 +19,7 @@ date or licence.
   §4 (gating rules), §5 (the location silo). Cite the section in every finding.
 - `docs/optimization-backlog.md` §4 for status and priority.
 - The export: every `<script type="application/ld+json">` block in `out/**/index.html`. Extract and
-  `JSON.parse` each one. **22 `index.html` files** are emitted; 19 of those URLs are in the sitemap.
+  `JSON.parse` each one. **31 `index.html` files** are emitted; 28 of those URLs are in the sitemap.
 - `lib/site.ts` — the single source of truth the graph must match. Note its own header comment: the
   **price (₪450), the certifications and the trust figures beyond the 2015 founding year are still
   unverified**. The founder (רונן דהן) and the guarantee terms are confirmed. Reviews, `geo` and the
@@ -36,7 +36,7 @@ date or licence.
    return **zero** files. Any reappearance without a verifiable public source is **Critical** and a
    stop-ship (schema-graph §4.1) — including "sample data to test the markup".
 2. **BreadcrumbList parity is structural now.** `components/PageHero.tsx` emits `BreadcrumbList` itself
-   from the same `crumbs` array the visible trail renders — **18 of the 22 emitted pages** carry both,
+   from the same `crumbs` array the visible trail renders — **27 of the 31 emitted pages** carry both,
    and the two cannot drift. The four without it are `/` (the root has no trail), `/thank-you/` and the
    two 404 artifacts; that is the expected count, not a gap. What to audit: no page may call
    `breadcrumbJsonLd` directly (double emission — `PageHero` must be the only importer outside
@@ -44,15 +44,15 @@ date or licence.
    crumbs.
 3. **The noindex exception.** `/thank-you/` is `noindex, follow`, carries no canonical and no
    breadcrumb, and is absent from the sitemap — all deliberate. Don't flag it as a gap.
-4. **Service nodes — seven of them, two builders.** Each `/services/{slug}/` carries a `Service` tied to
+4. **Service nodes — sixteen of them, two builders.** Each `/services/{slug}/` carries a `Service` tied to
    `provider: {"@id": "…#business"}` with `areaServed` as an `AdministrativeArea` (the region). Each
    `/locations/{city}/` carries a `Service` from `locationServiceJsonLd`, whose `areaServed` type is
-   derived from `location.kind` — `City` for a city, `AdministrativeArea` for a region. All three
-   shipped locations are `kind: "city"`, so all three must emit `City`; a region emitted as a `City` is
+   derived from `location.kind` — `City` for a city, `AdministrativeArea` for a region. All twelve
+   locations are `kind: "city"`, so all twelve must emit `City`; a region emitted as a `City` is
    a factual error in the graph. Verify the type against `lib/locations.ts` rather than assuming, and
    confirm no `LocalBusiness` node was ever added per city (§5 — this business has no premises).
-5. **FAQPage.** Present only where FAQs are visible — **12 pages** today: `/`, the four service pages,
-   the three guides, the three locations and `/pricing/`. Confirm each `Question` matches the
+5. **FAQPage.** Present only where FAQs are visible — **21 pages** today: `/`, the four service pages,
+   the three guides, the twelve locations and `/pricing/`. Confirm each `Question` matches the
    rendered text and that no schema-only question exists. **Not every `Question` is a `<details>`:**
    each page's leading answer block renders as an H2 plus a paragraph, which is still visible on-page
    Q&A and satisfies the visibility rule — only the FAQ lists below them use native
@@ -102,7 +102,7 @@ date or licence.
 
 ## Method
 
-1. Glob `out/**/index.html` (expect 22); extract every ld+json block; parse each and report parse
+1. Glob `out/**/index.html` (expect 31); extract every ld+json block; parse each and report parse
    failures first.
 2. Run the fabrication gate before anything else and expect it to pass:
    `grep -rl 'aggregateRating\|"@type":"Review"\|sameAs\|GeoCoordinates' out --include=index.html`
@@ -114,7 +114,7 @@ date or licence.
 4. Diff schema values against their source array — `lib/site.ts` for the business node, `lib/services.ts`,
    `lib/articles.ts`, `lib/locations.ts`, `lib/pricing.ts` for the rest — and against the visible text
    on the same page.
-5. Count `BreadcrumbList` occurrences (expect 18) and diff against the pages that pass `crumbs` to
+5. Count `BreadcrumbList` occurrences (expect 27) and diff against the pages that pass `crumbs` to
    `PageHero`. Separately, confirm `breadcrumbJsonLd` has no importer outside `PageHero`.
 6. Recommend a Rich Results Test run on one URL per route family — the homepage, one service page, one
    guide, one location page and `/pricing/`. **Never `/reviews/`**: that route was deleted 2026-08-17

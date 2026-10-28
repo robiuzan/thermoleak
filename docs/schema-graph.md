@@ -8,6 +8,7 @@ no external SEO kit): `localBusinessJsonLd` · `webSiteJsonLd` · `serviceJsonLd
 `breadcrumbJsonLd`, rendered through `components/JsonLd.tsx`.
 
 **Status verified against the build of 2026-09-06** — 22 `index.html` files, 19 of them in
+`sitemap.xml`; route counts are re-stated for the 2026-10-28 build — 31 `index.html` files, 28 in
 `sitemap.xml`. Every ✅/❌ below was read out of `out/`, not inferred from the source. When this file
 and a fresh `out/` disagree, `out/` wins and this file gets fixed in the same commit.
 
@@ -19,8 +20,8 @@ Stable `@id`s let nodes reference each other instead of repeating themselves.
 
 | Node                 | `@id`                                                | Status                                                                             |
 | -------------------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| The business         | `https://thermoleak.co.il/#business`                 | ✅ emitted on all 22 pages                                                         |
-| The website          | `https://thermoleak.co.il/#website`                  | ✅ emitted on all 22 pages                                                         |
+| The business         | `https://thermoleak.co.il/#business`                 | ✅ emitted on all 31 pages                                                         |
+| The website          | `https://thermoleak.co.il/#website`                  | ✅ emitted on all 31 pages                                                         |
 | A service            | `https://thermoleak.co.il/services/{slug}/#service`  | ✅ `lib/jsonld.ts:69`                                                              |
 | A location's service | `https://thermoleak.co.il/locations/{slug}/#service` | ✅ `lib/jsonld.ts:94`                                                              |
 | An article           | `https://thermoleak.co.il/guides/{slug}/#article`    | ✅ `lib/jsonld.ts:172`                                                             |
@@ -50,14 +51,14 @@ Required = what this spec demands. Emitted = what the 2026-09-06 build actually 
 
 | Route                         | Required                                                | Emitted today                                                                               |
 | ----------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| every page (root layout)      | `LocalBusiness` + `WebSite`                             | ✅ both, 22/22 pages                                                                        |
+| every page (root layout)      | `LocalBusiness` + `WebSite`                             | ✅ both, 31/31 pages                                                                        |
 | `/`                           | + `FAQPage` from `generalFaqs`                          | ✅ **10** questions (the 10th is the guarantee, added 2026-10-28); no breadcrumb, by design |
 | `/services/`                  | `CollectionPage` + `BreadcrumbList`                     | ✅ both                                                                                     |
 | `/services/{slug}/` ×4        | `Service` + `FAQPage` + `BreadcrumbList`                | ✅ all three (FAQPage = `answer` + 3 `faqs`)                                                |
 | `/guides/`                    | `CollectionPage` + `BreadcrumbList`                     | ✅ both                                                                                     |
 | `/guides/{slug}/` ×3          | `Article` + `FAQPage` + `BreadcrumbList`                | ✅ all three; `Article.image` ❌ (SD-6, §7b)                                                |
 | `/locations/`                 | `CollectionPage` + `BreadcrumbList`                     | ✅ both                                                                                     |
-| `/locations/{city}/` ×3       | `Service` + `areaServed` + `FAQPage` + `BreadcrumbList` | ✅ all four — see §5                                                                        |
+| `/locations/{city}/` ×12      | `Service` + `areaServed` + `FAQPage` + `BreadcrumbList` | ✅ all four — see §5                                                                        |
 | `/pricing/`                   | `FAQPage` + `BreadcrumbList`                            | ✅ both (FAQPage = `answer` + 4 `faqs`)                                                     |
 | `/about/`                     | `AboutPage` + `BreadcrumbList`                          | ✅ both; the `Person` is the global `founder`                                               |
 | `/contact/`                   | `ContactPage` + `BreadcrumbList`                        | ✅ both                                                                                     |
@@ -92,9 +93,9 @@ trail renders. One array, one truth — the markup and the schema cannot drift a
 **Pages must never call `breadcrumbJsonLd` directly.** Doing so double-emits the node on that page.
 The only legitimate caller is `PageHero`; the builder stays exported for it alone.
 
-Target and actual: **18 pages** carry `BreadcrumbList` — every page except `/`, `/thank-you/` and the
+Target and actual: **27 pages** carry `BreadcrumbList` — every page except `/`, `/thank-you/` and the
 two 404 artifacts, none of which render a `PageHero` trail. Verified: `grep -rl 'BreadcrumbList' out
---include=index.html | wc -l` → 18.
+--include=index.html | wc -l` → 27 (18 before the nine cities).
 
 The one thing still missing is the `@id` (§1): the node ships without `{pageUrl}#breadcrumb`, so it
 cannot be referenced from elsewhere in the graph. Low value, still open.
@@ -110,7 +111,7 @@ hand-assemble it and never hardcode a value `site` already carries.
 `alternateName`, `description`, `url`, `telephone`, `email`, `image`, `logo`, `priceRange`,
 `foundingDate` (`2015`, matching the roster), `PostalAddress` (region + country), `areaServed` (12
 `City` nodes), two `OpeningHoursSpecification` entries, and `founder` — a `Person` carrying
-`@id` `about/#founder` and the **confirmed** name (business-facts §A). All 22 pages carry it.
+`@id` `about/#founder` and the **confirmed** name (business-facts §A). All 31 pages carry it.
 
 **Absent, and staying absent until sourced.** The first three below were emitted until 2026-08-17 and
 were removed as a deliberate anti-fabrication measure; `hasMap` never shipped. The export confirms all
@@ -139,7 +140,7 @@ These are correctness rules, not preferences. Getting them wrong is worse than e
 
 1. **`Review` and `AggregateRating` ship only when the reviews are real and publicly verifiable.**
    This is a standing prohibition, and **the gate currently passes** — `aggregateRating`, `Review`,
-   `sameAs` and `GeoCoordinates` each return **zero files** across the 22-page export. It did not
+   `sameAs` and `GeoCoordinates` each return **zero files** across the 31-page export. It did not
    always: until 2026-08-17 the business node carried a 4.9/6 `aggregateRating` computed from six
    invented testimonials in a `lib/reviews.ts` that no longer exists. An invented rating is a Google
    policy violation and a Rich Results failure. The only thing that unblocks the node is real, sourced
@@ -148,7 +149,7 @@ These are correctness rules, not preferences. Getting them wrong is worse than e
 2. **Schema must match what the user sees.** A `FAQPage` question that isn't rendered is a violation.
    Any `Offer` price must equal the visible price text. Never mark up hidden content.
 3. **`FAQPage` only where FAQs are visible, and always derived from the same array the page renders.**
-   Twelve pages qualify: `/`, the 4 services, the 3 guides, the 3 locations and `/pricing/`. Each
+   Twenty-one pages qualify: `/`, the 4 services, the 3 guides, the 12 locations and `/pricing/`. Each
    builds `mainEntity` from the same typed data the DOM renders — `generalFaqs`, `service.answer` +
    `service.faqs`, `articleFaqs(article)`, `location.faqs`, `pricing.answer` + `pricing.faqs` — so the
    schema cannot drift from the copy. The service, pricing and homepage FAQs use native
@@ -172,17 +173,18 @@ These are correctness rules, not preferences. Getting them wrong is worse than e
 
 ## 5. Location-page schema — shipped 2026-08-24
 
-The silo exists: `/locations/` plus **three** city pages (תל אביב, חולון, בת ים). The other nine
-service areas stay gated in business-facts §E. Built by `locationServiceJsonLd` (`lib/jsonld.ts:83`).
+The silo exists: `/locations/` plus **twelve** city pages, one per service area — תל אביב, חולון and
+בת ים since 2026-08-30, the other nine added 2026-10-28 with their sources in
+`location-sources/{slug}.md`. Built by `locationServiceJsonLd` (`lib/jsonld.ts:83`).
 
 Each location page emits, and every new one must:
 
 - **`Service`** — `@id` `{url}#service`, `name: "איתור נזילות {prefixed}"`,
   `serviceType: "איתור נזילות"`, `description: location.answer.a`, `url`,
   `provider: { "@id": ".../#business" }`,
-  `areaServed: { "@type": "City" | "AdministrativeArea", name }`. ✅ all three.
-- **`BreadcrumbList`** — `בית › אזורי שירות › {city}`, emitted by `PageHero` (§2b). ✅ all three.
-- **`FAQPage`** from `[location.answer, ...location.faqs]` (changed 2026-10-28). ✅ all three, **3
+  `areaServed: { "@type": "City" | "AdministrativeArea", name }`. ✅ all twelve.
+- **`BreadcrumbList`** — `בית › אזורי שירות › {city}`, emitted by `PageHero` (§2b). ✅ all twelve.
+- **`FAQPage`** from `[location.answer, ...location.faqs]` (changed 2026-10-28). ✅ all twelve, **3
   questions each**. The empty-array gate moved INTO `faqPageJsonLd`, which returns `null` for an
   empty list while `<JsonLd>` renders nothing for `null` — so the guard is central and a
   `"mainEntity":[]` node is now a regression rather than a thing a caller has to remember to prevent.
@@ -212,8 +214,8 @@ keeping rather than deleting:
   Google requires. Do not reintroduce a template that builds the heading separately from the data.
 
 Use `City` for real cities and `AdministrativeArea` for regions — the `kind` field on the location model
-drives this (`/new-city`). Marking a region as a `City` is a factual error in the graph. All three
-shipped cities are `kind: "city"`, so `AdministrativeArea` is currently untested on this route.
+drives this (`/new-city`). Marking a region as a `City` is a factual error in the graph. All twelve
+cities are `kind: "city"`, so `AdministrativeArea` is currently untested on this route.
 
 **Do not** emit a `LocalBusiness` node per location. This business has **no physical premises at all**;
 one node is the honest count, and a node per city implies premises that don't exist — a well-known
@@ -300,15 +302,15 @@ Plus the standing low-value gap from §1: `BreadcrumbList` carries no `{pageUrl}
 grep -rL 'application/ld+json' out --include=index.html          # expect none
 
 # the global pair, on every emitted page
-find out -name index.html | wc -l                                # expect 22
-grep -rl 'LocalBusiness' out --include=index.html | wc -l        # expect 22
-grep -rl '"@type":"WebSite"' out --include=index.html | wc -l    # expect 22
+find out -name index.html | wc -l                                # expect 31
+grep -rl 'LocalBusiness' out --include=index.html | wc -l        # expect 31
+grep -rl '"@type":"WebSite"' out --include=index.html | wc -l    # expect 31
 
 # breadcrumbs everywhere they should be — all but /, /thank-you/ and the two 404 artifacts
-grep -rl 'BreadcrumbList' out --include=index.html | wc -l       # expect 18
+grep -rl 'BreadcrumbList' out --include=index.html | wc -l       # expect 27
 
-# FAQPage — /, 4 services, 3 guides, 3 locations, /pricing/
-grep -rl 'FAQPage' out --include=index.html | wc -l              # expect 12
+# FAQPage — /, 4 services, 3 guides, 12 locations, /pricing/
+grep -rl 'FAQPage' out --include=index.html | wc -l              # expect 21
 
 # the fabrication gate — currently PASSING, all four at zero
 grep -rl 'aggregateRating' out --include=index.html | wc -l                  # expect 0
@@ -317,8 +319,9 @@ grep -rl 'sameAs' out --include=index.html | wc -l                           # e
 grep -rl 'GeoCoordinates' out --include=index.html | wc -l                   # expect 0
 ```
 
-Every number above was measured against the 2026-09-06 build. When a route is added, the counts move —
-update them here in the same commit rather than letting an operator learn to wave a mismatch through.
+Every count above is re-stated for the 2026-10-28 build (first measured on 2026-09-06). When a route is
+added, the counts move — update them here in the same commit rather than letting an operator learn to
+wave a mismatch through.
 
 Then run Google's **Rich Results Test** on one page per route family: the homepage, one service page
 (`/services/water-leak-detection/`), one guide (`/guides/leak-detection-cost/`) and one location

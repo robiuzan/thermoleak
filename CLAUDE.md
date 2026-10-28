@@ -15,9 +15,9 @@
 - **Phone (click-to-call):** `055-660-1006` · WhatsApp same number · `info@thermoleak.co.il`.
   **These are real** (fleet values, confirmed in the roster).
 - **Hours:** ראשון–חמישי 08:00–18:00, שישי 08:00–13:00, plus out-of-hours for active leaks.
-- **Service area:** גוש דן והמרכז core, plus national service by prior arrangement — reach is ~2 hours' drive from Tel Aviv (confirmed 2026-09-17; the old "~60 km" was never confirmed and understated it). 12 named cities. **3 have location pages**
-  (תל אביב, חולון, בת ים — doorway gate run 2026-08-24, shipped 2026-08-30 in `7c9bbda`); the other
-  9 are served without a page and are gated in business-facts §E.
+- **Service area:** גוש דן והמרכז core, plus national service by prior arrangement — reach is ~2 hours' drive from Tel Aviv (confirmed 2026-09-17; the old "~60 km" was never confirmed and understated it). 12 named cities, and **all 12 have location pages**:
+  תל אביב, חולון, בת ים shipped 2026-08-30 (`7c9bbda`); the other nine were added at the owner's request
+  on 2026-10-28, each researched and fact-checked on its own (sources: `docs/location-sources/`).
 - **Founded:** 2015 — the **business** is 11 years old.
 - **Founder / owner:** רונן דהן — **confirmed** 2026-08-24 (business-facts §A). He is the byline on
   the `/guides/` articles and the `founder` in `LocalBusiness`. **In the trade since ~2005** and a
@@ -136,7 +136,7 @@ app/
   services/[slug]/        # 4 pages — Service + FAQPage JSON-LD, answer block, honest-limits section
   pricing/                # /pricing/ — the money-intent page, renders from lib/pricing.ts
   guides/ guides/[slug]/  # knowledge hub — 3 articles; FAQPage DERIVED from lib/articles.ts blocks
-  locations/ locations/[city]/  # local silo — 3 gated cities only (lib/locations.ts)
+  locations/ locations/[city]/  # local silo — all 12 service areas (lib/locations.ts)
   thank-you/              # noindex post-form conversion page; absent from the sitemap on purpose
   about/ contact/ accessibility/ privacy/
 components/               # FLAT — 28 files, one component per file, PascalCase, no subfolders
@@ -159,7 +159,7 @@ lib/
   faqs.ts       # the general FAQ — the homepage FAQPage; its guarantee answer composes site.guaranteeTerms
   pricing.ts    # /pricing/ copy — per-service prices stay in services.ts, never restated here
   articles.ts   # /guides/ typed blocks — FAQPage is DERIVED from them, so schema cannot drift
-  locations.ts  # ⭐ the 3 gated cities. READ its header before adding a 4th
+  locations.ts  # ⭐ the 12 city pages. READ its header before changing an entry
   gallery.ts    # the homepage gallery: files, alt text, provenance — scripts/optimize-gallery.mjs reads it
   jsonld.ts     # every JSON-LD builder. faqPageJsonLd returns null for an empty list; <JsonLd> skips null
   analytics.ts  # pushEvent() — the 3 conversion events no GTM trigger can observe (§12)
@@ -174,6 +174,7 @@ scripts/        # check-sitemap-parity.mjs (`npm run check:sitemap`), keep-previ
   live/         # the live-kit gates (prebuild + postbuild) and the weekly reminder (§14)
 assets/gallery/ # gallery masters: gitignored, never shipped — its README.md is the per-image register
 docs/           # the acceptance bars every agent cites
+  location-sources/  # source register per city page (the nine added 2026-10-28; the first three have none yet) — a claim and its row change together
 ```
 
 `/reviews/` and `lib/reviews.ts` were **removed 2026-08-17** (fabricated testimonials — golden rule
@@ -377,7 +378,10 @@ output. Add `prettier` as a devDependency if that matters.
 ## 12. Scope guardrails
 
 - Implement real UI, sections, or content only when asked. Don't opportunistically redesign.
-- **Don't build the 12 location pages.** Build 3–5 that pass the doorway test, or none. See `/new-city`.
+- **Every city page must pass the doorway test on its own.** All 12 service areas have a page since
+  2026-10-28 — the owner's decision, against the earlier "3–5 or none" rule; the risk it accepted is in
+  the header of `lib/locations.ts`. Never fill one from another's template; a new area beyond the 12
+  goes through `/new-city`.
 - Don't add dependencies without a reason that survives "can the platform already do this?" The runtime
   dependency list is four packages; keep it that way.
 - **No PII in tracking — and the `href` counts as tracking.** Never push a visitor's name, phone,
@@ -503,7 +507,7 @@ shows an updates strip after the method explainer; it hides itself 45 days after
   registers), the wartime line is **confirmed** for this business, and the export budget is
   **raised from 6 MB to 7.5 MB** ([performance-guidelines.md](docs/performance-guidelines.md) §1 —
   the live surfaces take `out/` to ≈6.93 MB; raised again to 8 MB on 2026-10-27, for the
-  gallery's approved images). The kit is synced from a committed 3locksmiths
+  gallery's approved images, and to 15 MB on 2026-10-28, for the nine remaining city pages). The kit is synced from a committed 3locksmiths
   (`live-kit.lock.json` names `cf3a5460aa8b`, no `+dirty`). **Still to do, outside this repo
   (fleet ops):** add the three origins (apex, www, `.pages.dev`) to the status switch's CORS list —
   without it the switch is unreadable here, every seasonal line and the card stay off, and a phone

@@ -56,6 +56,7 @@ replaces the missing mechanism.
 | Is this page deep enough to ship?                                   | content-standards.md                        |
 | What JSON-LD does this route need?                                  | schema-graph.md                             |
 | Can I state this claim as fact?                                     | business-facts.md → content-standards.md §6 |
+| Where does a statement on a city page come from?                    | `location-sources/{slug}.md`                |
 | How do we earn a review, a byline, a case study?                    | eeat-and-trust.md                           |
 | Where do CTAs go and how does the funnel work?                      | ux-cro-security.md                          |
 | What is the byte/latency budget?                                    | performance-guidelines.md                   |
@@ -67,6 +68,9 @@ replaces the missing mechanism.
 | Which instruction files must I update after a sprint?               | optimization-backlog.md §14                 |
 | What do we do next, and in what order?                              | implementation-roadmap.md                   |
 | What may the announcement bar, the seasonal card or the strip say?  | `content/live/` + `live.config.mjs` (below) |
+
+`location-sources/{slug}.md` exists for the nine city pages added 2026-10-28; the first three have
+none yet.
 
 **The live surfaces** — the announcement bar, the seasonal card and the homepage updates strip
 (fleet live-kit, owner decision 2026-10-11; CLAUDE.md §14) — keep their wording in

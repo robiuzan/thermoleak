@@ -33,7 +33,7 @@ actions and ISR. Response headers come from `public/_headers` and redirects from
   **There is no `Testimonials`, `FacebookIcon` or `InstagramIcon`** — don't import one, don't recreate one.
 - `lib/` — `site.ts` (NAP, hours, stats, founder, helpers), `services.ts` (the 4 services),
   `faqs.ts` (the general FAQ), `pricing.ts` (`/pricing/` copy), `articles.ts` (the 3 guides),
-  `locations.ts` (the 3 gated cities), `jsonld.ts` (all the schema builders).
+  `locations.ts` (all 12 service areas), `jsonld.ts` (all the schema builders).
   **`lib/reviews.ts` was deleted 2026-08-17 and must not come back** — see Rules.
 - `app/` — routes. Sections are composed by `app/page.tsx`:
   **Hero → TrustBar → MethodExplainer → ServicePillars → ServiceChooser → Process → Faq → ContactCTA.**
@@ -136,10 +136,13 @@ These are verified open in the working tree. Everything else in this file descri
 - `PageHero` **emits `BreadcrumbList` itself**, from the same `crumbs` array the visible trail
   renders. **A page must never call `breadcrumbJsonLd` directly** — that double-emits.
 - `ContactForm` **already moves focus to the first invalid field** on a failed submit.
-- **Both silos ship.** `/locations/` has three gated cities and `/guides/` has three articles. Before
-  adding a fourth city, read the header comment at the top of `lib/locations.ts` — it explains why
-  the list stopped at three, and that reasoning is the gate. `/new-city` and `/new-article` describe
-  the content bar; append to the existing arrays rather than creating a new model.
+- **Both silos are built.** `/locations/` has a page for all 12 service areas (three shipped
+  2026-08-30; nine added 2026-10-28, built locally and not yet deployed) and `/guides/` has three
+  articles. `nearby` is bidirectional and a module-scope check in `lib/locations.ts` fails the build
+  on an unknown or one-way slug, so set both ends. A 13th area goes through `/new-city` — read the
+  header comment at the top of `lib/locations.ts` first; every page must pass the doorway test on
+  its own. `/new-city` and `/new-article` describe the content bar; append to the existing arrays
+  rather than creating a new model.
 
 ## Workflow
 

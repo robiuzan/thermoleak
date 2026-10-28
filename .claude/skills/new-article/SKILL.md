@@ -117,8 +117,8 @@ Three of the six high-value openers are written. **Shipped — do not rewrite:**
 
 **The queue**, from `docs/keyword-map.md` §2 Tier 3 and `docs/seo-geo-aeo-strategy.md`:
 
-- למה כתם הרטיבות כמעט אף פעם לא נמצא מעל הנזילה — no page treats this today; it appears only as a
-  single location claim.
+- למה כתם הרטיבות כמעט אף פעם לא נמצא מעל הנזילה — no page treats this today; it appears only in
+  city-page copy (the תל אביב riser claim and FAQ, and since 2026-10-28 the רמת גן and כפר סבא FAQs).
 - מה חברת הביטוח באמת דורשת בדו״ח נזקי מים → links down to `/services/insurance-reports/`.
 - כל כמה זמן צריך בדיקה תרמוגרפית ללוח חשמל — ולמה היא נעשית תחת עומס → links down to
   `/services/electrical-thermography/`.

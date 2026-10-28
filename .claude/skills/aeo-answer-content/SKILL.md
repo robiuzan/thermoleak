@@ -1,6 +1,6 @@
 ---
 name: aeo-answer-content
-description: Answer-engine and LLM-citability layer for thermoleak — question-form H2s with a 40–60 word extractable answer first (shipped on all four services, three cities, /pricing/ and three guides), definition and comparison blocks, the llms.txt that has not been updated since the two new silos landed, verifying the live Cloudflare-served robots.txt rather than trusting app/robots.ts, and the freshness signals the guides now carry. Use when optimizing a page to be quoted by AI Overviews, ChatGPT or Perplexity. Triggers "AEO", "GEO", "AI Overviews", "llms.txt", "will an LLM cite this", "answer block", "AI crawlers".
+description: Answer-engine and LLM-citability layer for thermoleak — question-form H2s with a 40–60 word extractable answer first (on all four services, all 12 city pages, /pricing/ and three guides), definition and comparison blocks, the hand-maintained llms.txt and the parity check that keeps it inside the sitemap, verifying the live Cloudflare-served robots.txt rather than trusting app/robots.ts, and the freshness signals the guides now carry. Use when optimizing a page to be quoted by AI Overviews, ChatGPT or Perplexity. Triggers "AEO", "GEO", "AI Overviews", "llms.txt", "will an LLM cite this", "answer block", "AI crawlers".
 ---
 
 # Answer-engine optimization
@@ -64,11 +64,12 @@ An answer engine lifts a **contiguous, self-contained span**. Structure for that
 ```
 
 **This shipped 2026-08-17 and 2026-08-24.** Every service page, every city page, `/pricing/` and every
-guide opens with an answer block: `answer: ServiceFaq` on `Service` (`lib/services.ts`), `answer` on
-`Location` (`lib/locations.ts`), `pricing.answer` (`lib/pricing.ts`) and a `{ kind: "answer" }` block on
-each `Article` (`lib/articles.ts`). On services, `/pricing/` and the guides the same q/a also feeds the
-page's `FAQPage` node, so the visible answer and the marked-up answer are the same string by
-construction.
+guide opens with an answer block: `answer: ServiceFaq` on `Service` (`lib/services.ts`), `answer:
+{ q, a }` on `Location` (`lib/locations.ts`), `pricing.answer` (`lib/pricing.ts`) and a
+`{ kind: "answer" }` block on each `Article` (`lib/articles.ts`). On every one of them the same q/a also
+feeds the page's `FAQPage` node — city pages last, in Sprint 6 (`e6d4111`, 2026-10-28, closing AEO-5),
+so each city page emits 3 `Question`s — and the visible answer and the marked-up answer are the same
+string by construction.
 
 So the job here is **matching the shipped pattern, not introducing it** — and holding the 40–60 word
 band, which is the part that drifts. Measure the words; don't eyeball it.
@@ -142,10 +143,11 @@ service list, canonical URLs for the key answers, contact, and the service area.
 factual and in sync with `lib/site.ts` when facts change; it is a pointer file, not a second
 website.
 
-**It is stale.** It was written before the `/guides/` and `/locations/` silos shipped, so it lists no
-guide URL and no city URL — the three guides are exactly the pages an answer engine would most want
-pointed at. Bring it level with `out/sitemap.xml`: every indexable URL should either appear in
-`llms.txt` or be excluded on purpose, with the reason written down.
+It covers both silos: the three guides and all 12 city URLs are listed. `npm run check:sitemap` fails
+on any URL it advertises that `sitemap.xml` lacks (2026-10-28: "llms.txt 29 URL(s), all live"), but it
+cannot see an omission — so keep it level with `out/sitemap.xml` by hand: every indexable URL should
+either appear in `llms.txt` or be excluded on purpose, with the reason written down, edited in the
+same commit as the route.
 
 ## Checklist
 

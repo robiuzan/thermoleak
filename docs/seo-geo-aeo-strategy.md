@@ -23,8 +23,9 @@ title/description formulas in [keyword-map.md](keyword-map.md), the JSON-LD targ
   site — see §4.
 
 **Strategic thesis:** win the _method_ conversation (Tier 3), convert it into _service_ rankings
-(Tier 1), and use the GBP plus a small number of genuinely local pages to take the _map pack_
-(Tier 2). Do not try to win Tier 2 by volume of pages.
+(Tier 1), and use the GBP plus genuinely local pages — one per named service area since 2026-10-28,
+each passing the doorway test on its own — to take the _map pack_ (Tier 2). Do not try to win Tier 2
+by volume of pages.
 
 ---
 
@@ -39,7 +40,7 @@ Five tiers, defined in [keyword-map.md](keyword-map.md) §2. This section says *
         |                     |                     |
    SERVICE CLUSTER       LOCAL CLUSTER        ANSWER CLUSTER
    /services/{slug}/     /locations/{city}/   /guides/{question}/
-   4 pages, commercial   3 shipped, 9 gated   3 shipped, 3 topics open
+   4 pages, commercial   all 12 areas         3 shipped, 3 topics open
         |                     |                     |
         +--------- every guide links down to the service that monetises it,
                    every location links across to all four services,
@@ -50,12 +51,14 @@ Five tiers, defined in [keyword-map.md](keyword-map.md) §2. This section says *
 pillar with a descriptive Hebrew anchor, and the pillar links _down_ to its strongest children. A
 page with no inbound contextual link is not in the cluster — it is an orphan with a URL.
 
-**Where that stands after sprint 3.** The guide ring is wired both ways, and every city links across
+**Where that stands (2026-10-28).** The guide ring is wired both ways, and every city links across
 to all four services. The missing edge is the return leg on the local ring: **no service page
-carries a descriptive anchor into any city**, so the cities' only inbound links are the header and
-footer nav (open — LOC-2). Nav links keep them out of orphan status; they do not carry the topical
-relevance that an `איתור נזילות בתל אביב` anchor from `/services/water-leak-detection/` would. Close
-this before widening the silo, not after.
+carries a descriptive anchor into any city**, so the cities' inbound links are chrome and
+silo-internal — the footer's list of all twelve, the hub's twelve cards and the `nearby` edges, 30
+linking pages per city (open — LOC-2). That keeps them out of orphan status; it does not carry the
+topical relevance that an `איתור נזילות בתל אביב` anchor from `/services/water-leak-detection/`
+would. This said "close it before widening the silo"; the silo widened to twelve on 2026-10-28 with
+it still open, so it is now owed to twelve pages.
 
 ### Cluster ownership — one page per intent, no overlap
 
@@ -96,14 +99,15 @@ happens after the source is found, and **the honest-limits section**. Status: sh
 with answer blocks and limits blocks. Next increment is per-service case evidence
 (see [eeat-and-trust.md](eeat-and-trust.md)).
 
-### 3c. Location terms — won with **few** pages that are actually local
+### 3c. Location terms — won with pages that are actually local, one per real service area and never templated
 
 See §4. The failure mode is fatal and common: 12 templated city pages is a doorway cluster, and the
 penalty lands on the **domain**, not the page.
 
-Status: **three cities shipped 2026-08-24** — תל אביב, חולון, בת ים — through the §4 gate, with nine
-still gated. The restraint is the achievement here. Read §4 as the standard the next batch has to
-match, not as a plan still waiting to be executed.
+Status: **all twelve service areas have a page** — תל אביב, חולון, בת ים since 2026-08-30 (gate run
+2026-08-24), the other nine added 2026-10-28 at the owner's request, each through the §4 gate on its
+own. The city count is no longer the cap; the 48-cell service × location matrix still is. Read §4 as
+the standard every page has to keep meeting.
 
 ---
 
@@ -134,11 +138,14 @@ Once it exists, the profile URL is added to `lib/site.ts` and flows to the foote
 facebook.com / instagram.com placeholders it held, so restoring it is a deliberate act that requires
 a real profile URL, never a platform homepage.
 
-### The local silo — 3 shipped, 9 gated
+### The local silo — all 12 service areas
 
-`/locations/` plus תל אביב, חולון and בת ים went live 2026-08-24 (`lib/locations.ts`). All twelve
-areas were found to have three or more true city-specific claims available — the cap to three was a
-deliberate "should we", not a "could we", and the reasoning is recorded in that file's header.
+`/locations/` plus תל אביב, חולון and בת ים went live 2026-08-30 (gate run 2026-08-24;
+`lib/locations.ts`). All twelve areas were found to have three or more true city-specific claims
+available — the cap to three was a deliberate "should we", not a "could we". The owner lifted it on
+2026-10-28 and the other nine were built; the file's header keeps the original reasoning as the risk
+accepted (research, not job history; nine pages at once is the doorway pattern; twelve pages to keep
+true).
 
 Gate every candidate city on [content-standards.md](content-standards.md) §2. A city earns a page
 only if **three or more** of these are true and specific to it:
@@ -152,18 +159,25 @@ only if **three or more** of these are true and specific to it:
 - a city-specific FAQ that would read oddly anywhere else
 - local pricing reality if it differs
 
-Order of operations: **service depth → guides → 3-5 locations → only then consider
-service×location.** The first three have run; the fourth stays shut. The 4×12 = 48 cell matrix is a
-trap; see [keyword-map.md](keyword-map.md) §6.
+Order of operations: **service depth → guides → locations (all 12 named areas since 2026-10-28;
+this step read "3-5" until the owner's decision) → only then consider service×location.** The first
+three have run; the fourth stays shut. The 4×12 = 48 cell matrix is a trap; see
+[keyword-map.md](keyword-map.md) §6.
 
-**Two preconditions on batch 2, in this order.**
+**Batch 2's two preconditions, as written before it ran — and how they ended.**
 
-1. **Re-run the research gate.** The nine deferred cities were carried forward as **one truncated
-   angle each**, not as the intact claim sets the sprint-3 note describes — so batch 2 is a research
-   pass, not a data edit, and it must be costed that way (open — LOC-1).
-2. **Wire the inbound mesh for the three cities that already exist** before adding a fourth (open —
-   LOC-2, §2 above). Widening a silo whose pages receive no contextual equity multiplies the
-   weakness instead of the coverage.
+1. **Re-run the research gate** — **done 2026-10-28** (LOC-1). The nine had been carried forward as
+   one truncated angle each, so each was researched afresh, given two independent fact-checks (one
+   against the cited live pages, one blind), and read side by side with the other eleven. Every
+   statement's source is in [location-sources/](location-sources/README.md); the first three cities
+   have no register yet. The re-check overturned two queued leads: הרצליה's "94 בנייני רכבת ביד
+   התשעה" (no source) and רעננה's "קריית שרת 1950s railway buildings" (refuted).
+2. **Wire the inbound mesh before adding a fourth** — **not done** (open — LOC-2, §2 above). The
+   nine landed without it, so the weakness this warned about now spans twelve pages.
+
+**The open local work:** a Google Business Profile (above); LOC-2; a real job reference
+per city, the doorway item research cannot supply; and owner confirmation of every city claim,
+starting with the single-source ones listed in [business-facts.md](business-facts.md) §E.
 
 ### Hebrew grammar is a ranking detail here
 
@@ -238,8 +252,8 @@ page that monetises it.
 starting from nothing: topic 4 already has an answer block and a limits section on
 `/services/insurance-reports/`, and topic 5 has the under-load explanation in the limits section of
 `/services/electrical-thermography/` — a guide would deepen existing coverage. **Topic 3 has no
-dedicated treatment anywhere** (the closest is a single city FAQ on `/locations/tel-aviv/`), which
-makes it both the widest gap and the most quotable of the three. The order above is the publishing
+dedicated treatment anywhere** (the closest are city-page FAQs: תל אביב's riser FAQ and, since
+2026-10-28, רמת גן's shared-roof FAQ and כפר סבא's stepped-house FAQ), which makes it both the widest gap and the most quotable of the three. The order above is the publishing
 order; the sprint assignment lives in
 [implementation-roadmap.md](implementation-roadmap.md).
 
@@ -275,12 +289,13 @@ byline or a date; a fabricated author is a worse trust signal than none.**
 list, canonical URLs for key answers, contact, service area. It is a pointer file, not a second
 website.
 
-**It is currently stale, and that is a standing failure mode of this file, not a one-off.** It was
-written before both silos and still lists only the four services, `/pricing/` and the homepage — no
-guide URL, no location URL, and no named human, so the file whose entire job is routing an assistant
-to the best answer routes it away from every answer written since (open — AEO-1 / LOC-10 / EEAT-8).
-Keep it in sync with `lib/site.ts`, `lib/articles.ts` **and** `lib/locations.ts`: adding a route
-means updating this file in the same commit.
+**Staleness is a standing failure mode of this file, not a one-off.** It was written before both
+silos and for two sprints listed only the four services, `/pricing/` and the homepage — no guide URL,
+no location URL, no named human (AEO-1 / LOC-10 / EEAT-8). It now names the founder and lists the
+guides and all twelve city URLs: `npm run check:sitemap` reports "llms.txt 29 URL(s), all live" on
+the 2026-10-28 build. That check proves every listed URL is in the sitemap — it cannot see a route
+**missing** from the file. Keep it in sync with `lib/site.ts`, `lib/articles.ts` **and**
+`lib/locations.ts`: adding a route means updating this file in the same commit.
 
 ---
 

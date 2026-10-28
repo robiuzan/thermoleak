@@ -23,7 +23,7 @@ regulation, and a translation is not the declaration.
 
 Two silos shipped after this skill was written and are **deliberately outside that subset** unless
 someone argues otherwise: the three `/guides/` articles (long-form Hebrew editorial — translating them
-is a writing project, not a string swap) and the three `/locations/` city pages (their whole value is
+is a writing project, not a string swap) and the twelve `/locations/` city pages (their whole value is
 city-specific Hebrew substance aimed at Israeli local search). Decide their scope explicitly rather than
 letting a loop over the data arrays decide it for you.
 
@@ -154,8 +154,8 @@ span (**3.1.2 Language of Parts**).
       in that locale.
 - [ ] Not machine-translated. A bad translation damages E-E-A-T in both languages.
 - [ ] Legal pages Hebrew-authoritative; any English version marked a convenience translation.
-- [ ] `npm run lint && npm run build`; route count roughly doubles — from today's **22 emitted
-      `index.html` / 19 in the sitemap** — so update `/qa-build-gate` and `npm run check:sitemap`
+- [ ] `npm run lint && npm run build`; route count roughly doubles — from today's **31 emitted
+      `index.html` / 28 in the sitemap** (2026-10-28 build) — so update `/qa-build-gate` and `npm run check:sitemap`
       expectations in the same commit.
 
 ## Gotchas

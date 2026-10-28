@@ -127,7 +127,8 @@ export default function Footer() {
 
           {/* Every city page, one hop from every page. Before this the only links into them were
               /locations/ and each other — the footer half of LOC-2 (internal-linking skill §2).
-              Every location, no slice: a fourth city gets its link here automatically. */}
+              Every location, no slice: all twelve are listed, and a new one gets its link here
+              automatically. */}
           <nav aria-label="אזורי שירות" className="mt-6">
             <p className="text-sm font-bold uppercase tracking-wide text-white">
               אזורי שירות
