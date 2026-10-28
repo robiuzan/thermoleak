@@ -17,19 +17,23 @@ and a fresh `out/` disagree, `out/` wins and this file gets fixed in the same co
 
 Stable `@id`s let nodes reference each other instead of repeating themselves.
 
-| Node                 | `@id`                                                | Status                                                       |
-| -------------------- | ---------------------------------------------------- | ------------------------------------------------------------ |
-| The business         | `https://thermoleak.co.il/#business`                 | ✅ emitted on all 22 pages                                   |
-| The website          | `https://thermoleak.co.il/#website`                  | ✅ emitted on all 22 pages                                   |
-| A service            | `https://thermoleak.co.il/services/{slug}/#service`  | ✅ `lib/jsonld.ts:69`                                        |
-| A location's service | `https://thermoleak.co.il/locations/{slug}/#service` | ✅ `lib/jsonld.ts:94`                                        |
-| An article           | `https://thermoleak.co.il/guides/{slug}/#article`    | ✅ `lib/jsonld.ts:172`                                       |
-| A page / hub node    | `{pageUrl}#page`                                     | ✅ `lib/jsonld.ts:135` — see §2 for which pages              |
-| The founder          | `https://thermoleak.co.il/about/#founder`            | ✅ on `LocalBusiness.founder`; ❌ on `Article.author` (SD-5) |
-| A page's breadcrumb  | `{pageUrl}#breadcrumb`                               | ❌ breadcrumbs still have no `@id`                           |
+| Node                 | `@id`                                                | Status                                                                             |
+| -------------------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| The business         | `https://thermoleak.co.il/#business`                 | ✅ emitted on all 22 pages                                                         |
+| The website          | `https://thermoleak.co.il/#website`                  | ✅ emitted on all 22 pages                                                         |
+| A service            | `https://thermoleak.co.il/services/{slug}/#service`  | ✅ `lib/jsonld.ts:69`                                                              |
+| A location's service | `https://thermoleak.co.il/locations/{slug}/#service` | ✅ `lib/jsonld.ts:94`                                                              |
+| An article           | `https://thermoleak.co.il/guides/{slug}/#article`    | ✅ `lib/jsonld.ts:172`                                                             |
+| A page / hub node    | `{pageUrl}#page`                                     | ✅ `lib/jsonld.ts:135` — see §2 for which pages                                    |
+| The founder          | `https://thermoleak.co.il/about/#founder`            | ✅ on `LocalBusiness.founder` **and** on `Article.author` (SD-5 closed 2026-10-28) |
+| A page's breadcrumb  | `{pageUrl}#breadcrumb`                               | ❌ breadcrumbs still have no `@id`                                                 |
 
-`about/#founder` resolves to a real on-page anchor (`app/about/page.tsx` renders `id="founder"`), so
-the reference is not dangling. The one place it is missing is `Article.author`, which emits a bare
+`about/#founder` resolves to a real on-page anchor (`app/about/page.tsx` renders `id="founder"`,
+with `scroll-mt-20` so a jump clears the sticky header), and since 2026-10-28 the guide bylines link
+to it — the anchor is reachable by a human, not only by a parser. `Article.author` carries the same
+`@id` **when the byline is the founder**; a guest author gets a bare `Person` with no `@id` on
+purpose, because they are not that entity. The paragraph below describes the state before that fix,
+when `Article.author` emitted a bare
 `{"@type":"Person","name":…}` on the three guides — the same real human as `LocalBusiness.founder`,
 described twice as two unlinked entities. Fixing that is a one-line code change (SD-5, §7b) and needs
 no new business fact, since the name is already confirmed (business-facts §A).
@@ -44,22 +48,22 @@ concatenating URLs by hand.
 
 Required = what this spec demands. Emitted = what the 2026-09-06 build actually contains.
 
-| Route                         | Required                                                | Emitted today                                    |
-| ----------------------------- | ------------------------------------------------------- | ------------------------------------------------ |
-| every page (root layout)      | `LocalBusiness` + `WebSite`                             | ✅ both, 22/22 pages                             |
-| `/`                           | + `FAQPage` from `generalFaqs`                          | ✅ 9 questions; no breadcrumb, by design         |
-| `/services/`                  | `CollectionPage` + `BreadcrumbList`                     | ✅ both                                          |
-| `/services/{slug}/` ×4        | `Service` + `FAQPage` + `BreadcrumbList`                | ✅ all three (FAQPage = `answer` + 3 `faqs`)     |
-| `/guides/`                    | `CollectionPage` + `BreadcrumbList`                     | ✅ both                                          |
-| `/guides/{slug}/` ×3          | `Article` + `FAQPage` + `BreadcrumbList`                | ✅ all three; `Article.image` ❌ (SD-6, §7b)     |
-| `/locations/`                 | `CollectionPage` + `BreadcrumbList`                     | ✅ both                                          |
-| `/locations/{city}/` ×3       | `Service` + `areaServed` + `FAQPage` + `BreadcrumbList` | ✅ all four — see §5                             |
-| `/pricing/`                   | `FAQPage` + `BreadcrumbList`                            | ✅ both (FAQPage = `answer` + 4 `faqs`)          |
-| `/about/`                     | `AboutPage` + `BreadcrumbList`                          | ✅ both; the `Person` is the global `founder`    |
-| `/contact/`                   | `ContactPage` + `BreadcrumbList`                        | ✅ both                                          |
-| `/accessibility/` `/privacy/` | `BreadcrumbList`                                        | ✅ — no `#page` node, and none is required       |
-| `/thank-you/`                 | nothing beyond the global pair                          | ✅ — noindex, absent from the sitemap on purpose |
-| `/404/` `/_not-found/`        | nothing beyond the global pair                          | ✅                                               |
+| Route                         | Required                                                | Emitted today                                                                               |
+| ----------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| every page (root layout)      | `LocalBusiness` + `WebSite`                             | ✅ both, 22/22 pages                                                                        |
+| `/`                           | + `FAQPage` from `generalFaqs`                          | ✅ **10** questions (the 10th is the guarantee, added 2026-10-28); no breadcrumb, by design |
+| `/services/`                  | `CollectionPage` + `BreadcrumbList`                     | ✅ both                                                                                     |
+| `/services/{slug}/` ×4        | `Service` + `FAQPage` + `BreadcrumbList`                | ✅ all three (FAQPage = `answer` + 3 `faqs`)                                                |
+| `/guides/`                    | `CollectionPage` + `BreadcrumbList`                     | ✅ both                                                                                     |
+| `/guides/{slug}/` ×3          | `Article` + `FAQPage` + `BreadcrumbList`                | ✅ all three; `Article.image` ❌ (SD-6, §7b)                                                |
+| `/locations/`                 | `CollectionPage` + `BreadcrumbList`                     | ✅ both                                                                                     |
+| `/locations/{city}/` ×3       | `Service` + `areaServed` + `FAQPage` + `BreadcrumbList` | ✅ all four — see §5                                                                        |
+| `/pricing/`                   | `FAQPage` + `BreadcrumbList`                            | ✅ both (FAQPage = `answer` + 4 `faqs`)                                                     |
+| `/about/`                     | `AboutPage` + `BreadcrumbList`                          | ✅ both; the `Person` is the global `founder`                                               |
+| `/contact/`                   | `ContactPage` + `BreadcrumbList`                        | ✅ both                                                                                     |
+| `/accessibility/` `/privacy/` | `BreadcrumbList`                                        | ✅ — no `#page` node, and none is required                                                  |
+| `/thank-you/`                 | nothing beyond the global pair                          | ✅ — noindex, absent from the sitemap on purpose                                            |
+| `/404/` `/_not-found/`        | nothing beyond the global pair                          | ✅                                                                                          |
 
 `/reviews/` is **gone** — the route and `lib/reviews.ts` were removed 2026-08-17 and the URL 301s to
 `/about/` via `public/_redirects`. It has no row here and must not get one back without real,
@@ -174,21 +178,38 @@ service areas stay gated in business-facts §E. Built by `locationServiceJsonLd`
 Each location page emits, and every new one must:
 
 - **`Service`** — `@id` `{url}#service`, `name: "איתור נזילות {prefixed}"`,
-  `serviceType: "איתור נזילות"`, `description: location.answer`, `url`,
+  `serviceType: "איתור נזילות"`, `description: location.answer.a`, `url`,
   `provider: { "@id": ".../#business" }`,
   `areaServed: { "@type": "City" | "AdministrativeArea", name }`. ✅ all three.
 - **`BreadcrumbList`** — `בית › אזורי שירות › {city}`, emitted by `PageHero` (§2b). ✅ all three.
-- **`FAQPage`** from `location.faqs`, gated on the array being non-empty (§4.4). ✅ all three, 2
-  questions each.
+- **`FAQPage`** from `[location.answer, ...location.faqs]` (changed 2026-10-28). ✅ all three, **3
+  questions each**. The empty-array gate moved INTO `faqPageJsonLd`, which returns `null` for an
+  empty list while `<JsonLd>` renders nothing for `null` — so the guard is central and a
+  `"mainEntity":[]` node is now a regression rather than a thing a caller has to remember to prevent.
 
 Note the `name` takes `prefixed` **as-is** — `איתור נזילות בתל אביב` — because the location model
 carries the preposition. No template should ever glue a bare `ב` onto `name`.
 
-The visible answer block on a location page is **not** folded into its `FAQPage`, unlike
-`/services/{slug}/` and `/pricing/`, which prepend `answer` to their FAQ array. That asymmetry is
-deliberate rather than accidental: the location answer already serves as the `Service.description`,
-and duplicating it as a `Question` would assert the same text twice on one page. Keep both patterns as
-they are; don't "harmonise" them.
+**The visible answer block on a location page IS folded into its `FAQPage`, as of 2026-10-28** —
+the same pattern as `/services/{slug}/` and `/pricing/`. This REVERSES the instruction that stood
+here before ("that asymmetry is deliberate … don't harmonise them"), so the reasoning is worth
+keeping rather than deleting:
+
+- **The old objection was real.** The location answer also serves as `Service.description`, so it is
+  now asserted twice on one page — once as that description and once as `mainEntity[0]`'s answer
+  text. **That duplication was weighed and accepted.** No Google policy forbids restating a page's
+  own text across two nodes, and a `Service.description` and a `Question`/`Answer` pair are read for
+  different purposes.
+- **What it was costing.** Locations were the ONLY page type whose visible answer block never
+  reached the FAQ graph (finding AEO-5), which made the silo the weakest of the three for answer
+  engines while being the one most likely to be asked a direct local question.
+- **The alternative considered and rejected:** giving `Service.description` the authored
+  `metaDescription` instead, which would have removed the duplication outright. Rejected because
+  `metaDescription` ends in a call to action with the phone number — correct for a SERP snippet,
+  wrong inside a schema `description`.
+- **`Location.answer` is now `{ q, a }`**, matching services and articles, and `q` is the string
+  rendered as the visible H2 — which is what guarantees the `Question` is visible on the page, as
+  Google requires. Do not reintroduce a template that builds the heading separately from the data.
 
 Use `City` for real cities and `AdministrativeArea` for regions — the `kind` field on the location model
 drives this (`/new-city`). Marking a region as a `City` is a factual error in the graph. All three

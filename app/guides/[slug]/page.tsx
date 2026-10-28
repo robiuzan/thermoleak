@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getArticle, articleSlugs, articleFaqs, articles } from "@/lib/articles";
+import {
+  getArticle,
+  articleSlugs,
+  articleFaqs,
+  articles,
+} from "@/lib/articles";
 import { getService } from "@/lib/services";
 import { site, pageOpenGraph } from "@/lib/site";
 import { articleJsonLd, faqPageJsonLd } from "@/lib/jsonld";
@@ -18,7 +24,9 @@ export function generateStaticParams(): { slug: string }[] {
   return articleSlugs.map((slug) => ({ slug }));
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const article = getArticle(slug);
   if (!article) return {};
@@ -73,14 +81,36 @@ export default async function GuidePage({ params }: PageProps) {
 
       <section className="py-14 md:py-20">
         <Container className="max-w-3xl">
-          {/* Dates are real and verifiable. The byline is deliberately absent until a real person
-              is on file (docs/business-facts.md §A) — never invent one. */}
+          {/* Dates are real and verifiable, and the byline is a confirmed person — רונן דהן, on
+              file since 2026-08-24 (docs/business-facts.md §A). NEVER invent one: an article with
+              no known author publishes unattributed instead.
+              The name links to /about/#founder, the same anchor the Article node's author @id
+              points at, so the visible byline and the structured one resolve to one entity. Before
+              this, nothing on the site linked to that anchor at all (SD-5 / EEAT-5). */}
           <p className="mb-8 text-sm text-ink/70">
             עודכן:{" "}
             <time dateTime={article.dateModified} dir="ltr">
               {article.dateModified.split("-").reverse().join("/")}
             </time>
-            {article.author ? ` · נכתב על ידי ${article.author}` : null}
+            {article.author ? (
+              <>
+                {" · נכתב על ידי "}
+                {/* Linked only when the byline IS the founder — the same condition lib/jsonld.ts
+                    uses before putting his @id on Article.author. A guest author must not get a
+                    link to someone else's bio; they would inherit authority that is not theirs,
+                    and the visible page would contradict the structured data beside it. */}
+                {article.author === site.founder ? (
+                  <Link
+                    href="/about/#founder"
+                    className="font-semibold text-brand underline underline-offset-2"
+                  >
+                    {article.author}
+                  </Link>
+                ) : (
+                  article.author
+                )}
+              </>
+            ) : null}
           </p>
 
           <ArticleBody blocks={article.blocks} />

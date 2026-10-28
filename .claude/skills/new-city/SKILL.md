@@ -74,7 +74,9 @@ export interface Location {
   name: string; // תל אביב
   kind: "city" | "region";
   prefixed: string; // בתל אביב — carries the preposition so no template guesses
-  answer: string; // 40–60 words, the AEO block, complete in the first sentence
+  lastModified: string; // ISO date of the last MEANINGFUL change; app/sitemap.ts emits it
+  answer: { q: string; a: string }; // the AEO block. `q` IS the rendered H2; `a` is 40–60 words
+  metaDescription: string; // 150–160 chars, AUTHORED, ending in a CTA with the phone number
   intro: string[]; // 2–3 paragraphs, genuinely city-specific
   claims: LocationClaim[]; // the substance — three or more, or the city does not ship
   travel: string; // realistic scheduling at this distance
@@ -105,12 +107,20 @@ a route that skips this works in dev and 404s in production.
    `generateStaticParams()` over `locationSlugs`; `app/locations/page.tsx` lists every entry on the
    hub; `generateMetadata` composes the title from `prefixed` and the description from `answer`;
    `locationServiceJsonLd()` emits `Service` with `areaServed` typed off `kind`; `PageHero` emits the
-   `BreadcrumbList`; `faqPageJsonLd()` covers `faqs`. Adding a route by hand duplicates all of it.
+   `BreadcrumbList`; and `faqPageJsonLd()` covers **`[answer, ...faqs]`** — the answer block joins the
+   FAQ graph as its first `Question` (2026-10-28). Adding a route by hand duplicates all of it.
 4. **Order `claims` deliberately.** `app/locations/page.tsx` renders `claims[0].text` verbatim as the
    city's card blurb on `/locations/`, so the first claim doubles as the hub description and appears on
    two pages.
-5. **Write `answer` so its opening stands alone.** `generateMetadata` slices the first 155 characters
-   of it for the meta description, with no ellipsis and no word-boundary handling.
+5. **Write `answer.q` as a real question, and `metaDescription` by hand.** Two traps here, both of
+   them former bugs. (a) `answer.q` is rendered verbatim as the page's H2 **and** emitted as a
+   `FAQPage` `Question` — Google requires the Q&A be visible, and this shape is what guarantees it,
+   so an empty or placeholder `q` ships an invalid node. The three existing cities use
+   `מבצעים איתור נזילות {prefixed}?`; a city with a better real question should use it. (b)
+   `metaDescription` must be **authored**. The route used to derive it with `answer.slice(0, 155)`,
+   which cut all three cities mid-word — בת ים's page severed its own name (finding SEO-02). The
+   answer already appears in the first visible paragraph, so reusing it wastes the one field that can
+   carry a distinct hook.
 6. Set `nearby` from real geography, and add the new city to the `nearby` of its neighbours — **the
    edge is bidirectional**; a one-way link is a modelling error.
 7. Meet the **350-word floor** (`docs/content-standards.md` §1) with genuine local substance. For
@@ -130,7 +140,9 @@ a route that skips this works in dev and 404s in production.
       answered separately from the _could we_ one.
 - [ ] `kind` and `prefixed` set; no template interpolates a bare `ב${name}`.
 - [ ] ≥350 unique words; three or more genuinely local `claims`, each with a `category`.
-- [ ] `answer` is 40–60 words and its first 155 characters read as a standalone description.
+- [ ] `answer.a` is 40–60 words; `answer.q` is a real question and renders as the visible H2.
+- [ ] `metaDescription` is authored, 150–160 chars, and ends with the phone number — NOT derived.
+- [ ] `lastModified` is the day the page first deploys.
 - [ ] `claims[0]` is the item you want on the hub card.
 - [ ] `travel` states real availability at this distance — no borrowed same-day promise.
 - [ ] `nearby` set on both sides.

@@ -24,6 +24,20 @@ export const generalFaqs: ServiceFaq[] = [
     a: `ביקור איתור מתחיל מ-₪${site.priceFrom}, והעלות הסופית נקבעת לפי גודל הנכס והיקף הבדיקה. המחיר תמיד נמסר לכם מראש, בשקיפות מלאה.`,
   },
   {
+    // The site's most load-bearing commercial claim, and until now the only major one absent from
+    // every FAQPage. Composed from site.guaranteeTerms rather than retyped: the terms are
+    // owner-confirmed (business-facts §C) and this answer feeds JSON-LD, so a hand-written copy
+    // here would eventually contradict /pricing/#guarantee — which is where the full terms,
+    // including the exceptions, are set out.
+    q: `מה כוללת ההתחייבות ״${site.guarantee}״?`,
+    // ALL FOUR terms, exceptions included, in the order a worried homeowner needs them: the
+    // no-charge promise, what "found" means, what is not covered, and when the promise does not
+    // apply. Dropping `exceptions` here would state an UNCONDITIONAL no-charge promise on the
+    // homepage while its conditions sat one click away on /pricing/#guarantee — which is the
+    // over-promise §7.8 was opened about, not a fix for it.
+    a: `${site.guaranteeTerms.ifNotFound} ${site.guaranteeTerms.whatCounts} ${site.guaranteeTerms.excluded} ${site.guaranteeTerms.exceptions}`,
+  },
+  {
     q: "האם צריך להכין משהו לפני הבדיקה?",
     a: "לרוב לא נדרשת הכנה מיוחדת. לעיתים נבקש להפעיל מערכת מסוימת לפני ההגעה — למשל מזגן או ברז — כדי שהנזילה תהיה פעילה בזמן הסריקה ותשאיר חתימה תרמית ברורה.",
   },

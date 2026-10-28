@@ -1,6 +1,12 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Phone, ShieldCheck, Clock, BadgeCheck } from "lucide-react";
-import { site, telHref, whatsappHref, defaultWhatsappMessage } from "@/lib/site";
+import {
+  site,
+  telHref,
+  whatsappHref,
+  defaultWhatsappMessage,
+} from "@/lib/site";
 import Container from "./Container";
 import CtaButton from "./CtaButton";
 import WhatsappIcon from "./WhatsappIcon";
@@ -28,7 +34,12 @@ export default function Hero() {
             {/* No ariaLabel: the visible text already reads "חייגו עכשיו: 055-660-1006", which is a
                 complete accessible name. An aria-label of "התקשרו אלינו…" would REPLACE it and drop
                 the visible words — a WCAG 2.5.3 (Label in Name) failure. */}
-            <CtaButton href={telHref} variant="accent" size="lg" dataCta="hero-call">
+            <CtaButton
+              href={telHref}
+              variant="accent"
+              size="lg"
+              dataCta="hero-call"
+            >
               <Phone className="size-5" aria-hidden="true" />
               חייגו עכשיו: {site.phone.display}
             </CtaButton>
@@ -45,7 +56,17 @@ export default function Hero() {
           <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm font-medium text-white/85">
             <li className="flex items-center gap-2">
               <ShieldCheck className="size-5 text-accent" aria-hidden="true" />
-              {site.guarantee}
+              {/* The strongest claim on the site, now one click from the terms that bound it.
+                  Nothing but the navbar linked to /pricing/ at all, so the guarantee's scope was
+                  effectively unreachable from the page that makes the promise (cro-4 / EEAT-4).
+                  The underline carries the affordance on a dark surface; the white focus ring
+                  comes from .on-dark on this section. */}
+              <Link
+                href="/pricing/#guarantee"
+                className="underline underline-offset-2 transition-colors hover:text-white"
+              >
+                {site.guarantee}
+              </Link>
             </li>
             <li className="flex items-center gap-2">
               <Clock className="size-5 text-accent" aria-hidden="true" />

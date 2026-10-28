@@ -9,6 +9,11 @@ import { site, canonicalUrl } from "./site";
 import type { Service, ServiceFaq } from "./services";
 
 const businessId = `${site.domain}/#business`;
+// One node for the founder, referenced from everywhere he appears. Without this, LocalBusiness.founder
+// and each Article.author were separate anonymous Person objects, and nothing told an engine they
+// were the same human being — the opposite of what an author-entity signal is for (finding SD-5).
+// The anchor is real: app/about/page.tsx renders id="founder".
+const founderId = `${site.domain}/about/#founder`;
 
 // LocalBusiness — injected globally in the root layout.
 export function localBusinessJsonLd() {
@@ -32,7 +37,7 @@ export function localBusinessJsonLd() {
       addressCountry: site.address.country,
     },
     areaServed: site.serviceAreas.map((name) => ({ "@type": "City", name })),
-    founder: { "@type": "Person", "@id": `${site.domain}/about/#founder`, name: site.founder },
+    founder: { "@type": "Person", "@id": founderId, name: site.founder },
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
@@ -73,7 +78,8 @@ export function serviceJsonLd(service: Service) {
     url: canonicalUrl(`/services/${service.slug}`),
     provider: { "@id": businessId },
     areaServed: { "@type": "AdministrativeArea", name: site.address.region },
-    inLanguage: "he-IL",
+    // No inLanguage: schema.org does not define it on Service. It belongs on the creative works —
+    // WebSite, the page nodes and Article — which is where it still is.
   };
 }
 
@@ -85,7 +91,7 @@ export function locationServiceJsonLd(location: {
   name: string;
   kind: "city" | "region";
   prefixed: string;
-  answer: string;
+  answer: { q: string; a: string };
 }) {
   const url = canonicalUrl(`/locations/${location.slug}`);
   return {
@@ -94,7 +100,7 @@ export function locationServiceJsonLd(location: {
     "@id": `${url}#service`,
     name: `איתור נזילות ${location.prefixed}`,
     serviceType: "איתור נזילות",
-    description: location.answer,
+    description: location.answer.a,
     url,
     provider: { "@id": businessId },
     // A region typed as a City is a factual error in the graph, which is why `kind` exists.
@@ -102,11 +108,16 @@ export function locationServiceJsonLd(location: {
       "@type": location.kind === "region" ? "AdministrativeArea" : "City",
       name: location.name,
     },
-    inLanguage: "he-IL",
+    // No inLanguage — see serviceJsonLd above.
   };
 }
 
+// Returns null for an empty list, and <JsonLd> renders nothing for null. The guard is HERE, not at
+// the five call sites, because the failure it prevents is a future one: a FAQPage with
+// mainEntity: [] is an invalid node, and the next article added without a `faq` block — or the next
+// city added without FAQs — would have emitted one silently from a caller that looked correct.
 export function faqPageJsonLd(faqs: ServiceFaq[]) {
+  if (faqs.length === 0) return null;
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -178,7 +189,18 @@ export function articleJsonLd(article: {
     inLanguage: "he-IL",
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
     publisher: { "@id": businessId },
-    ...(article.author ? { author: { "@type": "Person", name: article.author } } : {}),
+    // When the byline IS the founder, the author node carries his @id so it resolves to the same
+    // Person as LocalBusiness.founder. A guest author gets a plain Person — correct, because they
+    // are not that entity and must not inherit its authority.
+    ...(article.author
+      ? {
+          author: {
+            "@type": "Person",
+            ...(article.author === site.founder ? { "@id": founderId } : {}),
+            name: article.author,
+          },
+        }
+      : {}),
   };
 }
 

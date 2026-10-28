@@ -3,25 +3,58 @@
 # HSTS deliberately WITHOUT includeSubDomains (mail/webmail subdomains not guaranteed HTTPS)
 # and WITHOUT preload (near-irreversible — owner's call, docs/business-facts.md §F).
 #
-# CSP is REPORT-ONLY on purpose. Shipping it now, BEFORE any analytics lands, is deliberate:
-# the site currently has zero third-party scripts, so the strictest possible policy costs nothing
-# to state and establishes the baseline. Installing a tag manager later will require widening
-# script-src (and adding frame-src) — do that in the SAME commit as the tag, never after.
-# Promote to enforcing (drop "-Report-Only") only after a full week of real traffic, including a
-# real form submission, produces no legitimate violations.
+# CSP is REPORT-ONLY. It shipped 2026-08-24 before any third-party script existed, and was widened
+# for the tag manager in the same commit that added it (2026-08-30) — that rule stands: a script and
+# the directive that allows it land together, never after.
 #   'unsafe-inline' in style-src: Next emits inline styles; removing it costs more than it returns.
+#   'unsafe-inline' in script-src is STRUCTURAL under output: "export" and cannot be removed. Next
+#   streams the RSC flight payload as inline <script> tags, there is no server to mint a per-response
+#   nonce, and a static file cannot carry one. A hash policy does not help either — the payload
+#   changes with every build. Do NOT "tighten" this: it breaks hydration on every route.
+#   connect-src: GA4 has no single endpoint. Besides www.google-analytics.com it also collects via
+#   REGIONAL hosts of the form regionN.google-analytics.com. (Which region serves a given visitor is
+#   Google's to decide and is not documented per country — so this does not claim one for Israel; the
+#   wildcard covers them all, which is the point.) Those hosts match neither the exact
+#   www.google-analytics.com nor *.analytics.google.com, which is a different registrable domain.
+#   Hence *.google-analytics.com. The explicit www.google-analytics.com is kept beside it as
+#   documentation of the host GA4 normally uses — note it is a subdomain the wildcard ALREADY
+#   matches, not the apex, and the bare apex google-analytics.com is deliberately absent because
+#   GA4 does not collect there.
 #   imgquarry.com in connect-src (2026-10-12, same change as the script that needs it):
 #   /assets/live.js reads the fleet status switch, https://imgquarry.com/status/fleet.json, once
 #   per page view (CLAUDE.md §14). Blocked, the switch reads as unreadable and every seasonal line
 #   and the card stay off — silently. The live surfaces' two inline <head> scripts are covered by
 #   the existing 'unsafe-inline', /assets/live.js by 'self'.
+#
+# HOW TO PROMOTE IT TO ENFORCING. The previous gate — "a full week of real traffic with no
+# legitimate violations" — was never executable: this header carries no report-uri and no report-to,
+# so it has never collected one report and never will (optimization-backlog §12.7). Cloudflare's
+# Report-Only CSP reports nowhere by itself. Use this instead; it is deterministic and needs no
+# reporting endpoint.
+#   1. Deploy to a Pages PREVIEW branch with the directive renamed to Content-Security-Policy
+#      (enforcing). Previews already send X-Robots-Tag: noindex, so nothing is indexed.
+#      ⚠️ The enforcing policy is an EDIT TO THIS FILE, and ops/deploy-site.ps1 deploys to
+#      --branch main. So do it on a throwaway git branch and deploy that branch by hand with
+#      wrangler (`npx wrangler pages deploy .\out --project-name thermoleak --branch csp-test`).
+#      Never run the ops script while this file says enforcing, and never merge the test branch.
+#   2. With the console open, walk all 19 routes; open the mobile menu, the consent banner and the
+#      seasonal card; and submit the form through to /thank-you/. Each of those exercises a distinct
+#      directive — the tag manager, GA4's regional endpoint, the status switch, the inline live
+#      scripts and the WhatsApp handoff — and ONLY a real submit reaches /thank-you/.
+#   3. Zero violations across all of it is the gate. A violation means a directive is wrong, not
+#      that the console is noisy.
+#   4. Only then drop "-Report-Only" here, deploy, and re-walk the same list on production.
+#
+# Permissions-Policy carries browsing-topics, NOT interest-cohort: FLoC was removed from Chrome, so
+# that directive is inert and governs nothing. Topics replaced it and IS readable by the tag manager
+# this site now loads, so Topics is the one that has to be denied.
 /*
   Strict-Transport-Security: max-age=31536000
   X-Frame-Options: SAMEORIGIN
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
-  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; connect-src 'self' https://www.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://imgquarry.com; img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; object-src 'none'; frame-src https://www.googletagmanager.com; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), browsing-topics=()
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://imgquarry.com; img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; object-src 'none'; frame-src https://www.googletagmanager.com; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
 
 # The production pages.dev alias serves the whole site as an indexable 200 duplicate (measured
 # 2026-10-19). This absolute-URL rule is Cloudflare's documented fix and matches on the request HOST,

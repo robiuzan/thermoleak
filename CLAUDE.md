@@ -46,8 +46,11 @@
 > `site.credentials` and holds only concrete capabilities), and **no accessibility coordinator**
 > (`/accessibility/` no longer asserts one). **Never refill any of the three.**
 >
-> Still unverified: **what the ₪350 visit includes/excludes**, **report turnaround as a number**,
-> and **accepted payment methods**. Purged 2026-08-17 and not to be reintroduced without sources:
+> Still unverified: **accepted payment methods**, and the **insurer's name and coverage amount**.
+> (What the ₪350 visit includes/excludes and the **3-day** report turnaround were confirmed
+> 2026-09-17 and are published — `site.visitScope` renders on `/pricing/` and the turnaround is in
+> the homepage FAQ. This line used to list both as open, which would send an agent to re-gate a
+> shipped, owner-approved fact.) Purged 2026-08-17 and not to be reintroduced without sources:
 > the six fabricated testimonials and their 4.9 rating, the 3,000+/97% stats, the placeholder `geo`,
 > and the facebook.com/instagram.com `sameAs` links. See
 > [docs/business-facts.md](docs/business-facts.md). **Never present an unconfirmed value as fact.**
@@ -153,12 +156,14 @@ components/               # FLAT — 28 files, one component per file, PascalCas
 lib/
   site.ts       # ⭐ NAP, hours, service areas, trust stats, helpers (telHref, whatsappHref, canonicalUrl)
   services.ts   # ⭐ the 4 services — copy, answer blocks, limits, steps, FAQs, keywords
-  faqs.ts       # the general FAQ
+  faqs.ts       # the general FAQ — the homepage FAQPage; its guarantee answer composes site.guaranteeTerms
   pricing.ts    # /pricing/ copy — per-service prices stay in services.ts, never restated here
   articles.ts   # /guides/ typed blocks — FAQPage is DERIVED from them, so schema cannot drift
   locations.ts  # ⭐ the 3 gated cities. READ its header before adding a 4th
   gallery.ts    # the homepage gallery: files, alt text, provenance — scripts/optimize-gallery.mjs reads it
-  jsonld.ts     # every JSON-LD builder
+  jsonld.ts     # every JSON-LD builder. faqPageJsonLd returns null for an empty list; <JsonLd> skips null
+  analytics.ts  # pushEvent() — the 3 conversion events no GTM trigger can observe (§12)
+  consent.ts    # the Consent Mode v2 storage key + the Window.dataLayer/gtag declaration
   live/         # fleet live-kit copies — byte-locked, never edit (§14)
 content/live/   # ⭐ the live registers: _campaigns.mjs, _updates.mjs (+ the synced calendar) (§14)
 live.config.mjs # the live surfaces' calm / no-card pages, NAP restated, this site's ⛔ claim stems (§14)
@@ -186,14 +191,19 @@ Israeli services sites/roster/sites/thermoleak.json   ← fleet record; REFERENC
         ▼
 lib/site.ts        site · navLinks · telHref · mailHref · whatsappHref() · canonicalUrl()
         ├─► lib/faqs.ts · lib/pricing.ts          (import site directly)
-        ├─► lib/services.ts · lib/articles.ts · lib/locations.ts   (content only, no site import)
+        ├─► lib/services.ts · lib/articles.ts     (content, PLUS site for priceFrom/guaranteeTerms)
+        ├─► lib/locations.ts                      (content only — no site import)
         ├─► lib/jsonld.ts     (site + the Service / Article / Location shapes above)
         ▼
 app/**/page.tsx  →  components/**
 ```
 
 **Identity and NAP live in `lib/site.ts`. Wording lives in `lib/services.ts` / `lib/faqs.ts`. Layout
-lives in components.** Copy never gets typed directly into JSX — components render `{variable}`, which
+lives in components.** `lib/services.ts` and `lib/articles.ts` import `site` for exactly two things —
+`site.priceFrom` and `site.guaranteeTerms` — and that edge exists on purpose (2026-10-28): both files
+feed `FAQPage` JSON-LD, so a retyped price or a retyped guarantee term becomes a **mismatch between
+the visible page and its structured data** the first time the fact changes. Add a third such import
+only for a fact with the same property. Everything else in those files stays literal copy. Copy never gets typed directly into JSX — components render `{variable}`, which
 keeps `react/no-unescaped-entities` quiet and centralises content.
 
 The roster manifest is **not** an upstream build input (unlike the Cloudflare Pages sites in the same
@@ -353,8 +363,14 @@ a draft can only be previewed with `LIVE_DRAFT=1 npm run build` — and a draft 
 (fixed 2026-10-12), and discards a draft `out/` instead of rotating it into `out.prev/`, the
 rollback copy.
 
-A `Stop` hook at `.claude/hooks/format-changed.ps1` formats changed files with Prettier — it is a
-**no-op until `prettier` is added as a devDependency**, by design (`--no-install` never downloads one).
+A `Stop` hook at `.claude/hooks/format-changed.ps1` formats changed files with Prettier. This file
+used to say it was a **no-op until `prettier` is added as a devDependency** — **that is false, found
+2026-10-28.** `prettier` is still absent from `package.json`, but `npx --no-install prettier
+--version` resolves **3.9.10** from outside the project, so the hook **is live and does reformat your
+files when you stop**. Two consequences: a string you just wrote may come back re-wrapped at 80
+columns, so re-read a file before doing a second exact-match edit on it; and the formatting is not
+pinned by this repo, so a different machine with a different global Prettier will produce different
+output. Add `prettier` as a devDependency if that matters.
 
 ---
 
@@ -372,6 +388,19 @@ A `Stop` hook at `.claude/hooks/format-changed.ps1` formats changed files with P
   in an `onClick` and keep the tagged `href` generic. **Finding SEC-3 — fixed 2026-09-17 in
   `components/ThankYouContent.tsx`**, which now renders the generic `whatsappHref()` and opens the
   prefilled conversation from its click handler. That file is the worked example; copy its shape.
+- **The PII ban covers any URL the browser can navigate to, not just hrefs.** A `<form>` with no
+  `method` defaults to GET on the current URL, so an un-hydrated submit would put the lead's name and
+  phone in the address bar and GTM would report it to GA4 as `page_location`. `ContactForm` carries
+  `method="post"` for exactly that reason and nothing else (finding 13.8, fixed 2026-10-28) — the
+  working path never POSTs, so do not remove it as dead configuration.
+- **Conversion events go through `lib/analytics.ts`, and only three of them belong in this repo.**
+  `pushEvent()` is called from `ContactForm` (`lead_whatsapp_open`, `lead_handoff_blocked`) and
+  `ThankYouContent` (`thank_you_view`) — the three outcomes **no container trigger can observe**,
+  because the handoff result exists only in the submit handler and `/thank-you/` is reached only by
+  `router.push`. Do **not** add a push for a `[data-cta]` click: those belong to the shared container,
+  and two sources for one click produce two numbers. `service` is the only form field that may
+  travel. And `lead_handoff_blocked` fires **alongside** `lead_whatsapp_open`, never instead of it —
+  it is a diagnostic, so marking both as GA4 Key events double-counts every blocked lead.
 - Cloudflare zone settings (AI crawler policy, Scrape Shield, cache rules) are **the owner's to
   change**. Document the exact toggle; never assume it was done.
 

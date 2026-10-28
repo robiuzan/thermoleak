@@ -52,19 +52,30 @@ date or licence.
    a factual error in the graph. Verify the type against `lib/locations.ts` rather than assuming, and
    confirm no `LocalBusiness` node was ever added per city (§5 — this business has no premises).
 5. **FAQPage.** Present only where FAQs are visible — **12 pages** today: `/`, the four service pages,
-   the three guides, the three locations and `/pricing/`. All render in native `<details>/<summary>`,
-   so every answer ships in the DOM. Confirm each `Question` matches the rendered text and that no
-   schema-only question exists. Most of these entity lists are derived from the page's own data, and
+   the three guides, the three locations and `/pricing/`. Confirm each `Question` matches the
+   rendered text and that no schema-only question exists. **Not every `Question` is a `<details>`:**
+   each page's leading answer block renders as an H2 plus a paragraph, which is still visible on-page
+   Q&A and satisfies the visibility rule — only the FAQ lists below them use native
+   `<details>/<summary>`. Either way every answer ships in the DOM with no JS.
+   Most of these entity lists are derived from the page's own data, and
    that is what makes them safe: guides build their entities from the article's own `answer` and `faq` blocks via
-   `articleFaqs()` (`lib/articles.ts`), `/pricing/` from `[pricing.answer, ...pricing.faqs]`, locations
-   from `location.faqs`. Flag any hand-typed restatement of a question that already lives in an array.
+   `articleFaqs()` (`lib/articles.ts`), `/pricing/` from `[pricing.answer, ...pricing.faqs]`, services
+   from `[service.answer, ...service.faqs]`, and locations from **`[location.answer, ...location.faqs]`**
+   — changed 2026-10-28, so a city now emits **3** questions, not 2, and `docs/schema-graph.md` §5's
+   old "deliberately not folded" note no longer applies. The empty-array gate lives inside
+   `faqPageJsonLd`, which returns `null`, so **a `FAQPage` with `"mainEntity":[]` is a regression, not
+   a known state.** Flag any hand-typed restatement of a question that already lives in an array.
 6. **Article nodes.** Each `/guides/{slug}/` carries an `Article` with `@id` `{url}#article`,
    `headline`, `description`, `datePublished`, `dateModified`, `mainEntityOfPage`, `publisher` →
    `#business`, and an `author` `Person`. The byline is **real** (רונן דהן, business-facts §A) — do not
    flag it as a fabrication, and never propose inventing one for an unattributed article. Two known
-   open items here rather than fresh findings: `Article` carries no `image` (**SD-6**), and the author
-   `Person` carries no `@id`, so it does not resolve to the founder entity at `about/#founder`
-   (**SD-5**). Report them as open with those ids; don't re-derive them as new.
+   open item here rather than a fresh finding: `Article` carries no `image` (**SD-6**). Report it as
+   open with that id; don't re-derive it as new.
+   **`SD-5` is CLOSED (2026-10-28) — do not report it as open.** The author `Person` now carries
+   `"@id": "https://thermoleak.co.il/about/#founder"`, the same node `LocalBusiness.founder` uses, so
+   the two resolve to one entity. The `@id` is conditional on the byline being the founder: a guest
+   author correctly gets a bare `Person`, and that is not a finding. The visible byline links to the
+   same anchor under the same condition — if one is present without the other, that IS a finding.
 7. **Missing node types.** `AboutPage`, `ContactPage`, `CollectionPage`, `Article` and the founder
    `Person` all ship — do not list them as absent. **`Offer`/`PriceSpecification` is the only node type
    still missing**, blocked on the ₪450 entry price and the per-service `priceModel` strings being

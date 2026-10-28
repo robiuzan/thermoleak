@@ -105,7 +105,7 @@ rather than hidden inside a sprint's "done when".
 
 ---
 
-## Sprint 4 — Stop the bleeding
+## Sprint 4 — Stop the bleeding ✅ shipped 2026-09-17
 
 **Goal:** fix everything a visitor, a crawler or a regulator experiences as wrong today.
 
@@ -265,7 +265,7 @@ agents and all 18 skills.
 
 ---
 
-## Sprint 6 — Make the funnel measurable, and the promise reachable
+## Sprint 6 — Make the funnel measurable, and the promise reachable ✅ shipped 2026-10-28
 
 **Goal:** turn `page_view` into a real conversion signal, and put the confirmed guarantee in front of
 the visitor at the moment they ask for it.
@@ -358,25 +358,54 @@ trigger exists.** Do not compress that.
     `grep -rn '₪350' lib app components` returns comments only, and the rebuilt `out/` should be
     byte-identical.
 
+### What actually shipped (2026-10-28)
+
+Nine of the eleven tasks were implemented. **Two were already done and were not redone** — a reading
+of the repo, not an assumption:
+
+- **Task 1** (the false client-routing premise) had already been corrected in the Sprint 5 docs
+  reconciliation; `docs/data-tracking-infrastructure.md` §6 now states the opposite, correctly.
+- **Task 8** (the guarantee sitting in the `certifications` array) was done in Sprint 4's fact
+  batch: the array is `site.credentials`, the guarantee is out of it, and the `/about/` heading reads
+  `ציוד וכיסוי`. Note the heading differs from this roadmap's suggested `שיטה וציוד` — the shipped
+  wording is the owner-era one and was left alone.
+
+Task 3 was narrower than written: the href rule was already in the doc, but the doc still described
+the leak as open. It now records the fix as the worked example.
+
+Two things were added that this plan did not ask for, both one-line and both defensible:
+`scroll-mt-20` on `ContactCTA`'s long-standing `#contact` anchor (it had the same
+hidden-under-the-header defect the new `#guarantee` anchor would have had), and `lib/faqs.ts`'s new
+question placed next to the price question rather than at the end, because the two read as a pair.
+
 ### Blocked on
 
 - **Container-side triggers** (`call_click`, `whatsapp_click` from `[data-cta]`) are a **fleet-ops
-  ask**, not repo work. **This sprint's gate does not depend on them.** Cheapest zero-risk interim:
+  ask**, not repo work. **This sprint's gate did not depend on them, and they are still not done** —
+  so nothing pushed by `lib/analytics.ts` has reached GA4 yet. Cheapest zero-risk interim:
   create `thank_you_view` and `pricing_view` as GA4-property-side Key events from `page_path`
-  conditions — that covers two of seven immediately.
-- CSP promotion to enforcing is deliberately _not_ in this sprint; task 5 only makes the gate
-  executable.
+  conditions — that covers two of seven immediately, with no container edit.
+- CSP promotion to enforcing was deliberately _not_ in this sprint; task 5 only made the gate
+  executable. It is now executable and still unexecuted.
 
 ### Done when — verifiable from the repo and an unprivileged `curl`
 
-- `lib/analytics.ts` exists and is called from both the form handler and `ThankYouContent`.
-- `grep -rn '₪350' lib app components` → comments only, and `out/` is byte-identical to the
-  pre-change build.
-- `out/index.html` emits 10 `"@type":"Question"` nodes (9 + the guarantee FAQ);
-  `out/locations/tel-aviv/index.html` emits 3.
-- Every page rendering `site.guarantee` has a path to `/pricing/#guarantee` within one click.
-- `curl -sI https://thermoleak.co.il/ | grep -i permissions-policy` contains `browsing-topics=()`
-  and no `interest-cohort`.
+All five were checked against a fresh export on 2026-10-28. ✅ = verified, with what was measured.
+
+- ✅ `lib/analytics.ts` exists and is called from both the form handler and `ThankYouContent`; all
+  three event names appear in the shipped client chunks under `out/_next/static/chunks/`.
+- ✅ `grep -rn '₪350' lib app components` → comments only. The "byte-identical `out/`" half of this
+  criterion was **not** checkable as written, because the same commit changed copy and markup
+  elsewhere; what was verified instead is that every price string renders identically
+  (`ביקור איתור החל מ-₪350`, `מתחיל ב-₪350`, and 4 occurrences on the homepage).
+- ✅ `out/index.html` emits 10 `"@type":"Question"` nodes (9 + the guarantee FAQ); each of
+  `out/locations/{tel-aviv,holon,bat-yam}/index.html` emits 3. No `FAQPage` anywhere has an empty
+  `mainEntity`.
+- ✅ Every page rendering `site.guarantee` has a path to `/pricing/#guarantee` within one click —
+  checked by walking every `.html` file in `out/`, not just the expected seven.
+- ⏳ `curl -sI https://thermoleak.co.il/ | grep -i permissions-policy` contains `browsing-topics=()`
+  and no `interest-cohort`. **Verified in `out/_headers`; still to be confirmed live after deploy** —
+  headers come from Cloudflare Pages, so the repo is not evidence (CLAUDE.md §10).
 
 ### Owner-gated verification (separate step — needs GA4 access and a deploy)
 

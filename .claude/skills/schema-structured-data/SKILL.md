@@ -1,6 +1,6 @@
 ---
 name: schema-structured-data
-description: Emit the JSON-LD graph with the lib/jsonld.ts builders — LocalBusiness + WebSite globally, Service per service and per location page, Article per guide, page nodes on the hubs, BreadcrumbList emitted by PageHero itself, FAQPage matched to visible FAQs, and the standing fabrication gate that keeps aggregateRating, Review, sameAs and geo at zero. Use when wiring or auditing structured data, or before a Rich Results Test. Triggers "add schema", "JSON-LD", "BreadcrumbList", "structured data", "rich results", "aggregateRating".
+description: Emit the JSON-LD graph with the lib/jsonld.ts builders — LocalBusiness + WebSite globally, Service per service and per location page (no inLanguage on either), Article per guide with the founder's @id on the author, page nodes on the hubs, BreadcrumbList emitted by PageHero itself, FAQPage matched to visible FAQs and returning null rather than an empty mainEntity, and the standing fabrication gate that keeps aggregateRating, Review, sameAs and geo at zero. Use when wiring or auditing structured data, or before a Rich Results Test. Triggers "add schema", "JSON-LD", "BreadcrumbList", "structured data", "rich results", "aggregateRating".
 ---
 
 # Structured data

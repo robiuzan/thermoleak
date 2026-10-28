@@ -1,6 +1,6 @@
 ---
 name: tracking-analytics
-description: GTM, GA4 and conversion events for thermoleak — the shared fleet container GTM-KWGGH438 ships on every route but only page_view is measured (no event tags, no dataLayer pushes), the triage order for a dead event, the data-cta hooks nothing consumes, the PII ban that covers hrefs as well as pushes, thank-you conversions across client-side navigation, Search Console, and the mandatory gtm.js 200-check. Use when wiring conversion events or when conversions are not being recorded. Triggers "set up GTM", "GA4", "track calls", "conversion tracking not firing", "Search Console", "container id".
+description: GTM, GA4 and conversion events for thermoleak — the shared fleet container GTM-KWGGH438 ships on every route and only page_view is MEASURED, though lib/analytics.ts now pushes the three events no container trigger can observe (lead_whatsapp_open, lead_handoff_blocked, thank_you_view) and the container still has no tag for them, the triage order for a dead event, the data-cta hooks nothing consumes, the PII ban that covers hrefs as well as pushes, thank-you conversions across client-side navigation, Search Console, and the mandatory gtm.js 200-check. Use when wiring conversion events or when conversions are not being recorded. Triggers "set up GTM", "GA4", "track calls", "conversion tracking not firing", "Search Console", "container id".
 ---
 
 # Tracking & analytics
@@ -16,7 +16,14 @@ Analytics landed on **2026-08-24**. What is true today (measured 2026-09-06):
   repo** — grepping the repo for it returns nothing, and that is correct.
 - The live container holds **one tag** (`__googtag`, firing on `gtm.init`). **Zero click triggers,
   zero event tags.**
-- The repo contains **zero custom `dataLayer` pushes**. The only `dataLayer` reference anywhere in
+- **(Corrected 2026-10-28.)** The repo contains **three** custom `dataLayer` pushes, all routed
+  through `lib/analytics.ts`'s typed `pushEvent()`: `lead_whatsapp_open` and
+  `lead_handoff_blocked` from `ContactForm`'s submit handler, and `thank_you_view` from
+  `ThankYouContent` on mount. Those three are in code **because no container trigger can observe
+  them**; the other four events are click/route triggers and must NOT be duplicated here. **The
+  container still holds no tag for any of them**, so they are pushed and not measured — which is the
+  next step, not a bug in the push. The paragraph below describes the state before that change:
+- The repo contained **zero custom `dataLayer` pushes**. The only `dataLayer` reference anywhere in
   `app/`, `components/` and `lib/` is the GTM bootstrap at `components/Analytics.tsx:33`.
 
 **Consequence — say this plainly when asked:** `page_view` is the only thing being measured. Every
@@ -70,7 +77,9 @@ Work down this list. Do not stop at "GTM is installed", and never answer "nothin
 anything" — both are wrong now.
 
 1. **Does repo code push the event?**
-   `grep -rn 'dataLayer' app components lib` — today this returns only the bootstrap. Events that
+   `grep -rn 'dataLayer' app components lib` — today this returns the bootstrap plus
+   `lib/analytics.ts`. If the event you are chasing is one of the three it pushes, the push is not
+   your problem; go to the next step. Events that
    depend on in-page state can _only_ come from here (see "the split that matters" below).
 2. **Do a trigger and a tag exist in the container?** Don't trust the GTM UI, read the payload:
    `curl -s "https://www.googletagmanager.com/gtm.js?id=GTM-KWGGH438"` and inspect the `var data =`
@@ -218,6 +227,10 @@ thank-you views are client-side navigations**. The same applies to internal jour
 
 - [ ] `gtm.js?id=GTM-KWGGH438` returns 200 (re-assert after every deploy).
 - [ ] `grep -rn 'dataLayer' app components lib` shows the pushes you expect — and nothing else.
+      Every push goes through `lib/analytics.ts`; a raw `window.dataLayer.push` in a component is a
+      regression, because the typed helper is what keeps PII and free-text fields out.
+- [ ] `lead_handoff_blocked` is NOT a GA4 Key event. It fires alongside `lead_whatsapp_open`, so
+      marking both double-counts every blocked lead.
 - [ ] The live container actually contains the trigger and tag you think you built.
 - [ ] No `data-cta` element whose href can contain PII sits inside any click trigger.
 - [ ] No PII in any push and none in any href — verified in the Network panel, not the config.

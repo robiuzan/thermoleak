@@ -48,8 +48,16 @@ export interface Location {
    * hyphenated names (בתל אביב-יפו). No template should ever guess this.
    */
   prefixed: string;
-  /** 40–60 word AEO answer block. Complete in the first sentence. */
-  answer: string;
+  /**
+   * The AEO answer block: a question-form heading and a 40–60 word answer, complete in its first
+   * sentence. The same `{ q, a }` shape as a service's `answer` and an article's `answer` block —
+   * which is the point. A string could not reach `faqPageJsonLd`, and locations were the ONLY page
+   * type whose answer block never joined the FAQ graph even though it is genuine on-page Q&A
+   * (finding AEO-5). `q` is the text rendered as the visible H2, so the two can never diverge.
+   * The three cities below kept the exact H2 they had already been rendering, so the change was
+   * structural only — no published copy moved. A new city may write a better real question.
+   */
+  answer: { q: string; a: string };
   /**
    * The SERP snippet, 150–160 chars, written to the Location formula in docs/keyword-map.md §3
    * and ending in a call to action with the phone number.
@@ -80,8 +88,10 @@ export const locations: Location[] = [
     kind: "city",
     // NOT "בתל אביב-יפו" — that reads badly in a title. This is exactly why the field exists.
     prefixed: "בתל אביב",
-    answer:
-      "אנחנו מבצעים איתור נזילות ורטיבות בכל רחבי תל אביב-יפו — ממרכז העיר ועד יפו, נווה צדק ופלורנטין. הבדיקה מתבצעת במצלמה תרמית וללא הרס, מה שקריטי במיוחד בבנייה הוותיקה של העיר ובמבנים המוגדרים לשימור. תל אביב נמצאת בלב אזור השירות שלנו, ולנזילה פעילה נשתדל להגיע באותו יום.",
+    answer: {
+      q: "מבצעים איתור נזילות בתל אביב?",
+      a: "אנחנו מבצעים איתור נזילות ורטיבות בכל רחבי תל אביב-יפו — ממרכז העיר ועד יפו, נווה צדק ופלורנטין. הבדיקה מתבצעת במצלמה תרמית וללא הרס, מה שקריטי במיוחד בבנייה הוותיקה של העיר ובמבנים המוגדרים לשימור. תל אביב נמצאת בלב אזור השירות שלנו, ולנזילה פעילה נשתדל להגיע באותו יום.",
+    },
     metaDescription:
       "איתור נזילות ורטיבות בתל אביב במצלמה תרמית — בלי לשבור קירות, גם בבנייה ותיקה ובמבנים לשימור. לנזילה פעילה נגיע באותו יום. חייגו 055-660-1006.",
     intro: [
@@ -138,8 +148,10 @@ export const locations: Location[] = [
     name: "חולון",
     kind: "city",
     prefixed: "בחולון",
-    answer:
-      "אנחנו מבצעים איתור נזילות ורטיבות בכל שכונות חולון — מג׳סי כהן והגרעין הוותיק ועד המגדלים החדשים בדרום העיר. הבדיקה נעשית במצלמה תרמית וללא שבירת קירות, ומסתיימת בדו״ח מסודר. חולון נמצאת כ-10 ק״מ ממרכז תל אביב, בתוך אזור השירות המרכזי שלנו, ולנזילה פעילה נשתדל להגיע באותו יום.",
+    answer: {
+      q: "מבצעים איתור נזילות בחולון?",
+      a: "אנחנו מבצעים איתור נזילות ורטיבות בכל שכונות חולון — מג׳סי כהן והגרעין הוותיק ועד המגדלים החדשים בדרום העיר. הבדיקה נעשית במצלמה תרמית וללא שבירת קירות, ומסתיימת בדו״ח מסודר. חולון נמצאת כ-10 ק״מ ממרכז תל אביב, בתוך אזור השירות המרכזי שלנו, ולנזילה פעילה נשתדל להגיע באותו יום.",
+    },
     metaDescription:
       "איתור נזילות ורטיבות בחולון במצלמה תרמית, ללא שבירת קירות ועם דו״ח מסודר. 10 ק״מ מתל אביב — לנזילה פעילה נגיע באותו יום. חייגו 055-660-1006.",
     intro: [
@@ -192,8 +204,10 @@ export const locations: Location[] = [
     name: "בת ים",
     kind: "city",
     prefixed: "בבת ים",
-    answer:
-      "אנחנו מבצעים איתור נזילות ורטיבות בכל בת ים — משיכוני רמת יוסף ורמת הנשיא ועד מגדלי פארק הים. הבדיקה מתבצעת במצלמה תרמית וללא הרס, ומסתיימת בדו״ח מסודר. בת ים קומפקטית ונמצאת כ-8 ק״מ ממרכז תל אביב, כך שלנזילה פעילה נשתדל להגיע באותו יום.",
+    answer: {
+      q: "מבצעים איתור נזילות בבת ים?",
+      a: "אנחנו מבצעים איתור נזילות ורטיבות בכל בת ים — משיכוני רמת יוסף ורמת הנשיא ועד מגדלי פארק הים. הבדיקה מתבצעת במצלמה תרמית וללא הרס, ומסתיימת בדו״ח מסודר. בת ים קומפקטית ונמצאת כ-8 ק״מ ממרכז תל אביב, כך שלנזילה פעילה נשתדל להגיע באותו יום.",
+    },
     metaDescription:
       "איתור נזילות ורטיבות בבת ים במצלמה תרמית, ללא הרס ועם דו״ח מסודר. משיכוני רמת יוסף ועד פארק הים, הגעה באותו יום. חייגו 055-660-1006.",
     intro: [

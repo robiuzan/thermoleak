@@ -9,6 +9,8 @@
 // a future article by someone else must set its own, and an article with no known author publishes
 // unattributed rather than borrowing a name. NEVER invent a byline.
 
+import { site } from "./site";
+
 export type Block =
   | { kind: "paragraph"; text: string }
   | { kind: "heading"; text: string }
@@ -282,7 +284,7 @@ export const articles: Article[] = [
       {
         kind: "answer",
         q: "כמה עולה איתור נזילות?",
-        a: "ביקור איתור נזילות מתחיל ב-₪350 ברוב הדירות. המחיר הסופי נגזר מגודל הנכס, ממספר המוקדים החשודים ומהיקף התיעוד הנדרש — ונמסר לכם מראש, לפני שנקבע ביקור. בדיקות לוחות חשמל ודו״חות לחברות ביטוח מתומחרים בנפרד לפי היקף העבודה.",
+        a: `ביקור איתור נזילות מתחיל ב-₪${site.priceFrom} ברוב הדירות. המחיר הסופי נגזר מגודל הנכס, ממספר המוקדים החשודים ומהיקף התיעוד הנדרש — ונמסר לכם מראש, לפני שנקבע ביקור. בדיקות לוחות חשמל ודו״חות לחברות ביטוח מתומחרים בנפרד לפי היקף העבודה.`,
       },
       {
         kind: "paragraph",
@@ -386,7 +388,10 @@ export const articles: Article[] = [
           },
           {
             q: "האם יש תשלום אם לא נמצאה נזילה?",
-            a: "לא. אנחנו עובדים לפי ״לא מצאנו — לא שילמתם״, ואין דמי ביקור. איתור נחשב זיהוי וסימון של מקור הרטיבות או הנזילה, מאומת במדידה משלימה ולא בממצא תרמי בלבד. אם לא אותר מקור — אין חיוב. האחריות אינה חלה כשלא ניתנה גישה לאזור הנדרש, או כשהנזילה אינה פעילה ולא ניתן היה לתאם מועד חלופי.",
+            // Composed from site.guaranteeTerms, not retyped. This answer feeds FAQPage JSON-LD,
+            // so the paraphrase that used to sit here was one correction away from contradicting
+            // the terms published on /pricing/#guarantee (finding EEAT-4).
+            a: `לא. ${site.guaranteeTerms.ifNotFound} ${site.guaranteeTerms.whatCounts} ${site.guaranteeTerms.exceptions}`,
           },
           {
             q: "הדו״ח לביטוח עולה בנפרד?",

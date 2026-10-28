@@ -57,12 +57,17 @@ is deliberately noindex and excluded; the two 404 artifacts are not content) · 
 `ThankYouContent`, `ConsentBanner`) · **zero** banned RTL utilities · **zero** `aggregateRating`, `Review`, `sameAs`
 and `GeoCoordinates` nodes.
 
-**Updated 2026-09-17 — Sprint 4 shipped.** Items 2 and 3 below are **resolved**; item 1 stands.
+**Updated 2026-10-28 — Sprint 6 shipped.** Item 1 is now **half** resolved — the half that lives
+in this repo. Items 2 and 3 were resolved in Sprint 4.
 
-1. **§13.5 — the conversion layer is still wired to nothing.** GTM ships on every route and
-   `page_view` flows, but no repo code pushes an event and the container holds no event tag, so all
-   seven documented conversion events fire zero times. **This is now the single largest open gap**,
-   and it is Sprint 6.
+1. 🟠 **§13.5 — the repo half of the conversion layer is wired; the container half is not.**
+   `lib/analytics.ts` now pushes `lead_whatsapp_open`, `lead_handoff_blocked` and `thank_you_view`,
+   the three events **no container configuration could ever produce**. The other four —
+   `cta_click`, `call_click`, `whatsapp_click`, `pricing_view` — are click and route triggers that
+   belong in the shared container and still fire zero times. **`call_click` is still invisible, and
+   it is still the site's number-one conversion goal.** A push with no trigger behind it is not a
+   measurement either, so nothing has reached GA4 yet. **The remaining work is a fleet-ops ask plus
+   one GA4-property-side shortcut** (see §13.5) — not repo work. This is still the largest open gap.
 2. ✅ **§13.6 and §8.6 — both fixed 2026-09-17.** The tagged `/thank-you/` href is generic and the
    prefilled chat opens from `onClick`, so no lead PII can reach the dataLayer; and the
    StickyContact spacer moved from `<main>` to `<footer>`, so the footer's only links to
@@ -340,10 +345,20 @@ confirmation (business-facts §C). Never ship a guessed price in schema.
 service pages and `{url}#service` on the location Services, both built in `lib/jsonld.ts` — so other
 nodes can now reference them.
 
+**4.7 ✅ (2026-10-28) The three schema nits closed, and `FAQPage` can no longer ship empty.**
+`inLanguage` is gone from both `Service` builders — schema.org does not define it there, and it was
+the only out-of-domain property in the graph; it remains on `WebSite`, the page nodes and `Article`,
+where it belongs. `faqPageJsonLd` now returns `null` for an empty list and `<JsonLd>` renders nothing
+for `null`, so the guard sits in one place instead of at five call sites: the next article added
+without a `faq` block, or the next city added without FAQs, can no longer emit
+`{"@type":"FAQPage","mainEntity":[]}` from a caller that looks correct. And the founder is one entity
+— see §7.5.
+
 **✅ Verified good:** every page carries valid, parseable JSON-LD; `LocalBusiness` and `WebSite` both
 ship globally and cross-reference correctly; `foundingDate: "2015"` matches the roster; `Service` nodes
 correctly use `AdministrativeArea` for the region and wire `provider` to the business `@id`; `FAQPage`
-questions all match visible rendered text.
+questions all match visible rendered text — including the location answer blocks added to the graph
+2026-10-28, whose `q` **is** the string rendered as the visible H2 (§6.2).
 
 ---
 
@@ -385,9 +400,12 @@ start of any AEO audit — it is edge state a dashboard change can flip back wit
 **6.2 ✅ (2026-08-17 → 2026-08-24) Answer blocks ship.** All four service pages, all three location
 pages, `/pricing/` and all three guides now open with a question-form heading and a short
 extractable answer, held in `lib/services.ts`, `lib/locations.ts`, `lib/pricing.ts` and
-`lib/articles.ts`. Services, `/pricing/` and the guides fold theirs into the `FAQPage` graph, so the
-markup and the visible text cannot drift. The spec is still the bar for anything new:
-content-standards §5.
+`lib/articles.ts`. **All of them now fold theirs into the `FAQPage` graph** (locations joined
+2026-10-28 — they were the last page type whose answer block never reached the FAQ graph, finding
+AEO-5), so the markup and the visible text cannot drift. `Location.answer` changed from a bare
+string to the same `{ q, a }` pair the other three use, and the route renders `answer.q` as its H2 —
+so a city's question is data, not a template, and the schema cannot diverge from the heading. The
+spec is still the bar for anything new: content-standards §5.
 
 **6.3 ✅ FAQs are fully extractable.** Both the homepage `Faq` component and the per-service FAQ blocks
 use native `<details>/<summary>`, so every answer ships in the DOM at first paint with **zero
@@ -433,7 +451,17 @@ rendered as the primary trust block — `TrustBar` shows
 fourth — `10+ שנות ניסיון` — **is** defensible (`foundedYear: 2015` in the roster). 97% in particular
 reads as measured and nothing measures it.
 
-**7.3 🟠 Uncredentialed certification claims.** `site.certifications` claims a certified thermography
+**7.3 ✅ RESOLVED 2026-09-17 — kept verbatim above as the record of what was published.** The body
+below described the state before the owner's fact batch. He confirmed there is **no thermography
+certificate and no ח.פ.**, so the "Level 1" badge was deleted outright, `legalName` dropped `בע״מ`,
+and `site.certifications` was renamed `site.credentials` holding only concrete, confirmed
+capabilities (FLIR E8, third-party insurance, a two-person team). The `/about/` heading went from
+`הסמכות וציוד` to `ציוד וכיסוי` so it no longer implies a credential. The guarantee was removed from
+that array in the same pass — a promise rendered with a `BadgeCheck` beside real equipment borrows
+their verifiability (finding EEAT-6), and it now has its own bounded terms at `/pricing/#guarantee`.
+**Never refill any of the three absent claims.**
+
+_Original finding:_ `site.certifications` claims a certified thermography
 technician (Level 1) and professional FLIR equipment. No certificate number, no issuing body, no
 insurance, no association membership, no ח.פ. — while `legalName` claims `בע״מ`.
 
@@ -446,18 +474,41 @@ pages that make the promise — see §7.8.**
 **7.5 🟠 → partly resolved (2026-08-24).** The founder **רונן דהן** is confirmed (business-facts §A)
 and now carries real weight: a `Person` node as the business's `founder` in `lib/jsonld.ts`,
 resolving to a real `#founder` anchor on `/about/`, plus the byline on all three guides. **Still
-open:** no technician is named; the credentials behind the name are still unconfirmed (§7.3); and
-the byline `Person` has no `@id` of its own, so to a parser the article author and the business
-founder are two unconnected people with the same name.
+open:** no technician is named beyond the founder.
+
+**✅ The entity half closed 2026-10-28.** The byline `Person` now carries `@id`
+`https://thermoleak.co.il/about/#founder` whenever the author **is** the founder, which is the same
+node `LocalBusiness.founder` points at — so a parser resolves one person, not three with the same
+name. A guest author still gets a plain `Person` with no `@id`, which is correct: they are not that
+entity and must not inherit its authority. The visible byline is now a link to that anchor too;
+before this, **nothing on the site linked to `#founder` at all**, so the anchor existed only for
+machines. The credentials question is answered rather than open — see §7.3.
 
 **7.6 ✅ RESOLVED 2026-08-17.** The footer social icons were removed with `site.social`; there is no
 such link on the site. See §4.2. The original point still governs the decision to restore them: a
 link that lands on a platform homepage actively demonstrates there is no profile.
 
-**7.7 🟡 Prices unverified.** `priceFrom: 450` and the per-service `priceModel` strings. Roster marks
-them unconfirmed.
+**7.7 ✅ (2026-09-17 → 2026-10-28) Confirmed, then single-sourced.** The owner confirmed **₪350**
+on 2026-09-17 (it had been an unverified ₪450). On 2026-10-28 the literal stopped being retyped:
+`lib/services.ts` and `lib/articles.ts` now import `site` and interpolate `site.priceFrom`, so
+`grep -rn '₪350' lib app components` returns comments only. This was behaviour-preserving the day it
+landed — the point is that `lib/articles.ts`'s copy feeds `FAQPage` JSON-LD, so the next price change
+would have left a stale number in structured data while the visible page showed the new one. Google
+reads that as a price mismatch. **Still open:** what the ₪350 visit includes was confirmed and is
+published (`site.visitScope`), but accepted payment methods are not (business-facts §C).
 
-**7.8 🟠 (opened 2026-09-06) The confirmed guarantee reaches one page in eight.** Eight emitted pages
+**7.8 ✅ RESOLVED 2026-10-28.** All three compounding problems are closed. `GuaranteeTerms` carries
+`id="guarantee"` (plus `scroll-mt-20`, so the anchor clears the `h-16` sticky header), and the
+homepage Hero, `/about/`'s values card and every service page's price sidebar now link the promise to
+`/pricing/#guarantee` — **verified in the built export: no page states `לא מצאנו — לא שילמתם` without
+a path to its terms.** The homepage `FAQPage` gained a tenth question composed from
+`site.guaranteeTerms`, so an answer engine reading the homepage now sees the scope and not just the
+slogan. And `lib/articles.ts` no longer hand-types the terms — its answer is composed from
+`site.guaranteeTerms` too, so one correction to the terms updates both copies and the JSON-LD built
+from them. The same pass gave `ContactCTA`'s long-standing `#contact` anchor the same
+`scroll-mt-20`, which it had always lacked.
+
+_Original finding (2026-09-06):_ Eight emitted pages
 make the promise `לא מצאנו — לא שילמתם` — the homepage, `/about/`, `/pricing/`, all four service
 pages and one guide. `components/GuaranteeTerms.tsx` renders on `/pricing/` only. Three problems
 compound it: the component has no `id`, so no page can even deep-link to the terms; the general FAQ
@@ -728,15 +779,22 @@ preload/includeSubDomains — deliberate, business-facts §F), `X-Frame-Options:
 `nosniff`, `Referrer-Policy`, `Permissions-Policy`, plus immutable caching on `/_next/static/*`.
 Verified in the live response post-deploy. Historical note: this item originally targeted
 `.htaccess`, written when the repo believed Apache was the origin — it wasn't (see the shipped block
-above). **One stale directive, found 2026-09-06:** `Permissions-Policy` still carries
-`interest-cohort=()`, which targeted FLoC — a feature Chrome removed. Its live successor,
-`browsing-topics=()`, is absent, and a Google tag now runs on this domain, which is precisely the
-case the directive exists for.
+above). **The stale directive found 2026-09-06 was fixed 2026-10-28:** `Permissions-Policy` carried
+`interest-cohort=()`, which targeted FLoC — a feature Chrome removed, so the directive governed
+nothing. It now carries `browsing-topics=()`, the live successor, which the Google tag running on
+this domain can actually read. That is precisely the case the directive exists for.
 
 **12.2 🟠 Report-only CSP shipped (2026-08-24), widened for the tag (2026-08-30).** `public/_headers`
 carries a `Content-Security-Policy-Report-Only` with `default-src 'self'`, `object-src 'none'`,
 `base-uri 'self'`, `form-action 'self'`, `frame-ancestors 'self'`, and a `script-src` /
-`connect-src` / `img-src` / `frame-src` allowlist that **already permits googletagmanager**. The
+`connect-src` / `img-src` / `frame-src` allowlist that **already permits googletagmanager**.
+**`connect-src` fixed 2026-10-28 (finding SEC-4):** it listed `https://www.google-analytics.com` (an
+exact host) and `https://*.analytics.google.com` (a different registrable domain), and GA4's regional
+endpoint for Israeli traffic — `region1.google-analytics.com` — matched neither. It now also carries
+`https://*.google-analytics.com`, with the exact apex kept alongside it because a host wildcard
+requires at least one label and so does not match its own apex. Zero impact the day it landed,
+because the header is Report-Only — which is exactly why it had to be fixed **before** enforcement
+rather than discovered by it. The
 widening landed in the same commit as the tag, exactly as this item required. **Anyone "hardening"
 it back to `script-src 'self'` would break the live analytics and would have to undo it before the
 policy could ever be enforced.**
@@ -780,11 +838,19 @@ unexecutable.** §12.2 says "promote to enforcing after a full week of real traf
 legitimate violations". But the header carries **no `report-uri` and no `report-to`**. A Report-Only
 policy with no reporting endpoint blocks nothing and reports nothing — the week of observation
 collects zero data by construction, and always did. (The `Report-To` header in the live response is
-Cloudflare's NEL; it cannot receive CSP reports.) Either add a reporting endpoint, or replace the
-criterion with something honest — for example, one manual pass with the browser console open,
-through a real form submit, on every route type. While in there, check `connect-src`: it lists
-`https://*.analytics.google.com` and `https://www.google-analytics.com`, which match neither the
-`analytics.google.com` apex nor `region1.google-analytics.com`.
+Cloudflare's NEL; it cannot receive CSP reports.)
+
+**✅ RESOLVED 2026-10-28 — by replacing the criterion, not by adding an endpoint.** The gate in
+`public/_headers` is now a deterministic walkthrough that needs no collector: deploy the policy as
+**enforcing to a Pages preview branch** (previews already send `X-Robots-Tag: noindex`), then with
+the console open walk all 19 routes, open the mobile menu, the consent banner and the seasonal card,
+and submit the form through to `/thank-you/` — each of those exercises a different directive, and
+only a real submit reaches `/thank-you/`. Zero violations is the gate; then drop `-Report-Only`,
+deploy, and re-walk on production. The same edit records that `'unsafe-inline'` in `script-src` is
+**structural** under `output: "export"` (inline RSC flight scripts, no server, no nonce, and a hash
+policy cannot survive a rebuild), so nobody "tightens" it into a hydration break. `connect-src` was
+fixed in the same commit — see §12.2. **Promotion itself is still not done**; what changed is that it
+is now possible.
 
 ---
 
@@ -818,8 +884,36 @@ form opens a WhatsApp deep link and cannot confirm delivery, so the event means 
 not "lead received". Name it `lead_whatsapp_open`, and **never put name, phone or message into
 `dataLayer`** — a rule §13.6 shows also covers `href` attributes, not just pushes.
 
-**13.5 🔴 (opened 2026-09-06) The event layer is unwired end to end — all seven documented
-conversion events fire zero times.** Verified from both ends. Repo side: the only `dataLayer`
+**13.5 🟠 (opened 2026-09-06; repo half SHIPPED 2026-10-28) The event layer was unwired end to
+end — all seven documented conversion events fired zero times.**
+
+**What shipped 2026-10-28.** `lib/analytics.ts` exports a typed `pushEvent(name, params)` guarding
+`window.dataLayer`, called from exactly two components:
+
+| Event                  | Pushed from                                  | Parameters              |
+| ---------------------- | -------------------------------------------- | ----------------------- |
+| `lead_whatsapp_open`   | `ContactForm`, after validation passes       | `service`, `handoff_ok` |
+| `lead_handoff_blocked` | the same handler, when `window.open` is null | `service`               |
+| `thank_you_view`       | `ThankYouContent`, on mount                  | `service` (optional)    |
+
+Three deliberate decisions in that table. **Only `service` travels** — it is the `<select>`'s fixed
+enum; `area` is free text and homeowners type street addresses into it (§13.6). **The handoff now
+carries `service` through `sessionStorage`** so `thank_you_view` can be attributed, with the field
+optional so a payload written by the previous deploy is not thrown away. And
+**`lead_handoff_blocked` fires _alongside_ `lead_whatsapp_open`, never instead of it** — it is a
+diagnostic, and marking both as Key events would double-count every blocked lead. The submit button
+carries a comment recording that `data-cta="form-whatsapp"` fires **pre-validation**, so it must
+never be used as the lead trigger: three mistyped phone numbers are three clicks on it.
+
+**What is still open.** The four container-side events — `cta_click`, `call_click`,
+`whatsapp_click`, `pricing_view` — are deliberately **not** duplicated in repo code, because two
+sources for one click produce two numbers. They remain a fleet-ops ask on a shared container.
+**And a push is not a measurement:** until the container carries a Custom Event trigger and tag per
+event name, the three above sit in `window.dataLayer` and go nowhere. The cheapest interim that
+needs no container edit at all is to create `thank_you_view` and `pricing_view` as
+**GA4-property-side** Key events from `page_path` conditions.
+
+_Original finding, which still describes the container:_ Verified from both ends. Repo side: the only `dataLayer`
 reference anywhere in `app/`, `components/` and `lib/` is the GTM bootstrap itself — **zero event
 pushes**. Container side: `GTM-KWGGH438` holds one tag, the GA4 config, firing on `gtm.init`; no
 click triggers, no event tags.
@@ -843,8 +937,18 @@ have now shipped with no conversion measurement to judge them by, and the done-c
 have caught it — a call click, a WhatsApp click and a form submit each appearing exactly once in
 realtime analytics — was never actually run.
 
-**13.6 🟠 (opened 2026-09-06) The visitor's name and phone sit in a tagged, clickable `href` on
-`/thank-you/`.** After a real submit, `ThankYouContent` renders
+**13.6 ✅ FIXED 2026-09-17 — body kept verbatim, because this is the worked example and the shape
+is easy to reintroduce.** `ThankYouContent` now renders the **generic** `whatsappHref()` and opens
+the prefilled conversation from an `onClick` handler, so the personal URL never enters the DOM. A
+no-JS visitor gets a blank chat, which works; a blocked popup navigates the current tab, which puts
+the message in the address bar but leaves the `href` — the only thing a tag manager reads — clean.
+The rule was widened in `docs/data-tracking-infrastructure.md` §4 the same way: no PII in the
+dataLayer **and** none in any `href`, because Click URL is itself a dataLayer variable. Sprint 6's
+`lead_whatsapp_open` push obeys it by carrying only `service`. ⏳ **The verification has still never
+been run:** a real phone submit producing no `/g/collect` request containing the tester's name or
+phone — inspected on the wire, not in the config.
+
+_Original finding (2026-09-06):_ After a real submit, `ThankYouContent` renders
 `<a href={whatsappHref(handoff.message)} … data-cta="thankyou-whatsapp">`, and that message is
 `שם: {name}` + `טלפון: {phone}` + area + service + free text, URL-encoded into the query string.
 GTM's built-in Click URL variable (`gtm.elementUrl`, already defined in the live container) is
@@ -878,6 +982,37 @@ definitively and name a real opt-out. **(b)** Decide whether a Consent Mode v2 d
 land **before** any further event tags — because every event added on top of §13.5 widens what is
 collected without consent. Do not treat (a) as satisfied by adding a cookie banner, and do not treat
 (b) as a code task with an obvious answer.
+
+---
+
+**13.8 ✅ FIXED 2026-10-28 (found by the Sprint 6 adversarial review) — the form could publish a
+lead's name and phone in the page URL, and from there to GA4.** A second route to the §13.6
+violation, through the address bar instead of an `href`.
+
+`components/ContactForm.tsx` rendered `<form onSubmit={…} noValidate>` with **no `method` and no
+`action`**, a `type="submit"` button, and a `name` attribute on all five fields (verified in
+`out/contact/index.html`). A `<form>` with no method defaults to **GET on the current URL**, so an
+**un-hydrated** submit navigated to
+`/contact/?name=…&phone=…&area=…&service=…&message=…` — the real values, in the address bar.
+Cloudflare Pages serves `/contact/index.html` for that URL regardless of the query string, so the
+page then loaded normally, GTM fired, and GA4 recorded the visitor's **name and mobile number inside
+`page_location`**. It would also reach the `Referer` of every subsequent third-party request.
+
+**Why this was reachable rather than theoretical.** React's `onSubmit`/`preventDefault` only exists
+after hydration. The window is normally short — but §10's chunk-404 incident is this stack's recorded
+proof that the JS can fail to arrive at all, and with no JS the form is _permanently_ in that state.
+The flow has never worked without JS (it needs `window.open`, `sessionStorage` and `router.push`), so
+the native submit was never a working fallback — only a leak.
+
+**The fix is `method="post"`.** Nothing in the app ever POSTs; the attribute exists so the
+un-hydrated path POSTs to a static asset, which Pages refuses, instead of putting personal data in a
+URL. A visitor whose JS failed sees an error rather than having their name published to analytics —
+the right way round to fail. The comment above the `return` in `ContactForm` says so, because the
+working path never exercises it and a future cleanup would remove it without anything breaking
+visibly.
+
+**The general rule this adds to §13.6:** no PII in the dataLayer, **none in any `href`**, and **none
+in any URL the browser can navigate to** — a form's default GET is a URL you did not write.
 
 ---
 

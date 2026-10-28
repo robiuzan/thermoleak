@@ -21,7 +21,11 @@ const staticRoutes: {
   priority: number;
   freq: "weekly" | "monthly" | "yearly";
 }[] = [
-  { path: "", lastModified: "2026-10-27", priority: 1, freq: "weekly" },
+  // 2026-10-28: a tenth visible FAQ shipped on the homepage (the guarantee question), which is
+  // new body copy and a tenth Question node — the file's own rule says that bumps the date in the
+  // same commit. The service and location pages are deliberately NOT bumped: their visible copy is
+  // unchanged, they only gained an internal link and a schema node.
+  { path: "", lastModified: "2026-10-28", priority: 1, freq: "weekly" },
   {
     path: "/services",
     lastModified: "2026-08-17",

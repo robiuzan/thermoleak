@@ -13,16 +13,18 @@ import WhatsappIcon from "./WhatsappIcon";
 
 export default function ContactCTA() {
   return (
-    <section id="contact" className="py-16 md:py-20">
+    <section id="contact" className="scroll-mt-20 py-16 md:py-20">
       <Container className="grid gap-10 lg:grid-cols-2 lg:items-start">
         <div>
-          <p className="mb-2 text-sm font-bold tracking-wide text-accent-strong">צור קשר</p>
+          <p className="mb-2 text-sm font-bold tracking-wide text-accent-strong">
+            צור קשר
+          </p>
           <h2 className="text-2xl font-extrabold text-brand sm:text-3xl">
             דברו איתנו — נשמח לעזור
           </h2>
           <p className="mt-3 max-w-xl leading-relaxed text-ink/70">
-            יש לכם נזילה, רטיבות או חשד לתקלה? התקשרו, שלחו וואטסאפ או השאירו פרטים — ונחזור אליכם
-            במהירות עם פתרון מקצועי.
+            יש לכם נזילה, רטיבות או חשד לתקלה? התקשרו, שלחו וואטסאפ או השאירו
+            פרטים — ונחזור אליכם במהירות עם פתרון מקצועי.
           </p>
 
           <div className="mt-6 space-y-3">
@@ -95,14 +97,18 @@ export default function ContactCTA() {
                   <MapPin className="size-4" aria-hidden="true" />
                   אזור שירות
                 </span>
-                <p className="mt-2 text-sm leading-relaxed text-ink/70">{site.serviceAreaText}</p>
+                <p className="mt-2 text-sm leading-relaxed text-ink/70">
+                  {site.serviceAreaText}
+                </p>
               </div>
             </div>
           </div>
         </div>
 
         <div className="rounded-2xl border border-ink/10 bg-paper p-6 shadow-sm">
-          <h3 className="text-lg font-bold text-brand">השאירו פרטים ונחזור אליכם</h3>
+          <h3 className="text-lg font-bold text-brand">
+            השאירו פרטים ונחזור אליכם
+          </h3>
           <p className="mt-1 text-sm text-ink/70">מענה מהיר, ללא התחייבות.</p>
           <div className="mt-4">
             <ContactForm />

@@ -1,5 +1,13 @@
 import type { Metadata } from "next";
-import { ShieldCheck, Target, Wallet, Sparkles, BadgeCheck } from "lucide-react";
+import Link from "next/link";
+import type { LucideIcon } from "lucide-react";
+import {
+  ShieldCheck,
+  Target,
+  Wallet,
+  Sparkles,
+  BadgeCheck,
+} from "lucide-react";
 import { site, pageOpenGraph } from "@/lib/site";
 import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
@@ -15,7 +23,12 @@ export const metadata: Metadata = {
   description:
     "מעל עשור של ניסיון באיתור נזילות ורטיבות במצלמה תרמית. הכירו את הערכים, השיטה והמומחיות של טרמוליק — דיוק, שקיפות וללא הרס.",
   alternates: { canonical: "/about/" },
-  ...pageOpenGraph({ path: "/about", title: `אודות | ${site.nameHe}`, description: "מעל עשור של ניסיון באיתור נזילות ורטיבות במצלמה תרמית. הכירו את הערכים, השיטה והמומחיות של טרמוליק — דיוק, שקיפות וללא הרס." }),
+  ...pageOpenGraph({
+    path: "/about",
+    title: `אודות | ${site.nameHe}`,
+    description:
+      "מעל עשור של ניסיון באיתור נזילות ורטיבות במצלמה תרמית. הכירו את הערכים, השיטה והמומחיות של טרמוליק — דיוק, שקיפות וללא הרס.",
+  }),
 };
 
 const story = [
@@ -54,11 +67,39 @@ const approach = [
   },
 ];
 
-const values = [
-  { icon: Target, title: "דיוק לפני הכל", desc: "מאתרים את מקור הבעיה המדויק, לא את הסימפטום — וכך התיקון מתבצע נכון מהפעם הראשונה." },
-  { icon: ShieldCheck, title: "ללא הרס מיותר", desc: "השיטה התרמוגרפית לא פולשנית, וחוסכת לכם הריסות, זמן וכסף." },
-  { icon: Wallet, title: "שקיפות מחירים", desc: "המחיר נמסר מראש, בצורה ברורה, בלי הפתעות בסוף הביקור." },
-  { icon: Sparkles, title: "אחריות מלאה", desc: site.guarantee + " — אנחנו עומדים מאחורי העבודה שלנו." },
+interface AboutValue {
+  icon: LucideIcon;
+  title: string;
+  desc: string;
+  /** Optional deeper read. Exists for the guarantee card — see below. */
+  more?: { href: string; label: string };
+}
+
+const values: AboutValue[] = [
+  {
+    icon: Target,
+    title: "דיוק לפני הכל",
+    desc: "מאתרים את מקור הבעיה המדויק, לא את הסימפטום — וכך התיקון מתבצע נכון מהפעם הראשונה.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "ללא הרס מיותר",
+    desc: "השיטה התרמוגרפית לא פולשנית, וחוסכת לכם הריסות, זמן וכסף.",
+  },
+  {
+    icon: Wallet,
+    title: "שקיפות מחירים",
+    desc: "המחיר נמסר מראש, בצורה ברורה, בלי הפתעות בסוף הביקור.",
+  },
+  {
+    icon: Sparkles,
+    title: "אחריות מלאה",
+    desc: site.guarantee + " — אנחנו עומדים מאחורי העבודה שלנו.",
+    // A card that asserts "אחריות מלאה" and shows no terms is the weaker version of this claim.
+    // The terms are published, owner-confirmed and bounded — linking them is what makes the
+    // promise credible rather than just loud (EEAT-4).
+    more: { href: "/pricing/#guarantee", label: "התנאים המלאים של האחריות" },
+  },
 ];
 
 export default function AboutPage() {
@@ -83,7 +124,10 @@ export default function AboutPage() {
       <section className="py-16 md:py-20">
         <Container className="max-w-3xl">
           {story.map((paragraph) => (
-            <p key={paragraph.slice(0, 24)} className="mb-4 text-lg leading-relaxed text-ink/80">
+            <p
+              key={paragraph.slice(0, 24)}
+              className="mb-4 text-lg leading-relaxed text-ink/80"
+            >
               {paragraph}
             </p>
           ))}
@@ -98,12 +142,22 @@ export default function AboutPage() {
           either. A photo and permission to publish it are still 🔶. */}
       <section className="py-12">
         <Container className="max-w-3xl">
-          <div id="founder" className="rounded-2xl border border-ink/10 bg-white p-6">
-            <p className="text-sm font-bold tracking-wide text-accent-strong">מי עומד מאחורי טרמוליק</p>
+          {/* scroll-mt-20 clears the h-16 sticky header. This diff created the FIRST in-site link
+              to this anchor (the guide bylines), and without the offset the arriving reader lands
+              with the "מי עומד מאחורי טרמוליק" label — the thing they clicked for — behind the
+              navbar. Same reason #guarantee and #contact carry it. */}
+          <div
+            id="founder"
+            className="scroll-mt-20 rounded-2xl border border-ink/10 bg-white p-6"
+          >
+            <p className="text-sm font-bold tracking-wide text-accent-strong">
+              מי עומד מאחורי טרמוליק
+            </p>
             <p className="mt-2 leading-relaxed text-ink/80">
               טרמוליק נוסדה ב-{site.founded} ומובלת על ידי{" "}
-              <span className="font-bold text-brand">{site.founder}</span>. כל בדיקה מבוצעת באותה
-              שיטה שמתוארת כאן — סריקה, אימות, ואז מסקנה — ולא בסדר ההפוך.
+              <span className="font-bold text-brand">{site.founder}</span>. כל
+              בדיקה מבוצעת באותה שיטה שמתוארת כאן — סריקה, אימות, ואז מסקנה —
+              ולא בסדר ההפוך.
             </p>
           </div>
         </Container>
@@ -111,7 +165,9 @@ export default function AboutPage() {
 
       <section className="py-16 md:py-20">
         <Container className="max-w-3xl">
-          <h2 className="text-2xl font-extrabold text-brand sm:text-3xl">איך אנחנו עובדים</h2>
+          <h2 className="text-2xl font-extrabold text-brand sm:text-3xl">
+            איך אנחנו עובדים
+          </h2>
           <div className="mt-8 space-y-8">
             {approach.map((item) => (
               <div key={item.title}>
@@ -132,12 +188,29 @@ export default function AboutPage() {
             {values.map((value) => {
               const Icon = value.icon;
               return (
-                <div key={value.title} className="rounded-2xl border border-ink/10 bg-white p-6 shadow-sm">
+                <div
+                  key={value.title}
+                  className="rounded-2xl border border-ink/10 bg-white p-6 shadow-sm"
+                >
                   <span className="inline-flex size-12 items-center justify-center rounded-xl bg-accent/15 text-accent-strong">
                     <Icon className="size-6" aria-hidden="true" />
                   </span>
-                  <h3 className="mt-4 text-lg font-bold text-brand">{value.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-ink/70">{value.desc}</p>
+                  <h3 className="mt-4 text-lg font-bold text-brand">
+                    {value.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-ink/70">
+                    {value.desc}
+                  </p>
+                  {value.more ? (
+                    <p className="mt-2 text-sm">
+                      <Link
+                        href={value.more.href}
+                        className="font-semibold text-brand underline underline-offset-2"
+                      >
+                        {value.more.label}
+                      </Link>
+                    </p>
+                  ) : null}
                 </div>
               );
             })}
@@ -150,7 +223,10 @@ export default function AboutPage() {
             <ul className="mt-4 grid gap-3 sm:grid-cols-2">
               {site.credentials.map((item) => (
                 <li key={item} className="flex items-start gap-2 text-ink/80">
-                  <BadgeCheck className="mt-0.5 size-5 shrink-0 text-brand" aria-hidden="true" />
+                  <BadgeCheck
+                    className="mt-0.5 size-5 shrink-0 text-brand"
+                    aria-hidden="true"
+                  />
                   {item}
                 </li>
               ))}

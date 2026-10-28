@@ -1,39 +1,68 @@
 "use client";
 
-import { useEffect, useRef, useSyncExternalStore, type MouseEvent } from "react";
+import {
+  useEffect,
+  useRef,
+  useSyncExternalStore,
+  type MouseEvent,
+} from "react";
 import Link from "next/link";
 import { CheckCircle2, Phone, TriangleAlert } from "lucide-react";
 import { site, telHref, whatsappHref } from "@/lib/site";
-import { LEAD_HANDOFF_KEY } from "./ContactForm";
+import { pushEvent } from "@/lib/analytics";
+import { LEAD_HANDOFF_KEY, THANK_YOU_COUNTED_KEY } from "./ContactForm";
 import Container from "./Container";
 import WhatsappIcon from "./WhatsappIcon";
 
 interface LeadHandoff {
   message: string;
   opened: boolean;
+  /**
+   * The service the visitor picked — the <select>'s fixed enum, and the only form field that may
+   * reach analytics (CLAUDE.md §12). OPTIONAL on purpose: a payload written before this field
+   * existed can still be sitting in sessionStorage when a visitor who submitted the form just
+   * before a deploy lands here, and that must not throw away their handoff.
+   */
+  service?: string;
 }
 
 function isLeadHandoff(value: unknown): value is LeadHandoff {
   if (typeof value !== "object" || value === null) return false;
   const record = value as Record<string, unknown>;
-  return typeof record.message === "string" && typeof record.opened === "boolean";
+  if (typeof record.message !== "string" || typeof record.opened !== "boolean")
+    return false;
+  return record.service === undefined || typeof record.service === "string";
 }
 
-// The handoff never changes during a visit, so it is read once and cached — a stable snapshot
-// is also what useSyncExternalStore requires (a fresh object per call would loop).
-let cachedHandoff: LeadHandoff | null | undefined;
+// useSyncExternalStore needs a STABLE snapshot — returning a fresh object per call loops forever —
+// so the parsed handoff is cached. The cache is keyed on the raw stored string, NOT on "have I read
+// once": this module stays loaded across client-side navigation, so a visitor who submits the form a
+// SECOND time in the same tab would otherwise get the FIRST lead's payload back. That mixed up three
+// things at once — the re-open button opened the previous enquiry's message, `blocked` showed the
+// previous attempt's outcome, and `thank_you_view` reported the previous lead's service. Comparing
+// the raw string keeps the snapshot stable while the payload is unchanged and invalidates the moment
+// it is not.
+let cachedRaw: string | null | undefined;
+let cachedHandoff: LeadHandoff | null = null;
 
 function readHandoff(): LeadHandoff | null {
-  if (cachedHandoff === undefined) {
+  let raw: string | null;
+  try {
+    raw = sessionStorage.getItem(LEAD_HANDOFF_KEY);
+  } catch {
+    // Storage unavailable (private mode) — the generic WhatsApp link below is the fallback.
+    return cachedHandoff;
+  }
+  if (raw !== cachedRaw) {
+    cachedRaw = raw;
     cachedHandoff = null;
-    try {
-      const raw = sessionStorage.getItem(LEAD_HANDOFF_KEY);
-      if (raw) {
+    if (raw) {
+      try {
         const parsed: unknown = JSON.parse(raw);
         if (isLeadHandoff(parsed)) cachedHandoff = parsed;
+      } catch {
+        // Malformed payload — treat it as no handoff rather than throwing during render.
       }
-    } catch {
-      // Storage unavailable — fall back to the generic WhatsApp link below.
     }
   }
   return cachedHandoff;
@@ -50,6 +79,38 @@ export default function ThankYouContent() {
   useEffect(() => {
     // Move focus to the heading so the outcome is announced after the form navigation.
     headingRef.current?.focus();
+  }, []);
+
+  // thank_you_view is pushed from here rather than configured in the container: /thank-you/ is
+  // reached ONLY by router.push from the form handler, so an All Pages trigger never fires for it
+  // (docs/data-tracking-infrastructure.md §6).
+  //
+  // Three separate things conspire to double-count this event, and all three are handled:
+  //   1. useSyncExternalStore renders once with the server snapshot during hydration and again with
+  //      the client one — so this reads readHandoff() directly rather than depending on `handoff`.
+  //   2. React's development double-invoke runs the effect twice on one mount — the ref covers it.
+  //   3. A REMOUNT gets a fresh ref: reloading /thank-you/, or returning to it with the back button
+  //      after tapping "חזרה לדף הבית", would count the same lead again. Only sessionStorage
+  //      survives that, so the count is marked there and ContactForm clears the mark on each new
+  //      submit.
+  // The result is one event per LEAD, not per mount. If sessionStorage is unavailable (private
+  // mode) this degrades to once per mount — the right way round to fail for a conversion signal,
+  // since an inflated one would have Ads bidding on a phantom.
+  const viewPushed = useRef(false);
+  useEffect(() => {
+    if (viewPushed.current) return;
+    viewPushed.current = true;
+    try {
+      if (sessionStorage.getItem(THANK_YOU_COUNTED_KEY)) return;
+      sessionStorage.setItem(THANK_YOU_COUNTED_KEY, "1");
+    } catch {
+      // Storage unavailable — fall through and count this mount.
+    }
+    const stored = readHandoff();
+    pushEvent(
+      "thank_you_view",
+      stored?.service ? { service: stored.service } : {},
+    );
   }, []);
 
   // The rendered href stays GENERIC on purpose. The prefilled message carries the visitor's name
@@ -75,21 +136,31 @@ export default function ThankYouContent() {
     <section className="py-16 md:py-24">
       <Container className="max-w-2xl">
         <div className="rounded-2xl border border-ink/10 bg-white p-8 text-center shadow-sm">
-          <CheckCircle2 className="mx-auto size-12 text-[#0e7468]" aria-hidden="true" />
-          <h1 ref={headingRef} tabIndex={-1} className="mt-4 text-2xl font-extrabold text-brand sm:text-3xl">
+          <CheckCircle2
+            className="mx-auto size-12 text-[#0e7468]"
+            aria-hidden="true"
+          />
+          <h1
+            ref={headingRef}
+            tabIndex={-1}
+            className="mt-4 text-2xl font-extrabold text-brand sm:text-3xl"
+          >
             הפנייה שלכם מוכנה לשליחה
           </h1>
           <p className="mt-3 leading-relaxed text-ink/70">
-            ההודעה עם הפרטים שמילאתם נפתחה בוואטסאפ — נשאר רק ללחוץ ״שליחה״ שם, ונחזור אליכם
-            בשעות הפעילות.
+            ההודעה עם הפרטים שמילאתם נפתחה בוואטסאפ — נשאר רק ללחוץ ״שליחה״ שם,
+            ונחזור אליכם בשעות הפעילות.
           </p>
 
           {blocked ? (
             <div className="mt-5 rounded-xl border border-accent-strong/30 bg-accent/10 p-4 text-start">
               <p className="flex items-start gap-2 text-sm font-semibold text-ink">
-                <TriangleAlert className="mt-0.5 size-5 shrink-0 text-accent-strong" aria-hidden="true" />
-                נראה שהדפדפן חסם את פתיחת וואטסאפ. לא נורא — ההודעה שלכם שמורה, ואפשר לפתוח אותה
-                ידנית בכפתור למטה.
+                <TriangleAlert
+                  className="mt-0.5 size-5 shrink-0 text-accent-strong"
+                  aria-hidden="true"
+                />
+                נראה שהדפדפן חסם את פתיחת וואטסאפ. לא נורא — ההודעה שלכם שמורה,
+                ואפשר לפתוח אותה ידנית בכפתור למטה.
               </p>
             </div>
           ) : null}
@@ -117,8 +188,14 @@ export default function ThankYouContent() {
           </div>
 
           <ul className="mt-8 space-y-2 text-start text-sm leading-relaxed text-ink/70">
-            <li>• נחזור אליכם לתיאום מועד שנוח לכם, בשעות הפעילות ({site.hours[0].days} {site.hours[0].time}).</li>
-            <li>• כדאי להכין: מיקום הכתם או הבעיה, ומתי היא מופיעה (למשל אחרי מקלחת או גשם).</li>
+            <li>
+              • נחזור אליכם לתיאום מועד שנוח לכם, בשעות הפעילות (
+              {site.hours[0].days} {site.hours[0].time}).
+            </li>
+            <li>
+              • כדאי להכין: מיקום הכתם או הבעיה, ומתי היא מופיעה (למשל אחרי
+              מקלחת או גשם).
+            </li>
             <li>• לנזילה פעילה ודחופה — עדיף להתקשר ישירות.</li>
           </ul>
 

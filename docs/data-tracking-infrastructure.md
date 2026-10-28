@@ -6,20 +6,46 @@ the architecture and the contracts.
 
 ---
 
-## 1. Current state: `page_view` only
+## 1. Current state: `page_view` plus the three events the container cannot see
 
 **GTM-KWGGH438 ships on every page.** `components/Analytics.tsx` is mounted from the root layout,
 so all 23 emitted HTML files carry the container (verified in the fresh export and against the live
 origin), and the container resolves `thermoleak.co.il` → GA4 **G-5YWLZ07PEC** through its hostname
 RegEx table. Installed in `f06aab8`, 2026-08-30.
 
-**Exactly one event flows: `page_view`.** The container holds a single tag — the GA4 config tag,
-firing on `gtm.init`. There are no click triggers and no event tags. In the repo there are **zero
-`dataLayer` pushes**: the only `dataLayer` reference across `app/`, `components/` and `lib/` is the
-bootstrap snippet at `components/Analytics.tsx:33`. Therefore **every event in §4's schema fires
-zero times** — the seven conversion events and the generic `cta_click` alike. That includes
-`call_click`, the site's primary conversion goal, and one GA4 cannot recover on its own because
-Enhanced Measurement never tracks `tel:` links.
+**Container-side, exactly one event still flows: `page_view`.** The container holds a single tag —
+the GA4 config tag, firing on `gtm.init`. There are no click triggers and no event tags, and nothing
+in this repo can add one.
+
+**Repo-side, three events now reach the data layer** (shipped 2026-10-28, Sprint 6 task 2).
+`lib/analytics.ts` exports a typed `pushEvent`, and it is called from exactly two components:
+
+| Event                  | Pushed from                                  | Parameters              |
+| ---------------------- | -------------------------------------------- | ----------------------- |
+| `lead_whatsapp_open`   | `components/ContactForm.tsx` submit handler  | `service`, `handoff_ok` |
+| `lead_handoff_blocked` | the same handler, when `window.open` is null | `service`               |
+| `thank_you_view`       | `components/ThankYouContent.tsx` on mount    | `service` (optional)    |
+
+Those three live in code **because no container configuration can produce them**: the handoff's
+outcome exists only inside the submit handler, and `/thank-you/` is reached only by `router.push`
+from that handler, so an All Pages trigger never fires there (§6). The other four — `cta_click`,
+`call_click`, `whatsapp_click`, `pricing_view` — are click and route triggers that belong in the
+container and are deliberately **not** duplicated in code: two sources for one click produce two
+numbers. **They still fire zero times.** That includes `call_click`, the site's primary conversion
+goal, and one GA4 cannot recover on its own because Enhanced Measurement never tracks `tel:` links.
+
+**A push is not a measurement.** Until the container carries a Custom Event trigger and tag for each
+of the three, they sit in `window.dataLayer` and go nowhere — the same shape of gap as the
+`data-cta` attributes in §4, one step further along. The container work is a fleet-ops ask.
+
+**The property-side shortcut, and its catch.** `thank_you_view` and `pricing_view` can be created as
+**GA4-property-side** Key events from `page_path` conditions, with no container edit. **But a
+property-side condition can only match an event GA4 already receives**, and both routes are reached
+by client-side navigation (§6) — so this works only if the GA4 data stream has Enhanced Measurement's
+**"Page changes based on browser history events"** switched on. **Check that switch before relying on
+it.** With it off, the Key event matches only reloads and direct hits — precisely the arrivals that
+are _not_ leads — and would report zero while looking configured. The durable answer for
+`thank_you_view` is a Custom Event trigger on the event name this repo now pushes.
 
 > **Triage rule.** The old answer to "why isn't this conversion firing?" was "nothing is measuring
 > anything." That answer is now wrong and it stops the investigation one step short. Work §9's
@@ -113,19 +139,21 @@ therefore _not_ evidence that clicks are measured — it is evidence that they _
 
 ### Event schema
 
-**Every row below is a specification, not a description. All of them currently fire zero times**
-(§1). Keep that in mind when reading the "Fires when" column.
+**Three of these rows now describe shipped behaviour; the rest are still specification.**
+`lead_whatsapp_open`, `lead_handoff_blocked` and `thank_you_view` are pushed by `lib/analytics.ts`
+(§1) — though a push with no container trigger behind it is still not a measurement. Every other row
+**fires zero times**. Keep that in mind when reading the "Fires when" column.
 
-| Event                  | Fires when                               | Parameters              | Notes                                                                                         |
-| ---------------------- | ---------------------------------------- | ----------------------- | --------------------------------------------------------------------------------------------- |
-| `cta_click`            | Any `[data-cta]` clicked                 | `cta_id`, `page_type`   | Generic click capture                                                                         |
-| `call_click`           | `tel:` link clicked                      | `cta_id`, `page_type`   | **Key event** in GA4. GA4 alone never sees `tel:` clicks — this needs a container trigger     |
-| `whatsapp_click`       | `wa.me` link clicked                     | `cta_id`, `page_type`   | **Key event.** Must not read Click URL on `/thank-you/` — see the PII boundary below          |
-| `lead_whatsapp_open`   | Form submitted **and** handoff attempted | `service`, `handoff_ok` | Container-side impossible: the outcome exists only in `ContactForm`. Needs a `dataLayer` push |
-| `lead_handoff_blocked` | `window.open` returned `null`            | `service`               | Same — a push, not a trigger. Popup blocked is a real, measurable loss                        |
-| `thank_you_view`       | `/thank-you/` reached                    | `service`               | Cleanest Ads conversion target. **Reached only by client-side navigation — see §6**           |
-| `faq_open`             | A `<details>` opened                     | `question_id`           | Reveals real objections. Costs a fourth client component if pushed in code — weigh it         |
-| `pricing_view`         | `/pricing/` reached                      | `referrer_page`         | Buying-intent signal. Also mostly client-side navigation (§6)                                 |
+| Event                  | Fires when                               | Parameters              | Notes                                                                                                                            |
+| ---------------------- | ---------------------------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `cta_click`            | Any `[data-cta]` clicked                 | `cta_id`, `page_type`   | Generic click capture                                                                                                            |
+| `call_click`           | `tel:` link clicked                      | `cta_id`, `page_type`   | **Key event** in GA4. GA4 alone never sees `tel:` clicks — this needs a container trigger                                        |
+| `whatsapp_click`       | `wa.me` link clicked                     | `cta_id`, `page_type`   | **Key event.** Must not read Click URL on `/thank-you/` — see the PII boundary below                                             |
+| `lead_whatsapp_open`   | Form submitted **and** handoff attempted | `service`, `handoff_ok` | ✅ **Pushed** (`ContactForm`). The lead event — and the only one of the three to mark a Key event                                |
+| `lead_handoff_blocked` | `window.open` returned `null`            | `service`               | ✅ **Pushed**. Diagnostic ONLY: it fires _alongside_ the row above, so marking both double-counts every blocked lead             |
+| `thank_you_view`       | `/thank-you/` reached                    | `service`               | ✅ **Pushed** (`ThankYouContent`, on mount). Cleanest Ads conversion target. **Reached only by client-side navigation — see §6** |
+| `faq_open`             | A `<details>` opened                     | `question_id`           | Reveals real objections. Costs a fourth client component if pushed in code — weigh it                                            |
+| `pricing_view`         | `/pricing/` reached                      | `referrer_page`         | Buying-intent signal. Also mostly client-side navigation (§6)                                                                    |
 
 Note the `area` parameter has been dropped from `lead_whatsapp_open`: the field is free text, and
 the PII boundary below forbids forwarding it.
@@ -159,20 +187,29 @@ whole URL — query string included — as `link_url`. So an href is not a safe 
 personal data in one is the same violation as pushing it, with the added problem that it happens
 without anyone writing a push.
 
-**The live case, still open (`SEC-3` / `AN-2` — code fix required, not made in this pass):**
-`components/ThankYouContent.tsx:57` builds `whatsappHref(handoff?.message)` and renders it at :84-93
-as `<a href={waHref} … data-cta="thankyou-whatsapp">`. After a real submit that href is
+**The live case — `SEC-3` / `AN-2`, FIXED 2026-09-17 in `components/ThankYouContent.tsx`.** Keep
+reading anyway: this is the worked example, and the shape of the bug is easy to reintroduce.
+
+The thank-you page used to build `whatsappHref(handoff?.message)` and render it as
+`<a href={waHref} … data-cta="thankyou-whatsapp">`. After a real submit that href was
 `https://wa.me/…?text=` + the URL-encoded lead — **full name, phone number, area and free text** —
 sitting in the DOM of a page the container runs on, on an element tagged as a deliberate trigger
-target. The static HTML is clean (the fallback href is a generic prefill), so this only appears in a
-real post-submit session, which is exactly why it survived review.
+target. The static HTML was clean (the fallback href is a generic prefill), so it appeared only in a
+real post-submit session. That is why it survived review, and why **reading the markup is not a
+sufficient check — the request on the wire is.**
 
-It also contradicts what the form promises the visitor at `components/ContactForm.tsx:221`
-("הם אינם נשמרים אצלנו").
+It also contradicted what the form promises the visitor ("הם אינם נשמרים אצלנו").
 
-**The rule for anyone wiring `whatsapp_click`:** do not read Click URL. Read `data-cta`. And when
-the code fix lands, the re-open control on `/thank-you/` should carry a PII-free href (or be a
-`<button>`), passing the composed message to `window.open` at click time instead.
+**The fix, which is the pattern to copy:** the rendered `href` is the generic `whatsappHref()`, and
+the prefilled conversation is opened from an `onClick` handler via `window.open`, so the personal
+URL never enters the DOM. A no-JS visitor gets a blank chat — a working fallback. If the popup is
+blocked the handler navigates the current tab instead: the address bar then carries the message, but
+the href, the only thing a tag manager reads, stays clean.
+
+**The rule for anyone wiring `whatsapp_click`:** do not read Click URL. Read `data-cta`. Any new
+control that needs personal data in a URL builds it at click time — never in an attribute. The same
+rule is why `lead_whatsapp_open` carries only `service`: `area` is free text and homeowners type
+street addresses into it.
 
 ---
 
@@ -236,8 +273,12 @@ Two direct consequences:
 - Drive GA4 `page_view` from a **History Change trigger** (or an explicit `page_view` push on route
   change) **in addition to** the initial container load. Guard against the double-fire on first
   load — History Change must not also fire for the initial page.
-- Build `thank_you_view` on a **History Change matching `/thank-you/`**, never on an All Pages
-  trigger. Same for `pricing_view` on `/pricing/`.
+- `thank_you_view` **no longer needs a trigger at all** — `components/ThankYouContent.tsx` pushes
+  it on mount (§1), which is strictly more reliable than matching a URL and survives any container
+  edit. Wire a Custom Event trigger on the event name. Do **not** also build a History Change
+  trigger for `/thank-you/`: that would count every arrival twice.
+- `pricing_view` still needs a **History Change matching `/pricing/`**, never an All Pages trigger —
+  or, cheaper and with no container edit, a GA4-property-side Key event on a `page_path` condition.
 - Anything that depends on knowing _why_ a route changed — the handoff outcome, for instance —
   cannot be recovered from a history event at all. That belongs in a `dataLayer` push from the code
   that observed it (§4).
@@ -342,10 +383,12 @@ Mitigations, cheapest first:
 
 **Before promoting the CSP from report-only to enforcing** (see
 [ux-cro-security.md](ux-cro-security.md) §5): check the violation reports for
-`google-analytics.com` specifically — `connect-src` currently lists
+`google-analytics.com` specifically — **fixed 2026-10-28**: `connect-src` listed only
 `https://www.google-analytics.com` and `https://*.analytics.google.com`, and a CSP host wildcard
-requires at least one label, so it covers neither the `analytics.google.com` apex nor GA4's regional
-`region1.google-analytics.com` collect endpoint. Then confirm a GA4 Realtime hit from a browser
+requires at least one label, so it covered neither the `analytics.google.com` apex nor GA4's
+regional `regionN.google-analytics.com` collect hosts. `https://*.google-analytics.com` now
+covers the regional hosts. The `analytics.google.com` apex is still uncovered — it is a
+reporting host, not a collect host, so nothing requests it from the page. Then confirm a GA4 Realtime hit from a browser
 **after** the switch, not only before it. The policy has no `report-uri` and no `report-to`, so
 today "check the reports" means a DevTools console on a preview deploy, not a collector.
 
@@ -357,12 +400,19 @@ today "check the reports" means a DevTools console on a preview deploy, not a co
 - [x] GA4 property exists for this domain — resolved inside the container by hostname.
 - [x] `gtm.js` verified 200.
 - [x] Every CTA carries `data-cta`; no orphan CTAs — 19 values, §4.
-- [ ] **At least one event beyond `page_view` reaches GA4.** Nothing does today (§1).
-- [ ] `page_view` and `thank_you_view` driven by History Change, verified across a real
-      client-side navigation (§6).
-- [ ] Event names describe what was **observed** — no `lead_submit` on an unconfirmed handoff.
-- [ ] Zero PII in the data layer **and in every tagged `href`**, verified on the wire (§4).
+- [x] **At least one event beyond `page_view` is pushed from code** — three are: `lead_whatsapp_open`,
+      `lead_handoff_blocked`, `thank_you_view` (§1, `lib/analytics.ts`).
+- [ ] **At least one of them reaches GA4.** A push with no container trigger behind it is not a
+      measurement, and the container still holds only the config tag (§1).
+- [ ] `page_view` driven by History Change in addition to the container load, verified across a real
+      client-side navigation (§6). `thank_you_view` no longer depends on this.
+- [x] Event names describe what was **observed** — `lead_whatsapp_open`, never `lead_submit`, on a
+      handoff the site cannot confirm was sent.
+- [x] Zero PII in the data layer **and in every tagged `href`** — `service` is the only form field
+      forwarded, and the thank-you href is generic (SEC-3 fixed 2026-09-17). ⏳ Still to be
+      confirmed **on the wire** from a real phone submit; it has never actually been run.
 - [x] CSP updated in the same commit as the tag install (`f06aab8`).
-- [ ] `connect-src` covers GA4's apex and regional collect endpoints before enforcing (§9).
+- [x] `connect-src` covers GA4's regional collect hosts before enforcing — `*.google-analytics.com`
+      added 2026-10-28 (§9). The `analytics.google.com` apex is deliberately still absent.
 - [ ] `/privacy/` states the analytics that actually ship (§8).
 - [ ] Search Console verified; sitemap submitted; Key events marked.

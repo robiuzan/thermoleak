@@ -1,6 +1,11 @@
 // Service pillars data. Rendered across the homepage, /services and /services/[slug].
 import type { LucideIcon } from "lucide-react";
 import { Droplets, ThermometerSun, Zap, FileCheck2 } from "lucide-react";
+// The ONE import of site into this file, and it buys a single thing: site.priceFrom. The price is
+// owner-confirmed but marked 🔶 for the scope around it, so it WILL be edited — and two of these
+// priceModel strings feed the visible sidebar while the answer blocks feed FAQPage JSON-LD. A stale
+// copy is not a typo, it is a price mismatch between the page and its structured data (TS-1).
+import { site } from "./site";
 
 export interface ServiceStep {
   title: string;
@@ -186,8 +191,7 @@ export const services: Service[] = [
         },
       ],
     },
-    priceModel:
-      "ביקור איתור החל מ-₪350. העלות הסופית נקבעת לפי גודל הנכס והיקף הבדיקה, ותימסר לכם מראש בשקיפות מלאה.",
+    priceModel: `ביקור איתור החל מ-₪${site.priceFrom}. העלות הסופית נקבעת לפי גודל הנכס והיקף הבדיקה, ותימסר לכם מראש בשקיפות מלאה.`,
     faqs: [
       {
         q: "כמה זמן לוקחת הבדיקה?",
@@ -277,8 +281,7 @@ export const services: Service[] = [
         },
       ],
     },
-    priceModel:
-      "בדיקת רטיבות ובידוד החל מ-₪350. המחיר נקבע לפי היקף השטח לבדיקה ומועבר אליכם מראש.",
+    priceModel: `בדיקת רטיבות ובידוד החל מ-₪${site.priceFrom}. המחיר נקבע לפי היקף השטח לבדיקה ומועבר אליכם מראש.`,
     faqs: [
       {
         q: "אפשר לאתר את מקור הרטיבות בלי לפרק את הקיר?",

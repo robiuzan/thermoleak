@@ -13,7 +13,9 @@
 //   • There is NO accessibility coordinator. /accessibility/ no longer asserts one.
 // Do not reintroduce any of the three. A removed false claim is not a gap to be refilled.
 //
-// STILL unverified: what the ₪350 visit includes/excludes, and the insurance-report turnaround.
+// STILL unverified: accepted payment METHODS, and the insurer's name and coverage amount. What the
+// ₪350 visit includes/excludes and the 3-day report turnaround were CONFIRMED 2026-09-17 and are
+// published (visitScope on /pricing/, the turnaround in the homepage FAQ) — do not re-gate them.
 // Never present an unconfirmed value as fact — mark it `// 🔶 confirm` and add a row to
 // docs/business-facts.md.
 
@@ -229,7 +231,14 @@ export function pageOpenGraph({
   description: string;
 }) {
   const url = canonicalUrl(path);
-  const images = [{ url: "/og.png", width: 1200, height: 630, alt: `${site.nameHe} — ${title}` }];
+  const images = [
+    {
+      url: "/og.png",
+      width: 1200,
+      height: 630,
+      alt: `${site.nameHe} — ${title}`,
+    },
+  ];
   return {
     openGraph: {
       type: "website" as const,

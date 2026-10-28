@@ -19,7 +19,9 @@ export function generateStaticParams(): { city: string }[] {
   return locationSlugs.map((city) => ({ city }));
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const { city } = await params;
   const location = getLocation(city);
   if (!location) return {};
@@ -32,7 +34,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     ...pageOpenGraph({
       path: `/locations/${city}`,
       title: `איתור נזילות ${location.prefixed} | ${site.nameHe}`,
-      description: location.answer,
+      description: location.answer.a,
     }),
   };
 }
@@ -49,7 +51,11 @@ export default async function LocationPage({ params }: PageProps) {
   return (
     <>
       <JsonLd data={locationServiceJsonLd(location)} />
-      {location.faqs.length > 0 ? <JsonLd data={faqPageJsonLd(location.faqs)} /> : null}
+      {/* The visible answer block leads the FAQ graph, exactly as the service pages do: it is
+          genuine on-page Q&A, and a location page's answer block is its most quotable paragraph.
+          Until now it was the one answer block on the site that never reached FAQPage (AEO-5).
+          No length guard needed — faqPageJsonLd returns null for an empty list. */}
+      <JsonLd data={faqPageJsonLd([location.answer, ...location.faqs])} />
 
       <PageHero
         title={`איתור נזילות ${location.prefixed}`}
@@ -66,13 +72,18 @@ export default async function LocationPage({ params }: PageProps) {
           {/* AEO answer block first in the DOM — docs/content-standards.md §5. */}
           <div className="rounded-2xl border-s-4 border-brand bg-paper p-6">
             <h2 className="text-xl font-bold text-brand">
-              מבצעים איתור נזילות {location.prefixed}?
+              {location.answer.q}
             </h2>
-            <p className="mt-3 leading-relaxed text-ink/80">{location.answer}</p>
+            <p className="mt-3 leading-relaxed text-ink/80">
+              {location.answer.a}
+            </p>
           </div>
 
           {location.intro.map((paragraph) => (
-            <p key={paragraph.slice(0, 24)} className="mt-6 leading-relaxed text-ink/80">
+            <p
+              key={paragraph.slice(0, 24)}
+              className="mt-6 leading-relaxed text-ink/80"
+            >
               {paragraph}
             </p>
           ))}
@@ -89,7 +100,10 @@ export default async function LocationPage({ params }: PageProps) {
                 key={claim.text.slice(0, 32)}
                 className="flex items-start gap-2 leading-relaxed text-ink/80"
               >
-                <span aria-hidden="true" className="mt-2.5 size-1.5 shrink-0 rounded-full bg-accent-strong" />
+                <span
+                  aria-hidden="true"
+                  className="mt-2.5 size-1.5 shrink-0 rounded-full bg-accent-strong"
+                />
                 {claim.text}
               </li>
             ))}
@@ -97,10 +111,14 @@ export default async function LocationPage({ params }: PageProps) {
 
           <div className="mt-8 rounded-xl border border-ink/10 bg-white p-5">
             <h2 className="font-bold text-brand">זמינות והגעה</h2>
-            <p className="mt-2 text-sm leading-relaxed text-ink/75">{location.travel}</p>
+            <p className="mt-2 text-sm leading-relaxed text-ink/75">
+              {location.travel}
+            </p>
           </div>
 
-          <h2 className="mt-10 text-xl font-bold text-brand">השירותים שאנחנו נותנים {location.prefixed}</h2>
+          <h2 className="mt-10 text-xl font-bold text-brand">
+            השירותים שאנחנו נותנים {location.prefixed}
+          </h2>
           <ul className="mt-4 grid gap-3 sm:grid-cols-2">
             {services.map((service) => (
               <li key={service.slug}>
@@ -108,7 +126,9 @@ export default async function LocationPage({ params }: PageProps) {
                   href={`/services/${service.slug}/`}
                   className="group flex h-full items-center gap-3 rounded-xl border border-ink/10 bg-white p-4 transition hover:border-brand/30"
                 >
-                  <span className="flex-1 font-semibold text-brand">{service.title}</span>
+                  <span className="flex-1 font-semibold text-brand">
+                    {service.title}
+                  </span>
                   <ArrowLeft
                     className="size-4 shrink-0 text-accent-strong transition-transform group-hover:-translate-x-1"
                     aria-hidden="true"
@@ -128,9 +148,13 @@ export default async function LocationPage({ params }: PageProps) {
                   <details key={faq.q} className="group">
                     <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 text-base font-bold text-brand [&::-webkit-details-marker]:hidden">
                       {faq.q}
-                      <span className="text-accent-strong transition-transform group-open:rotate-45">+</span>
+                      <span className="text-accent-strong transition-transform group-open:rotate-45">
+                        +
+                      </span>
                     </summary>
-                    <p className="px-5 pb-5 text-sm leading-relaxed text-ink/75">{faq.a}</p>
+                    <p className="px-5 pb-5 text-sm leading-relaxed text-ink/75">
+                      {faq.a}
+                    </p>
                   </details>
                 ))}
               </div>
