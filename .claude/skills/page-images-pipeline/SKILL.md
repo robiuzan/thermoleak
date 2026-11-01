@@ -19,13 +19,13 @@ The toolkit lives in Media Studio. This repo contributes the plan (`content/imag
 
 ## The owner's touches — everything else runs unattended
 
-| #   | Touch                                                                        | Where                                                   |
-| --- | ---------------------------------------------------------------------------- | ------------------------------------------------------- |
-| 1   | Approve the plan, the seven note texts and the budget (done 2026-11-01)      | chat                                                    |
+| #   | Touch                                                                         | Where                                                   |
+| --- | ----------------------------------------------------------------------------- | ------------------------------------------------------- |
+| 1   | Approve the plan, the seven note texts and the budget (done 2026-11-01)       | chat                                                    |
 | 2   | The consent record for עומר and יואב (signed copies reported done 2026-11-01) | `Media Studio\refs\thermoleak\CONSENT.md`, outside git  |
-| 3   | One "yes" on the prompt digest                                               | `Media Studio\sites\thermoleak\plan-digest.md` → chat   |
-| 4   | One board session (about 70 cards: approve all passing, plus spot checks)    | `http://localhost:4310` beside `npm run dev:images`     |
-| 5   | Confirm the deploy                                                           | `ops/deploy-site.ps1 -Domain thermoleak.co.il -Confirm` |
+| 3   | One "yes" on the prompt digest                                                | `Media Studio\sites\thermoleak\plan-digest.md` → chat   |
+| 4   | One board session (about 70 cards: approve all passing, plus spot checks)     | `http://localhost:4310` beside `npm run dev:images`     |
+| 5   | Confirm the deploy                                                            | `ops/deploy-site.ps1 -Domain thermoleak.co.il -Confirm` |
 
 Expected spend is about US$20–25 against a hard cap of US$45 (`runner.costCapUsd`). Only the owner raises it.
 
@@ -34,8 +34,9 @@ Expected spend is about US$20–25 against a hard cap of US$45 (`runner.costCapU
 - `npm run gate` is green with the manifest as it stands.
 - **The shared toolkit order.** Nobody edits `page-images/lib` while another session has it dirty. On
   2026-11-01 the order is hambabait, then netomazganim, then this site's changes: object references, the
-  legacy import, retire-on-install, `minQuality` and calibration by the site's own rules. `object-mismatch`
-  and the camera reference need those changes, so nothing renders before they land.
+  legacy import, retire-on-install, `minQuality`, calibration by the site's own rules, the allowed FLIR text,
+  rejected frames staying out of `stage`, and `brief --refresh-blocks`. `object-mismatch` and the camera reference
+  need those changes, so nothing renders before they land.
 - Media Studio: `cd page-images && npm install && npm test`. `secrets/.env` holds `GEMINI_API_KEY` and
   `ANTHROPIC_API_KEY`, by name, never printed.
 - `node page-images/cli.mjs doctor --site thermoleak` is all green.
@@ -51,7 +52,9 @@ across 27 routes. Every frame with a person sets `badge: true`, and every frame 
 crew, he, him, his, hand or hands.
 
 A slot with a `service` has the camera. A frame without the camera has `service: null`, so it gets
-`TRADE:generic` and the prompt never describes a device the frame must not hold.
+`TRADE:generic` and the TRADE block never names a device the frame must not hold. `objectFallback: false` keeps the
+camera-fallback block off a frame whose camera is dark or set down, and `twin: false` on the hero stops a people-free
+twin after a refusal: the old hero stays live instead.
 
 ## 2. Prompts and the digest
 
@@ -75,8 +78,10 @@ Nobody edits `approved:` by hand, and a new scene is a new batch.
 
 ## 4. Calibrate, pilot, batches
 
-1. **Calibrate** (about US$3): `qa --site thermoleak --calibrate --cap 5` scores the judges on the 45 labelled
-   masters. Go when `wrong-trade`, `text`, `branding`, `extra-person` and `face-mismatch` reach ≥ 90 % recall.
+1. **Calibrate** (about US$1): `qa --site thermoleak --calibrate --only thermoleak --cap 5` scores the judges on
+   the 45 labelled masters; without `--only` it pools other trades' frames. Go when `wrong-trade`, `text`,
+   `branding` and `extra-person` reach ≥ 90 % recall. No labelled frame has a wrong face, so the pilot measures
+   the face.
    Tune the wording in `judge.json`, never the labels.
 2. **Pilot** (10 frames, about US$7): 3 עומר with the camera, 2 יואב with the camera, the hero, 2 people-free
    with the camera (the case, and a set-down camera with its screen), 1 people-free without it, 1 `done` frame
@@ -84,24 +89,27 @@ Nobody edits `approved:` by hand, and a new scene is a new batch.
    - **Go:** ≥ 7/10 pass within two attempts, the face matches on ≥ 80 % of person frames, `object-mismatch` on
      ≤ 2 first attempts, the FLIR mark legible and unbroken on ≥ 2 of 3 camera close-ups, `badge-mismatch` on
      ≤ 1 of 3, zero stray text, ≤ 1 refusal.
-   - **No-go:** rewrite `OBJECTS:camera`, promote the fallback framing, or take it to the owner. Dropping the
-     FLIR mark is the owner's decision.
-3. **Batches:** services and gallery (18) → home, about, contact, pricing, the locations strip (11) → cities
+   - **No-go:** rewrite `OBJECTS:camera`, promote the fallback framing, or take it to the owner. A prompt keeps
+     its fixed blocks once briefed, so re-issue them with `brief --refresh-blocks`. Dropping the FLIR mark is the
+     owner's decision.
+3. **Batches:** services and gallery (18) → home, about, contact, pricing, the locations strip (10) → cities
    (24) → guides (3). `import` runs beside the first batch and spends nothing with Gemini.
 
 ```powershell
-node page-images/cli.mjs generate --site thermoleak --only services-,gallery- --dry-run
-node page-images/cli.mjs generate --site thermoleak --only services-,gallery-
+node page-images/cli.mjs generate --site thermoleak --only "services-*,gallery-*" --dry-run
+node page-images/cli.mjs generate --site thermoleak --only "services-*,gallery-*"
 node page-images/cli.mjs qa       --site thermoleak
 node page-images/cli.mjs alt      --site thermoleak
 node page-images/cli.mjs finish   --site thermoleak
 node page-images/cli.mjs stage    --site thermoleak --dry-run
 node page-images/cli.mjs stage    --site thermoleak
 node page-images/cli.mjs import   --site thermoleak --dry-run
+node page-images/cli.mjs import   --site thermoleak --retire
 ```
 
 - `qa` is deterministic checks plus two vision judges. `strict` is false here, so `agreement` codes need both
-  judges or high confidence. It regenerates up to `runner.maxAttempts` with the judges' positive fixes.
+  judges or high confidence. It amends the prompt with the judges' positive fixes, so re-run `generate` and `qa` until nothing is queued,
+  up to `runner.maxAttempts`.
 - `finish` resizes to the slot's box, composites the logo bottom-right on navy or white by the corner's
   brightness, and writes WebP at q85, stepping to q80. It never goes below `minQuality` 80: a frame that does
   not fit moves down a size class.
@@ -113,8 +121,7 @@ Before the owner's session, run the `image-qa-reviewer` agent over the candidate
 ## 5. Review on the real pages
 
 ```powershell
-npm run dev:images                                  # next dev with IMAGES_DRAFT=1, in this repo
-node page-images/cli.mjs review --site thermoleak   # the board at http://localhost:4310
+node page-images/cli.mjs review --site thermoleak   # the board at http://localhost:4310; it starts dev:images itself
 ```
 
 Candidates render in place with the «טיוטה — ממתין לאישור» badge, and each card links to
@@ -146,7 +153,7 @@ When every content route has its two images:
 ## 7. Deploy — ask first
 
 Skill `deploy-thermoleak`: `-DryRun`, show the delta and the drift check, wait for the owner, `-Confirm`. Then
-its post-deploy image checks, then `node page-images/cli.mjs mirror --site thermoleak`.
+its post-deploy image checks, then `node page-images/cli.mjs mirror --site thermoleak --to <the owner's folder>`.
 
 ## Cost table
 
@@ -167,8 +174,10 @@ its post-deploy image checks, then `node page-images/cli.mjs mirror --site therm
   old entry. The file stays at least 60 days, and removing it is a separate owner decision.
 - A rollback never deletes an image: `wrangler pages deploy .\out.prev` (copy the newest `_next/static` in
   first, CLAUDE.md §10) or `git revert` of the manifest commit.
-- **Revoked consent:** a people-free twin at the same dimensions for every frame the person is in, installed at
-  new file names, old entries retired, the references deleted the same day, live removal within 14 days.
+- **Revoked consent overrides the 60-day keep:** a people-free twin at the same dimensions for every frame the
+  person is in, installed at new file names; old entries retired with a `consentRevoked` date, which an operator
+  sets; the old files gone from `public/images/` within 14 days, which the gate enforces; the references deleted
+  the same day.
 - Real phone photos enter as `owner-supplied` and replace renderings one for one.
 
 ## Troubleshooting

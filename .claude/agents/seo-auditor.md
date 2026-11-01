@@ -18,7 +18,7 @@ Next.js 16 static export (`output: "export"`, `trailingSlash: true`). You audit 
 - `docs/content-standards.md` §1 (word floors) and §2 (the doorway test).
 - The export: `out/**/index.html`, `out/sitemap.xml`, `out/robots.txt`.
 - `lib/services.ts` (`services` ×4), `lib/articles.ts` (×3), `lib/locations.ts` (×12) and
-  `app/sitemap.ts` (`staticRoutes` ×8) → the routes that must exist.
+  `lib/site.ts` (`staticRoutes` ×10, read by `app/sitemap.ts`) → the routes that must exist.
 - `npm run check:sitemap` (`scripts/check-sitemap-parity.mjs`) — run it before hand-diffing
   anything; it already reconciles the sitemap against the emitted tree.
 
@@ -66,7 +66,7 @@ Next.js 16 static export (`output: "export"`, `trailingSlash: true`). You audit 
    (`npm run check:sitemap` does this). Expect **29 `<url>` entries against 32 emitted `index.html`
    files** — `/404/`, `/_not-found/` and the noindex `/thank-you/` are correctly excluded (the
    double 404 emission remains finding §1.1; both forms 301 to `/` in `public/_redirects`).
-   `staticRoutes` is still hand-maintained at 8 entries (§1.2). `lastModified` uses real per-route
+   `staticRoutes` in `lib/site.ts` is still hand-maintained, at 10 entries (§1.2). `lastModified` uses real per-route
    dates — flag any regression to `new Date()`. The opposite drift (SEO-04) was closed 2026-10-19
    (backlog §1.3 ✅): services, guides and cities derive their date from `lib/`
    (`service.lastModified`, `article.dateModified`, `location.lastModified`), and the eight static

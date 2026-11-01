@@ -86,8 +86,9 @@ regression, and you should say so.
 8. **Navigation depth.** Any commercial page ≤ 2 clicks from home. Individual services are currently
    2 hops; a header dropdown would make them 1.
 
-**Images (CLAUDE.md §15).** An image never sits above a CTA or the contact form, and never between the visitor
-and the call button on a phone. Report any that does. A rendering is not a trust signal: it never counts as proof
+**Images (CLAUDE.md §15).** An image never sits above the hero's CTAs on `/`, or above the form and its call buttons
+on `/contact/`. On other pages a figure may come before the first in-flow CTA, because `StickyContact` keeps the call
+in reach on a phone. Report only those two cases. A rendering is not a trust signal: it never counts as proof
 of work, and the words beside it must not turn it into one.
 
 ## The trust gate — apply before every recommendation

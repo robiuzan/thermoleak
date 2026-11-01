@@ -162,7 +162,7 @@ So the fix has two halves and needs both:
 - **In-repo (a code change, not this pass):** a small typed `pushEvent(name, params)` helper that
   guards `window.dataLayer`, called from `ContactForm` (handoff attempted / handoff blocked, with
   `service` only) and from `ThankYouContent` (`thank_you_view`). Anything touching `Faq.tsx` would
-  make it a client component — weigh that against CLAUDE.md §7's three-client-component budget
+  make it a client component — weigh that against CLAUDE.md §7's four-client-component budget
   before doing it, or drop `faq_open`.
 - **Container-side (the owner's call, because the container is shared):** hostname-scoped click
   triggers on `[data-cta]`, reading the attribute into `cta_id` and splitting on Click URL (`tel:` →

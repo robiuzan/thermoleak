@@ -93,7 +93,7 @@ export default function Gallery({
           <p className="mt-8 text-center">
             <Link
               href="/gallery/"
-              className="font-semibold text-brand underline underline-offset-2"
+              className="inline-flex min-h-11 items-center font-semibold text-brand underline underline-offset-2"
             >
               {gallery.allImagesLink}
             </Link>

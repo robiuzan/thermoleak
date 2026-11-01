@@ -13,8 +13,9 @@ export interface LogoProps {
    * starts — a visible delay on the one element that is on-screen first.
    *
    * Deliberately NOT `priority`: that was tried and removed (backlog §10.3) because it injects a
-   * preload <link> that competes with the LCP hero. `eager` is the middle setting — request it
-   * straight away, but do not jump the preload queue.
+   * preload <link> with fetchpriority="high" that competes with the page's first content image.
+   * `eager` is the middle setting: it is requested straight away. React still adds a plain preload
+   * <link> for any non-lazy image, but that one carries no fetchpriority.
    */
   eager?: boolean;
 }
@@ -22,7 +23,12 @@ export interface LogoProps {
 // Brand logo lockup (icon + Hebrew wordmark + tagline) — a 280×70 transparent WebP in /public/images.
 // On dark sections we invert it to white via `brightness-0 invert`; transparency means only the
 // opaque logo pixels flip, so it reads cleanly on the dark-blue footer.
-export default function Logo({ className = "", onDark = false, priority = false, eager = false }: LogoProps) {
+export default function Logo({
+  className = "",
+  onDark = false,
+  priority = false,
+  eager = false,
+}: LogoProps) {
   return (
     <Image
       src="/images/thermoleak_logo.webp"

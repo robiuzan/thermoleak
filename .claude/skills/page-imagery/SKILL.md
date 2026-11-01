@@ -5,7 +5,7 @@ description: Which image belongs in which slot on טרמוליק — the measure
 
 # Page imagery
 
-**What ships.** Every content page carries two or more **AI-made illustrations** of thermal leak detection
+**What ships once the renders install** (the state line in CLAUDE.md §15). Every content page carries two or more **AI-made illustrations** of thermal leak detection
 (the user's decision of 2026-11-01, CLAUDE.md §15): Gemini renders in the look of a technician's phone
 snapshot, made by the Media Studio `page-images` toolkit, approved by the owner on the local site first,
 installed under `public/images/<group>/<slug>.webp`, described in `content/images/manifest.json`, with the
@@ -20,29 +20,29 @@ every width below comes from the code, not from taste.
 
 ## The slot inventory
 
-| Route         | Slot · ratio · class                        | Where it sits                                                     | Widest rendered | Note                                                        |
-| ------------- | ------------------------------------------- | ----------------------------------------------------------------- | --------------- | ----------------------------------------------------------- |
-| `/`           | `main` · 5:4 · tile 960 · priority          | the `Hero` image column, `max-w-md`                               | 448 px          | The LCP image: ≤ 150 KB, no caption                         |
-| `/`           | `detail` · 3:2 · half 1200                  | under the two `MethodExplainer` paragraphs                        | 704 px          | People-free: the camera set down, its screen in view        |
-| `/`           | `supplied` 1–11 · 3:5 720×1200              | the `Gallery` section, five scenes                                | ~330 px         | Scene captions in `lib/gallery.ts`                          |
-| `/services/`  | `pair-1..2` · 4:3 · reuse                   | `FieldStrip cols={2}` under `PageHero`, above the cards           | 536 px          | Two service mains; no render of its own                     |
-| 4 services    | `main` · 4:3 · large 1400 · priority        | under the answer block; the decorative SVG is its fallback        | ~709 px         |                                                             |
-| 4 services    | `detail` · 3:2 · half                       | after the «איך התהליך עובד» steps                                 | ~709 px         |                                                             |
-| 4 services    | `work` · 3:2 · half                         | after the limits box                                              | ~709 px         |                                                             |
-| `/pricing/`   | `survey` · 3:2 · half · priority            | after «מה כולל ביקור»                                             | 832 px          | Reused on `/about/`                                         |
-| `/pricing/`   | `layers` · 3:2 · half                       | after the «ממה מושפע המחיר?» factors                              | 832 px          | Reused on the cost guide                                    |
-| `/guides/`    | thumbnail 480×360, derived from each `lead` | the start of each card                                            | ~144 px         | First card priority                                         |
-| 3 guides      | `lead` · 4:3 · half · priority              | after the answer box, through `ArticleBody`                       | 704 px          |                                                             |
-| 3 guides      | `mid` · reuse                               | a `{ kind: "figure", slot: "mid" }` block in `lib/articles.ts`    | 704 px          |                                                             |
-| `/locations/` | `strip-1..3` · 4:3 · tile                   | `FieldStrip` under the intro                                      | 224 px          | Building types, never a named place                         |
-| 12 cities     | `main` · 4:3 · large · priority             | under the answer block                                            | 704 px          | A person with the camera                                    |
-| 12 cities     | `detail` · 3:2 · half                       | after the «מה מאפיין נכסים…» claims                               | 704 px          | People-free, no camera; never shared by two cities          |
-| `/about/`     | `team` · 3:2 · half · priority              | after the story, with the note under it                           | 704 px          | **No image beside the founder card**                        |
-| `/about/`     | `work` · 3:2 · half                         | after «איך אנחנו עובדים»                                          | 704 px          |                                                             |
-| `/about/`     | `survey` · reuse                            | inside «ציוד וכיסוי»                                              | ~500 px         |                                                             |
-| `/contact/`   | `main` 3:2, `team` reuse, no captions       | **below** the two columns, never above a CTA or the form          | 408 px          |                                                             |
-| `/gallery/`   | `supplied` 1–11, then `generated` 12–21     | scenes first, then a 3-column grid with a caption and a page link | ~347 px         | 18–21 are the four service mains                            |
-| every page    | the footer note `data-images-notice`        | the `Footer` bottom bar                                           | —               | Live once `notice.json` is stamped and an image is approved |
+| Route         | Slot · ratio · class                        | Where it sits                                                     | At ≥ 1024 px | Note                                                        |
+| ------------- | ------------------------------------------- | ----------------------------------------------------------------- | ------------ | ----------------------------------------------------------- |
+| `/`           | `main` · 5:4 · tile 960 · priority          | the `Hero` image column, `max-w-md`                               | 448 px       | The LCP image: ≤ 120 KB, no caption                         |
+| `/`           | `detail` · 3:2 · half 1200                  | under the two `MethodExplainer` paragraphs                        | 704 px       | People-free: the camera set down, its screen in view        |
+| `/`           | `supplied` 1–11 · 3:5 720×1200              | the `Gallery` section, five scenes                                | ~330 px      | Scene captions in `lib/gallery.ts`                          |
+| `/services/`  | `pair-1..2` · 4:3 · reuse                   | `FieldStrip cols={2}` under `PageHero`, above the cards           | 440 px       | Two service mains; no render of its own                     |
+| 4 services    | `main` · 4:3 · large 1400 · priority        | under the answer block; the decorative SVG is its fallback        | ~709 px      |                                                             |
+| 4 services    | `detail` · 3:2 · half                       | after the «איך התהליך עובד» steps                                 | ~709 px      |                                                             |
+| 4 services    | `work` · 3:2 · half                         | after the limits box                                              | ~709 px      |                                                             |
+| `/pricing/`   | `survey` · 3:2 · half · priority            | after «מה כולל ביקור»                                             | 832 px       | Reused on `/about/`                                         |
+| `/pricing/`   | `layers` · 3:2 · half                       | after the «ממה מושפע המחיר?» factors                              | 832 px       | Reused on the cost guide                                    |
+| `/guides/`    | thumbnail 480×360, derived from each `lead` | the start of each card                                            | ~144 px      | First card priority                                         |
+| 3 guides      | `lead` · 4:3 · half · priority              | after the answer box, through `ArticleBody`                       | 704 px       |                                                             |
+| 3 guides      | `mid` · reuse                               | a `{ kind: "figure", slot: "mid" }` block in `lib/articles.ts`    | 704 px       |                                                             |
+| `/locations/` | `strip-1..3` · 4:3 · tile                   | `FieldStrip` under the intro                                      | 224 px       | Building types, never a named place                         |
+| 12 cities     | `main` · 4:3 · large · priority             | under the answer block                                            | 704 px       | A person with the camera                                    |
+| 12 cities     | `detail` · 3:2 · half                       | after the «מה מאפיין נכסים…» claims                               | 704 px       | People-free, no camera; never shared by two cities          |
+| `/about/`     | `team` · 3:2 · half · priority              | after the story, with the note under it                           | 704 px       | **No image beside the founder card**                        |
+| `/about/`     | `work` · 3:2 · half                         | after «איך אנחנו עובדים»                                          | 704 px       |                                                             |
+| `/about/`     | `survey` · reuse                            | inside «ציוד וכיסוי»                                              | 768 px       |                                                             |
+| `/contact/`   | `main` 3:2, `team` reuse, no captions       | **below** the two columns, never above a CTA or the form          | 408 px       |                                                             |
+| `/gallery/`   | `supplied` 1–11, then `generated` 12–21     | scenes first, then a 3-column grid with a caption and a page link | ~347 px      | 18–21 are the four service mains                            |
+| every page    | the footer note `data-images-notice`        | the `Footer` bottom bar                                           | —            | Live once `notice.json` is stamped and an image is approved |
 
 Not slots: `PageHero` (a picture there would move the LCP off the `<h1>`), the aside on a service page, the
 founder card, the share card `/og.png`, the logo.
@@ -67,11 +67,13 @@ Two facts that are easy to get wrong:
 ## Alt text and captions (Hebrew)
 
 The toolkit's `alt` step writes both from the finished pixels. `scripts/images/lib/manifest-rules.mjs` and
-the toolkit enforce them, and the postbuild gate re-checks the built HTML.
+the toolkit refuse the stems below, and the postbuild gate re-checks the built HTML. No stem list catches every
+sentence, so the `image-qa-reviewer` agent and the owner read the rest.
 
 - **Alt: 40–160 characters, one sentence, only what is visible.** Never `תמונה של`, never `הדמיה` or `AI`: the
   note carries that.
-- **Caption: 40–200 characters, optional.** It names the activity or the method: «סריקה תרמית של…», «אימות במד
+- **Caption: 40–200 characters, optional** (the site's own floor is 20, for the short scene captions in
+  `lib/gallery.ts`). It names the activity or the method: «סריקה תרמית של…», «אימות במד
   לחות», «איתור אקוסטי», «סימון המוקד ותיעוד».
 - **A screen is an illustration, never a reading.** Describe colours and positions: «על המסך רקע סגול ופס
   צהוב-כתום». Never "the screen shows the leak", and never a temperature or a number.

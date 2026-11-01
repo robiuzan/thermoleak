@@ -52,7 +52,7 @@ export default function Figure({
       id={`img-${image.id}`}
       data-image-id={image.id}
       data-image-status={image.status}
-      className={`relative ${className}`}
+      className={`relative scroll-mt-20 ${className}`}
     >
       <Image
         src={image.src}

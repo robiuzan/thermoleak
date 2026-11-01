@@ -66,7 +66,7 @@ export default function GuidesPage() {
               <li key={article.slug}>
                 <Link
                   href={`/guides/${article.slug}/`}
-                  className="group flex items-start gap-4 rounded-2xl border border-ink/10 bg-white p-6 transition hover:border-brand/30 hover:shadow-md"
+                  className={`group flex items-start gap-4 rounded-2xl border border-ink/10 bg-white p-6 transition hover:border-brand/30 hover:shadow-md ${lead?.thumb ? "flex-col sm:flex-row" : ""}`}
                 >
                   {lead?.thumb ? (
                     <Image
@@ -76,7 +76,7 @@ export default function GuidesPage() {
                       height={lead.thumb.height}
                       preload={index === firstThumb}
                       fetchPriority={index === firstThumb ? "high" : undefined}
-                      className="h-auto w-28 shrink-0 rounded-lg border border-ink/10 bg-paper sm:w-36"
+                      className="h-auto w-36 shrink-0 rounded-lg border border-ink/10 bg-paper"
                     />
                   ) : null}
                   <span className="flex-1">
@@ -88,7 +88,7 @@ export default function GuidesPage() {
                     </span>
                   </span>
                   <ArrowLeft
-                    className="mt-1 size-5 shrink-0 text-accent-strong transition-all group-hover:-translate-x-1"
+                    className={`mt-1 size-5 shrink-0 text-accent-strong transition-all group-hover:-translate-x-1 ${lead?.thumb ? "self-end sm:self-start" : ""}`}
                     aria-hidden="true"
                   />
                 </Link>

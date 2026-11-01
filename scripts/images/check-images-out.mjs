@@ -59,6 +59,7 @@ import {
 } from "./lib/images.config.mjs";
 import {
   RETIRED_KEEP_DAYS,
+  REVOKED_REMOVE_DAYS,
   isVisible,
   manifestProblems,
   noticeIsLive,
@@ -220,7 +221,13 @@ function walk(dir, acc = []) {
   return acc;
 }
 const candidatesDir = path.join(OUT, "images", "_candidates");
-if (!DRAFT) {
+// The draft state follows the pages, not the environment. A standalone run on a draft export must
+// neither erase the mark that stops it being deployed nor prune the files its pages point at: the
+// candidate check below fails it instead, and the mark stays.
+const pagesUseCandidates = walk(OUT)
+  .filter((f) => f.endsWith(".html"))
+  .some((f) => fs.readFileSync(f, "utf8").includes("/images/_candidates/"));
+if (!DRAFT && !pagesUseCandidates) {
   if (fs.existsSync(candidatesDir)) {
     const n = walk(candidatesDir).length;
     fs.rmSync(candidatesDir, { recursive: true, force: true });
@@ -302,6 +309,15 @@ for (const e of images) {
       const kept =
         fs.existsSync(under(PUBLIC, keptSrc)) &&
         fs.existsSync(under(OUT, keptSrc));
+      // A revoked consent overrides the keep: the person's image leaves the site.
+      if (e.consentRevoked) {
+        const since = Math.floor((now - Date.parse(e.consentRevoked)) / 864e5);
+        if (kept && since > REVOKED_REMOVE_DAYS)
+          fileProblems.push(
+            `${e.id}: consent revoked ${since} days ago — ${keptSrc} must be gone within ${REVOKED_REMOVE_DAYS} days`,
+          );
+        break;
+      }
       if (days < RETIRED_KEEP_DAYS && !kept)
         fileProblems.push(
           `${e.id}: retired ${days} day(s) ago but ${keptSrc} is gone — the file stays ≥ ${RETIRED_KEEP_DAYS} days`,
@@ -345,7 +361,7 @@ const shipped = fs.existsSync(imagesDir)
 check(
   "every file under out/images/ is an approved (or retired) manifest entry, or non-content",
   shipped.filter((s) => !allowed.has(s) && !isNonContent(s)),
-  "a file nothing references is a leak — add it to the manifest through the toolkit, or delete it",
+  "a file nothing references is a leak — add it through the toolkit; a stray file that never deployed may go",
 );
 const totalBytes = shipped.reduce(
   (n, s) => n + fs.statSync(under(OUT, s)).size,
@@ -356,7 +372,7 @@ check(
   totalBytes <= gates.maxTotalBytes
     ? []
     : [`${(totalBytes / 1048576).toFixed(1)} MB`],
-  "retire and remove old files, or re-encode — the export is uploaded whole on every deploy",
+  "re-encode, or ask the owner — a deployed file is never removed without the owner's word",
 );
 
 // ── 5. every page ───────────────────────────────────────────────────────────────────────────
@@ -397,10 +413,26 @@ const problems = {
   notice: [],
 };
 const coverage = [];
-const aboutTeamShown = visible.some((e) =>
-  e.placements.some(
-    (pl) => pl.route === ABOUT_ROUTE && pl.slot === ABOUT_TEAM_SLOT,
-  ),
+// In draft a candidate takes the place of the approved image at the same (route, slot, order), the
+// way lib/images.ts renders it, so that approved image is not missing from the page.
+const shadowed = (e, pl) =>
+  DRAFT &&
+  e.status === "approved" &&
+  visible.some(
+    (c) =>
+      c.status === "candidate" &&
+      c.placements.some(
+        (q) =>
+          q.route === pl.route && q.slot === pl.slot && q.order === pl.order,
+      ),
+  );
+// The note names the people in the picture, so a people-free twin of the team figure carries none.
+const aboutTeamShown = visible.some(
+  (e) =>
+    e.people?.length > 0 &&
+    e.placements.some(
+      (pl) => pl.route === ABOUT_ROUTE && pl.slot === ABOUT_TEAM_SLOT,
+    ),
 );
 
 for (const p of all) {
@@ -598,6 +630,7 @@ for (const p of all) {
       // The guides index shows each guide's lead as its 480-px thumbnail: that IS the placement rendering.
       if (
         pl.route !== p.route ||
+        shadowed(e, pl) ||
         rendered.has(srcOf(e)) ||
         (e.thumb && rendered.has(thumbSrcOf(e)))
       )
@@ -661,7 +694,7 @@ check(
 check(
   "every rendered alt and figcaption passes the text rules",
   problems.text,
-  "Hebrew, 20–200 chars, no claim stems, no finding or reading, no place, no ASCII quote touching Hebrew, a first name on /about/ only",
+  "Hebrew, an alt of 40–160 chars and a caption of 20–200, no claim stems, no finding or reading, no place, no ASCII quote touching Hebrew, a first name on /about/ only",
 );
 check(
   "every element with data-image-id names a visible entry placed on its route",

@@ -63,7 +63,8 @@ fleet ops script resolves when shipping. Read the manifest to learn what the fle
 ## Images
 
 Every content image comes from `content/images/manifest.json` through `lib/images.ts` and renders with
-`components/Figure.tsx`. The toolkit in Media Studio writes the manifest, never a person. CLAUDE.md §15 is the
+`components/Figure.tsx`, apart from the `/guides/` thumbnails. The toolkit in Media Studio writes the manifest; the only
+hand edits are the two fields in golden rule 11. CLAUDE.md §15 is the
 rule, and the `page-imagery` skill is the slot inventory.
 
 ## Routes — 29 indexable, 32 emitted `index.html`
@@ -140,12 +141,13 @@ work in dev and 404 in production. See `/new-city`.
 `components/` has **no subfolders**. Chrome: `Navbar`, `Footer`, `StickyContact`. Primitives:
 `Container`, `CtaButton`, `SectionHeading`, `PageHero`, `Breadcrumbs`, `Logo`, `JsonLd`. Sections:
 `Hero`, `TrustBar`, `MethodExplainer`, `ServicePillars`, `ServiceCard`, `ServiceChooser`, `Process`,
-`Faq`, `ContactCTA`, `GuaranteeTerms`, `ArticleBody`. Form: `ContactForm`, `ThankYouContent`. Icons:
+`Faq`, `ContactCTA`, `GuaranteeTerms`, `ArticleBody`, `Gallery`, `Figure`, `FieldStrip`. Form: `ContactForm`,
+`ThankYouContent`. Consent: `ConsentBanner`. Icons:
 `WhatsappIcon`. Plus `Analytics` (the GTM bootstrap) and `EmailOff` — the Cloudflare workaround, below.
 That is the whole list; `ls components/` is the authority. `Testimonials`, `FacebookIcon` and
 `InstagramIcon` were **deleted 2026-08-17** with the fabricated-reviews purge — don't reintroduce them.
 
-Exactly **three** client components exist: `ContactForm`, `Navbar`, `ThankYouContent`. `Analytics` and
+Exactly **four** client components exist: `ContactForm`, `Navbar`, `ThankYouContent`, `ConsentBanner`. `Analytics` and
 `ServiceChooser` are server components despite the names — check before assuming. The FAQ is
 deliberately built on native
 `<details>/<summary>` so every answer ships in the DOM with zero JS — that is what makes `FAQPage`

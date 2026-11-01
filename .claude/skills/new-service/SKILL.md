@@ -129,7 +129,8 @@ do these; read one before writing, and match it:
    in its first sentence.
 4. Write **3–5 service-specific FAQs**. They render in native `<details>/<summary>` and are emitted as
    `FAQPage`, so the copy and the schema come from one place — keep it that way.
-5. Add a new image to `public/images/services/`. Match the existing style (SVG illustration). It is
+5. Add a new image to `public/images/services/`, and a line for it in `NON_CONTENT_IMAGES` in
+   `scripts/images/lib/images.config.mjs`, or the image gate refuses it. Match the existing style (SVG illustration). It is
    rendered decorative with `alt=""` on purpose — an `alt` repeating the H1 made a screen reader
    announce the heading twice (backlog §11.5) — so the illustration must carry no information the copy
    lacks.

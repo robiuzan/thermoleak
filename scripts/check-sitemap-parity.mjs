@@ -2,7 +2,7 @@
 /**
  * Sitemap parity check — closes docs/optimization-backlog.md §1.2.
  *
- * The failure mode this exists to catch: `staticRoutes` in app/sitemap.ts is hand-maintained, so a
+ * The failure mode this exists to catch: `staticRoutes` in lib/site.ts is hand-maintained, so a
  * new page builds green and is SILENTLY absent from sitemap.xml. Nobody notices until it fails to
  * rank.
  *
@@ -31,7 +31,10 @@ const ORIGIN = "https://thermoleak.co.il";
 const INTENTIONALLY_EXCLUDED = new Map([
   ["/thank-you/", "noindex post-form conversion page (app/thank-you/page.tsx)"],
   ["/404/", "404 artifact — 301s to / via public/_redirects (backlog §1.1)"],
-  ["/_not-found/", "404 artifact — 301s to / via public/_redirects (backlog §1.1)"],
+  [
+    "/_not-found/",
+    "404 artifact — 301s to / via public/_redirects (backlog §1.1)",
+  ],
 ]);
 
 function emittedRoutes(dir, acc = []) {
@@ -56,21 +59,27 @@ try {
 }
 
 const inSitemap = new Set(
-  [...sitemapXml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].replace(ORIGIN, "") || "/"),
+  [...sitemapXml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(
+    (m) => m[1].replace(ORIGIN, "") || "/",
+  ),
 );
 const emitted = emittedRoutes(OUT).sort();
 
-const missing = emitted.filter((r) => !inSitemap.has(r) && !INTENTIONALLY_EXCLUDED.has(r));
+const missing = emitted.filter(
+  (r) => !inSitemap.has(r) && !INTENTIONALLY_EXCLUDED.has(r),
+);
 const stale = [...inSitemap].filter((r) => !emitted.includes(r));
 
 for (const route of missing) {
   console.error(
     `FAIL: ${route} is emitted but missing from sitemap.xml.\n` +
-      `      Add it to staticRoutes in app/sitemap.ts, or to INTENTIONALLY_EXCLUDED here with a reason.`,
+      `      Add it to staticRoutes in lib/site.ts, or to INTENTIONALLY_EXCLUDED here with a reason.`,
   );
 }
 for (const route of stale) {
-  console.error(`FAIL: ${route} is in sitemap.xml but no longer emitted — remove it from app/sitemap.ts.`);
+  console.error(
+    `FAIL: ${route} is in sitemap.xml but no longer emitted — remove it from staticRoutes in lib/site.ts.`,
+  );
 }
 
 // public/llms.txt ⊆ sitemap.xml (CLAUDE.md §3). Read from out/ so it is the SHIPPED copy that is
@@ -79,18 +88,31 @@ let llmsDead = [];
 let llmsCount = 0;
 try {
   const llms = readFileSync(join(OUT, "llms.txt"), "utf8");
-  const urls = [...new Set([...llms.matchAll(/https?:\/\/thermoleak\.co\.il(\/[^\s)\]>,"']*)/g)].map((m) => m[1]))];
+  const urls = [
+    ...new Set(
+      [...llms.matchAll(/https?:\/\/thermoleak\.co\.il(\/[^\s)\]>,"']*)/g)].map(
+        (m) => m[1],
+      ),
+    ),
+  ];
   llmsCount = urls.length;
   llmsDead = urls.filter((u) => {
     const route = u.endsWith("/") ? u : `${u}/`;
     // A file reference (sitemap.xml, robots.txt, llms.txt itself) is not a route — check it exists.
     if (/\.[a-z0-9]+$/i.test(u)) {
-      try { statSync(join(OUT, u.replace(/^\//, ""))); return false; } catch { return true; }
+      try {
+        statSync(join(OUT, u.replace(/^\//, "")));
+        return false;
+      } catch {
+        return true;
+      }
     }
     return !inSitemap.has(route);
   });
 } catch {
-  console.error("FAIL: out/llms.txt not found. It is hand-maintained in public/ and must ship.");
+  console.error(
+    "FAIL: out/llms.txt not found. It is hand-maintained in public/ and must ship.",
+  );
   process.exit(1);
 }
 

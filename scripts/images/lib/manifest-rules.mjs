@@ -67,6 +67,9 @@ export const PHASES = Object.freeze([
 /** A `retired` entry keeps its file at least this long (contract §4). */
 export const RETIRED_KEEP_DAYS = 60;
 
+/** A revoked consent overrides that keep: the person's image leaves the site within this many days. */
+export const REVOKED_REMOVE_DAYS = 14;
+
 export const GATE_KEYS = Object.freeze([
   "minPerContentPage",
   "maxImageBytes",
@@ -97,7 +100,7 @@ export function hasHebrew(s) {
 /** Hebrew word edges — \b is ASCII-only. Up to two prefix letters (ב, ל, מ, ו, ה, ש, כ). */
 const hebrewWord = (name) =>
   new RegExp(
-    `(?<![\\u05d0-\\u05ea])[ובלמהשכ]{0,2}${escapeRe(name)}(?![\\u05d0-\\u05ea])`,
+    `(?<![\\u05d0-\\u05ea])[ובלמהשכ]{0,2}${escapeRe(name).replace(/ /g, "[\\s\\-־]+")}(?![\\u05d0-\\u05ea])`,
   );
 function escapeRe(s) {
   return String(s).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -112,6 +115,8 @@ function escapeRe(s) {
  * `ביטוח` alone stays legal: it is the name of a service; the claim to BE insured is not.
  */
 const EXTRA_BANNED_RE = extraBannedRegex.map((src) => new RegExp(src));
+const CAMERA_EN =
+  /(?<![A-Za-z0-9])(?:FLIR|E8|E5|Fluke|Testo|Hikmicro)(?![A-Za-z0-9])/i;
 const BANNED = [
   {
     re: /תמונה של/,
@@ -119,7 +124,7 @@ const BANNED = [
   },
   { re: /לפני ואחרי/, why: "״לפני ואחרי״ — no pair exists, so it is a claim" },
   {
-    re: /כוכב|דירוג|★|מומלצ/,
+    re: /כוכב|דירוג|★|מומל[צץ]/,
     why: "a rating/recommendation stem (כוכב / דירוג / ★ / מומלץ)",
   },
   {
@@ -127,6 +132,7 @@ const BANNED = [
     why: "a per-image AI label (הדמיה / AI / בינה) — disclosure is the site-wide note",
   },
   { re: /(?<!\d)\d{4}(?!\d)/, why: "a 4-digit number reads as a year" },
+  { re: /\d{1,2}\s*[./]\s*\d{1,2}/, why: "a date-like number pair" },
   {
     re: /\d\s*מ[״"׳']?[רמ](?![א-ת])/,
     why: "digits before מ״ר / מ״מ — an area or thickness is a job fact",
@@ -140,7 +146,10 @@ const BANNED = [
     re: /\d\s*(?:שעות|שעה|ימים|יום|שבועות|שבוע|חודשים|חודש|שנים|שנה|שנות)(?![א-ת])/,
     why: "digits with a duration word — how long a job took is a job fact",
   },
-  { re: /₪|ש["״]ח|שקל|מחיר/, why: "a price stem (₪ / ש״ח / שקל / מחיר)" },
+  {
+    re: /₪|ש["״]ח|(?<![א-ת])[ובלה]?שקל(?:ים)?(?![א-ת])|מחיר/,
+    why: "a price stem (₪ / ש״ח / שקל / מחיר)",
+  },
   { re: /אחריות/, why: "a warranty word — a term, not a picture" },
   {
     re: /לקוח|דייר(?:ים|ת)?(?![א-ת])|משפחת\s/,
@@ -166,8 +175,10 @@ export function textProblems(text, kind, ctx, opts = {}) {
   if (typeof text !== "string" || !text.trim()) return [`${kind} is empty`];
   const t = text.trim();
   if (!hasHebrew(t)) out.push(`${kind} has no Hebrew letters`);
-  if (t.length < 20 || t.length > 200)
-    out.push(`${kind} is ${t.length} chars (20–200 allowed)`);
+  // The site's floor for a caption is lower than the toolkit's, for the short scene captions in lib/gallery.ts.
+  const [min, max] = kind === "alt" ? [40, 160] : [20, 200];
+  if (t.length < min || t.length > max)
+    out.push(`${kind} is ${t.length} chars (${min}–${max} allowed)`);
   for (const b of BANNED)
     if (b.re.test(t)) out.push(`${kind} carries ${b.why}`);
   for (const stem of extraBanned)
@@ -357,9 +368,11 @@ export function entryProblems(e, ctx, gates) {
     if (!isPosInt(pl.order)) p("placement order must be a positive integer");
   }
 
+  // A retired entry renders nowhere, so a caption that was legal while it was live stays legal.
   const everyAbout =
-    placements.length > 0 &&
-    placements.every((pl) => isObj(pl) && pl.route === "/about/");
+    e.status === "retired" ||
+    (placements.length > 0 &&
+      placements.every((pl) => isObj(pl) && pl.route === "/about/"));
   for (const m of textProblems(e.alt, "alt", ctx)) p(m);
   if (e.caption !== null && e.caption !== undefined)
     for (const m of textProblems(e.caption, "caption", ctx, {
@@ -368,6 +381,21 @@ export function entryProblems(e, ctx, gates) {
       p(m);
   if (e.altEn !== null && e.altEn !== undefined && typeof e.altEn !== "string")
     p("altEn must be a string or null");
+  if (typeof e.altEn === "string") {
+    if (e.altEn.length < 30 || e.altEn.length > 160)
+      p(`altEn is ${e.altEn.length} chars (30–160 allowed)`);
+    if (!/^[\x20-\x7e]+$/.test(e.altEn)) p("altEn must be plain ASCII");
+    if (CAMERA_EN.test(e.altEn))
+      p(
+        "altEn names a camera make or model — the site names it, an image's text never does",
+      );
+  }
+
+  if (e.consentRevoked !== null && e.consentRevoked !== undefined) {
+    if (e.status !== "retired") p("consentRevoked belongs on a retired entry");
+    if (!ISO_DATE.test(String(e.consentRevoked)))
+      p("consentRevoked must be YYYY-MM-DD");
+  }
 
   if (e.thumb !== null && e.thumb !== undefined) {
     if (

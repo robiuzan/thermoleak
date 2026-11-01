@@ -66,11 +66,10 @@ is on disk. **You are read-only.** You approve nothing, edit nothing, move nothi
 ## Method — the manifest audit
 
 ```bash
-node scripts/images/check-images-out.mjs out
+test -f out/.images-draft && echo "DRAFT BUILD — do not ship, and do not run the gate on it"
+node scripts/images/check-images-out.mjs out     # only on a production export: it prunes candidates
 npm run images:status
-grep -ic 'fetchpriority="high"' out/services/water-leak-detection/index.html   # expect 1 once installed
-grep -l 'application/ld+json' out/index.html | xargs grep -o '/images/[^"]*' | head   # read what it finds: no rendering in schema
-test -f out/.images-draft && echo "DRAFT BUILD — do not ship"
+grep -oi 'fetchpriority="high"' out/services/water-leak-detection/index.html | wc -l   # 2 once installed: the img and its preload
 git status --short | grep -E 'assets/|_candidates/'   # expect only assets/gallery/README.md, if anything
 ```
 

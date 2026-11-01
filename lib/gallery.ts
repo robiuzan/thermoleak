@@ -19,8 +19,14 @@ export interface GalleryScene {
 export const gallery = {
   eyebrow: "הבדיקה בשטח",
   title: "כך נראית בדיקה תרמית בבית",
-  secondTitle: "עוד מהבדיקות",
+  secondTitle: "עוד הדמיות של בדיקה תרמית",
   allImagesLink: "לכל התמונות — בגלריה",
+};
+
+/** The page each people-free, camera-free /gallery/ tile links to: it has no service of its own. */
+export const generatedLinks: Record<string, string> = {
+  "gallery-generated-3": "/services/moisture-detection/",
+  "gallery-generated-6": "/services/water-leak-detection/",
 };
 
 export const galleryScenes: GalleryScene[] = [

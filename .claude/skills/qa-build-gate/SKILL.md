@@ -369,7 +369,7 @@ behind it: CLAUDE.md §15. By hand:
 
 ```bash
 npm run images:status                                        # plan against manifest, route by route
-grep -il 'fetchpriority="high"' out/index.html               # one per image-bearing page
+grep -oi 'fetchpriority="high"' out/index.html | wc -l        # 2: the img and its preload link
 test -f out/.images-draft && echo "DRAFT BUILD — do not ship"
 git status --short | grep -E 'assets/|_candidates/'          # expect nothing but assets/gallery/README.md
 ```

@@ -8,7 +8,7 @@ no external SEO kit): `localBusinessJsonLd` · `webSiteJsonLd` · `serviceJsonLd
 `breadcrumbJsonLd`, rendered through `components/JsonLd.tsx`.
 
 **Status verified against the build of 2026-09-06** — 22 `index.html` files, 19 of them in
-`sitemap.xml`; route counts are re-stated for the 2026-10-28 build — 31 `index.html` files, 28 in
+`sitemap.xml`; route counts are re-stated for the 2026-11-01 build — 32 `index.html` files, 29 in
 `sitemap.xml`. Every ✅/❌ below was read out of `out/`, not inferred from the source. When this file
 and a fresh `out/` disagree, `out/` wins and this file gets fixed in the same commit.
 
@@ -256,7 +256,7 @@ existing 1200×630 asset, so nothing is fabricated — paired with the same `/og
 each guide's `openGraph.images`, which the page-level `generateMetadata` currently drops. Until real
 job photography exists, `/og.png` is the honest source; do **not** reference a photo the site does not
 own. **A page image is never the answer here:** a rendering stays out of JSON-LD and `og:image` by policy
-(CLAUDE.md §15), even though the guides now carry one. This needs a code change (§7b).
+(CLAUDE.md §15), even once the guides carry one. This needs a code change (§7b).
 
 Deriving `FAQPage` from the typed blocks via `articleFaqs()` rather than authoring it separately is what
 keeps rule §4.2 from breaking as copy is edited — the same property the `<details>`-based service FAQs

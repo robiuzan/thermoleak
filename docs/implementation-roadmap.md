@@ -297,7 +297,7 @@ trigger exists.** Do not compress that.
    `data-cta="form-whatsapp"` element recording that it fires **pre-validation** and must never be
    used as the lead trigger — a naive click trigger there counts three mistyped phone numbers as
    three leads. Skip `faq_open` unless the `"use client"` cost on `Faq.tsx` is worth it; the
-   three-client-component budget is deliberate and native `<details>` is golden rule 6.
+   four-client-component budget is deliberate and native `<details>` is golden rule 6.
 
 3. **Extend the PII rule to cover hrefs.** [AN-2 · §13.6] The tracking doc's PII section only ever
    warned about the submit handler, so an agent following it would ship the Sprint 4 task 2 leak

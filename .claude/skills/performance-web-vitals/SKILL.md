@@ -53,8 +53,8 @@ meaningless, and `public/images/` was about **80 KB** until the homepage gallery
 
 What actually matters:
 
-- `public/images/hero.webp` — the one raster hero, **33 KB**. It is preloaded (`<link rel="preload"
-as="image">` is emitted) and `Hero` is the only component claiming `priority`. There is no LCP-blocking
+- `public/images/hero.webp` — the hero until its replacement installs, **33 KB**. `Figure` takes one priority per
+  page, chosen by `leadSlotOf`, and the gate checks it. There is no LCP-blocking
   download here; leave it alone unless the art changes.
 - `public/images/thermoleak_logo.webp` — 18 KB, rendered by `Logo` in `Navbar` **without** `priority`.
   `components/Navbar.tsx` carries a comment recording that decision (the hero is the LCP candidate).
@@ -62,7 +62,7 @@ as="image">` is emitted) and `Hero` is the only component claiming `priority`. T
 - `public/og.png` — 128 KB, the single largest non-text asset, but **never rendered on-page**; it is only
   a meta reference. Its weight doesn't affect CWV.
 
-So image work on this site is almost always the wrong lever. Say so rather than filling the section.
+Every image size is a class budget, and the gate enforces it, so measure before reopening image work.
 
 Two viable routes if the hero needs work — pick one deliberately, don't mix:
 
@@ -82,8 +82,8 @@ Identify the real LCP element **per route type** — it differs:
 - `/services/{slug}/` — the `PageHero` heading, or the service image below it.
 - `/contact/`, `/privacy/` — text; there is no image to blame.
 
-At most **one** `priority` image per page — currently satisfied: `Hero` claims it on `/`, and nothing
-else claims it anywhere.
+One `fetchpriority="high"` per page: `Figure` takes it, chosen by `leadSlotOf`, `FieldStrip` and `ArticleBody`, and
+the gate checks it.
 
 ## Fonts
 

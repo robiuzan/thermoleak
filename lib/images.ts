@@ -134,6 +134,8 @@ export interface ImageEntry {
   review: { automated: AutomatedReview | null; owner: OwnerReview | null };
   approved: string | null;
   retired: string | null;
+  /** On a retired entry: the date a depicted person revoked consent. Its file leaves within 14 days. */
+  consentRevoked?: string | null;
 }
 
 export interface ImageGates {

@@ -12,16 +12,16 @@ and the direction of the location edges**.
 
 ## Current state (backlog §9)
 
-| Aspect                    | State                                                                                                  |
-| ------------------------- | ------------------------------------------------------------------------------------------------------ |
-| Orphans                   | **zero** ✅ (`/404/`, `/_not-found/`, `/thank-you/` are intentional)                                   |
-| Header                    | 7 nav links (`navLinks`) — services, pricing, locations and guides indexes; individual services **no** |
-| Footer                    | all 4 services + all 7 nav links + both legal pages + all 12 cities (`אזורי שירות`, 2026-10-19) ✅     |
-| Related services          | `services.filter(s => s.slug !== current)` → all 3 others. Correct at 4 services; revisit at 8+        |
-| Contextual in-copy links  | ✅ shipped — a `links` array per service (`lib/services.ts`), 2 descriptive anchors each               |
-| Hub prose on `/services/` | **still none** — the index is a card grid plus the PageHero subtitle                                   |
-| Breadcrumbs               | ✅ `PageHero` renders the trail **and** emits `BreadcrumbList` from the same array — 28 pages          |
-| Location silo             | 12 cities — each links out to all 4 services; in: hub, footer, `nearby` (30 pages), no service page    |
+| Aspect                    | State                                                                                                            |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Orphans                   | **zero** ✅ (`/404/`, `/_not-found/`, `/thank-you/` are intentional)                                             |
+| Header                    | 7 nav links (`navLinks`) — services, pricing, locations and guides indexes; individual services **no**           |
+| Footer                    | all 4 services + all 7 nav links + `/gallery/` + both legal pages + all 12 cities (`אזורי שירות`, 2026-10-19) ✅ |
+| Related services          | `services.filter(s => s.slug !== current)` → all 3 others. Correct at 4 services; revisit at 8+                  |
+| Contextual in-copy links  | ✅ shipped — a `links` array per service (`lib/services.ts`), 2 descriptive anchors each                         |
+| Hub prose on `/services/` | **still none** — the index is a card grid plus the PageHero subtitle                                             |
+| Breadcrumbs               | ✅ `PageHero` renders the trail **and** emits `BreadcrumbList` from the same array — 28 pages                    |
+| Location silo             | 12 cities — each links out to all 4 services; in: hub, footer, `nearby` (30 pages), no service page              |
 
 ## 1. Header
 

@@ -788,8 +788,8 @@ which is already correct for a 2× display and comfortably inside the LCP-image 
 `sizes` or make it real" half is moot too: there is no `sizes=` anywhere in `app/` or `components/`.
 _(2026-10-22: no longer the only rasters — the homepage gallery adds four 720×1200 WebP files,
 185,682 B, lazy and below the fold, one size each by the hero's reasoning; performance-guidelines §1
-and §3.)_ _(2026-11-01: every content page now carries images, so the "only rasters" reasoning no
-longer holds. §10.6 is where they are budgeted; the one-size-per-slot decision still stands.)_
+and §3.)_ _(2026-11-01: once the renders install, every content page carries images, so the "only rasters"
+reasoning no longer holds. §10.6 is where they are budgeted; the one-size-per-slot decision still stands.)_
 
 Keep the rule — don't pass `sizes` to an unoptimized image, it looks correct and does nothing — but
 do not spend a sprint slot here. §10.1 is where the bytes are.

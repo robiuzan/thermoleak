@@ -1,6 +1,6 @@
 ---
 name: seo-metadata
-description: Per-route metadata for thermoleak — the Hebrew title and description formulas, the layout template rule and the two brand-token traps it sets (both fixed 2026-08-17, both easy to reintroduce), self-referencing trailing-slash canonicals, the openGraph shallow-merge trap (fixed 2026-09-17 by pageOpenGraph(), easy to reintroduce), Search Console verification, and the hand-maintained staticRoutes array in sitemap.ts. Use when writing metadata for a route, fixing duplicate or malformed titles, or auditing on-page SEO. Triggers "set the metadata", "titles and descriptions", "canonical", "brand suffix", "sitemap", "one H1".
+description: Per-route metadata for thermoleak — the Hebrew title and description formulas, the layout template rule and the two brand-token traps it sets (both fixed 2026-08-17, both easy to reintroduce), self-referencing trailing-slash canonicals, the openGraph shallow-merge trap (fixed 2026-09-17 by pageOpenGraph(), easy to reintroduce), Search Console verification, and the hand-maintained staticRoutes array in lib/site.ts. Use when writing metadata for a route, fixing duplicate or malformed titles, or auditing on-page SEO. Triggers "set the metadata", "titles and descriptions", "canonical", "brand suffix", "sitemap", "one H1".
 ---
 
 # Per-route SEO metadata
@@ -117,16 +117,16 @@ deliberately has none: it is `robots: { index: false }` and absent from the site
 ## Sitemap
 
 `app/sitemap.ts` derives service entries from `services`, guide entries from `articles` and the
-whole location silo from `locations` — those three cannot go missing. `staticRoutes` is still a
-**hand-maintained array of 8** (backlog §1.2): add a top-level page and it builds fine while being
+whole location silo from `locations` — those three cannot go missing. `staticRoutes` in `lib/site.ts` is still a
+**hand-maintained array of 10** (backlog §1.2): add a top-level page and it builds fine while being
 silently absent from the sitemap. `npm run check:sitemap` (`scripts/check-sitemap-parity.mjs`) is the
 backstop — run it after adding any route.
 
 `lastModified: new Date()` was replaced with real per-route dates on 2026-08-17 (§1.3), and the comment
-at the top of `app/sitemap.ts` records why. The opposite failure — dates nobody bumps (SEO-04) — was
+above `staticRoutes` in `lib/site.ts` records why. The opposite failure — dates nobody bumps (SEO-04) — was
 closed 2026-10-19 (§1.3 ✅): services, guides and cities read their own date from `lib/`
-(`service.lastModified`, `article.dateModified`, `location.lastModified`), and the eight
-`staticRoutes` dates were re-baselined against git. Those eight, the `/locations/` hub and every
+(`service.lastModified`, `article.dateModified`, `location.lastModified`), and the
+`staticRoutes` dates were re-baselined against git. Those entries and every
 `lib/` date are still bumped by hand: **if you meaningfully change what a route shows, bump its date
 in the same commit.** Markup, OG tags and the live-kit strip do not count.
 

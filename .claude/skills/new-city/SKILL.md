@@ -182,7 +182,7 @@ a route that skips this works in dev and 404s in production.
 - **Fixed 2026-10-19 — the sitemap no longer stamps one hardcoded date on every city.** `Location`
   now has a required `lastModified`, which `app/sitemap.ts` reads (the first three carried
   2026-08-30, their first deploy, until the 2026-10-28 removal of job-history and same-day wording
-  moved them to 2026-10-28). The `/locations/` hub keeps its own date in `app/sitemap.ts`; bump it
+  moved them to 2026-10-28). The `/locations/` hub keeps its own date in `staticRoutes` in `lib/site.ts`; bump it
   too if the hub's visible content changes.
 - **Wire the new city's inbound links in the same commit.** The footer's `אזורי שירות` list maps
   over `locations`, so it links the new city automatically (since 2026-10-19). The service pages

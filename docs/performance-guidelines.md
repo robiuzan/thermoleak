@@ -4,7 +4,7 @@ Enforceable numbers, not aspirations. A change that breaks a budget here does no
 `perf-a11y-auditor` audits against this file; `/performance-web-vitals` holds the technique.
 
 **Measure before optimising.** The user-facing baseline is genuinely healthy — static HTML on a
-global edge, one 33 KB raster, four SVGs — so do not manufacture findings to fill a report. But
+global edge, lazy content images, four SVGs — so do not manufacture findings to fill a report. But
 "healthy" is not the same as "inside every budget": as of the 2026-09-06 re-baseline the export sat
 at **98.5% of its size budget** (then 6 MB — the owner raised it to 7.5 MB on 2026-10-12, to
 8 MB on 2026-10-27, to 15 MB on 2026-10-28 and to 25 MB on 2026-11-01, §1), one
@@ -20,7 +20,7 @@ such in §1. Everything else here is fine.
 | Metric   | Target   | Fail     | Notes                                                                                                       |
 | -------- | -------- | -------- | ----------------------------------------------------------------------------------------------------------- |
 | **LCP**  | ≤ 2.0 s  | > 2.5 s  | Stricter than Google's 2.5 s "good": we are static HTML on a global edge, so 2.5 s means something is wrong |
-| **INP**  | ≤ 150 ms | > 200 ms | Three client components ship, plus GTM after hydration; anything approaching 200 ms means new JS arrived    |
+| **INP**  | ≤ 150 ms | > 200 ms | Four client components ship, plus GTM after hydration; anything approaching 200 ms means new JS arrived     |
 | **CLS**  | ≤ 0.05   | > 0.1    | Every image is dimensioned and the sticky bar has a spacer; 0.1 means a reserve was dropped                 |
 | **TTFB** | ≤ 300 ms | > 600 ms | Edge-served HTML. A sustained regression means an origin/config change                                      |
 
@@ -139,8 +139,8 @@ fit.
 carried chunks. The renders are expected to add about 6.7 MB: 16 large images ≈ 2.1 MB, 35 half ≈ 2.8 MB,
 four tiles ≈ 0.25 MB, three thumbnails ≈ 0.05 MB, 11 re-issued gallery images ≈ 0.55 MB, the hero
 ≤ 0.12 MB, the `/gallery/` route ≈ 0.3 MB, and about 60 figures' markup emitted four times each ≈ 0.5 MB.
-That lands near 18 MB raw, 72% of the budget, and about 21 MB (84%) if every image hits its class budget.
-A 20 MB budget would have sat at 90–98% and forced another raise within a sprint. These are estimates
+That lands near 18 MB raw, 72% of the budget, and about 22.6 MB (90%) if every image hits its class budget.
+A 20 MB budget would have sat at 90–113% and forced another raise within a sprint. These are estimates
 from betonplus's per-class averages. **Replace them with the measured figure on install day.**
 
 **On the JS rows.** The old "≤ 120 KB per route, well under ✅" was never measured and is 4.7×
@@ -156,22 +156,17 @@ that is exactly what the +0 B row catches.
 ## 2. Non-negotiable architectural rules
 
 1. **RSC by default.** `"use client"` only for state, effects or browser APIs, kept leaf-level and
-   justified in a comment. Three client components exist and each is defensible.
+   justified in a comment. Four client components exist and each is defensible.
 2. **The FAQ stays `<details>`-based.** Native disclosure = zero JS, every answer in the DOM at
    first paint. It is simultaneously the fastest option, the most accessible, and what makes
    `FAQPage` schema honest and the content extractable by answer engines. Converting it to client
    state breaks all four.
-3. **At most one preloaded image per page**, the first content image, through `Figure`'s `priority`
-   prop, which sets `preload` and `fetchPriority="high"` together (a hand-written `priority` is
-   deprecated in Next 16 and emits no `fetchpriority`). It should be the LCP element — **and an
-   above-the-fold image that is _not_ the LCP element must still be `loading="eager"`.** The second
-   clause exists because the first one was over-applied: dropping the navbar logo's `priority`
-   (correctly — it was preloading a ~40 px wordmark in competition with the hero) left it on
-   `next/image`'s default, so the emitted markup is `loading="lazy"` on the topmost element of every
-   route. Lazy-loading an in-viewport image hides it from the preload scanner and the wordmark
-   pops in after first paint. There is no CLS (the box is reserved), so this is a polish defect, not
-   a budget breach — but it is the swing the rule now names. Open: `components/Logo.tsx` needs a
-   `loading` pass-through, `components/Navbar.tsx` an eager instance; the footer copy stays lazy.
+3. **One `fetchpriority="high"` per page, on the first content image,** through `Figure`'s `priority` prop,
+   which sets `preload` and `fetchPriority="high"` together (a hand-written `priority` is deprecated in Next 16 and
+   emits no `fetchpriority`). **An above-the-fold image that is not the LCP element must still be
+   `loading="eager"`:** the navbar logo is, through `Logo`'s `eager` prop, because lazy-loading an in-viewport image
+   hides it from the preload scanner. React adds a preload link for any non-lazy image, so every page also preloads
+   the logo, and that preload carries no `fetchpriority`.
 4. **Every image reserves its box.** Explicit `width`/`height`, or `fill` with a sized parent.
 5. **No layout-shifting late content.** No client-injected banners, no post-hydration content swaps
    above the fold. See [mobile-ux-and-personalization.md](mobile-ux-and-personalization.md) §4 for
@@ -209,13 +204,14 @@ srcset**. Consequence: passing `sizes` is _misleading_, it does nothing.
 80 KB in total until the homepage gallery's WebP files landed (four on 2026-10-22, 185,682 B;
 eleven since 2026-10-27, 540,802 B).
 
-**Since 2026-11-01 every content image goes through `components/Figure.tsx`** (CLAUDE.md §15). It
+**Since 2026-11-01 every content image goes through `components/Figure.tsx`** (CLAUDE.md §15), apart from the
+`/guides/` thumbnails, which `app/guides/page.tsx` renders from the same manifest entry. It
 renders `next/image` with the manifest's numeric width and height, lazy except the page's first image,
 which gets `preload` and `fetchPriority="high"`. The files are WebP. Quality starts at 85, steps to 80 to
 fit a size class, and **never goes below 80**, because thermal colour ramps band under it (q75 was
 measured to blotch them); a frame that still does not fit drops a size class. What actually matters:
 
-- **`hero.webp`** — the one raster LCP candidate. Measured: **33,210 B, 828×670 intrinsic**,
+- **`hero.webp`** — the LCP candidate on `/` until the new hero installs. Measured: **33,210 B, 828×670 intrinsic**,
   rendered at ≤ 448 CSS px (`max-w-md`) on desktop and ~358 px on mobile, and preloaded. That is
   4.5× inside the LCP-image budget and correct as a single size for DPR 2+. **There is nothing to
   win here** — a width-variant exercise buys a few KB, so do not schedule it as a performance sprint

@@ -62,8 +62,8 @@ read-only.
 
 2. **Images.** `next.config.ts` sets `images: { unoptimized: true }`, so every `next/image` renders a
    bare `<img>` with **no srcset**. **All four** service illustrations are SVG (1,166–1,379 B each), so
-   **Since 2026-11-01 every content page carries images** through `components/Figure.tsx`, so each page's
-   first image is an LCP input with one `fetchpriority="high"`; the gate enforces the size classes and the
+   **Once the page images install (the state line in CLAUDE.md §15) every content page carries images** through
+   `components/Figure.tsx`, so each page's first image is an LCP input with one `fetchpriority="high"`; the gate enforces the size classes and the
    per-page caps (`scripts/images/check-images-out.mjs`, CLAUDE.md §15). Audit `alt` and the figcaption
    contrast too. Before that,
    the raster surface was two files until 2026-10-22: `public/images/hero.webp` (33,210 B, 828×670) and
@@ -72,22 +72,20 @@ read-only.
    `public/images/` totals ~597 KB. The hero is already
    4.5× inside the 150 KB LCP-image budget and there is no `sizes=` attribute anywhere in `app/` or
    `components/`. **There is no image-weight crisis here; do not open one.**
-3. **LCP.** Identify the real LCP element per route type — they differ. The homepage preloads
-   `/images/hero.webp` (`<link rel="preload" as="image">` is in the emitted HTML); on every other
-   route the LCP is the `PageHero` H1 text (`components/PageHero.tsx`). `Logo` no longer ships
-   `priority` — backlog §10.3 dropped it, and because `next/image` defaults to lazy the navbar wordmark
-   is now `loading="lazy"` above the fold on every route (finding PERF-5, OPEN — a perceived-speed
-   nit, not a CWV failure; the `width`/`height` reserve the box so there is no CLS).
+3. **LCP.** Identify the real LCP element per route type: they differ. The homepage's LCP is the hero image; on
+   other routes it is the `PageHero` H1 unless the first content image, the one with `fetchpriority`, is in the first
+   viewport and larger, so measure it. `Logo` no longer ships `priority` (backlog §10.3). The navbar wordmark is
+   `loading="eager"` through `Logo`'s `eager` prop, so PERF-5 is closed; React still emits a plain preload for it.
 4. **Fonts — already done, verify rather than prescribe.** Heebo + Assistant are self-hosted via
    `next/font/google` (`app/fonts.ts`), and the build **already emits four
    `<link rel="preload" … as="font" type="font/woff2">` tags on every route** — `next/font` preloads by
    default and there was never anything to add. Confirm they are still there and that `display: swap`
    holds. Any doc still listing "add a font preload" as open work is stale; say so.
-5. **JS budget (INP).** **Exactly three** client components exist — `components/ContactForm.tsx`,
-   `components/Navbar.tsx` and `components/ThankYouContent.tsx` — and each genuinely needs state,
-   effects or `sessionStorage`. `components/Analytics.tsx` and `components/ServiceChooser.tsx` are
+5. **JS budget (INP).** **Exactly four** client components exist — `components/ContactForm.tsx`,
+   `components/Navbar.tsx`, `components/ThankYouContent.tsx` and `components/ConsentBanner.tsx` — and each
+   genuinely needs state, effects or browser storage. `components/Analytics.tsx` and `components/ServiceChooser.tsx` are
    **server** components; do not miscount them. The FAQ uses native `<details>/<summary>` with zero JS.
-   Flag any _new_ `"use client"` that isn't justified rather than re-litigating the existing three.
+   Flag any _new_ `"use client"` that isn't justified rather than re-litigating the existing four.
    Measured payload: every route loads the identical 9 chunks totalling **688,193 B**, of which
    112,594 B carries `noModule` and is skipped by modern browsers → **575,599 B uncompressed / ~164 KB
    brotli on the wire**, with one chunk at 226,355 B. This is the Next 16.2.9 + React 19.2.4 floor with

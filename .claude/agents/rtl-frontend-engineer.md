@@ -46,8 +46,8 @@ Sibling components import each other **relatively** (`./Container`); anything fr
 - **No `any`. No non-null `!` to silence the compiler.** Narrow instead — `getService()` returns
   `Service | undefined` and the route narrows it with `notFound()`.
 - **RSC by default.** `"use client"` only for state, effects or browser APIs, kept leaf-level.
-  **Exactly three components are client today: `ContactForm`, `Navbar` and `ThankYouContent`** (the
-  last reads sessionStorage via `useSyncExternalStore`). `Analytics` and `ServiceChooser` are server
+  **Exactly four components are client today: `ContactForm`, `Navbar`, `ThankYouContent` and
+  `ConsentBanner`** (`ThankYouContent` reads sessionStorage via `useSyncExternalStore`). `Analytics` and `ServiceChooser` are server
   components despite what their names suggest — leave them that way. **The FAQ deliberately uses
   native `<details>/<summary>` with zero JS** — that is what keeps every answer in the DOM for
   `FAQPage` schema and for answer engines. Do not convert it to client state.

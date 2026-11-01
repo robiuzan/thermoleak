@@ -95,10 +95,11 @@
    **Promise**.
 10. **Never edit generated output** — `node_modules/`, `.next/`, `out/`. And never audit `out/` without
     checking it is newer than the last commit; it is routinely stale.
-11. **`content/images/manifest.json` and `public/images/**` are written by the toolkit, never by hand.**
+11. **`content/images/manifest.json` and `public/images/**` are written by the toolkit, never by hand,**
+    apart from two fields an operator sets: `gates.minPerContentPage` and a `consentRevoked` date.
     An `approved:` stamp comes from the owner's yes, through the toolkit. **Never delete a deployed
     image:** crawled pages keep asking for it, so a replaced file stays at least 60 days and its removal
-    is a separate owner decision (§15).
+    is a separate owner decision. A revoked consent overrides that keep: the file leaves within 14 days (§15).
 
 ---
 
@@ -123,7 +124,7 @@ actions and ISR. Response headers come from **`public/_headers`** and redirects 
 
 `app/sitemap.ts` and `app/robots.ts` each carry `export const dynamic = "force-static"`. That line is
 what makes them emit at build time; don't delete it as noise. `staticRoutes` itself has lived in
-`lib/site.ts` since 2026-11-01, because `lib/images.ts` and the image gate read the same list.
+`lib/site.ts` since 2026-11-01, because `lib/images.ts` and `images-status` read the same list.
 
 **`public/llms.txt` is hand-maintained on purpose.** Generating it from `lib/site.ts` would need a
 GET route handler, which this config forbids — so do **not** propose one. The cost of that is drift:
@@ -154,7 +155,7 @@ components/               # FLAT — 30 files, one component per file, PascalCas
   ConsentBanner                        # the Consent Mode v2 question (client, §7)
   Container CtaButton SectionHeading PageHero Breadcrumbs Logo JsonLd
                                        # Container's width is its `max` prop: a max-w-* in className loses to .max-w-6xl
-  Figure FieldStrip                    # the ONLY way a content image renders: next/image from the manifest (§15)
+  Figure FieldStrip                    # how a content image renders: next/image from the manifest (§15)
   Hero TrustBar MethodExplainer ServicePillars ServiceCard Process Faq ContactCTA
   ServiceChooser                       # homepage symptom→service decision aid (lib/services.ts)
   Gallery                              # homepage and /gallery/ scenes, fed by the manifest; its words are in lib/gallery.ts
@@ -417,7 +418,8 @@ output. Add `prettier` as a devDependency if that matters.
   goes through `/new-city`.
 - Don't add dependencies without a reason that survives "can the platform already do this?" The runtime
   dependency list is four packages; keep it that way.
-- **`Figure` is the only way a content image renders,** and `sharp` and every other image tool live in
+- **`Figure` is the only way a content image renders,** apart from the `/guides/` thumbnails, which
+  `app/guides/page.tsx` renders from the same manifest entry. `sharp` and every other image tool live in
   Media Studio, never here. A raw `<img>` or a new `next/image` call bypasses the manifest, and the gate
   fails a stray file under `public/images/` (§15).
 - **No PII in tracking — and the `href` counts as tracking.** Never push a visitor's name, phone,
@@ -525,7 +527,7 @@ shows an updates strip after the method explainer; it hides itself 45 days after
   held back); `ConsentBanner` lifts it when the visitor answers (the kit README, step 5).
 - **Gates:** `prebuild` = check-live-copy → check-live-register → check-live-schedule;
   `postbuild` = check-live-out (the built pages must carry exactly what the registers say), then
-  keep-previous-assets (§10), which must run after it. CI
+  check-images-out (§15), then keep-previous-assets (§10), which must run last. CI
   (`deploy.yml`) runs `npm run build`, so it goes red whenever a register lacks the owner's
   `approved` stamp (both carry it since 2026-10-12). The orphan
   recipes in the `qa-build-gate` and `internal-linking` skills strip the bar and the cards as chrome.
@@ -589,14 +591,14 @@ stays `0`. **Move this line when that changes.**
 | Decision        | Value                                                                                                                                                                                                                                                                                                                                                                      |
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Disclosure      | One note: a footer line on every page, the `/gallery/` intro, a line under the team figure on `/about/`. No per-image label and no file marker; Google's invisible SynthID stays. The texts live in `content/images/notice.json`, and a wording change needs a new approval.                                                                                               |
-| People          | עומר (manager) and יואב (technician); consent relayed by the user in chat, signed copies reported done 2026-11-01 (business-facts §A). **Surnames never appear in this public repo**, in a file name or on the site. A first name appears only in the about note and in a caption whose every placement is `/about/`.                                                                          |
+| People          | עומר (manager) and יואב (technician); consent relayed by the user in chat, signed copies reported done 2026-11-01 (business-facts §A). **Surnames never appear in this public repo**, in a file name or on the site. A first name appears only in the about note and in a caption whose every placement is `/about/`.                                                      |
 | Founder         | רונן דהן is **never depicted**, and his name never sits in an alt or a caption: beside a technician's face it would be a false identification.                                                                                                                                                                                                                             |
 | Emblem          | The shield alone, on the left chest of **every** frame with a person (`badge.required`), so every person is seen from the front or three-quarter front. Never the lettered logo on clothing.                                                                                                                                                                               |
 | Watermark       | The logo without its tagline, bottom-right on every image, composited afterwards and never generated.                                                                                                                                                                                                                                                                      |
 | The camera      | Every thermal camera is the **FLIR E8**, drawn from a reference photo, with the small FLIR mark on its side kept (the user's choice). A man facing the viewer holds it with the screen toward him. A lit screen shows only where the camera is set down with its back to the viewer and its lens on the surface, because only that framing can honestly show that surface. |
 | Kit             | Besides the E8, the pin moisture meter and the acoustic detector: a blue masking-tape or chalk mark, a plain tablet showing only a thermal image, a plain grey case. Nothing else, and no tool of repair.                                                                                                                                                                  |
 | Existing images | The 11 homepage gallery images are re-issued with the logo at new file names; the hero is regenerated.                                                                                                                                                                                                                                                                     |
-| Budgets         | Export 25,000,000 B · `out/images` 12 MB · one image 200 KB, the hero 150 KB · one page 900 KB, `/` 1 MB, `/gallery/` 3 MB · WebP quality never below 80, because thermal colour ramps band under it.                                                                                                                                                                      |
+| Budgets         | Export 25,000,000 B · `out/images` 12 MB · one image 200 KB, the hero 120 KB (its `tile` class) · one page 900 KB, `/` 1 MB, `/gallery/` 3 MB · WebP quality never below 80, because thermal colour ramps band under it.                                                                                                                                                   |
 | Never           | A rendering never enters JSON-LD, `og:image` or a Google Business Profile.                                                                                                                                                                                                                                                                                                 |
 
 **The slots** (the full inventory with widths: the `page-imagery` skill).
@@ -617,8 +619,10 @@ stays `0`. **Move this line when that changes.**
 
 Excluded, on purpose: `/privacy/`, `/accessibility/`, `/thank-you/`, the 404.
 
-**The words** (`scripts/images/lib/manifest-rules.mjs` enforces them; `images.config.mjs` holds this
-trade's list, which Media Studio's alt writer shares, and `doctor` fails if the two drift):
+**The words.** `scripts/images/lib/manifest-rules.mjs` refuses the stems and the service cities it knows;
+`images.config.mjs` holds this trade's list, which Media Studio's alt writer shares, and `doctor` fails if
+the two drift. No stem list catches every sentence, so the `image-qa-reviewer` agent and the owner read the
+rest:
 
 - A screen is an illustration: alt and caption describe colours and positions, never a reading, a
   temperature, a number or a finding.
@@ -640,7 +644,9 @@ skill is this site's runbook.
 - **Never** commit `public/images/_candidates/` or anything in `assets/` except its README.
 - Reference portraits stay in `Media Studio/refs/thermoleak/`, and never enter this repo, `public/` or a URL.
 - **Never delete a deployed image.** A replaced file becomes `retired` with a date, stays at least 60 days,
-  and its removal is a separate owner decision. A revoked consent means people-free twins at new file names.
+  and its removal is a separate owner decision. A revoked consent overrides that keep: people-free twins at new
+  file names, a `consentRevoked` date on each retired entry, and the old files gone within 14 days. The gate
+  checks both limits.
 - A route that gains a captioned figure moves its `lastModified` on install day; re-issuing an image with
   the logo does not count.
 - **The toolkit is shared with other sessions.** Nobody edits `page-images/lib` while another session has it

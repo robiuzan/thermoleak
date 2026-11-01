@@ -148,12 +148,14 @@ export default function AboutPage() {
                 priority={eager === "team"}
                 className="mt-8"
               />
-              <p
-                data-images-notice="about"
-                className="mt-3 text-sm leading-relaxed text-ink/70"
-              >
-                {imagesNote.about}
-              </p>
+              {teamImage.people.length > 0 ? (
+                <p
+                  data-images-notice="about"
+                  className="mt-3 text-sm leading-relaxed text-ink/70"
+                >
+                  {imagesNote.about}
+                </p>
+              ) : null}
             </>
           ) : null}
         </Container>

@@ -218,7 +218,8 @@ label on some images implies that the others are photographs.
 - **Never in schema, `og:image` or a Google Business Profile.** A Business Profile asks for real
   photographs, and a rendering there would be a misrepresentation, not an illustration.
 - **Retire, never delete.** A replaced file stays at least 60 days, because crawled pages still ask for
-  it. A revoked consent means people-free twins at new file names.
+  it. A revoked consent overrides that keep: people-free twins at new file names, and the old files gone within 14
+  days.
 - **Real photographs win.** A real job photo enters the manifest as `owner-supplied` and replaces a
   rendering one for one.
 

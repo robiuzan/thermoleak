@@ -24,7 +24,7 @@ export default function FieldStrip({
 
   return (
     <ul
-      className={`grid grid-cols-2 gap-3 sm:gap-4 ${cols === 3 ? "sm:grid-cols-3" : ""} ${className}`}
+      className={`grid grid-cols-2 gap-3 sm:gap-4 ${images.length === 3 ? "sm:grid-cols-3" : ""} ${className}`}
     >
       {images.map((image, index) => (
         <li

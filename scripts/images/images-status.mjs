@@ -65,19 +65,24 @@ if (plan) {
   for (const r of plan.reuse ?? [])
     planned.set(r.route, [
       ...(planned.get(r.route) ?? []),
-      { slot: r.slot, id: `reuse ${r.of}` },
+      { slot: r.slot, id: `reuse ${r.of}`, of: r.of },
     ]);
 }
-const have = new Map(); // route → { slot → [status] }
-for (const e of manifest.images ?? [])
-  for (const pl of e.placements ?? []) {
-    const slots = have.get(pl.route) ?? new Map();
-    slots.set(pl.slot, [...(slots.get(pl.slot) ?? []), e.status]);
-    have.set(pl.route, slots);
-  }
+// A planned image is judged by its own manifest entry, never by the slot name: the legacy hero holds
+// the slot `main` on `/`, and that must not hide that the new hero does not exist yet.
+const byId = new Map((manifest.images ?? []).map((e) => [e.id, e]));
+const stateOf = (w) => {
+  const status = byId.get(w.of ?? w.id)?.status;
+  return status === "approved" || status === "candidate" ? status : "missing";
+};
+const live = (manifest.images ?? []).filter((e) => e.status === "approved");
 
 const routes = [
-  ...new Set([...contentRoutes, ...planned.keys(), ...have.keys()]),
+  ...new Set([
+    ...contentRoutes,
+    ...planned.keys(),
+    ...live.flatMap((e) => (e.placements ?? []).map((pl) => pl.route)),
+  ]),
 ].sort();
 const totals = { planned: 0, approved: 0, candidate: 0, missing: 0 };
 console.log(
@@ -87,22 +92,24 @@ console.log(
   "  route                                            approved  candidate  missing (planned slot)",
 );
 for (const route of routes) {
-  const slots = have.get(route) ?? new Map();
-  const approved = [...slots]
-    .filter(([, st]) => st.includes("approved"))
-    .map(([s]) => s);
-  const candidate = [...slots]
-    .filter(([, st]) => st.includes("candidate") && !st.includes("approved"))
-    .map(([s]) => s);
   const want = planned.get(route) ?? [];
+  const approved = want.filter((w) => stateOf(w) === "approved");
+  const candidate = want.filter((w) => stateOf(w) === "candidate");
   const missing = want
-    .filter((w) => !approved.includes(w.slot) && !candidate.includes(w.slot))
+    .filter((w) => stateOf(w) === "missing")
     .map((w) => w.slot);
   totals.planned += want.length;
   totals.approved += approved.length;
   totals.candidate += candidate.length;
   totals.missing += missing.length;
-  const flag = !contentRoutes.includes(route) ? "  ⚠ not a content route" : "";
+  const ids = new Set(want.map((w) => w.of ?? w.id));
+  const extra = live.filter(
+    (e) =>
+      !ids.has(e.id) && (e.placements ?? []).some((pl) => pl.route === route),
+  ).length;
+  const flag =
+    (extra ? `  (+${extra} outside the plan)` : "") +
+    (!contentRoutes.includes(route) ? "  ⚠ not a content route" : "");
   console.log(
     `  ${route.padEnd(48)} ${String(approved.length).padStart(8)} ${String(candidate.length).padStart(10)}  ${missing.join(", ") || (want.length ? "—" : plan ? "(unplanned)" : "")}${flag}`,
   );

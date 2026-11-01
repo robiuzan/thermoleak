@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { articles } from "@/lib/articles";
-import { gallery } from "@/lib/gallery";
+import { gallery, generatedLinks } from "@/lib/gallery";
 import { imagesFor, imagesNote, type PlacedImage } from "@/lib/images";
 import { collectionPageJsonLd } from "@/lib/jsonld";
 import { locations } from "@/lib/locations";
@@ -39,15 +39,17 @@ const pageTitles = new Map<string, string>([
 
 /**
  * Where a tile links. A reused image goes back to the page it was made for (its first placement);
- * an image made for the gallery goes to the service it shows. Neither: no link.
+ * an image made for the gallery goes to the service it shows. The two that show no camera carry no
+ * service (a service brings the camera into the prompt), so lib/gallery.ts names their pages.
  */
 function linkFor(image: PlacedImage): { href: string; label: string } | null {
   const href =
-    image.route !== "/gallery/"
+    generatedLinks[image.id] ??
+    (image.route !== "/gallery/"
       ? image.route
       : image.service
         ? `/services/${image.service}/`
-        : null;
+        : null);
   const label = href ? pageTitles.get(href) : undefined;
   return href && label ? { href, label } : null;
 }
