@@ -22,7 +22,7 @@ The toolkit lives in Media Studio. This repo contributes the plan (`content/imag
 | #   | Touch                                                                        | Where                                                   |
 | --- | ---------------------------------------------------------------------------- | ------------------------------------------------------- |
 | 1   | Approve the plan, the seven note texts and the budget (done 2026-11-01)      | chat                                                    |
-| 2   | Keep the consent record for עומר and יואב (relayed; signed copies to follow) | `Media Studio\refs\thermoleak\CONSENT.md`, outside git  |
+| 2   | The consent record for עומר and יואב (signed copies reported done 2026-11-01) | `Media Studio\refs\thermoleak\CONSENT.md`, outside git  |
 | 3   | One "yes" on the prompt digest                                               | `Media Studio\sites\thermoleak\plan-digest.md` → chat   |
 | 4   | One board session (about 70 cards: approve all passing, plus spot checks)    | `http://localhost:4310` beside `npm run dev:images`     |
 | 5   | Confirm the deploy                                                           | `ops/deploy-site.ps1 -Domain thermoleak.co.il -Confirm` |

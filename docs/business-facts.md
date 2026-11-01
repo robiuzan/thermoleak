@@ -60,7 +60,7 @@ homepage gallery only. CLAUDE.md §15 is the operating rule, and [eeat-and-trust
   No per-image label, no file marker.
 - **The people.** עומר is the manager and יואב the technician: the two technicians the site already
   counts. Both may be shown, faces included, on every content page. The user relayed the consent in
-  chat; the signed copies are open. Surnames stay out of this repo.
+  chat, and reported the signed copies done the same day. Surnames stay out of this repo.
 - **The founder** is re-confirmed as רונן דהן, who owns and runs the business. He is never depicted.
 - **Existing images.** The hero is regenerated. The 11 gallery images are re-issued with the logo at
   new file names; the old files stay at least 60 days, and their removal is a separate decision.
@@ -68,9 +68,7 @@ homepage gallery only. CLAUDE.md §15 is the operating rule, and [eeat-and-trust
   stays (the user's choice over the recommendation to drop it).
 - **The emblem.** The shield alone on the left chest of every frame with a person, as the request asks.
 - **Kit that may appear** besides the E8, the pin moisture meter and the acoustic detector: a small
-  masking-tape or chalk mark, a plain tablet showing only a thermal image, a plain grey case. All four
-  boxes of that question were ticked, "none of these" included; the work reads the three items as
-  allowed. Nothing else, ever: no drain camera, no pressure-test kit, no tool of repair.
+  masking-tape or chalk mark, a plain tablet showing only a thermal image, a plain grey case (the user confirmed this reading the same day). Nothing else, ever: no drain camera, no pressure-test kit, no tool of repair.
 - **The export budget** is 25,000,000 B, and the page-width fix (`Container`'s `max` prop) ships with this
   work.
 
@@ -86,7 +84,7 @@ homepage gallery only. CLAUDE.md §15 is the operating rule, and [eeat-and-trust
 | Permission to publish a photo of the founder | A named face is the strongest single trust signal available | `public/images/`                                 |                                                                                                      | 🔶     |
 | AI likeness — עומר (manager)                 | Every image that shows him needs his OK                     | `content/images/manifest.json`                   | **yes** — himself 2026-10-22 for the gallery; extended to every page 2026-11-01, relayed by the user | ✅     |
 | AI likeness — יואב (technician)              | Every image that shows him needs his OK                     | `content/images/manifest.json`                   | **yes** — 2026-11-01, relayed by the user                                                            | ✅     |
-| Signed consent copies                        | The consent above is relayed, not yet signed                | Media Studio `refs/thermoleak/`, never this repo |                                                                                                      | 🔶     |
+| Signed consent copies                        | The consent above needs a signed record                | Media Studio `refs/thermoleak/`, never this repo | **done** — reported by the user, in chat, 2026-11-01 | ✅     |
 
 > **On the two experience numbers.** The BUSINESS was founded 2015 (11 years). The FOUNDER has been
 > in the trade ~20 years. `site.stats.years` says "20+ שנות ניסיון **בשטח**" — the word בשטח is
