@@ -64,7 +64,7 @@ today — a title that gets there is usually trap 1 coming back.
 ## Descriptions
 
 150–160 chars, unique per route, following keyword-map §5: what it is + where, one **true**
-differentiator, then an action with the phone. All 28 indexable routes are currently unique — verify
+differentiator, then an action with the phone. All 29 indexable routes are currently unique — verify
 that still holds after any change.
 
 Two live gaps against that spec, both **code** defects, both open:
@@ -106,7 +106,7 @@ alternates: {
 }
 ```
 
-All 28 indexable routes carry a correct self-referencing one — verified in `out/`. `/thank-you/`
+All 29 indexable routes carry a correct self-referencing one — verified in `out/`. `/thank-you/`
 deliberately has none: it is `robots: { index: false }` and absent from the sitemap. Two notes:
 
 - `app/page.tsx` sets `alternates: { canonical: "/" }` while `app/layout.tsx` already does — redundant,
@@ -180,7 +180,7 @@ See `/aeo-answer-content`.
 ## One H1 per page
 
 Exactly one `<h1>`, matching the title's intent. Everything else `<h2>`/`<h3>`, no skipped levels.
-Currently correct on all 31 emitted pages — keep it that way.
+Currently correct on all 32 emitted pages — keep it that way.
 
 ## Checklist
 

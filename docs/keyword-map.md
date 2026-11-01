@@ -77,9 +77,10 @@ brand-token bugs this section used to describe (brandless home, double-branded `
 | Location        | `איתור נזילות ב{prefixed}`                  | `איתור נזילות בתל אביב \| טרמוליק`               |
 | About           | `אודות` — **not** `אודות טרמוליק`           | `אודות \| טרמוליק` ✅ fixed 2026-08-17           |
 | Contact         | `צור קשר`                                   | `צור קשר \| טרמוליק`                             |
+| Gallery         | `גלריה — כך נראית בדיקה תרמית בבית`         | `גלריה — כך נראית בדיקה תרמית בבית \| טרמוליק`   |
 | Article         | the question verbatim                       | `מה מצלמה תרמית באמת רואה? \| טרמוליק`           |
 
-Keep the **rendered** title under ~60 characters. Hebrew is compact and 27 of the 28 indexed routes
+Keep the **rendered** title under ~60 characters. Hebrew is compact and 28 of the 29 indexed routes
 sit at 15–59 (the twelve city titles at 29–35). The one over is `/guides/find-leak-without-breaking/` at **64**, because §4 requires
 the article title to be the question verbatim and that question is long. Two rules genuinely collide
 there; prefer the verbatim question and shorten the _question_ in `lib/articles.ts` if it ever needs
@@ -110,7 +111,7 @@ Note the deliberate asymmetry on hubs and indexes: the `<title>` carries the key
 — איתור נזילות ורטיבות`) because that is what a SERP shows, while the `<h1>` stays a short label
 because that is what a visitor reads at the top of the page. Don't "fix" one to match the other.
 
-Exactly one `<h1>` per page — verified correct on all 31 emitted routes. Everything below is `<h2>`/`<h3>` with no
+Exactly one `<h1>` per page — verified correct on all 32 emitted routes. Everything below is `<h2>`/`<h3>` with no
 skipped levels.
 
 ---
@@ -118,7 +119,7 @@ skipped levels.
 ## 5. Description formulas
 
 150–160 characters, unique per route. Lead with **what it is + where**, add **one true**
-differentiator, close with an action. Never reuse a description across two routes. All 28 indexed
+differentiator, close with an action. Never reuse a description across two routes. All 29 indexed
 routes are currently unique.
 
 - **Service:** `{what it is in one clause}. {method or duration}. {one true differentiator}. חייגו {phone}.`
@@ -189,7 +190,7 @@ A cell exists when there is something true and specific to say in it. Not before
 
 ## 7. Route → primary keyword
 
-All **28 indexed routes**, in sitemap order. This table is the whole indexable surface — if a route is
+All **29 indexed routes**, in sitemap order. This table is the whole indexable surface — if a route is
 not here, it is not indexed.
 
 | Route                                 | Primary target                                 | Tier |
@@ -220,6 +221,7 @@ not here, it is not indexed.
 | `/locations/modiin/`                  | איתור נזילות במודיעין                          | 2    |
 | `/about/`                             | brand + entity terms                           | —    |
 | `/contact/`                           | brand + "איתור נזילות טלפון"                   | —    |
+| `/gallery/`                           | none — a picture page; linked from the footer  | —    |
 | `/accessibility/`                     | none — legal, indexed for trust                | —    |
 | `/privacy/`                           | none — legal, indexed for trust                | —    |
 

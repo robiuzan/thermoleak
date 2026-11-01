@@ -46,23 +46,47 @@ matching agent or skill will wire it into the right place.
 years in the trade, team size — and, importantly, two **negative** answers. There is **no company
 registration and no ח.פ.**, so `site.legalName` dropped `בע״מ`; and there is **no accessibility
 coordinator**, so `/accessibility/` no longer asserts one. **Resolved 2026-10-22 (in conversation):**
-the AI images of the team (`lib/gallery.ts`) may be published. They show עומר, the second
-technician, not the founder (named 2026-10-26; first name only, because this repo is public).
-**Changed 2026-10-26 (in conversation):** they ship with no label at all — no visible note or tags,
-no הדמיה in the alt text, no AI marker in the files. עומר agreed himself, including to the
-unlabelled version (confirmed 2026-10-26, in conversation).
+the AI images of the team may be published. They show עומר, not the founder, by first name only
+because this repo is public. He agreed himself on 2026-10-22, and on 2026-10-26 to their shipping
+with no note beside them.
+
+**Decided 2026-11-01 (the user, in chat).** This replaces the 2026-10-26 decision, which covered the
+homepage gallery only. CLAUDE.md §15 is the operating rule, and [eeat-and-trust.md](eeat-and-trust.md)
+§5a the reasoning.
+
+- **Images on every content page**, AI-made illustrations of the method under one site-wide note: a
+  footer line on every page, the `/gallery/` intro, and a line under the team figure on `/about/`. The
+  seven texts in `content/images/notice.json` are approved, and a wording change needs a new approval.
+  No per-image label, no file marker.
+- **The people.** עומר is the manager and יואב the technician: the two technicians the site already
+  counts. Both may be shown, faces included, on every content page. The user relayed the consent in
+  chat; the signed copies are open. Surnames stay out of this repo.
+- **The founder** is re-confirmed as רונן דהן, who owns and runs the business. He is never depicted.
+- **Existing images.** The hero is regenerated. The 11 gallery images are re-issued with the logo at
+  new file names; the old files stay at least 60 days, and their removal is a separate decision.
+- **The camera.** Every thermal camera in a picture is the FLIR E8, and the small FLIR mark on its side
+  stays (the user's choice over the recommendation to drop it).
+- **The emblem.** The shield alone on the left chest of every frame with a person, as the request asks.
+- **Kit that may appear** besides the E8, the pin moisture meter and the acoustic detector: a small
+  masking-tape or chalk mark, a plain tablet showing only a thermal image, a plain grey case. All four
+  boxes of that question were ticked, "none of these" included; the work reads the three items as
+  allowed. Nothing else, ever: no drain camera, no pressure-test kit, no tool of repair.
+- **The export budget** is 25,000,000 B, and the page-width fix (`Container`'s `max` prop) ships with this
+  work.
 
 > ⚠️ **A ❌ row is an answer, not a gap.** Three rows below are confirmed ABSENT. Do not re-open
 > them as "missing facts to chase", and never let a future agent refill them.
 
-| Field                         | Why it's needed                                             | Lands in                  | Value                                                           | Status |
-| ----------------------------- | ----------------------------------------------------------- | ------------------------- | --------------------------------------------------------------- | ------ |
-| Owner / founder name          | `Person` schema, author bylines, the About story            | `lib/site.ts` + `/about/` | **רונן דהן**                                                    | ✅     |
-| Owner's years in the trade    | The "experience" half of E-E-A-T                            | `lib/site.ts`             | **in the trade since ~2005** (10 years before founding in 2015) | ✅     |
-| Technician count / team shape | "צוות" was implied but never quantified                     | `lib/site.ts`             | **2 people**                                                    | ✅     |
-| ח.פ. / ע.מ. number            | Was claimed via `בע״מ` with no number behind it             | `lib/site.ts`             | **none — not a registered company**                             | ❌     |
-| Permission to publish a photo | A named face is the strongest single trust signal available | `public/images/`          |                                                                 | 🔶     |
-| AI images of the team         | 11 on the homepage; need the depicted person's OK           | `lib/gallery.ts`          | **עומר** (2nd tech) — agreed himself; no label (2026-10-26)     | ✅     |
+| Field                                        | Why it's needed                                             | Lands in                                         | Value                                                                                                | Status |
+| -------------------------------------------- | ----------------------------------------------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------- | ------ |
+| Owner / founder name                         | `Person` schema, author bylines, the About story            | `lib/site.ts` + `/about/`                        | **רונן דהן**                                                                                         | ✅     |
+| Owner's years in the trade                   | The "experience" half of E-E-A-T                            | `lib/site.ts`                                    | **in the trade since ~2005** (10 years before founding in 2015)                                      | ✅     |
+| Technician count / team shape                | "צוות" was implied but never quantified                     | `lib/site.ts`                                    | **2 people**                                                                                         | ✅     |
+| ח.פ. / ע.מ. number                           | Was claimed via `בע״מ` with no number behind it             | `lib/site.ts`                                    | **none — not a registered company**                                                                  | ❌     |
+| Permission to publish a photo of the founder | A named face is the strongest single trust signal available | `public/images/`                                 |                                                                                                      | 🔶     |
+| AI likeness — עומר (manager)                 | Every image that shows him needs his OK                     | `content/images/manifest.json`                   | **yes** — himself 2026-10-22 for the gallery; extended to every page 2026-11-01, relayed by the user | ✅     |
+| AI likeness — יואב (technician)              | Every image that shows him needs his OK                     | `content/images/manifest.json`                   | **yes** — 2026-11-01, relayed by the user                                                            | ✅     |
+| Signed consent copies                        | The consent above is relayed, not yet signed                | Media Studio `refs/thermoleak/`, never this repo |                                                                                                      | 🔶     |
 
 > **On the two experience numbers.** The BUSINESS was founded 2015 (11 years). The FOUNDER has been
 > in the trade ~20 years. `site.stats.years` says "20+ שנות ניסיון **בשטח**" — the word בשטח is
@@ -75,17 +99,18 @@ unlabelled version (confirmed 2026-10-26, in conversation).
 were all **removed**. The site no longer fabricates proof — but it now has **none**, which keeps
 this section the highest-priority ask. The rows below are what replaces them legitimately.
 
-| Field                                                  | Why it's needed                                                                 | Lands in               | Value                                                                         | Status |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------- | ---------------------- | ----------------------------------------------------------------------------- | ------ |
-| **Google Business Profile URL** (service-area profile) | The top local lever; `sameAs`; the only legitimate source for `aggregateRating` | `lib/site.ts` `social` | **does not exist yet** — owner will open one                                  | 🔶     |
-| Facebook page URL                                      | `sameAs`; entity corroboration                                                  | `lib/site.ts` `social` |                                                                               | 🔶     |
-| Instagram URL                                          | `sameAs`; thermal imagery is a natural fit                                      | `lib/site.ts` `social` |                                                                               | 🔶     |
-| 5–10 real reviews (author, date, text, **source URL**) | Replaces the six fabricated ones                                                | a new `lib/reviews.ts` |                                                                               | 🔶     |
-| Real review count + average rating                     | `AggregateRating`. **Ships only with a verifiable public source**               | derived from the above |                                                                               | 🔶     |
-| Equipment — which thermal camera?                      | A specific model is a genuine expertise signal                                  | `lib/site.ts`          | **FLIR E8**                                                                   | ✅     |
-| Insurance (ביטוח צד ג׳)                                | Standard trade trust signal                                                     | `lib/site.ts`          | **yes — held** (insurer and coverage amount not supplied, so no figure ships) | ✅     |
-| Thermography certification — issuing body + number     | Was claimed as "Thermography Level 1" with no certificate behind it             | `lib/site.ts`          | **none — no certificate held**                                                | ❌     |
-| Trade association membership                           | Authority signal                                                                | `lib/site.ts`          | **none**                                                                      | ❌     |
+| Field                                                  | Why it's needed                                                                                                                                        | Lands in                       | Value                                                                         | Status |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------ | ----------------------------------------------------------------------------- | ------ |
+| **Google Business Profile URL** (service-area profile) | The top local lever; `sameAs`; the only legitimate source for `aggregateRating`                                                                        | `lib/site.ts` `social`         | **does not exist yet** — owner will open one                                  | 🔶     |
+| Facebook page URL                                      | `sameAs`; entity corroboration                                                                                                                         | `lib/site.ts` `social`         |                                                                               | 🔶     |
+| Instagram URL                                          | `sameAs`; thermal imagery is a natural fit                                                                                                             | `lib/site.ts` `social`         |                                                                               | 🔶     |
+| 5–10 real reviews (author, date, text, **source URL**) | Replaces the six fabricated ones                                                                                                                       | a new `lib/reviews.ts`         |                                                                               | 🔶     |
+| Real review count + average rating                     | `AggregateRating`. **Ships only with a verifiable public source**                                                                                      | derived from the above         |                                                                               | 🔶     |
+| Equipment — which thermal camera?                      | A specific model is a genuine expertise signal                                                                                                         | `lib/site.ts`                  | **FLIR E8**                                                                   | ✅     |
+| Insurance (ביטוח צד ג׳)                                | Standard trade trust signal                                                                                                                            | `lib/site.ts`                  | **yes — held** (insurer and coverage amount not supplied, so no figure ships) | ✅     |
+| Thermography certification — issuing body + number     | Was claimed as "Thermography Level 1" with no certificate behind it                                                                                    | `lib/site.ts`                  | **none — no certificate held**                                                | ❌     |
+| Photos of real work                                    | None exist on the site. Renderings run under the note; a real phone photo enters the manifest as `owner-supplied` and replaces a rendering one for one | `content/images/manifest.json` |                                                                               | 🔶     |
+| Trade association membership                           | Authority signal                                                                                                                                       | `lib/site.ts`                  | **none**                                                                      | ❌     |
 
 > ⚠️ **The certification row is ❌, not 🔶.** The owner confirmed 2026-09-17 there is no
 > thermography certificate, and the unbacked "Level 1" line was deleted from `site.credentials` on
@@ -277,7 +302,7 @@ the same day** on the fleet wording sign-off page; every answer he gave there is
 | When the card may open                                   | at any hour the calendar allows — weekday evenings, Friday afternoon and Saturday night included, when nobody may answer the phone; its WhatsApp button still works then. Shabbat, chag and the quiet days still silence it                    | owner, fleet decision 2026-10-12 (every site)                                                                                                                                   | ✅                                                                    |
 | Counting the card in GTM                                 | **one shared trigger for the fleet** — `CE - popup events (3locksmiths)` keeps a hostname condition, widened to match every fleet site, this one included; not a trigger per site                                                              | owner, fleet decision 2026-10-12                                                                                                                                                | ✅ decided — the container edit is fleet ops, before the first deploy |
 | The homepage updates strip                               | ships as is, no new item (the owner left "anything to add?" empty). Its newest item is 17/09/2026, so it hides itself from 01/11/2026 until a real newer item is added                                                                         | owner, 2026-10-12                                                                                                                                                               | ✅                                                                    |
-| Export size budget                                       | raised from 6 MB to 7.5 MB (2026-10-12), to 8 MB (2026-10-27), then to **15 MB** (2026-10-28) — [performance-guidelines.md](performance-guidelines.md) §1                                                                                      | owner, 2026-10-12 ("Raise the cap to 7.5 MB"); owner, 2026-10-27 ("Raise limit to 8 MB"); owner, 2026-10-28 ("increase size limit to 15M")                                      | ✅                                                                    |
+| Export size budget                                       | raised from 6 MB to 7.5 MB (2026-10-12), to 8 MB (2026-10-27), to **15 MB** (2026-10-28), then to **25 MB** (2026-11-01) — [performance-guidelines.md](performance-guidelines.md) §1                                                           | owner, 2026-10-12 ("Raise the cap to 7.5 MB"); owner, 2026-10-27 ("Raise limit to 8 MB"); owner, 2026-10-28 ("increase size limit to 15M")                                      | ✅                                                                    |
 | Header call button wraps at 768–820 px (live today)      | fix approved **as a separate change, later** — not part of the live-kit port; [optimization-backlog.md](optimization-backlog.md) §8.7                                                                                                          | owner, 2026-10-12                                                                                                                                                               | ✅ decided — not fixed yet                                            |
 
 ---

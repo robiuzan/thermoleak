@@ -32,7 +32,7 @@ Next.js 16 static export (`output: "export"`, `trailingSlash: true`). You audit 
      page string renders it twice (the old `/about/` bug).
      Check the extracted `<title>` list, not raw HTML — the JSON-LD legitimately repeats the brand.
      **Measured 2026-09-06: all 22 emitted titles carry `טרמוליק` exactly once, homepage included**
-     (all 31 on 2026-10-28).
+     (all 32 on 2026-11-01).
      This section is a regression trap, not a live defect — do not report either old bug as open.
 2. **Descriptions.** Present, unique, following the keyword-map formulas. Measured 2026-09-06: all
    19 indexed routes carry a unique description. The only repeats are `/404/`, `/_not-found/` and
@@ -42,13 +42,13 @@ Next.js 16 static export (`output: "export"`, `trailingSlash: true`). You audit 
    `service.summary` (which doubles as the meta description), not a defect: nothing is truncated
    and nothing is duplicated. **SEO-02 is closed** (2026-09-17): the old `.slice(0, 155)` that cut
    the city descriptions mid-word is gone, and every city reads an authored, required
-   `metaDescription`. On 2026-10-28 all 28 indexed descriptions are unique and the twelve city ones
+   `metaDescription`. On 2026-11-01 all 29 indexed descriptions are unique and the twelve city ones
    measure 152–158 chars. Flag a city description that promises a same-day visit its page does not —
    only תל אביב, חולון, בת ים and רמת גן say `נשתדל להגיע באותו יום`.
-3. **One H1 per page**, matched to intent, and unbroken heading order. Measured 2026-10-28: exactly
-   one `<h1>` on all 31 emitted pages; a regression here is High.
+3. **One H1 per page**, matched to intent, and unbroken heading order. Measured 2026-11-01: exactly
+   one `<h1>` on all 32 emitted pages; a regression here is High.
 4. **Canonicals.** One self-referencing `<link rel="canonical">` per URL with a trailing slash.
-   Measured 2026-10-28: correct on all 28 indexed routes. `app/layout.tsx` deliberately sets **no**
+   Measured 2026-11-01: correct on all 29 indexed routes. `app/layout.tsx` deliberately sets **no**
    layout-level canonical (a default would leak a homepage canonical onto `/thank-you/`), so
    `/404/`, `/_not-found/` and `/thank-you/` carry none — that is the intended shape, not a gap.
 5. **OpenGraph and Twitter — a regression trap (SEO-01, fixed 2026-09-17).** Next shallow-merges
@@ -57,13 +57,13 @@ Next.js 16 static export (`output: "export"`, `trailingSlash: true`). You audit 
    services, three guides, the three cities then shipped) emitted no `og:image`, and eight hub and
    static routes inherited `og:url = https://thermoleak.co.il/`. `b954357` routed every indexed page
    except `/` through `pageOpenGraph()` (`lib/site.ts`), which also emits a matching `twitter`
-   block. Measured 2026-10-28: every one of the 31 pages carries an `og:image` and every canonical
+   block. Measured 2026-11-01: every one of the 32 pages carries an `og:image` and every canonical
    page's `og:url` equals its canonical. Do not report SEO-01 as open; a page missing either, or a
    generic `twitter:title` beside a page-specific `og:title`, is a **new regression** — usually a
    route that hand-wrote its `openGraph`. **Grep `out/` for this; a gate that only checks
    title/canonical/H1 cannot see it.**
 6. **Sitemap & robots.** Diff the sitemap URL set against the emitted `out/` tree in both directions
-   (`npm run check:sitemap` does this). Expect **28 `<url>` entries against 31 emitted `index.html`
+   (`npm run check:sitemap` does this). Expect **29 `<url>` entries against 32 emitted `index.html`
    files** — `/404/`, `/_not-found/` and the noindex `/thank-you/` are correctly excluded (the
    double 404 emission remains finding §1.1; both forms 301 to `/` in `public/_redirects`).
    `staticRoutes` is still hand-maintained at 8 entries (§1.2). `lastModified` uses real per-route
@@ -135,7 +135,10 @@ the route count audited and a green/red verdict per backlog section.
 - **`out/` on disk is routinely stale** — it lags the last commit. Check its mtime against
   `git log -1` first, and if it is behind, say so and stop rather than auditing an old artifact.
 - Never audit source files as a proxy for the export.
-- **The measured baselines in this file are dated 2026-09-06 unless marked 2026-10-28.** Re-measure rather than quoting them,
+- **Page images (CLAUDE.md §15):** `og:image` stays `/og.png`, never a rendering. File names are subject-based
+  and never carry a city or a person. Every image has numeric size and a Hebrew alt that says what is visible;
+  `alt=""` is legal only on the decorative service illustrations.
+- **The measured baselines in this file are dated 2026-09-06 unless marked 2026-10-28 or 2026-11-01.** Re-measure rather than quoting them,
   and correct this file's numbers in your report if the build has moved — a stale count here is the
   same class of failure as a stale count in the backlog.
 - Never invent, restate or "confirm" a business fact to fill a metadata field. Prices, certifications

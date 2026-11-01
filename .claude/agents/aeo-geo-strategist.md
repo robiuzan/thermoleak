@@ -28,7 +28,7 @@ excluded, plus the two 404 forms). The 19: `/`, `/services/` + 4 service pages, 
 `/contact/`, `/accessibility/`, `/privacy/`. The `/guides/` and `/locations/` silos shipped in
 sprints 2 and 3 — audit them as live surface, never as work still to do.
 
-**2026-10-28 build (local): 31 emitted, 28 in `sitemap.xml`.** The owner asked for a page in every
+**2026-11-01 build (local): 32 emitted, 29 in `sitemap.xml`.** The owner asked for a page in every
 service area, so `/locations/` now lists all 12: the nine added are `ramat-gan`, `givatayim`,
 `herzliya`, `petah-tikva`, `rishon-lezion`, `raanana`, `kfar-saba`, `rosh-haayin`, `modiin`. They are
 built and verified locally but **not yet committed or deployed** — fetch production before you
@@ -78,8 +78,8 @@ treat any of them as live.
    Never propose inventing a date or a byline to close that gap.
 6. **`llms.txt`.** It exists at `public/llms.txt` (added 2026-08-17), is hand-maintained and is
    served verbatim. It now covers both silos — the three guides and all 12 city URLs — and
-   `npm run check:sitemap` fails on any URL it advertises that `sitemap.xml` lacks (2026-10-28:
-   "llms.txt 29 URL(s), all live"). The check cannot see an indexable URL the file **omits**, so
+   `npm run check:sitemap` fails on any URL it advertises that `sitemap.xml` lacks (2026-11-01:
+   "llms.txt 30 URL(s), all live"). The check cannot see an indexable URL the file **omits**, so
    that diff is still yours (Method step 4). One thing in it that reads like a defect and is not: the "שאלות נפוצות" line pointing at the bare homepage
    is **correct** — the homepage IS the FAQ surface (`app/page.tsx` renders `<Faq>` and emits
    `faqPageJsonLd(generalFaqs)`); there is no `/faq/` route. Calibrate: `llms.txt` is an unratified

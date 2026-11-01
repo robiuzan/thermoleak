@@ -116,7 +116,7 @@ Two rules follow, and they are the whole of the breadcrumb work now:
    only importer outside `lib/jsonld.ts` is `PageHero` itself — keep it that way.
 2. **A page with a visible trail uses `PageHero`.** Hand-rolled crumbs get a trail with no schema.
 
-**27 of the 31 emitted `index.html` files carry `BreadcrumbList`.** The four without it are `/` (the
+**28 of the 32 emitted `index.html` files carry `BreadcrumbList`.** The four without it are `/` (the
 root has no trail), `/thank-you/` and the two 404 artifacts. That is the expected number, not a gap.
 
 ## Service nodes
@@ -195,8 +195,8 @@ is the founder carries the founder's `@id` (`…/about/#founder`).
 
 ```bash
 grep -rL 'application/ld+json' out --include=index.html          # pages with no schema — expect none
-find out -name index.html | wc -l                                # 31 emitted pages
-grep -rl 'BreadcrumbList' out --include=index.html | wc -l       # expect 27 of the 31
+find out -name index.html | wc -l                                # 32 emitted pages
+grep -rl 'BreadcrumbList' out --include=index.html | wc -l       # expect 28 of the 32
 grep -rl 'aggregateRating\|"@type":"Review"\|sameAs\|GeoCoordinates' out --include=index.html | wc -l  # expect 0
 ```
 

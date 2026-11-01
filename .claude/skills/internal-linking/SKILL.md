@@ -5,7 +5,7 @@ description: Build the link mesh on thermoleak — a header that reaches all fou
 
 # Internal linking
 
-Twenty-eight indexable routes (31 emitted, 2026-10-28 build), and the graph is **orphan-free** — the
+Twenty-nine indexable routes (32 emitted, 2026-11-01 build), and the graph is **orphan-free** — the
 only unlinked emitted files are `/404/`, `/_not-found/` and `/thank-you/`, all three deliberate. That
 is genuinely better than most sites this size. The gap is not reachability; it is **anchor-text depth
 and the direction of the location edges**.
@@ -20,7 +20,7 @@ and the direction of the location edges**.
 | Related services          | `services.filter(s => s.slug !== current)` → all 3 others. Correct at 4 services; revisit at 8+        |
 | Contextual in-copy links  | ✅ shipped — a `links` array per service (`lib/services.ts`), 2 descriptive anchors each               |
 | Hub prose on `/services/` | **still none** — the index is a card grid plus the PageHero subtitle                                   |
-| Breadcrumbs               | ✅ `PageHero` renders the trail **and** emits `BreadcrumbList` from the same array — 27 pages          |
+| Breadcrumbs               | ✅ `PageHero` renders the trail **and** emits `BreadcrumbList` from the same array — 28 pages          |
 | Location silo             | 12 cities — each links out to all 4 services; in: hub, footer, `nearby` (30 pages), no service page    |
 
 ## 1. Header
@@ -94,7 +94,7 @@ prose is short and its card blurbs are lifted verbatim from the child pages (LOC
 
 `components/PageHero.tsx` takes one `crumbs` array and does both jobs from it: it renders the visible
 trail through `Breadcrumbs` **and** emits `BreadcrumbList` itself, mapping `href` → `url`. They cannot
-drift. 27 emitted pages carry both on the 2026-10-28 build (every route except `/`, `/thank-you/` and
+drift. 28 emitted pages carry both on the 2026-11-01 build (every route except `/`, `/thank-you/` and
 the two 404 artifacts; 18 before the nine cities).
 
 **A page must never call `breadcrumbJsonLd` directly** — that double-emits. Pass `crumbs` to

@@ -83,7 +83,7 @@ to them. There is no `.htaccess`; that file died with the Apache origin.
 curl -sI  https://thermoleak.co.il/pricing/ | head -5          # 200 — a new-build route
 curl -s   https://thermoleak.co.il/ | grep -o '<title>[^<]*</title>'
 curl -sI  https://thermoleak.co.il/reviews/ | grep -iE '^HTTP|location'   # 301 -> /about/
-curl -s   https://thermoleak.co.il/sitemap.xml | grep -c '<url>'          # 28
+curl -s   https://thermoleak.co.il/sitemap.xml | grep -c '<url>'          # 29
 curl -sI  https://thermoleak.co.il/guides/what-a-thermal-camera-sees/ | head -1  # 200 — sprint-2 silo
 curl -sI  https://thermoleak.co.il/locations/tel-aviv/ | head -1                 # 200 — sprint-3 silo
 curl -sI  https://thermoleak.co.il/locations/modiin/ | head -1                   # 200
@@ -91,11 +91,23 @@ curl -sI  https://thermoleak.co.il/ | grep -iE 'strict-transport|x-frame' # _hea
 curl -s   https://thermoleak.co.il/robots.txt                             # managed block state
 ```
 
+**After an image install, also check** (CLAUDE.md §15; a draft build must never reach this point, and the ops
+script refuses one):
+
+```bash
+curl -sI https://thermoleak.co.il/images/_candidates/x.webp | head -1   # 404 — candidates never ship
+curl -sI https://thermoleak.co.il/images/hero.webp | head -1            # 200 — a replaced file stays
+curl -s  https://thermoleak.co.il/ | grep -o 'property="og:image" content="[^"]*"'   # still /og.png
+curl -s  https://thermoleak.co.il/ | grep -c 'data-images-notice="footer"'           # 1
+```
+
+Then PageSpeed on `/`, one service and one city, and the Rich Results Test on one service and one guide.
+
 Check: a **new-build** route answers (not just old ones); the title carries the brand exactly once;
 the `_headers` entries actually appear; `robots.txt` reflects the intended AI-crawler stance
 (**Cloudflare can prepend a managed block** — see `/aeo-answer-content`).
 
-For reference, the export currently emits **31** `index.html` files and the sitemap lists **28**
+For reference, the export currently emits **32** `index.html` files and the sitemap lists **29**
 (`/thank-you/` is noindex and deliberately excluded, and the two 404 forms are not routes). Those two
 numbers move whenever a silo grows — `npm run check:sitemap` asserts they agree before you deploy, so
 treat the curl count as a live-site confirmation of what the gate already checked, not as a fixed

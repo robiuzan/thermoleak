@@ -292,8 +292,8 @@ website.
 **Staleness is a standing failure mode of this file, not a one-off.** It was written before both
 silos and for two sprints listed only the four services, `/pricing/` and the homepage — no guide URL,
 no location URL, no named human (AEO-1 / LOC-10 / EEAT-8). It now names the founder and lists the
-guides and all twelve city URLs: `npm run check:sitemap` reports "llms.txt 29 URL(s), all live" on
-the 2026-10-28 build. That check proves every listed URL is in the sitemap — it cannot see a route
+guides and all twelve city URLs: `npm run check:sitemap` reports "llms.txt 30 URL(s), all live" on
+the 2026-11-01 build. That check proves every listed URL is in the sitemap — it cannot see a route
 **missing** from the file. Keep it in sync with `lib/site.ts`, `lib/articles.ts` **and**
 `lib/locations.ts`: adding a route means updating this file in the same commit.
 

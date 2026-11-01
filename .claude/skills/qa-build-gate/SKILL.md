@@ -51,7 +51,7 @@ only gate. Add `npx tsc --noEmit` if you want the type errors faster than a full
 
 `npm run check:sitemap` (`scripts/check-sitemap-parity.mjs`) belongs in the same breath as the build.
 It is cited all over this repo and is cheap; run it every time rather than assuming it passed. It
-currently prints `sitemap parity OK — 31 routes emitted, 28 indexed, 3 deliberately excluded; llms.txt 29 URL(s), all live.`
+currently prints `sitemap parity OK — 32 routes emitted, 29 indexed, 3 deliberately excluded; llms.txt 30 URL(s), all live.`
 
 The build can also fail on the city graph: since 2026-10-28 a module-scope check in
 `lib/locations.ts` rejects an unknown or one-way `nearby` slug. Fix the edge on both cities; never
@@ -65,15 +65,15 @@ files, that's the cause, and deleting files from `out/` afterwards is not the fi
 ## 3. Route count
 
 ```bash
-find out -name index.html | wc -l          # expect 31 (28 indexable + /thank-you/ + /404/ + /_not-found/)
-grep -c '<url>' out/sitemap.xml            # expect 28 (/thank-you/ is noindex and excluded)
+find out -name index.html | wc -l          # expect 32 (29 indexable + /thank-you/ + /404/ + /_not-found/)
+grep -c '<url>' out/sitemap.xml            # expect 29 (/thank-you/ is noindex and excluded)
 test -f out/robots.txt && echo ok
 test -f out/llms.txt && echo ok
 test -f out/404.html && echo ok            # Cloudflare Pages serves this as the custom 404
 test -f out/_headers && test -f out/_redirects && echo ok   # Pages headers/redirects shipped
 ```
 
-The 28 indexed routes, in full — anything else in the sitemap is new and wants explaining:
+The 29 indexed routes, in full — anything else in the sitemap is new and wants explaining:
 
 `/` · `/services/` · `/services/water-leak-detection/` · `/services/moisture-detection/` ·
 `/services/electrical-thermography/` · `/services/insurance-reports/` · `/pricing/` · `/guides/` ·
@@ -82,10 +82,10 @@ The 28 indexed routes, in full — anything else in the sitemap is new and wants
 `/locations/bat-yam/` · `/locations/ramat-gan/` · `/locations/givatayim/` · `/locations/herzliya/` ·
 `/locations/petah-tikva/` · `/locations/rishon-lezion/` · `/locations/raanana/` ·
 `/locations/kfar-saba/` · `/locations/rosh-haayin/` · `/locations/modiin/` · `/about/` ·
-`/contact/` · `/accessibility/` · `/privacy/`
+`/contact/` · `/gallery/` · `/accessibility/` · `/privacy/`
 
 If the counts move, something was added or dropped. Reconcile before shipping — `staticRoutes` in
-`app/sitemap.ts` is hand-maintained, so a new page can build fine and be silently absent from the
+`lib/site.ts` is hand-maintained, so a new page can build fine and be silently absent from the
 sitemap. That is what `npm run check:sitemap` exists to catch (§9); the raw counts here are the
 human-readable cross-check on it, not a substitute.
 
@@ -145,11 +145,11 @@ done
 
 **Both must return empty; a non-empty result is a stop-ship.** This was finding SEO-01, fixed
 2026-09-17 (`b954357`): every indexed route except `/` (which keeps the layout's block) builds its
-tags with `pageOpenGraph()` in `lib/site.ts`. Both checks return empty on the 2026-10-28 build of 31 routes. Before the fix, check
+tags with `pageOpenGraph()` in `lib/site.ts`. Both checks return empty on the 2026-11-01 build of 32 routes. Before the fix, check
 (a) returned the ten routes that declared their own `openGraph` (four services, three guides, the
 three cities of the day), and check (b) eight hub and static routes whose `og:url` was the homepage.
 A new route that hand-writes its `openGraph` instead of calling the helper is how it comes back.
-Every one of the 28 indexed routes also carries a correct self-referencing `rel=canonical`.
+Every one of the 29 indexed routes also carries a correct self-referencing `rel=canonical`.
 
 ## 7. One H1
 
@@ -159,13 +159,13 @@ for f in $(find out -name index.html); do
 done
 ```
 
-Expect no output. Currently clean on all 31 pages.
+Expect no output. Currently clean on all 32 pages.
 
 ## 8. Structured data — including the stop-ship
 
 ```bash
 grep -rL 'application/ld+json' out --include=index.html      # pages with no schema — expect none
-grep -rl 'BreadcrumbList' out --include=index.html | wc -l   # expect 27 (every PageHero page — all but /, /thank-you/ and the two 404 artifacts)
+grep -rl 'BreadcrumbList' out --include=index.html | wc -l   # expect 28 (every PageHero page — all but /, /thank-you/ and the two 404 artifacts)
 grep -rl 'aggregateRating' out --include=index.html | wc -l  # MUST be 0 until sourced (removed 2026-08-17)
 grep -rl '"@type":"Review"' out --include=index.html | wc -l # MUST be 0 — same purge
 grep -rl 'sameAs\|GeoCoordinates' out --include=index.html | wc -l  # MUST be 0 until real values exist
@@ -180,7 +180,7 @@ return only with real, verifiable values from `docs/business-facts.md` §B/§E.
 
 The purged **statistics** need a text-scoped grep, not a raw one — `4.9` matches SVG path data and
 `97%` matches inline CSS on every page, so a naive `grep -rl` reports one false positive per page
-(31 on 2026-10-28):
+(32 on 2026-11-01):
 
 ```bash
 for f in $(find out -name index.html); do
@@ -201,7 +201,7 @@ A page calling `breadcrumbJsonLd` directly is a double-emission bug.
 
 ```bash
 npm run check:sitemap
-# sitemap parity OK — 31 routes emitted, 28 indexed, 3 deliberately excluded; llms.txt 29 URL(s), all live.
+# sitemap parity OK — 32 routes emitted, 29 indexed, 3 deliberately excluded; llms.txt 30 URL(s), all live.
 ```
 
 `scripts/check-sitemap-parity.mjs` is the assertion; it exits non-zero on drift. It does not just
@@ -279,7 +279,7 @@ the request, not the config** — and confirm no `/g/collect` call carries the n
 ## 12. Output weight
 
 ```bash
-find out -type f -printf '%s\n' | awk '{s+=$1} END {print s; exit (s>15000000)}'  # 15 MB since 2026-10-28; measured 11,212,389 raw, 10,643,189 minus carried chunks
+find out -type f -printf '%s\n' | awk '{s+=$1} END {print s; exit (s>25000000)}'  # 25 MB since 2026-11-01; the 2026-10-28 baseline was 11,212,389 raw, 10,643,189 minus carried chunks
 find out -name '*.js' -size +250k -exec ls -lh {} \;                            # expect nothing
 du -sb out/_next                                                                # measured 936,350
 ```
@@ -290,7 +290,7 @@ CSS and icons. Largest JS chunk **226,355 B**; `public/images/` was only ~80 KB 
 is SVG — since 2026-10-22 the homepage gallery adds WebP files (eleven since 2026-10-27, 540,802 B).
 
 **2026-10-28, with all 12 city pages:** 11,212,389 B raw / 378 files, of which 569,200 B (65 files)
-are earlier builds' carried chunks — **10,643,189 B, 71.0% of the 15,000,000 B budget**, leaving
+are earlier builds' carried chunks — **10,643,189 B, 71.0% of the budget of the day, 15,000,000 B**, leaving
 4,356,811 B. Each city page costs 302–308 KB, so that is the unit to budget a new content page at.
 
 That `.txt` figure is not a defect to chase. It is Next 16's RSC flight payloads, emitted **twice per
@@ -362,6 +362,27 @@ Last step, and the one that keeps this file honest: if the change made any state
 doesn't exist yet" — fix it in the **same commit**. Every stale assertion in this gate got that way by
 someone shipping the code and leaving the sentence.
 
+## 15. Images
+
+`postbuild` runs `scripts/images/check-images-out.mjs`, so a green build has already passed it. Rules
+behind it: CLAUDE.md §15. By hand:
+
+```bash
+npm run images:status                                        # plan against manifest, route by route
+grep -il 'fetchpriority="high"' out/index.html               # one per image-bearing page
+test -f out/.images-draft && echo "DRAFT BUILD — do not ship"
+git status --short | grep -E 'assets/|_candidates/'          # expect nothing but assets/gallery/README.md
+```
+
+A draft proves the wiring: `IMAGES_DRAFT=1 npm run build` leaves `out/.images-draft` and `out/.live-draft`,
+and the ops script's `-DeployOnly -DryRun` must print `GATE FAILED` for that `out/` (a plain `-DryRun` only
+previews a fresh build, so it cannot show the refusal). Rebuild clean afterwards. Grep `fetchpriority`
+case-insensitively, because the emitted HTML is camelCase. A page carries it twice, and that is correct: once on
+the `<img>` and once on its preload link.
+
+**Once `gates.minPerContentPage` is 2**, every content route needs two images: a new page needs its plan slots
+and two approved images before it ships.
+
 ## Stop-ship list
 
 - **`aggregateRating`, `Review`, `sameAs`, `GeoCoordinates`, or a facebook.com/instagram.com link in
@@ -374,7 +395,9 @@ someone shipping the code and leaving the sentence.
 - A route in `out/` missing from `sitemap.xml` — i.e. `npm run check:sitemap` exiting non-zero.
 - A new orphan beyond `/404/`, `/_not-found/` and `/thank-you/`.
 - A `data-cta` href carrying a visitor's name, phone or email (§11).
-- `out/` past the 15,000,000 B budget (§12), or any JS chunk over 250 KB.
+- `out/` past the 25,000,000 B budget (§12), or any JS chunk over 250 KB.
+- A build that left `out/.images-draft`, an unapproved image, a rendering in JSON-LD or `og:image`, or a page
+  under its image minimum (§15).
 - Any unreferenced file over 1 MB under `out/`.
 - `lint` or `build` failing.
 - A live claim that `docs/business-facts.md` marks 🔶.

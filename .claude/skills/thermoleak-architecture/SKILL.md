@@ -6,7 +6,7 @@ description: Start-here orientation for thermoleak.co.il — the lib/site.ts →
 # thermoleak.co.il architecture
 
 טרמוליק — thermal (infrared) leak and moisture detection, גוש דן והמרכז. Hebrew RTL marketing site,
-**29 content routes** (28 indexable + `/thank-you/`), Next.js 16 App Router compiled to static HTML.
+**30 content routes** (29 indexable + `/thank-you/`), Next.js 16 App Router compiled to static HTML.
 Read this before changing anything.
 
 ## The stack, and what it forbids
@@ -60,23 +60,29 @@ roster **is** the deploy authority: `roster.json` carries `localPath` and `pages
 fleet ops script resolves when shipping. Read the manifest to learn what the fleet believes is true
 (its `_needsConfirmation` array is the honest list), then edit `lib/site.ts` by hand.
 
-## Routes — 28 indexable, 31 emitted `index.html`
+## Images
 
-| Route                                                           | Source                           | Count |
-| --------------------------------------------------------------- | -------------------------------- | ----- |
-| `/`                                                             | `app/page.tsx`                   | 1     |
-| `/services/`                                                    | `app/services/page.tsx`          | 1     |
-| `/services/{slug}/`                                             | `app/services/[slug]/page.tsx`   | 4     |
-| `/guides/`                                                      | `app/guides/page.tsx`            | 1     |
-| `/guides/{slug}/`                                               | `app/guides/[slug]/page.tsx`     | 3     |
-| `/locations/`                                                   | `app/locations/page.tsx`         | 1     |
-| `/locations/{city}/`                                            | `app/locations/[city]/page.tsx`  | 12    |
-| `/pricing/` `/about/` `/contact/` `/accessibility/` `/privacy/` | one dir each under `app/`        | 5     |
-| `/thank-you/`                                                   | noindex, post-form conversion    | 1     |
-| `/404/` + `/_not-found/`                                        | `app/not-found.tsx`              | 2     |
-| `/sitemap.xml` `/robots.txt`                                    | `app/sitemap.ts` `app/robots.ts` | —     |
+Every content image comes from `content/images/manifest.json` through `lib/images.ts` and renders with
+`components/Figure.tsx`. The toolkit in Media Studio writes the manifest, never a person. CLAUDE.md §15 is the
+rule, and the `page-imagery` skill is the slot inventory.
 
-The 2026-10-28 export emits **31** `index.html` files; the sitemap lists **28** (`/thank-you/` is
+## Routes — 29 indexable, 32 emitted `index.html`
+
+| Route                                                                       | Source                           | Count |
+| --------------------------------------------------------------------------- | -------------------------------- | ----- |
+| `/`                                                                         | `app/page.tsx`                   | 1     |
+| `/services/`                                                                | `app/services/page.tsx`          | 1     |
+| `/services/{slug}/`                                                         | `app/services/[slug]/page.tsx`   | 4     |
+| `/guides/`                                                                  | `app/guides/page.tsx`            | 1     |
+| `/guides/{slug}/`                                                           | `app/guides/[slug]/page.tsx`     | 3     |
+| `/locations/`                                                               | `app/locations/page.tsx`         | 1     |
+| `/locations/{city}/`                                                        | `app/locations/[city]/page.tsx`  | 12    |
+| `/pricing/` `/about/` `/contact/` `/gallery/` `/accessibility/` `/privacy/` | one dir each under `app/`        | 6     |
+| `/thank-you/`                                                               | noindex, post-form conversion    | 1     |
+| `/404/` + `/_not-found/`                                                    | `app/not-found.tsx`              | 2     |
+| `/sitemap.xml` `/robots.txt`                                                | `app/sitemap.ts` `app/robots.ts` | —     |
+
+The 2026-11-01 export emits **32** `index.html` files; the sitemap lists **29** (`/thank-you/` is
 noindex and deliberately absent, the two 404 forms are excluded — the double 404 emission is backlog
 §1.1, and both forms now 301 to `/` in `public/_redirects`; Pages serves the root `404.html` natively).
 `/reviews/` was removed 2026-08-17 and 301s to `/about/` via `public/_redirects`.

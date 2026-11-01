@@ -11,19 +11,20 @@ Measured 2026-09-06 from a clean `out/`. Two numbers per row: `<main>` is everyt
 content landmark; **Unique** subtracts the shared `ContactCTA` block, which contributes **112 words**
 to every page that renders it. The floor is judged against **Unique**.
 
-| Page type                      | Floor | `<main>`  | Unique  | vs floor                                         |
-| ------------------------------ | ----- | --------- | ------- | ------------------------------------------------ |
-| Homepage                       | 800   | 972       | 860     | ✅                                               |
-| Service page                   | 450   | 475–571   | 363–459 | ⚠️ only `water-leak-detection` clears            |
-| Location page                  | 350   | 696–766   | 584–654 | ✅ all three; all 12 on 2026-10-28 (below)       |
-| Article                        | 900   | 798–936   | 686–824 | ❌ all three short — see the note below          |
-| Hub `/services/`               | 250   | 367       | 255     | ✅ on the line                                   |
-| Hub `/locations/`              | 250   | 357       | 245     | ⚠️ on the line                                   |
-| Hub `/guides/`                 | 250   | 267       | 155     | ❌ thin — a one-line subtitle and three cards    |
-| `/pricing/`                    | 450   | 552       | 440     | ⚠️ on the line (money-intent → service floor)    |
-| About                          | 500   | 610       | 498     | ⚠️ on the line                                   |
-| Contact                        | 200   | 275       | n/a     | ✅ the CTA **is** the page here, so no deduction |
-| Legal (privacy, accessibility) | none  | 171 / 154 | —       | fine as-is                                       |
+| Page type                      | Floor | `<main>`  | Unique  | vs floor                                                |
+| ------------------------------ | ----- | --------- | ------- | ------------------------------------------------------- |
+| Homepage                       | 800   | 972       | 860     | ✅                                                      |
+| Service page                   | 450   | 475–571   | 363–459 | ⚠️ only `water-leak-detection` clears                   |
+| Location page                  | 350   | 696–766   | 584–654 | ✅ all three; all 12 on 2026-10-28 (below)              |
+| Article                        | 900   | 798–936   | 686–824 | ❌ all three short — see the note below                 |
+| Hub `/services/`               | 250   | 367       | 255     | ✅ on the line                                          |
+| Hub `/locations/`              | 250   | 357       | 245     | ⚠️ on the line                                          |
+| Hub `/guides/`                 | 250   | 267       | 155     | ❌ thin — a one-line subtitle and three cards           |
+| `/pricing/`                    | 450   | 552       | 440     | ⚠️ on the line (money-intent → service floor)           |
+| About                          | 500   | 610       | 498     | ⚠️ on the line                                          |
+| Contact                        | 200   | 275       | n/a     | ✅ the CTA **is** the page here, so no deduction        |
+| Legal (privacy, accessibility) | none  | 171 / 154 | —       | fine as-is                                              |
+| `/gallery/`                    | none  | —         | —       | a picture page: its words are the note and the captions |
 
 **Location pages, 2026-10-28.** The row above is the first three on 2026-09-06. On the build that
 added the other nine, those nine carry 446–469 unique non-chrome words (949–997 raw, chrome
@@ -224,16 +225,16 @@ until confirmed:
 - The ₪350 starting price and what it includes (§C)
 - Certifications, equipment brand, insurance, association membership, ח.פ. (§B)
 - Any person other than the confirmed founder — and any claim about the founder beyond his name and
-  role (§A)
+  role (§A). The two technicians appear by first name in the note on `/about/` and nowhere else
 - Report turnaround, technician count, payment terms, emergency-availability specifics (§C)
 - "שירות ארצי" as a coverage claim (§E)
 - Superlatives: "המובילים", "הטובים ביותר", "מספר 1"
 
 **Never permitted:** an invented customer name or quote; a rating without a public source; a
-certification the business doesn't hold; a photo presented as our work that isn't. The one
-owner-decided exception is the homepage gallery's AI illustrations (`lib/gallery.ts`, shown with no
-label since 2026-10-26): its limits are in [eeat-and-trust.md](eeat-and-trust.md) §5, and it covers
-no other image or page.
+certification the business doesn't hold; a picture presented as a record of a job that isn't one.
+Illustrations of the method are allowed on every content page under the site-wide note and the word
+rules of [eeat-and-trust.md](eeat-and-trust.md) §5a: an alt or a caption names an activity or a method,
+never a finding, a result, a place or a customer.
 
 **Permanently barred, not merely unconfirmed.** `3,000+ בתים ועסקים`, `97% איתור כבר בביקור הראשון`,
 the 4.9 rating, the six testimonials, and the placeholder `facebook.com`/`instagram.com` links were

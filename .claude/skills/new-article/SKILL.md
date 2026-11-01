@@ -174,3 +174,5 @@ the service page for the commercial action.
 - [ ] No price, certification or turnaround literal — interpolated or 🔶.
 - [ ] Present in `out/` and `out/sitemap.xml`; `npm run check:sitemap` passes.
 - [ ] Title carries the brand exactly once (the layout template appends it — don't write it).
+
+**Images.** A new guide needs its slots in `content/images/plan.json`. While `gates.minPerContentPage` is `0` it ships without them; once that gate is `2`, it needs two approved images first (the `page-imagery` and `page-images-pipeline` skills).

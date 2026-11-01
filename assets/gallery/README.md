@@ -1,19 +1,27 @@
 # assets/gallery — gallery masters (not shipped)
 
-Full-size masters for the homepage gallery. **Only this README is in git**: the masters are
+Full-size masters of the eleven gallery images made by hand in the Gemini app on 2026-10-22 and
+2026-10-27, with the rest of those two batches. **Only this README is in git**: the masters are
 gitignored (the repo is public, and most of them show the team in scenes that will never be
-published), and nothing in this folder is deployed. What ships is `public/images/gallery/*.webp`,
-built from here.
+published), and nothing in this folder is deployed. What ships is the WebP set under
+`public/images/gallery/`.
 
-- **Add or change an image:** put the master here, add or edit its entry in `lib/gallery.ts` (slug,
-  alt, `master.file`, optional `master.crop`), then run `node scripts/optimize-gallery.mjs`. New
-  pixels need a new slug — `/images/*` is cached for 30 days (`public/_headers`).
+- **Add or change an image:** new images no longer start here. Since 2026-11-01 they go through the
+  fleet's `page-images` toolkit (CLAUDE.md §15, the `page-images-pipeline` skill), which also re-issues
+  these eleven with the logo. New pixels need a new file name: `/images/*` is cached for 30 days
+  (`public/_headers`).
 - **Fresh clone:** this folder holds only this file. The masters live on the machine that made them
-  (and in the Gemini history); copy them back before re-running the script.
+  (and in the Gemini history).
 - **Provenance:** #1–31 were made with Google Gemini on 2026-10-22 and #32–45 on 2026-10-27, from
-  reference portraits of the team (עומר), who agreed himself. Since 2026-10-26 they ship with no label at all — no note or
-  tags, no הדמיה in the alt text, no AI marker in the files — by the owner's decision
-  (`docs/business-facts.md` §A, `docs/eeat-and-trust.md` §5).
+  reference portraits of the team (עומר), who agreed himself. Since 2026-11-01 they sit under the
+  site-wide note (`docs/business-facts.md` §A, `docs/eeat-and-trust.md` §5a).
+- **How the eleven were encoded** (measured 2026-10-22; the script that did it was deleted 2026-11-01):
+  a cover crop to 720×1200 after the optional crop, WebP q85. The tiles render at most ~345 CSS px wide,
+  so 720 px is right for a 2× screen. q85 because thermal colour ramps band below q80: at q75 the camera
+  screen's purple–yellow ramp blotches visibly, and at q85 it is indistinguishable from lossless at about
+  32 KB. The first batch (31 files, 55,195,544 B) landed in `public/images/` for a moment on 2026-10-22,
+  which would have shipped 8× the whole site's weight on the next deploy, and that is why masters live
+  outside `public/`.
 
 ## Making new images
 
@@ -39,8 +47,8 @@ built to stop each of them.
    - one person — no faces in mirrors or framed photos;
    - every object appears once (taps, cables, hoses);
    - the screen shows the spot the lens points at;
-   - no thin black or white strip on an edge (cut it off with `master.crop`).
-6. Master here → an entry in `lib/gallery.ts` → `node scripts/optimize-gallery.mjs`.
+   - no thin black or white strip on an edge (crop it off).
+6. This manual flow is the record of how the eleven were made. The toolkit runs these checks now.
 
 ### The prompt (2026-10-22)
 
@@ -156,7 +164,7 @@ owner raised the export budget to 8 MB for them (docs/performance-guidelines.md 
 shipped, 1 spare, 6 rejected.**
 
 Review: the same checklist and verdicts as the first batch, at full size and at gallery size, with
-עומר's reference portraits (`עומר רטנר 1–5`) for the face. #37, #40, #41 and #42 had two independent
+עומר's five reference portraits for the face. #37, #40, #41 and #42 had two independent
 reviewers who agreed; #36 and #44 one reviewer plus a second check; #33, #38 and #43 a full check
 plus two reviewers' partial passes (their run was cut off) that found nothing beyond the notes
 below; #32, #34, #35, #39 and #45 one full check.

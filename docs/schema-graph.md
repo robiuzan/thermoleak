@@ -20,8 +20,8 @@ Stable `@id`s let nodes reference each other instead of repeating themselves.
 
 | Node                 | `@id`                                                | Status                                                                             |
 | -------------------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| The business         | `https://thermoleak.co.il/#business`                 | ✅ emitted on all 31 pages                                                         |
-| The website          | `https://thermoleak.co.il/#website`                  | ✅ emitted on all 31 pages                                                         |
+| The business         | `https://thermoleak.co.il/#business`                 | ✅ emitted on all 32 pages                                                         |
+| The website          | `https://thermoleak.co.il/#website`                  | ✅ emitted on all 32 pages                                                         |
 | A service            | `https://thermoleak.co.il/services/{slug}/#service`  | ✅ `lib/jsonld.ts:69`                                                              |
 | A location's service | `https://thermoleak.co.il/locations/{slug}/#service` | ✅ `lib/jsonld.ts:94`                                                              |
 | An article           | `https://thermoleak.co.il/guides/{slug}/#article`    | ✅ `lib/jsonld.ts:172`                                                             |
@@ -51,7 +51,7 @@ Required = what this spec demands. Emitted = what the 2026-09-06 build actually 
 
 | Route                         | Required                                                | Emitted today                                                                               |
 | ----------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| every page (root layout)      | `LocalBusiness` + `WebSite`                             | ✅ both, 31/31 pages                                                                        |
+| every page (root layout)      | `LocalBusiness` + `WebSite`                             | ✅ both, 32/32 pages                                                                        |
 | `/`                           | + `FAQPage` from `generalFaqs`                          | ✅ **10** questions (the 10th is the guarantee, added 2026-10-28); no breadcrumb, by design |
 | `/services/`                  | `CollectionPage` + `BreadcrumbList`                     | ✅ both                                                                                     |
 | `/services/{slug}/` ×4        | `Service` + `FAQPage` + `BreadcrumbList`                | ✅ all three (FAQPage = `answer` + 3 `faqs`)                                                |
@@ -61,6 +61,7 @@ Required = what this spec demands. Emitted = what the 2026-09-06 build actually 
 | `/locations/{city}/` ×12      | `Service` + `areaServed` + `FAQPage` + `BreadcrumbList` | ✅ all four — see §5                                                                        |
 | `/pricing/`                   | `FAQPage` + `BreadcrumbList`                            | ✅ both (FAQPage = `answer` + 4 `faqs`)                                                     |
 | `/about/`                     | `AboutPage` + `BreadcrumbList`                          | ✅ both; the `Person` is the global `founder`                                               |
+| `/gallery/`                   | `CollectionPage` + `BreadcrumbList`                     | ✅ both; **no `ImageObject`**, by policy (CLAUDE.md §15)                                    |
 | `/contact/`                   | `ContactPage` + `BreadcrumbList`                        | ✅ both                                                                                     |
 | `/accessibility/` `/privacy/` | `BreadcrumbList`                                        | ✅ — no `#page` node, and none is required                                                  |
 | `/thank-you/`                 | nothing beyond the global pair                          | ✅ — noindex, absent from the sitemap on purpose                                            |
@@ -93,9 +94,9 @@ trail renders. One array, one truth — the markup and the schema cannot drift a
 **Pages must never call `breadcrumbJsonLd` directly.** Doing so double-emits the node on that page.
 The only legitimate caller is `PageHero`; the builder stays exported for it alone.
 
-Target and actual: **27 pages** carry `BreadcrumbList` — every page except `/`, `/thank-you/` and the
+Target and actual: **28 pages** carry `BreadcrumbList` — every page except `/`, `/thank-you/` and the
 two 404 artifacts, none of which render a `PageHero` trail. Verified: `grep -rl 'BreadcrumbList' out
---include=index.html | wc -l` → 27 (18 before the nine cities).
+--include=index.html | wc -l` → 28 (18 before the nine cities, 27 before `/gallery/`).
 
 The one thing still missing is the `@id` (§1): the node ships without `{pageUrl}#breadcrumb`, so it
 cannot be referenced from elsewhere in the graph. Low value, still open.
@@ -111,7 +112,7 @@ hand-assemble it and never hardcode a value `site` already carries.
 `alternateName`, `description`, `url`, `telephone`, `email`, `image`, `logo`, `priceRange`,
 `foundingDate` (`2015`, matching the roster), `PostalAddress` (region + country), `areaServed` (12
 `City` nodes), two `OpeningHoursSpecification` entries, and `founder` — a `Person` carrying
-`@id` `about/#founder` and the **confirmed** name (business-facts §A). All 31 pages carry it.
+`@id` `about/#founder` and the **confirmed** name (business-facts §A). All 32 pages carry it.
 
 **Absent, and staying absent until sourced.** The first three below were emitted until 2026-08-17 and
 were removed as a deliberate anti-fabrication measure; `hasMap` never shipped. The export confirms all
@@ -254,7 +255,8 @@ a required property missing. The resolution is `image: "${site.domain}/og.png"` 
 existing 1200×630 asset, so nothing is fabricated — paired with the same `/og.png` being restored to
 each guide's `openGraph.images`, which the page-level `generateMetadata` currently drops. Until real
 job photography exists, `/og.png` is the honest source; do **not** reference a photo the site does not
-own. This needs a code change (§7b).
+own. **A page image is never the answer here:** a rendering stays out of JSON-LD and `og:image` by policy
+(CLAUDE.md §15), even though the guides now carry one. This needs a code change (§7b).
 
 Deriving `FAQPage` from the typed blocks via `articleFaqs()` rather than authoring it separately is what
 keeps rule §4.2 from breaking as copy is edited — the same property the `<details>`-based service FAQs

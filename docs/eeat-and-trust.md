@@ -41,6 +41,9 @@ statements is sourced to the site making them. Nothing outside `thermoleak.co.il
 claim. That is what §2 (reviews) and the GBP exist to fix, and it is why they sit at the top of the
 ranked asks in §3.
 
+**Renderings carry zero Experience weight (§5a).** The images on the site show how the method works;
+they prove nothing about any job, and an audit must not count them.
+
 ---
 
 ## 2. The review engine — the highest-ROI work available
@@ -187,28 +190,45 @@ trade can fake: a normal photo and its thermal twin, side by side, with the leak
   a thermal image alone is abstract.
 - **Caption with the finding**, not with adjectives: "נזילה בצנרת מים חמים מאחורי הקיר, קומה 2,
   רמת גן" beats "איתור מדויק".
-- **Real jobs only.** Never stock, never AI-generated, never a demo scan staged for the camera. A
-  sibling site in this fleet shipped AI-generated "after" photos carrying a generative watermark;
-  that is a permanent credibility liability once noticed.
+- **Evidence comes from real jobs only.** A before/after pair, a case study or anything else offered
+  as a record of a job is a real photograph of that job: no stock, no generated picture, no demo scan
+  staged for the camera. A sibling site in this fleet shipped AI-generated "after" photos carrying a
+  generative watermark; that is a permanent credibility liability once noticed. Illustrations are a
+  different thing, and §5a is their rule.
 - **Provenance record**: keep a note per image of job date, city, permission status. If provenance
   cannot be established, the image does not ship.
 - **Accessibility**: thermal images need real `alt` describing the _finding_, since colour is the
   entire information channel and a colourblind or screen-reader user gets nothing from it otherwise.
 
-> **Scoped exception — 2026-10-22, changed 2026-10-26 (owner; business-facts §A).** The homepage
-> gallery (`components/Gallery.tsx`, `lib/gallery.ts`) shows eleven AI-generated illustrations of
-> עומר (four made 2026-10-22, seven from the 2026-10-27 batch — the owner approved its "maybe"
-> frames that day), the second technician — not the founder (business-facts §A) — each scene a wide shot plus one or two
-> closer shots of the camera in use. That format is allowed for them only within these limits: no
-> label of any kind since the owner's decision of 2026-10-26 (no note or tags on the page, no הדמיה
-> in the alt text, no AI marker in the files), so `source.kind` in `lib/gallery.ts` is the only
-> record of their provenance; captions name an activity, never a symptom or a finding; a screen is
-> never presented as a reading; they are not Experience evidence (§1) and never appear in schema,
-> `og:image` or a Google
-> Business Profile. The before/after evidence gallery above stays real-jobs-only, and real job
-> photos replace the illustrations as they arrive. Accepted risk: Gemini embeds Google's invisible
-> SynthID watermark, so a visitor can still find out the images are AI-made — the "credibility
-> liability once noticed" this section warns about.
+## 5a. Illustrations under one note (the user, 2026-11-01)
+
+Every content page carries AI-made illustrations of the method, built on the fleet's `page-images`
+toolkit. They show how a thermal check is done. They are **not evidence**, and §5 above still governs
+evidence. The rule sits on the words around a picture and not on a label on each picture, because a
+label on some images implies that the others are photographs.
+
+- **One site-wide note.** A footer line on every page, the `/gallery/` intro, and a line under the team
+  figure on `/about/`. The texts live in `content/images/notice.json`.
+- **Words describe an activity or a method.** Never a finding, a result, a promise, the guarantee's
+  slogan, a temperature, a number, a city or neighbourhood, a customer, a date, or the camera's model.
+- **A screen is an illustration, never a reading.** Alt and caption describe colours and positions.
+- **The people are real and consented.** עומר and יואב appear in scenes that never happened, which the
+  consent text says in those words. Their first names appear only on `/about/`. The founder is never
+  depicted.
+- **Never in schema, `og:image` or a Google Business Profile.** A Business Profile asks for real
+  photographs, and a rendering there would be a misrepresentation, not an illustration.
+- **Retire, never delete.** A replaced file stays at least 60 days, because crawled pages still ask for
+  it. A revoked consent means people-free twins at new file names.
+- **Real photographs win.** A real job photo enters the manifest as `owner-supplied` and replaces a
+  rendering one for one.
+
+**Accepted risk.** Gemini embeds Google's invisible SynthID watermark, so a visitor can establish that
+an image is AI-made. The note already says so, which is why that risk is smaller under this rule than
+it was before it.
+
+_History: an owner-scoped exception for the homepage gallery (2026-10-22, changed 2026-10-26) was
+superseded 2026-11-01 by this section. Its eleven images are re-issued with the logo under the same
+rule._
 
 ---
 
@@ -286,8 +306,9 @@ Before adding urgency copy, badges, counters or scarcity to any page, check busi
 - [ ] Every `Article` author resolves to the `about/#founder` `Person` node, and the visible byline
       links to it.
 - [ ] Every image has known provenance and permission.
-- [ ] The homepage gallery's AI illustrations stay inside the §5 exception's limits, and no AI
-      image ships anywhere else.
+- [ ] Renderings stay inside §5a: words that describe an activity, the note live, nothing in schema,
+      `og:image` or a Google Business Profile, and the founder never depicted.
+- [ ] No rendering is counted as Experience evidence, and no per-image label has crept back in.
 - [ ] The guarantee states scope, exclusions and call-out policy — and every page that makes the
       promise puts those terms one tap away.
 - [ ] Nothing self-issued renders as a credential (`certifications` holds certifications only).

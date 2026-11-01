@@ -7,7 +7,7 @@ Enforceable numbers, not aspirations. A change that breaks a budget here does no
 global edge, one 33 KB raster, four SVGs — so do not manufacture findings to fill a report. But
 "healthy" is not the same as "inside every budget": as of the 2026-09-06 re-baseline the export sat
 at **98.5% of its size budget** (then 6 MB — the owner raised it to 7.5 MB on 2026-10-12, to
-8 MB on 2026-10-27 and to 15 MB on 2026-10-28, §1), one
+8 MB on 2026-10-27, to 15 MB on 2026-10-28 and to 25 MB on 2026-11-01, §1), one
 JS chunk is over, and the tag budget is knowingly breached. Those three are real and are stated as
 such in §1. Everything else here is fine.
 
@@ -37,7 +37,7 @@ these.
 
 | Asset class                             | Budget                                                  | Current (2026-09-06)                                                                                                                |
 | --------------------------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| Total `out/`                            | ≤ 15,000,000 B (owner, 2026-10-28; was 8,000,000 B)     | **5,910,433 B — 98.5% of the 6 MB budget of the day** ⚠️ 220 files; re-measured 2026-10-12 below                                    |
+| Total `out/`                            | ≤ 25,000,000 B (the user, 2026-11-01; was 15,000,000 B) | **5,910,433 B — 98.5% of the 6 MB budget of the day** ⚠️ 220 files; re-measured 2026-10-12 below                                    |
 | ├ RSC segment payloads (`out/**/*.txt`) | _no budget — set one_                                   | **2,769,645 B / 158 files = 46.9% of the export**                                                                                   |
 | ├ HTML                                  | —                                                       | 1,984,248 B / 23 files                                                                                                              |
 | └ `out/_next` (JS, CSS, fonts)          | —                                                       | 936,350 B                                                                                                                           |
@@ -45,7 +45,10 @@ these.
 | Any single JS chunk                     | ≤ 200 KB (204,800 B)                                    | **226,355 B** (`3j9pm5otqxm82.js`, the React/Next runtime) ⚠️ breached                                                              |
 | JS per route — framework floor          | _irreducible; not a target_                             | 688,193 B across 9 chunks · 575,599 B modern-only (one 112,594 B chunk is `noModule`) · **168,200 B brotli on the wire**            |
 | JS per route — **delta**                | **+0 B**                                                | ✅ every route loads the identical 9 chunks                                                                                         |
-| LCP image                               | ≤ 150 KB                                                | `hero.webp` 33,210 B (828×670) ✅                                                                                                   |
+| LCP image                               | ≤ 150 KB                                                | `hero.webp` 33,210 B (828×670) ✅ — since 2026-11-01 the rule applies to the `/` `main` slot, and the gate enforces it              |
+| `out/images/` total                     | ≤ 12 MB (`gates.maxTotalBytes`)                         | 583 KB before the renders; the gate enforces it                                                                                     |
+| One content image                       | ≤ 200 KB (`gates.maxImageBytes`)                        | size classes: large 1400 px ≤ 200 KB, half 1200 ≤ 170 KB, tile 960 ≤ 120 KB, thumb 480 ≤ 45 KB                                      |
+| Image bytes per page                    | ≤ 900 KB; `/` ≤ 1 MB; `/gallery/` ≤ 3 MB                | the gate enforces them                                                                                                              |
 | Any single image                        | ≤ 250 KB                                                | `og.png` 128,363 B (never rendered on-page) ✅                                                                                      |
 | Fonts preloaded per page                | ≤ 80 KB                                                 | 71,540 B — 4 faces ✅ (135,576 B on disk; the rest is `unicode-range`-gated, §4)                                                    |
 | Client components                       | ≤ 4                                                     | 4 (`ContactForm`, `Navbar`, `ThankYouContent`, `ConsentBanner` — re-counted 2026-10-12; the live surfaces add none) ✅ at the limit |
@@ -131,6 +134,15 @@ RSC payloads, plus Sprint 6's own additions (`e6d4111`) in the same build. The r
 3.8 MB under the budget, so the §7 command is green again. About fourteen more content pages would
 fit.
 
+**Raised 2026-11-01 — the export budget is now 25,000,000 B,** approved with the page-image plan
+(CLAUDE.md §15). Both conventions matter here. The baseline is 11,212,389 B raw, or 10,643,189 B net of
+carried chunks. The renders are expected to add about 6.7 MB: 16 large images ≈ 2.1 MB, 35 half ≈ 2.8 MB,
+four tiles ≈ 0.25 MB, three thumbnails ≈ 0.05 MB, 11 re-issued gallery images ≈ 0.55 MB, the hero
+≤ 0.12 MB, the `/gallery/` route ≈ 0.3 MB, and about 60 figures' markup emitted four times each ≈ 0.5 MB.
+That lands near 18 MB raw, 72% of the budget, and about 21 MB (84%) if every image hits its class budget.
+A 20 MB budget would have sat at 90–98% and forced another raise within a sprint. These are estimates
+from betonplus's per-class averages. **Replace them with the measured figure on install day.**
+
 **On the JS rows.** The old "≤ 120 KB per route, well under ✅" was never measured and is 4.7×
 wrong against its own stated unit. The framework floor is what Next 16.2.9 + React 19.2.4 cost on
 any route; it is not something this site can tune. So the enforceable budget is the **delta**: a new
@@ -149,7 +161,9 @@ that is exactly what the +0 B row catches.
    first paint. It is simultaneously the fastest option, the most accessible, and what makes
    `FAQPage` schema honest and the content extractable by answer engines. Converting it to client
    state breaks all four.
-3. **At most one `priority` image per page**, and it must be the LCP element — **and an
+3. **At most one preloaded image per page**, the first content image, through `Figure`'s `priority`
+   prop, which sets `preload` and `fetchPriority="high"` together (a hand-written `priority` is
+   deprecated in Next 16 and emits no `fetchpriority`). It should be the LCP element — **and an
    above-the-fold image that is _not_ the LCP element must still be `loading="eager"`.** The second
    clause exists because the first one was over-applied: dropping the navbar logo's `priority`
    (correctly — it was preloading a ~40 px wordmark in competition with the hero) left it on
@@ -193,8 +207,13 @@ srcset**. Consequence: passing `sizes` is _misleading_, it does nothing.
 
 **All four** service illustrations are **SVG**, where this costs nothing. `public/images/` was
 80 KB in total until the homepage gallery's WebP files landed (four on 2026-10-22, 185,682 B;
-eleven since 2026-10-27, 540,802 B). What
-actually matters:
+eleven since 2026-10-27, 540,802 B).
+
+**Since 2026-11-01 every content image goes through `components/Figure.tsx`** (CLAUDE.md §15). It
+renders `next/image` with the manifest's numeric width and height, lazy except the page's first image,
+which gets `preload` and `fetchPriority="high"`. The files are WebP. Quality starts at 85, steps to 80 to
+fit a size class, and **never goes below 80**, because thermal colour ramps band under it (q75 was
+measured to blotch them); a frame that still does not fit drops a size class. What actually matters:
 
 - **`hero.webp`** — the one raster LCP candidate. Measured: **33,210 B, 828×670 intrinsic**,
   rendered at ≤ 448 CSS px (`max-w-md`) on desktop and ~358 px on mobile, and preloaded. That is
@@ -208,8 +227,8 @@ actually matters:
 - **`gallery/*.webp`** (2026-10-22; three more scenes and a third kitchen image 2026-10-27) — eleven 720×1200 WebP q85, 29–71 KB each, lazy and far below
   the fold on the homepage (`components/Gallery.tsx`), each tile at most ~345 CSS px wide (the
   one-column layout just under 768 px; a three-image scene's tiles are ≈330 px on desktop), so one
-  size serves DPR 2 like the hero. `scripts/optimize-gallery.mjs` builds them from masters kept out of
-  `public/`; its header records the measurement behind q85 (q75 blotches the thermal ramps).
+  size serves DPR 2 like the hero. They were built by hand from the masters in `assets/gallery/`; that
+  folder's README records the measurement behind q85.
 
 **If a genuinely large raster ever lands, two viable paths — pick one deliberately, never mix:**
 
@@ -303,8 +322,8 @@ The auditor reads the artifact; it does not measure a browser. For real numbers:
 The commands that reproduce every number in §1 — run them, do not re-estimate:
 
 ```bash
-# total export size, and the budget as an assertion (exit 1 = breached; 15 MB since 2026-10-28)
-find out -type f -printf '%s\n' | awk '{s+=$1;n++} END {print s" bytes / "n" files"; exit (s>15000000)}'
+# total export size, and the budget as an assertion (exit 1 = breached; 25 MB since 2026-11-01)
+find out -type f -printf '%s\n' | awk '{s+=$1;n++} END {print s" bytes / "n" files"; exit (s>25000000)}'
 # the asset class that is half the export
 find out -name '*.txt'    -printf '%s\n' | awk '{s+=$1;n++} END {print "txt   "s" / "n}'
 find out -name '*.html'   -printf '%s\n' | awk '{s+=$1;n++} END {print "html  "s" / "n}'
@@ -340,8 +359,9 @@ curl -sSI "https://thermoleak.co.il$(grep -o '/_next/static/media/[^"]*\.woff2' 
 - Tag manager / analytics installation ← **the highest-risk change on this list**
 - Any `_headers` edit
 - **A new route silo** — `/guides/` and `/locations/` together added ~1.87 MB to the export, almost
-  all of it RSC payload (§1). A content page costs about 302–308 KB and the 2026-10-28 build sits at
-  71.0% of the 15 MB budget, so re-measure with §7 whenever pages are added
+  all of it RSC payload (§1). A content page costs about 302–308 KB, so re-measure with §7 whenever
+  pages are added
+- **An image batch** — re-measure with §7 and record the figure in §1 on install day
 - The i18n build landing (doubles the route count)
 
 > **This list only works if someone runs it.** It did not run once between 2026-08-30 and

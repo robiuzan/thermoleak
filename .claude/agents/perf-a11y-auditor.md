@@ -1,6 +1,6 @@
 ---
 name: perf-a11y-auditor
-description: Read-only Core Web Vitals and WCAG 2.0 AA / IS 5568 audit of the static export in one pass with two verdicts — the export against its 15 MB budget and its duplicated RSC .txt payloads, LCP and the disabled image pipeline, CLS reserves, INP client-JS budget, plus computed colour contrast on the live ink/55 and ink/60 call sites and the accent tokens, tap targets, keyboard and focus order, form labelling, and whether the published accessibility statement is still true. Invoke with "perf audit", "a11y audit", "check Core Web Vitals", or "בדיקת נגישות". Never edits.
+description: Read-only Core Web Vitals and WCAG 2.0 AA / IS 5568 audit of the static export in one pass with two verdicts — the export against its 25 MB budget and its duplicated RSC .txt payloads, LCP and the disabled image pipeline, CLS reserves, INP client-JS budget, plus computed colour contrast on the live ink/55 and ink/60 call sites and the accent tokens, tap targets, keyboard and focus order, form labelling, and whether the published accessibility statement is still true. Invoke with "perf audit", "a11y audit", "check Core Web Vitals", or "בדיקת נגישות". Never edits.
 model: sonnet
 tools: Read, Grep, Glob, Bash, WebFetch
 ---
@@ -32,8 +32,8 @@ read-only.
    across 220 files and 22 emitted routes** — not the "~3.9 MB" several docs still carry. That was
    98.5% of the 6 MB budget of the day; the owner raised the budget in
    `docs/performance-guidelines.md` §1 to **7.5 MB** on 2026-10-12, when the live surfaces took a
-   build to ≈6.93 MB, to **8 MB** on 2026-10-27, for the gallery's approved images, and to **15 MB** on
-   2026-10-28, for the nine remaining city pages. Composition:
+   build to ≈6.93 MB, to **8 MB** on 2026-10-27, for the gallery's approved images, to **15 MB** on
+   2026-10-28, for the nine remaining city pages, and to **25 MB** on 2026-11-01, for the page images. Composition:
 
    | Class                                | Bytes                   | Share |
    | ------------------------------------ | ----------------------- | ----- |
@@ -53,6 +53,8 @@ read-only.
    weight that grows ~115 KB per new route — the reason the nine remaining cities needed the 15 MB
    budget (owner, 2026-10-28). Report it as a budget-and-planning finding, not an LCP finding.
 
+   _(2026-11-01: 32 emitted routes, budget 25,000,000 B. The figures in this paragraph are the 2026-10-28
+   baseline; re-measure once the page images install.)_
    **2026-10-28 build (all 12 cities, local — not yet deployed):** 31 emitted routes, 11,212,389 B
    raw across 378 files, of which 569,200 B (65 files) are carried earlier-build chunks; the budgeted
    total is **10,643,189 B = 71.0% of 15,000,000 B**, leaving 4,356,811 B. Each city page costs
@@ -60,6 +62,10 @@ read-only.
 
 2. **Images.** `next.config.ts` sets `images: { unoptimized: true }`, so every `next/image` renders a
    bare `<img>` with **no srcset**. **All four** service illustrations are SVG (1,166–1,379 B each), so
+   **Since 2026-11-01 every content page carries images** through `components/Figure.tsx`, so each page's
+   first image is an LCP input with one `fetchpriority="high"`; the gate enforces the size classes and the
+   per-page caps (`scripts/images/check-images-out.mjs`, CLAUDE.md §15). Audit `alt` and the figcaption
+   contrast too. Before that,
    the raster surface was two files until 2026-10-22: `public/images/hero.webp` (33,210 B, 828×670) and
    `public/images/thermoleak_logo.webp` (18,480 B). The homepage gallery then added lazy 720×1200
    WebP files below the fold (`public/images/gallery/`; eleven since 2026-10-27, 540,802 B), so
@@ -135,8 +141,8 @@ read-only.
    themselves. That is exposure under IS 5568, not a pixel bug. Note also that the page's "last updated"
    line still reads ביוני 2026 while the a11y posture changed in August; the correct sequence is **fix,
    then re-date** — flag any re-dating that runs ahead of the fixes.
-3. **Semantics.** Landmarks (`header`/`nav`/`main`/`footer`) present; exactly one `<h1>` on all **31
-   emitted pages** (28 of them in the sitemap, 2026-10-28 build); heading order unbroken. A skip link ships in
+3. **Semantics.** Landmarks (`header`/`nav`/`main`/`footer`) present; exactly one `<h1>` on all **32
+   emitted pages** (29 of them in the sitemap, 2026-11-01 build); heading order unbroken. A skip link ships in
    `app/layout.tsx`. Confirm rather than assume.
 4. **Keyboard.** `:focus-visible` is styled globally in `app/globals.css:45-49` with a 3px `brand-light`
    outline — don't remove it, and note that `CtaButton`'s `focus-visible:outline-none` does not beat it
@@ -218,7 +224,7 @@ lab numbers need a real Lighthouse or PSI run, and any a11y item you computed ra
 - **Distinguish first-paint cost from deploy weight.** The runtime experience here is genuinely healthy
   — ~597 KB of images (most of it the lazy, below-the-fold gallery), four font preloads, an LCP
   image preload, four client components — while the
-  _export_ (10,643,189 B, 71.0% of its 15 MB budget on the 2026-10-28 build) carries deploy weight,
+  _export_ (10,643,189 B on the 2026-10-28 build; the budget is 25 MB since 2026-11-01) carries deploy weight,
   much of it prefetch payloads, that never touches a rendering metric. Say both. A verdict that
   calls the export size an LCP problem is as wrong as one that ignores it.
 - Don't manufacture findings to fill a section. But don't hunt closed ones either: `text-ink/50`, the

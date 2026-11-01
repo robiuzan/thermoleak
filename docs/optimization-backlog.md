@@ -61,6 +61,9 @@ _(2026-10-28, with all 12 city pages built locally — not yet committed or depl
 `index.html` · 28 URLs in `sitemap.xml` · `out/` 10,643,189 B net of carried chunks, 71.0% of the
 15,000,000 B budget. See §3.4 and §10.1.)_
 
+_(2026-11-01, with `/gallery/` built locally — not yet deployed: 32 emitted `index.html` · 29 URLs in
+`sitemap.xml` · llms.txt 30 URLs. The export budget is 25,000,000 B. See §7.10 and §10.6.)_
+
 **Updated 2026-10-28 — Sprint 6 shipped.** Item 1 is now **half** resolved — the half that lives
 in this repo. Items 2 and 3 were resolved in Sprint 4.
 
@@ -514,6 +517,10 @@ entity and must not inherit its authority. The visible byline is now a link to t
 before this, **nothing on the site linked to `#founder` at all**, so the anchor existed only for
 machines. The credentials question is answered rather than open — see §7.3.
 
+_(2026-11-01: "no technician is named" is half-answered. עומר and יואב are named by first name in the
+note on `/about/`, under a figure that is an illustration. That is disclosure, not an authority signal.
+A photo of the founder stays open: business-facts §A, roadmap Track O #12.)_
+
 **7.6 ✅ RESOLVED 2026-08-17.** The footer social icons were removed with `site.social`; there is no
 such link on the site. See §4.2. The original point still governs the decision to restore them: a
 link that lands on a platform homepage actively demonstrates there is no profile.
@@ -592,6 +599,13 @@ load-bearing and unverified, and do not copy it into a new page, a city page, or
 **✅ Verified good:** the privacy policy and accessibility statement are real, substantive documents,
 not boilerplate stubs. Service area and contact routes are clear and consistent. The published hours and
 the out-of-hours line beside them are owner-confirmed since 2026-10-28 (§7.9).
+
+**7.10 🟠 (opened 2026-11-01) Imagery on every page, under one note.** The user decided that every content
+page carries two or more AI-made illustrations of the method. The kit, the `/gallery/` page, the slot plan
+(55 renders) and the policy are in; the renders, the owner's review and the deploy are not. Trust rests on
+the words and on the note, not on a label per image: [eeat-and-trust.md](eeat-and-trust.md) §5a. Renderings
+carry zero Experience weight, so this item closes no gap in §7.5 and does not replace real job photos
+(Track O #14). CLAUDE.md §15 is the operating rule.
 
 ---
 
@@ -774,7 +788,8 @@ which is already correct for a 2× display and comfortably inside the LCP-image 
 `sizes` or make it real" half is moot too: there is no `sizes=` anywhere in `app/` or `components/`.
 _(2026-10-22: no longer the only rasters — the homepage gallery adds four 720×1200 WebP files,
 185,682 B, lazy and below the fold, one size each by the hero's reasoning; performance-guidelines §1
-and §3.)_
+and §3.)_ _(2026-11-01: every content page now carries images, so the "only rasters" reasoning no
+longer holds. §10.6 is where they are budgeted; the one-size-per-slot decision still stands.)_
 
 Keep the rule — don't pass `sizes` to an unoptimized image, it looks correct and does nothing — but
 do not spend a sprint slot here. §10.1 is where the bytes are.
@@ -790,6 +805,13 @@ that still schedules it.
 
 **10.5 🟠 Measure the right artifact.** See §1.6 — `out/` is often stale. `rm -rf .next out` and rebuild
 before any measurement.
+
+**10.6 🟠 (opened 2026-11-01) Image weight and the budget.** The export budget moved to 25,000,000 B with
+the page-image plan, on an estimate of about 18 MB raw once installed: the arithmetic is in
+[performance-guidelines.md](performance-guidelines.md) §1. **Open until install day:** replace the estimate
+with the measured figure, and re-run PageSpeed on `/`, one service and one city after the deploy, since
+the hero's `fetchPriority` and every page's first image are new LCP inputs. The size classes, the 12 MB
+`out/images` cap and the per-page caps are enforced by `scripts/images/check-images-out.mjs`.
 
 ---
 
@@ -928,7 +950,7 @@ Cloudflare's NEL; it cannot receive CSP reports.)
 **✅ RESOLVED 2026-10-28 — by replacing the criterion, not by adding an endpoint.** The gate in
 `public/_headers` is now a deterministic walkthrough that needs no collector: deploy the policy as
 **enforcing to a Pages preview branch** (previews already send `X-Robots-Tag: noindex`), then with
-the console open walk all 19 routes (28 indexed since 2026-10-28), open the mobile menu, the
+the console open walk all 19 routes (29 indexed since 2026-11-01), open the mobile menu, the
 consent banner and the seasonal card, and submit the form through to `/thank-you/` — each of those
 exercises a different directive, and only a real submit reaches `/thank-you/`. Zero violations is
 the gate; then drop `-Report-Only`, deploy, and re-walk on production. The same edit records that `'unsafe-inline'` in `script-src` is

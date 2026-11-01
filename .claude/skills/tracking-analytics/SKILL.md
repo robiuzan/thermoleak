@@ -208,7 +208,7 @@ thank-you views are client-side navigations**. The same applies to internal jour
   default and is the setting that turns the thank-you href into a live PII leak.
 - **Search Console:** the verification token ships at `app/layout.tsx:34`, and the roster now carries
   the same value — the two agree. Confirm the property is verified, then submit
-  `https://thermoleak.co.il/sitemap.xml` (**28 URLs** in the 2026-10-28 build; `/thank-you/` is deliberately noindex and
+  `https://thermoleak.co.il/sitemap.xml` (**29 URLs** in the 2026-11-01 build; `/thank-you/` is deliberately noindex and
   excluded) and watch Coverage for the `/404/` + `/_not-found/` duplication (backlog §1.1), which
   `public/_redirects` now collapses onto `/`.
 

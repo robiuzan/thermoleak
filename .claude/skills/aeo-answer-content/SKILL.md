@@ -144,7 +144,7 @@ factual and in sync with `lib/site.ts` when facts change; it is a pointer file, 
 website.
 
 It covers both silos: the three guides and all 12 city URLs are listed. `npm run check:sitemap` fails
-on any URL it advertises that `sitemap.xml` lacks (2026-10-28: "llms.txt 29 URL(s), all live"), but it
+on any URL it advertises that `sitemap.xml` lacks (2026-11-01: "llms.txt 30 URL(s), all live"), but it
 cannot see an omission — so keep it level with `out/sitemap.xml` by hand: every indexable URL should
 either appear in `llms.txt` or be excluded on purpose, with the reason written down, edited in the
 same commit as the route.

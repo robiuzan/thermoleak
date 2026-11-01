@@ -150,10 +150,10 @@ a route that skips this works in dev and 404s in production.
    meaningfully changes (a `metaDescription` or OG edit does not count). **`public/llms.txt` is not
    derived**: it lists all twelve city URLs, so add the new one in the same commit (CLAUDE.md §3).
 10. `npm run lint && npm run build`, then `npm run check:sitemap`, then confirm the route exists in
-    `out/` **and** in `out/sitemap.xml`. The 2026-10-28 baseline it prints is "31 routes emitted, 28
-    indexed, 3 deliberately excluded; llms.txt 29 URL(s), all live" — one more city adds one to each
+    `out/` **and** in `out/sitemap.xml`. The 2026-11-01 baseline it prints is "32 routes emitted, 29
+    indexed, 3 deliberately excluded; llms.txt 30 URL(s), all live" — one more city adds one to each
     of the first two numbers and to the llms.txt count. Each city page costs about 302–308 KB of
-    export against the 15,000,000 B budget (`docs/performance-guidelines.md` §1).
+    export against the 25,000,000 B budget (`docs/performance-guidelines.md` §1).
 
 ## Checklist
 
@@ -201,3 +201,5 @@ a route that skips this works in dev and 404s in production.
 - `/locations/` is already in `navLinks`, so the hub is in the header and the footer on every route —
   but **no service page links into a city page today**. That is an open mesh gap in the silo as a
   whole, not something your entry creates; fixing it is an `/internal-linking` task.
+
+**Images.** A new city needs its slots in `content/images/plan.json`. While `gates.minPerContentPage` is `0` it ships without them; once that gate is `2`, it needs two approved images first (the `page-imagery` and `page-images-pipeline` skills).

@@ -31,6 +31,9 @@
   report an insurer accepts.
 - **Conversion goals, in order:** (1) phone call, (2) WhatsApp, (3) contact form. Every page keeps a
   call/WhatsApp action within reach; `StickyContact` is a mobile-only fixed bottom bar.
+- **Images:** every content page carries illustrations of the method, never evidence of a job, under
+  one site-wide note (the user, 2026-11-01). They show the two technicians, עומר (manager) and יואב
+  (technician), by first name only and only on `/about/`. The founder is never depicted. See §15.
 
 > ⚠️ **What is still placeholder.** Phone, WhatsApp and email are **real**. So are the **founder**
 > and the **guarantee's scope** — both confirmed 2026-08-24 (business-facts §A/§C) and **published**:
@@ -63,7 +66,8 @@
    licences, insurance, ratings, reviews, certifications, customer names. If it is not in `lib/site.ts`,
    the roster manifest, or [docs/business-facts.md](docs/business-facts.md), mark it `// 🔶 confirm` and
    add a row to that file. **Fabricated reviews or ratings are a Google policy violation, not a style
-   problem** — and this site is already carrying that cost once (rule 3).
+   problem** — and this site is already carrying that cost once (rule 3). **An image is a claim too:** a
+   rendering illustrates the method and never records a job, a finding, a place or a customer (§15).
 2. **Business facts come from `lib/site.ts`, never hardcoded in components.** Import `site`, `navLinks`,
    `telHref`, `mailHref`, `whatsappHref()`, `canonicalUrl()`. The repo is currently **clean** of NAP
    literals; a new one is a regression, not a precedent.
@@ -91,6 +95,10 @@
    **Promise**.
 10. **Never edit generated output** — `node_modules/`, `.next/`, `out/`. And never audit `out/` without
     checking it is newer than the last commit; it is routinely stale.
+11. **`content/images/manifest.json` and `public/images/**` are written by the toolkit, never by hand.**
+    An `approved:` stamp comes from the owner's yes, through the toolkit. **Never delete a deployed
+    image:** crawled pages keep asking for it, so a replaced file stays at least 60 days and its removal
+    is a separate owner decision (§15).
 
 ---
 
@@ -114,7 +122,8 @@ actions and ISR. Response headers come from **`public/_headers`** and redirects 
 2026-08-02 cutover. There is no `.htaccess`; the Apache/cPanel origin is retired.
 
 `app/sitemap.ts` and `app/robots.ts` each carry `export const dynamic = "force-static"`. That line is
-what makes them emit at build time; don't delete it as noise.
+what makes them emit at build time; don't delete it as noise. `staticRoutes` itself has lived in
+`lib/site.ts` since 2026-11-01, because `lib/images.ts` and the image gate read the same list.
 
 **`public/llms.txt` is hand-maintained on purpose.** Generating it from `lib/site.ts` would need a
 GET route handler, which this config forbids — so do **not** propose one. The cost of that is drift:
@@ -139,13 +148,16 @@ app/
   locations/ locations/[city]/  # local silo — all 12 service areas (lib/locations.ts)
   thank-you/              # noindex post-form conversion page; absent from the sitemap on purpose
   about/ contact/ accessibility/ privacy/
-components/               # FLAT — 28 files, one component per file, PascalCase, no subfolders
+  gallery/                # /gallery/ — the 11 owner-approved images and the renderings, under the note (§15)
+components/               # FLAT — 30 files, one component per file, PascalCase, no subfolders
   Navbar Footer StickyContact          # chrome
   ConsentBanner                        # the Consent Mode v2 question (client, §7)
   Container CtaButton SectionHeading PageHero Breadcrumbs Logo JsonLd
+                                       # Container's width is its `max` prop: a max-w-* in className loses to .max-w-6xl
+  Figure FieldStrip                    # the ONLY way a content image renders: next/image from the manifest (§15)
   Hero TrustBar MethodExplainer ServicePillars ServiceCard Process Faq ContactCTA
   ServiceChooser                       # homepage symptom→service decision aid (lib/services.ts)
-  Gallery                              # homepage scenes, 2–3 images each (lib/gallery.ts) — AI images; no label of any kind (owner, 2026-10-26)
+  Gallery                              # homepage and /gallery/ scenes, fed by the manifest; its words are in lib/gallery.ts
   ArticleBody                          # renders the typed blocks — the reason FAQPage can be DERIVED
   GuaranteeTerms                       # the bounded guarantee on /pricing/, from site.guaranteeTerms
   ContactForm ThankYouContent          # the form + its post-submit page
@@ -160,19 +172,21 @@ lib/
   pricing.ts    # /pricing/ copy — per-service prices stay in services.ts, never restated here
   articles.ts   # /guides/ typed blocks — FAQPage is DERIVED from them, so schema cannot drift
   locations.ts  # ⭐ the 12 city pages. READ its header before changing an entry
-  gallery.ts    # the homepage gallery: files, alt text, provenance — scripts/optimize-gallery.mjs reads it
+  gallery.ts    # the scene register: eyebrow, captions, which image orders form a scene
+  images.ts     # ⭐ the manifest's accessors, validated at module init (imagesFor, imageFor, leadSlotOf, stripFor)
   jsonld.ts     # every JSON-LD builder. faqPageJsonLd returns null for an empty list; <JsonLd> skips null
   analytics.ts  # pushEvent() — the 3 conversion events no GTM trigger can observe (§12)
   consent.ts    # the Consent Mode v2 storage key + the Window.dataLayer/gtag declaration
   live/         # fleet live-kit copies — byte-locked, never edit (§14)
 content/live/   # ⭐ the live registers: _campaigns.mjs, _updates.mjs (+ the synced calendar) (§14)
+content/images/ # plan.json (authored) · manifest.json (toolkit-written) · notice.json (the approved note texts) (§15)
 live.config.mjs # the live surfaces' calm / no-card pages, NAP restated, this site's ⛔ claim stems (§14)
 public/         # copied verbatim into out/ — _headers, _redirects, llms.txt, og.png, images/
-                #   assets/live.js is a fleet live-kit copy (§14)
+                #   assets/live.js is a fleet live-kit copy (§14); images/_candidates/ is gitignored (§15)
 scripts/        # check-sitemap-parity.mjs (`npm run check:sitemap`), keep-previous-assets.mjs (postbuild, §10)
-                #   optimize-gallery.mjs — assets/gallery/ masters → public/images/gallery/*.webp (by hand)
   live/         # the live-kit gates (prebuild + postbuild) and the weekly reminder (§14)
-assets/gallery/ # gallery masters: gitignored, never shipped — its README.md is the per-image register
+  images/       # check-images-out.mjs (postbuild gate), images-status, images-dev; lib/ = the rules + images.config.mjs (§15)
+assets/gallery/ # the 45 Gemini-app masters of 2026-10-22/27: gitignored, never shipped — its README.md is their register
 docs/           # the acceptance bars every agent cites
   location-sources/  # source register per city page (the nine added 2026-10-28; the first three have none yet) — a claim and its row change together
 ```
@@ -210,6 +224,11 @@ keeps `react/no-unescaped-entities` quiet and centralises content.
 The roster manifest is **not** an upstream build input (unlike the Cloudflare Pages sites in the same
 fleet). Read it to learn what the fleet believes is true — its `_needsConfirmation` array is the honest
 list — then edit `lib/site.ts` by hand and keep the two in sync.
+
+**Images are the second exception to "wording lives in `lib/`", after §14's registers.**
+`content/images/plan.json` is authored here, Media Studio's toolkit turns it into files and writes
+`content/images/manifest.json`, `lib/images.ts` reads the manifest, and `Figure`, `FieldStrip` and
+`Gallery` render it. An image's alt and caption live in the manifest (§15).
 
 ---
 
@@ -288,6 +307,11 @@ Fonts: **Heebo** (headings, `font-heading`) + **Assistant** (body, `font-sans`) 
   the same `crumbs` array the visible trail renders — pages must never call `breadcrumbJsonLd`
   directly (double emission). Target graph: [docs/schema-graph.md](docs/schema-graph.md).
   `Review`/`AggregateRating` ship **only** when sourced — enforced since 2026-08-17.
+- **Images:** one `fetchpriority="high"` per page, on its first content image; `Figure` sets it
+  explicitly, because `preload` alone emits no such attribute (its preload link repeats it, so the raw
+  HTML shows it twice). Numeric width and height always. A Hebrew
+  alt of 40–160 characters says only what is visible. `data-images-notice` marks the three disclosure
+  lines, and the gate checks them. `og:image` stays `/og.png`; no rendering in JSON-LD (§15).
 - **Accessibility: WCAG 2.0 AA + IS 5568**, and a statement is published at `/accessibility/`. Semantic
   landmarks, one `<h1>` per page, visible `:focus-visible` rings, labelled fields with
   `aria-describedby`/`aria-invalid`, a skip link, ≥4.5:1 text contrast. **A contrast regression also
@@ -337,6 +361,10 @@ believe it.**
   shipped too (harmless JS/CSS — to purge one, delete its files from `.static-archive/`, `out/` and
   `out.prev/`).
 
+- **Images:** never deploy a draft. `IMAGES_DRAFT=1 npm run build` leaves `out/.images-draft` and adds
+  to `out/.live-draft`, which the ops script refuses. Never delete a deployed image either; §15 and
+  golden rule 11 say why, and a rollback never removes a file from `public/images/`.
+
 Run `/qa-build-gate` before shipping. **Deploying is a production mutation — always ask first.**
 See the `deploy-thermoleak` skill.
 
@@ -344,21 +372,26 @@ See the `deploy-thermoleak` skill.
 
 ## 11. Commands
 
-| Task             | Command                                                       |
-| ---------------- | ------------------------------------------------------------- |
-| Dev server       | `npm run dev`                                                 |
-| Production build | `npm run build`                                               |
-| Serve the build  | `npm run start`                                               |
-| Lint             | `npm run lint`                                                |
-| Type-check       | `npx tsc --noEmit`                                            |
-| Sitemap parity   | `npm run check:sitemap` (reads `out/` — build first)          |
-| Live draft build | `LIVE_DRAFT=1 npm run build` — local preview only (§14)       |
-| Live reminder    | `npm run live:remind` (prints; pushes only with `NTFY_TOPIC`) |
+| Task              | Command                                                       |
+| ----------------- | ------------------------------------------------------------- |
+| Dev server        | `npm run dev`                                                 |
+| Production build  | `npm run build`                                               |
+| Serve the build   | `npm run start`                                               |
+| Lint              | `npm run lint`                                                |
+| Type-check        | `npx tsc --noEmit`                                            |
+| Sitemap parity    | `npm run check:sitemap` (reads `out/` — build first)          |
+| Live draft build  | `LIVE_DRAFT=1 npm run build` — local preview only (§14)       |
+| Live reminder     | `npm run live:remind` (prints; pushes only with `NTFY_TOPIC`) |
+| Full gate         | `npm run gate` = lint, build, `check:sitemap`                 |
+| Image gate        | `npm run images:check` (reads `out/`; `postbuild` runs it)    |
+| Image status      | `npm run images:status` — plan against manifest, by route     |
+| Image review      | `npm run dev:images` — the draft site beside the board (§15)  |
+| Draft image build | `IMAGES_DRAFT=1 npm run build` — local preview only (§15)     |
 
 There is no `typecheck` or `format` script. **Build gate: `npm run lint && npm run build`** — `next
 build` type-checks the whole app. Always run it before declaring work done. `npm run build` also
-runs the live-kit gates (§14) in `prebuild` and `postbuild`, then carries earlier builds' chunks into
-`out/` (`scripts/keep-previous-assets.mjs`, §10). The live-kit gates fail on unapproved live wording, so
+runs the live-kit gates (§14) in `prebuild` and `postbuild`, then the image gate (§15), then carries
+earlier builds' chunks into `out/` (`scripts/keep-previous-assets.mjs`, §10). The live-kit gates fail on unapproved live wording, so
 a draft can only be previewed with `LIVE_DRAFT=1 npm run build` — and a draft `out/` (it carries
 `out/.live-draft`) must never be deployed. `ops/deploy-site.ps1` refuses it, `-DeployOnly` included
 (fixed 2026-10-12), and discards a draft `out/` instead of rotating it into `out.prev/`, the
@@ -384,6 +417,9 @@ output. Add `prettier` as a devDependency if that matters.
   goes through `/new-city`.
 - Don't add dependencies without a reason that survives "can the platform already do this?" The runtime
   dependency list is four packages; keep it that way.
+- **`Figure` is the only way a content image renders,** and `sharp` and every other image tool live in
+  Media Studio, never here. A raw `<img>` or a new `next/image` call bypasses the manifest, and the gate
+  fails a stray file under `public/images/` (§15).
 - **No PII in tracking — and the `href` counts as tracking.** Never push a visitor's name, phone,
   address or message text into the `dataLayer`; the contact form has all of them in scope at submit
   time. The same ban covers **any element carrying `data-cta`**: GTM's built-in Click URL variable
@@ -414,13 +450,14 @@ output. Add `prettier` as a devDependency if that matters.
 
 **Agents** (`.claude/agents/`) — `seo-auditor`, `schema-auditor`, `eeat-trust-auditor`,
 `local-seo-strategist`, `aeo-geo-strategist`, `perf-a11y-auditor`, `security-auditor`,
-`ts-react-reviewer`, `cro-conversion-auditor` (all read-only), plus `rtl-frontend-engineer` and `hebrew-copywriter` (which edit).
+`ts-react-reviewer`, `cro-conversion-auditor`, `image-qa-reviewer` (all read-only), plus
+`rtl-frontend-engineer`, `hebrew-copywriter` and `image-art-director` (which edit).
 
 **Skills** (`.claude/skills/`) — start with `thermoleak-architecture`. Then `seo-metadata`,
 `schema-structured-data`, `hebrew-rtl`, `local-seo-il`, `aeo-answer-content`, `internal-linking`,
 `conversion-cro`, `tracking-analytics`, `performance-web-vitals`, `responsive-accessibility`,
 `web-security-headers`, `i18n-bilingual`, `new-service`, `new-city`, `new-article`, `qa-build-gate`,
-`deploy-thermoleak`.
+`deploy-thermoleak`, `page-imagery`, `page-images-pipeline`.
 
 **The acceptance bars** live in `docs/` — start at [docs/README.md](docs/README.md), which maps them.
 Every agent cites them by section number.
@@ -508,7 +545,7 @@ shows an updates strip after the method explainer; it hides itself 45 days after
   registers), the wartime line is **confirmed** for this business, and the export budget is
   **raised from 6 MB to 7.5 MB** ([performance-guidelines.md](docs/performance-guidelines.md) §1 —
   the live surfaces take `out/` to ≈6.93 MB; raised again to 8 MB on 2026-10-27, for the
-  gallery's approved images, and to 15 MB on 2026-10-28, for the nine remaining city pages). The kit is synced from a committed 3locksmiths
+  gallery's approved images, to 15 MB on 2026-10-28, for the nine remaining city pages, and to 25 MB on 2026-11-01, for the page images). The kit is synced from a committed 3locksmiths
   (`live-kit.lock.json` names `cf3a5460aa8b`, no `+dirty`).
 - **The status switch's CORS list is DONE — verified against production 2026-10-28.** All three
   origins answer with a matching `Access-Control-Allow-Origin`:
@@ -533,3 +570,78 @@ shows an updates strip after the method explainer; it hides itself 45 days after
   `NTFY_TOPIC`. Neither is verifiable from outside (one is container config, one a repo secret), so
   neither may be marked done by inspection the way the CORS line was. Order and commands: the kit
   README, "Before a site's first deploy".
+
+---
+
+## 15. Page images — illustrations under one note
+
+**Decided by the user 2026-11-01** (business-facts §A; [docs/eeat-and-trust.md](docs/eeat-and-trust.md) §5a):
+every content page carries two or more realistic AI-made images of the method, built on the fleet's
+`page-images` toolkit (`Media Studio/page-images/`, runbook
+`Media Studio/runbooks/page-images-for-a-site.md`), as on gagoline.co.il and betonplus.co.il.
+**They are illustrations, never evidence.** The rule sits on the words around a picture, not on a label
+on each picture.
+
+**State on 2026-11-01:** the kit, the slot plan and the toolkit configuration are in; the 55 renders are
+not made yet. Until they install, the site shows its 12 legacy images and `gates.minPerContentPage`
+stays `0`. **Move this line when that changes.**
+
+| Decision        | Value                                                                                                                                                                                                                                                                                                                                                                      |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Disclosure      | One note: a footer line on every page, the `/gallery/` intro, a line under the team figure on `/about/`. No per-image label and no file marker; Google's invisible SynthID stays. The texts live in `content/images/notice.json`, and a wording change needs a new approval.                                                                                               |
+| People          | עומר (manager) and יואב (technician); consent relayed by the user in chat, signed copies open (business-facts §A). **Surnames never appear in this public repo**, in a file name or on the site. A first name appears only in the about note and in a caption whose every placement is `/about/`.                                                                          |
+| Founder         | רונן דהן is **never depicted**, and his name never sits in an alt or a caption: beside a technician's face it would be a false identification.                                                                                                                                                                                                                             |
+| Emblem          | The shield alone, on the left chest of **every** frame with a person (`badge.required`), so every person is seen from the front or three-quarter front. Never the lettered logo on clothing.                                                                                                                                                                               |
+| Watermark       | The logo without its tagline, bottom-right on every image, composited afterwards and never generated.                                                                                                                                                                                                                                                                      |
+| The camera      | Every thermal camera is the **FLIR E8**, drawn from a reference photo, with the small FLIR mark on its side kept (the user's choice). A man facing the viewer holds it with the screen toward him. A lit screen shows only where the camera is set down with its back to the viewer and its lens on the surface, because only that framing can honestly show that surface. |
+| Kit             | Besides the E8, the pin moisture meter and the acoustic detector: a blue masking-tape or chalk mark, a plain tablet showing only a thermal image, a plain grey case. Nothing else, and no tool of repair.                                                                                                                                                                  |
+| Existing images | The 11 homepage gallery images are re-issued with the logo at new file names; the hero is regenerated.                                                                                                                                                                                                                                                                     |
+| Budgets         | Export 25,000,000 B · `out/images` 12 MB · one image 200 KB, the hero 150 KB · one page 900 KB, `/` 1 MB, `/gallery/` 3 MB · WebP quality never below 80, because thermal colour ramps band under it.                                                                                                                                                                      |
+| Never           | A rendering never enters JSON-LD, `og:image` or a Google Business Profile.                                                                                                                                                                                                                                                                                                 |
+
+**The slots** (the full inventory with widths: the `page-imagery` skill).
+
+| Route           | Images                                                                                      |
+| --------------- | ------------------------------------------------------------------------------------------- |
+| `/`             | `main` (the hero, 5:4), `detail` under the method text, the 11 `supplied` gallery images    |
+| `/services/`    | `pair-1`, `pair-2`: two service mains, reused                                               |
+| 4 service pages | `main`, `detail`, `work`                                                                    |
+| `/pricing/`     | `survey`, `layers`                                                                          |
+| `/guides/`      | one thumbnail per guide, derived from its `lead`                                            |
+| 3 guides        | `lead`, and `mid` reused through a `figure` block in `lib/articles.ts`                      |
+| `/locations/`   | `strip-1` to `strip-3`                                                                      |
+| 12 city pages   | `main` with a person, `detail` people-free and with no camera; no file shared by two cities |
+| `/about/`       | `team`, `work`, `survey` reused. **No image beside the founder card**                       |
+| `/contact/`     | `main`, `team` reused                                                                       |
+| `/gallery/`     | the 11 `supplied`, then `generated` 12–17 made for it and 18–21 the four service mains      |
+
+Excluded, on purpose: `/privacy/`, `/accessibility/`, `/thank-you/`, the 404.
+
+**The words** (`scripts/images/lib/manifest-rules.mjs` enforces them; `images.config.mjs` holds this
+trade's list, which Media Studio's alt writer shares, and `doctor` fails if the two drift):
+
+- A screen is an illustration: alt and caption describe colours and positions, never a reading, a
+  temperature, a number or a finding.
+- A caption names an activity or a method. It never states a finding, a result, a promise, the
+  guarantee's slogan, a city or neighbourhood, a customer, a date, or the camera's make or model.
+- The site names the FLIR E8 elsewhere; an alt or a caption never does.
+
+**The pipeline.** `content/images/plan.json` (authored) → `brief` → `digest` → **one owner yes** →
+`approve` → `generate` (Gemini, with the portraits, the shield and the camera as references) → `qa` (two
+vision judges with hard and soft codes, regenerating on a hard one) → `alt` → `finish` (exact box, logo,
+WebP) → `stage` (candidates in `public/images/_candidates/`, gitignored) → **the owner's review** on the
+board beside `npm run dev:images` → `install` → `npm run gate` → deploy with the owner's word. The legacy
+11 go through `import`. The spend cap is US$45 and only the owner may raise it. The `page-images-pipeline`
+skill is this site's runbook.
+
+**Operating rules.**
+
+- **Never** hand-edit the manifest's structure, an `approved:` stamp or `public/images/**`.
+- **Never** commit `public/images/_candidates/` or anything in `assets/` except its README.
+- Reference portraits stay in `Media Studio/refs/thermoleak/`, and never enter this repo, `public/` or a URL.
+- **Never delete a deployed image.** A replaced file becomes `retired` with a date, stays at least 60 days,
+  and its removal is a separate owner decision. A revoked consent means people-free twins at new file names.
+- A route that gains a captioned figure moves its `lastModified` on install day; re-issuing an image with
+  the logo does not count.
+- **The toolkit is shared with other sessions.** Nobody edits `page-images/lib` while another session has it
+  dirty; the 2026-11-01 order is hambabait, then netomazganim, then this site.

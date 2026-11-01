@@ -82,8 +82,8 @@ Recompute against the **real background**, not against white by default — the 
 
 ## Semantics
 
-- **One `<h1>` per page** — verified correct on all **31 emitted pages** (28 of them in the sitemap,
-  2026-10-28 build; `/thank-you/` is deliberately noindex, plus the two 404 forms). Heading order
+- **One `<h1>` per page** — verified correct on all **32 emitted pages** (29 of them in the sitemap,
+  2026-11-01 build; `/thank-you/` is deliberately noindex, plus the two 404 forms). Heading order
   unbroken.
 - Landmarks: `header`, `nav` (with `aria-label`), `main#main`, `footer` — all present. The footer has
   three labelled `<nav>` regions (`שירותים`, `ניווט`, `אזורי שירות` — the 12-city list), which is the

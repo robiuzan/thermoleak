@@ -50,6 +50,7 @@ decision, not on a sprint.
 | **7 — Repair the location silo, then extend** | ⏳ **12 of 12 built 2026-10-28**, not yet deployed   |
 | **8 — The second guide triplet**              | after 7                                              |
 | **9 — Owner-gated upside**                    | a queue, not a sequence                              |
+| **10 — Page images**                          | ⏳ **kit and plan in, 2026-11-01**; renders pending  |
 
 ---
 
@@ -77,24 +78,24 @@ rather than hidden inside a sprint's "done when".
 > includes/excludes**, and **report turnaround as a number**. Both were asked and came back as "use
 > your judgement", which is not an answer a site may publish. See business-facts §C.
 
-| #   | Ask                                         | Status                                                                             | Unlocks                                                                   | Backlog |
-| --- | ------------------------------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | ------- |
-| 1   | **Google Business Profile URL**             | 🔶 **open** — none exists yet; owner will open one                                 | first non-empty `sameAs`; map pack; the only legitimate route to a rating | §5.3    |
-| 2   | **Real reviews with source URLs**           | 🔶 **open** — ask at the job; ~10 over 60 days                                     | retires the `/reviews/` 301; `Review` + honest `AggregateRating`          | §7.1    |
-| 3   | **Thermography certificate**                | ❌ **closed — none held.** The "Level 1" badge was removed                         | nothing. Do not re-ask; do not reintroduce a certification claim          | §7.3    |
-| 4   | **Starting price**                          | ✅ **₪350** (was an unverified ₪350)                                               | `Offer`/`PriceSpecification` once inclusions are known too                | §7.7    |
-| 5   | **Thermal camera model**                    | ✅ **FLIR E8**                                                                     | model-level specificity; shipped in `site.credentials`                    | §7.3    |
-| 6   | **Report turnaround as a number**           | 🔶 **open** — answered "use the standard", which is not a fact about this business | a concrete answer block on `/services/insurance-reports/`                 | §7.7    |
-| 7   | **Travel reach**                            | ✅ **~2 hours' drive from Tel Aviv** — lifts the batch-4 distance gate             | location batches 4–5 on distance                                          | §5.4    |
-| 8   | **Is "שירות ארצי בתיאום מראש" true?**       | ✅ **yes**                                                                         | the clause it renders in 6 places is now backed                           | §5.4    |
-| 9   | **ח.פ. number**                             | ❌ **closed — not a registered company.** `בע״מ` removed from `legalName`          | nothing. Do not re-ask                                                    | §7.3    |
-| 10  | **Third-party insurance (ביטוח צד ג׳)**     | ✅ **held** — insurer and amount not supplied, so no figure ships                  | the signal ועדי בתים and property managers ask for                        | §7.3    |
-| 11  | **Accessibility coordinator name**          | ❌ **closed — none appointed.** `/accessibility/` no longer asserts one            | nothing. Do not re-ask                                                    | §11.2   |
-| 12  | **Owner photo + permission**                | 🔶 **open**                                                                        | author bio block; strongest single trust element on `/about/`             | §7.5    |
-| 13  | **One real job reference per city**         | 🔶 **open** — operational                                                          | the only doorway-test item research cannot supply                         | §3.4    |
-| 14  | **Before/after thermal pairs with consent** | 🔶 **open** — operational                                                          | the E-E-A-T unfair advantage                                              | §7.1    |
-| 15  | **What the ₪350 visit includes / excludes** | 🔶 **open** — answered "use your judgement"; a draft awaits approval               | the #1 pre-purchase question; `Offer` schema; AEO answer block            | §7.7    |
-| 16  | **Accepted payment methods**                | 🔶 **open** — only "issues a חשבונית מס" is confirmed                              | removes a conversion objection for ועדי בתים                              | §7.7    |
+| #   | Ask                                                                                                              | Status                                                                             | Unlocks                                                                   | Backlog |
+| --- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | ------- |
+| 1   | **Google Business Profile URL**                                                                                  | 🔶 **open** — none exists yet; owner will open one                                 | first non-empty `sameAs`; map pack; the only legitimate route to a rating | §5.3    |
+| 2   | **Real reviews with source URLs**                                                                                | 🔶 **open** — ask at the job; ~10 over 60 days                                     | retires the `/reviews/` 301; `Review` + honest `AggregateRating`          | §7.1    |
+| 3   | **Thermography certificate**                                                                                     | ❌ **closed — none held.** The "Level 1" badge was removed                         | nothing. Do not re-ask; do not reintroduce a certification claim          | §7.3    |
+| 4   | **Starting price**                                                                                               | ✅ **₪350** (was an unverified ₪350)                                               | `Offer`/`PriceSpecification` once inclusions are known too                | §7.7    |
+| 5   | **Thermal camera model**                                                                                         | ✅ **FLIR E8**                                                                     | model-level specificity; shipped in `site.credentials`                    | §7.3    |
+| 6   | **Report turnaround as a number**                                                                                | 🔶 **open** — answered "use the standard", which is not a fact about this business | a concrete answer block on `/services/insurance-reports/`                 | §7.7    |
+| 7   | **Travel reach**                                                                                                 | ✅ **~2 hours' drive from Tel Aviv** — lifts the batch-4 distance gate             | location batches 4–5 on distance                                          | §5.4    |
+| 8   | **Is "שירות ארצי בתיאום מראש" true?**                                                                            | ✅ **yes**                                                                         | the clause it renders in 6 places is now backed                           | §5.4    |
+| 9   | **ח.פ. number**                                                                                                  | ❌ **closed — not a registered company.** `בע״מ` removed from `legalName`          | nothing. Do not re-ask                                                    | §7.3    |
+| 10  | **Third-party insurance (ביטוח צד ג׳)**                                                                          | ✅ **held** — insurer and amount not supplied, so no figure ships                  | the signal ועדי בתים and property managers ask for                        | §7.3    |
+| 11  | **Accessibility coordinator name**                                                                               | ❌ **closed — none appointed.** `/accessibility/` no longer asserts one            | nothing. Do not re-ask                                                    | §11.2   |
+| 12  | **Owner photo + permission** (renderings never depict the founder, so they close nothing here)                   | 🔶 **open**                                                                        | author bio block; strongest single trust element on `/about/`             | §7.5    |
+| 13  | **One real job reference per city**                                                                              | 🔶 **open** — operational                                                          | the only doorway-test item research cannot supply                         | §3.4    |
+| 14  | **Before/after thermal pairs with consent** (renderings are illustrations, not pairs; a real photo replaces one) | 🔶 **open** — operational                                                          | the E-E-A-T unfair advantage                                              | §7.1    |
+| 15  | **What the ₪350 visit includes / excludes**                                                                      | 🔶 **open** — answered "use your judgement"; a draft awaits approval               | the #1 pre-purchase question; `Offer` schema; AEO answer block            | §7.7    |
+| 16  | **Accepted payment methods**                                                                                     | 🔶 **open** — only "issues a חשבונית מס" is confirmed                              | removes a conversion objection for ועדי בתים                              | §7.7    |
 
 **Two asks are fleet decisions, not facts:**
 
@@ -591,6 +592,29 @@ Start any row the day its fact lands. None blocks another.
 **Bilingual stays conditional** and gated on [accessibility-and-i18n.md](accessibility-and-i18n.md)
 §B0 — build only if a named audience exists. English permanently doubles content, floors and audits.
 Nothing above depends on it.
+
+---
+
+## Sprint 10 — Page images
+
+Decided by the user 2026-11-01. Every content page carries two or more realistic AI-made illustrations
+under one site-wide note. CLAUDE.md §15 is the rule; the `page-images-pipeline` skill is the runbook.
+
+**Done on 2026-11-01:** the site kit (`Figure`, `FieldStrip`, the manifest-fed `Gallery`, `/gallery/`, the
+postbuild gate, the `Container` width fix), the policy in `docs/`, the slot plan (55 renders, 27 routes), and
+the Media Studio site configuration.
+
+**Blocked on:** the toolkit's object-reference and legacy-import work, which waits for two sibling sessions
+to commit; then one owner yes on the prompts, one review session on the board, and the owner's word for the
+deploy.
+
+**Done when:**
+
+- Every sitemap content URL carries at least two content images with numeric size and a Hebrew alt.
+- `gates.minPerContentPage` is `2` and `npm run gate` is green.
+- The footer note is on every page, and `og:image` is still `/og.png`.
+- The export is under 25,000,000 B, and the measured figure is recorded in performance-guidelines §1.
+- The old `/images/gallery/*.webp` and `/images/hero.webp` still answer 200.
 
 ---
 

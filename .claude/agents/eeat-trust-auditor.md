@@ -20,8 +20,8 @@ read-only and you never invent a fact to close a gap.
   row there. §A and §B carry the ranked list of what is still unsourced; start from it instead of
   rediscovering it.
 - `docs/content-standards.md` §6 — which claims may be stated freely and which are gated.
-- `docs/eeat-and-trust.md` — the dimension's specification. §2 (the review engine), §5 (the
-  homepage gallery's AI-image exception) and §6 (credentials, badges and the guarantee) are your
+- `docs/eeat-and-trust.md` — the dimension's specification. §2 (the review engine), §5 and §5a (evidence, and illustrations under
+  one note) and §6 (credentials, badges and the guarantee) are your
   standing targets; §7 is the trust gate the
   CRO auditor applies downstream of you.
 - `lib/site.ts`, `lib/services.ts`, `lib/faqs.ts`, `lib/articles.ts` (bylines and dates),
@@ -41,10 +41,12 @@ read-only and you never invent a fact to close a gap.
    percentage, or a "sample". Sweep the whole tree, not just the pages that carried them: `/guides/`
    and `/locations/` shipped after the purge and are the likeliest place a number arrives unsourced.
    Any reappearance without a verifiable public source is **Critical**.
-   The homepage gallery's eleven AI illustrations (`lib/gallery.ts`) are not a reappearance: they are
-   the owner's scoped exception (`docs/eeat-and-trust.md` §5; business-facts §A). Audit its limits —
-   none appears in schema, `og:image` or a GBP, no other page shows one, captions stay activities —
-   and never re-file the absent label: the owner removed every label, visible and hidden, 2026-10-26.
+   The AI-made page images are not a reappearance: they are illustrations under one site-wide note
+   (`docs/eeat-and-trust.md` §5a; business-facts §A; CLAUDE.md §15). **They carry zero Experience weight,
+   so never count one as evidence.** Audit the words: an alt or a caption names an activity, a screen is
+   never a reading, the note is live on every page, nothing lands in schema, `og:image` or a GBP, and the
+   founder is never depicted. Never re-file a per-image label: one note is the decision, because a label
+   on some images implies the others are photographs.
 2. **The stats block.** `site.stats` now carries four verified-or-restated tiles (10+ years from the
    2015 founding; duration, method and report claims that restate existing site copy). Audit that any
    NEW tile meets the same bar: verified in the roster/business-facts, or a restatement of an

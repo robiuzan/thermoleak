@@ -174,3 +174,5 @@ do these; read one before writing, and match it:
 - [ ] `serviceChooser` case added; `public/llms.txt` updated.
 - [ ] Present in `out/` and `out/sitemap.xml`; `npm run check:sitemap` passes; `<title>` carries the
       brand exactly once.
+
+**Images.** A new service needs its slots in `content/images/plan.json`. While `gates.minPerContentPage` is `0` it ships without them; once that gate is `2`, it needs two approved images first (the `page-imagery` and `page-images-pipeline` skills).

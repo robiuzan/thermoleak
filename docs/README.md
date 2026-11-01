@@ -68,6 +68,8 @@ replaces the missing mechanism.
 | Which instruction files must I update after a sprint?               | optimization-backlog.md §14                 |
 | What do we do next, and in what order?                              | implementation-roadmap.md                   |
 | What may the announcement bar, the seasonal card or the strip say?  | `content/live/` + `live.config.mjs` (below) |
+| What may an image show, and what may its alt or caption say?        | eeat-and-trust.md §5a + CLAUDE.md §15       |
+| How does an image get made, reviewed and installed?                 | the `page-images-pipeline` skill            |
 
 `location-sources/{slug}.md` exists for the nine city pages added 2026-10-28; the first three have
 none yet.

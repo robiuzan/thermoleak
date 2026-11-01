@@ -4,6 +4,11 @@
       "Bash(npm run build)",
       "Bash(npm run lint)",
       "Bash(npm run dev)",
+      "Bash(npm run gate)",
+      "Bash(npm run check:sitemap)",
+      "Bash(npm run images:check)",
+      "Bash(npm run images:status)",
+      "Bash(npm run dev:images)",
       "Bash(npx tsc --noEmit)",
       "Bash(git status:*)",
       "Bash(git diff:*)",
@@ -30,7 +35,9 @@
       "Skill(new-article)",
       "Skill(qa-build-gate)",
       "Skill(deploy-thermoleak)",
-      "Skill(i18n-bilingual)"
+      "Skill(i18n-bilingual)",
+      "Skill(page-imagery)",
+      "Skill(page-images-pipeline)"
     ]
   },
   "hooks": {

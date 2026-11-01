@@ -154,8 +154,8 @@ span (**3.1.2 Language of Parts**).
       in that locale.
 - [ ] Not machine-translated. A bad translation damages E-E-A-T in both languages.
 - [ ] Legal pages Hebrew-authoritative; any English version marked a convenience translation.
-- [ ] `npm run lint && npm run build`; route count roughly doubles — from today's **31 emitted
-      `index.html` / 28 in the sitemap** (2026-10-28 build) — so update `/qa-build-gate` and `npm run check:sitemap`
+- [ ] `npm run lint && npm run build`; route count roughly doubles — from today's **32 emitted
+      `index.html` / 29 in the sitemap** (2026-11-01 build) — so update `/qa-build-gate` and `npm run check:sitemap`
       expectations in the same commit.
 
 ## Gotchas

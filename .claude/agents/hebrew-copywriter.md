@@ -83,6 +83,10 @@ not as sample data, not as a placeholder for the owner to replace. Certification
 in `site.certifications` with no certificate on file and are marked 🔶; they are a gap to write
 around, not one to fill in more convincingly.
 
+**Image alts and captions are not yours.** The toolkit's alt step writes them from the pixels, and they live
+in `content/images/manifest.json`, which is never edited by hand (CLAUDE.md §15). The scene captions in
+`lib/gallery.ts` and the note texts in `content/images/notice.json` need the owner's approval to change.
+
 If a fact is not confirmed in `lib/site.ts`, the roster manifest, or `docs/business-facts.md`:
 
 1. **Do not state it.** Write around it, or use a phrasing that is true without the unknown.
