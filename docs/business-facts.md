@@ -57,7 +57,9 @@ homepage gallery only. CLAUDE.md §15 is the operating rule, and [eeat-and-trust
 - **Images on every content page**, AI-made illustrations of the method under one site-wide note: a
   footer line on every page, the `/gallery/` intro, and a line under the team figure on `/about/`. The
   seven texts in `content/images/notice.json` are approved, and a wording change needs a new approval.
-  No per-image label, no file marker.
+  No per-image label, no file marker. **The note keeps «חלק מהתמונות»:** a review pointed out that every
+  image will be a rendering once the new hero installs, and the user chose to keep this wording. Do not
+  re-ask.
 - **The people.** עומר is the manager and יואב the technician: the two technicians the site already
   counts. Both may be shown, faces included, on every content page. The user relayed the consent in
   chat, and reported the signed copies done the same day. Surnames stay out of this repo.
