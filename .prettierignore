@@ -4,3 +4,6 @@ scripts/live/
 content/live/_calendar*.json
 public/assets/live.js
 live-kit.lock.json
+
+# written by the Media Studio toolkit, never by hand
+content/images/manifest.json

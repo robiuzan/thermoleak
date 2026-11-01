@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { site, pageOpenGraph } from "@/lib/site";
+import { imageFor, leadSlotOf } from "@/lib/images";
+import Figure from "@/components/Figure";
 import PageHero from "@/components/PageHero";
 import ContactCTA from "@/components/ContactCTA";
 import Container from "@/components/Container";
@@ -11,10 +13,19 @@ export const metadata: Metadata = {
   description:
     "צרו קשר עם טרמוליק לאיתור נזילות, רטיבות ובדיקות תרמוגרפיה בגוש דן והמרכז. טלפון, וואטסאפ או טופס — מענה מהיר ושירות חירום.",
   alternates: { canonical: "/contact/" },
-  ...pageOpenGraph({ path: "/contact", title: `צור קשר | ${site.nameHe}`, description: "צרו קשר עם טרמוליק לאיתור נזילות, רטיבות ובדיקות תרמוגרפיה בגוש דן והמרכז. טלפון, וואטסאפ או טופס — מענה מהיר ושירות חירום." }),
+  ...pageOpenGraph({
+    path: "/contact",
+    title: `צור קשר | ${site.nameHe}`,
+    description:
+      "צרו קשר עם טרמוליק לאיתור נזילות, רטיבות ובדיקות תרמוגרפיה בגוש דן והמרכז. טלפון, וואטסאפ או טופס — מענה מהיר ושירות חירום.",
+  }),
 };
 
 export default function ContactPage() {
+  const arrivalImage = imageFor("/contact/", "main");
+  const teamImage = imageFor("/contact/", "team");
+  const eager = leadSlotOf("/contact/", ["main", "team"]);
+
   return (
     <>
       <JsonLd
@@ -37,9 +48,11 @@ export default function ContactPage() {
       {/* Depth to the 200-word floor (backlog §3.3) with content that is genuinely useful at the
           moment of contact — what happens next, and what to have ready. */}
       <section className="border-t border-ink/10 py-14 md:py-16">
-        <Container className="grid max-w-4xl gap-10 md:grid-cols-2">
+        <Container max="4xl" className="grid gap-10 md:grid-cols-2">
           <div>
-            <h2 className="text-xl font-bold text-brand">מה קורה אחרי שפונים אלינו</h2>
+            <h2 className="text-xl font-bold text-brand">
+              מה קורה אחרי שפונים אלינו
+            </h2>
             <ol className="mt-4 space-y-3">
               {[
                 "אנחנו חוזרים אליכם בשעות הפעילות, ומבררים בקצרה מה קורה: איפה מופיע הכתם או הרטיבות, מתי הופיע, והאם הוא משתנה לפי שימוש.",
@@ -51,7 +64,9 @@ export default function ContactPage() {
                   <span className="inline-flex size-7 shrink-0 items-center justify-center rounded-full bg-brand text-sm font-bold text-white">
                     {index + 1}
                   </span>
-                  <span className="text-sm leading-relaxed text-ink/80">{step}</span>
+                  <span className="text-sm leading-relaxed text-ink/80">
+                    {step}
+                  </span>
                 </li>
               ))}
             </ol>
@@ -67,8 +82,14 @@ export default function ContactPage() {
                 "גודל הנכס ומספר המקומות שבהם מופיעה הבעיה.",
                 "תמונה של הכתם, אם יש — היא עוזרת לנו להעריך מראש.",
               ].map((item) => (
-                <li key={item.slice(0, 20)} className="flex items-start gap-2 text-sm leading-relaxed text-ink/80">
-                  <span aria-hidden="true" className="mt-2 size-1.5 shrink-0 rounded-full bg-accent-strong" />
+                <li
+                  key={item.slice(0, 20)}
+                  className="flex items-start gap-2 text-sm leading-relaxed text-ink/80"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="mt-2 size-1.5 shrink-0 rounded-full bg-accent-strong"
+                  />
                   {item}
                 </li>
               ))}
@@ -76,12 +97,37 @@ export default function ContactPage() {
 
             <div className="mt-6 rounded-xl border border-ink/10 bg-paper p-5">
               <p className="font-semibold text-brand">{site.emergencyNote}</p>
-              <p className="mt-2 text-sm leading-relaxed text-ink/70">{site.serviceAreaText}</p>
-              <p className="mt-2 text-sm leading-relaxed text-ink/70">{site.address.note}</p>
+              <p className="mt-2 text-sm leading-relaxed text-ink/70">
+                {site.serviceAreaText}
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-ink/70">
+                {site.address.note}
+              </p>
             </div>
           </div>
         </Container>
       </section>
+
+      {arrivalImage || teamImage ? (
+        <section className="pb-14 md:pb-16">
+          <Container max="4xl" className="grid gap-4 sm:grid-cols-2">
+            {arrivalImage ? (
+              <Figure
+                image={arrivalImage}
+                priority={eager === "main"}
+                caption={false}
+              />
+            ) : null}
+            {teamImage ? (
+              <Figure
+                image={teamImage}
+                priority={eager === "team"}
+                caption={false}
+              />
+            ) : null}
+          </Container>
+        </section>
+      ) : null}
     </>
   );
 }

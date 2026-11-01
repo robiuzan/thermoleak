@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Phone, ShieldCheck, Clock, BadgeCheck } from "lucide-react";
 import {
@@ -7,11 +6,16 @@ import {
   whatsappHref,
   defaultWhatsappMessage,
 } from "@/lib/site";
+import { imageFor } from "@/lib/images";
 import Container from "./Container";
 import CtaButton from "./CtaButton";
+import Figure from "./Figure";
 import WhatsappIcon from "./WhatsappIcon";
 
 export default function Hero() {
+  // The manifest's `main` on `/`: the page's single LCP image, in a frame of its own.
+  const heroImage = imageFor("/", "main");
+
   return (
     <section className="on-dark relative overflow-hidden bg-brand text-white">
       <div
@@ -82,14 +86,14 @@ export default function Hero() {
           </ul>
         </div>
         <div className="relative mx-auto w-full max-w-md">
-          <Image
-            src="/images/hero.webp"
-            alt="טכנאי טרמוליק מבצעים איתור נזילה בדירה בעזרת מצלמה תרמית וציוד אקוסטי"
-            width={828}
-            height={670}
-            priority
-            className="h-auto w-full rounded-3xl ring-1 ring-white/20"
-          />
+          {heroImage ? (
+            <Figure
+              image={heroImage}
+              priority
+              bare
+              imageClassName="h-auto w-full rounded-3xl ring-1 ring-white/20"
+            />
+          ) : null}
         </div>
       </Container>
     </section>

@@ -134,7 +134,7 @@ export default function ThankYouContent() {
 
   return (
     <section className="py-16 md:py-24">
-      <Container className="max-w-2xl">
+      <Container max="2xl">
         <div className="rounded-2xl border border-ink/10 bg-white p-8 text-center shadow-sm">
           <CheckCircle2
             className="mx-auto size-12 text-[#0e7468]"

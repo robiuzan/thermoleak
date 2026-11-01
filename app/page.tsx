@@ -39,7 +39,7 @@ export default function HomePage() {
       <Process />
       {/* The four steps, then what a visit looks like: white between Process and the FAQ, which
           are both bg-paper. Far below the fold, so its lazy images never touch LCP. */}
-      <Gallery />
+      <Gallery route="/" allImagesLink />
       <Faq
         faqs={generalFaqs}
         eyebrow="שאלות נפוצות"

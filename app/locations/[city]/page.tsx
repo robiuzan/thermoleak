@@ -5,10 +5,12 @@ import { ArrowLeft, MapPin } from "lucide-react";
 import { getLocation, locationSlugs, locations } from "@/lib/locations";
 import { services } from "@/lib/services";
 import { site, pageOpenGraph } from "@/lib/site";
+import { imageFor, leadSlotOf } from "@/lib/images";
 import { locationServiceJsonLd, faqPageJsonLd } from "@/lib/jsonld";
 import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
 import ContactCTA from "@/components/ContactCTA";
+import Figure from "@/components/Figure";
 import JsonLd from "@/components/JsonLd";
 
 interface PageProps {
@@ -48,6 +50,11 @@ export default async function LocationPage({ params }: PageProps) {
     .map((slug) => locations.find((l) => l.slug === slug))
     .filter((l) => l !== undefined);
 
+  const route = `/locations/${location.slug}/`;
+  const mainImage = imageFor(route, "main");
+  const detailImage = imageFor(route, "detail");
+  const eager = leadSlotOf(route, ["main", "detail"]);
+
   return (
     <>
       <JsonLd data={locationServiceJsonLd(location)} />
@@ -68,7 +75,7 @@ export default async function LocationPage({ params }: PageProps) {
       />
 
       <section className="py-14 md:py-20">
-        <Container className="max-w-3xl">
+        <Container max="3xl">
           {/* AEO answer block first in the DOM — docs/content-standards.md §5. */}
           <div className="rounded-2xl border-s-4 border-brand bg-paper p-6">
             <h2 className="text-xl font-bold text-brand">
@@ -78,6 +85,14 @@ export default async function LocationPage({ params }: PageProps) {
               {location.answer.a}
             </p>
           </div>
+
+          {mainImage ? (
+            <Figure
+              image={mainImage}
+              priority={eager === "main"}
+              className="mt-8"
+            />
+          ) : null}
 
           {location.intro.map((paragraph) => (
             <p
@@ -108,6 +123,14 @@ export default async function LocationPage({ params }: PageProps) {
               </li>
             ))}
           </ul>
+
+          {detailImage ? (
+            <Figure
+              image={detailImage}
+              priority={eager === "detail"}
+              className="mt-8"
+            />
+          ) : null}
 
           <div className="mt-8 rounded-xl border border-ink/10 bg-white p-5">
             <h2 className="font-bold text-brand">זמינות והגעה</h2>

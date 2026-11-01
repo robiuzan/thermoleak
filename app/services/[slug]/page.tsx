@@ -5,12 +5,14 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, CheckCircle2, Eye } from "lucide-react";
 import { getService, services, serviceSlugs } from "@/lib/services";
 import { site, telHref, pageOpenGraph } from "@/lib/site";
+import { imageFor, leadSlotOf } from "@/lib/images";
 import { serviceJsonLd, faqPageJsonLd } from "@/lib/jsonld";
 import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
 import ContactCTA from "@/components/ContactCTA";
 import JsonLd from "@/components/JsonLd";
 import CtaButton from "@/components/CtaButton";
+import Figure from "@/components/Figure";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -49,6 +51,12 @@ export default async function ServiceDetailPage({ params }: PageProps) {
   // The visible answer block is genuine on-page Q&A, so it legitimately joins the FAQPage graph.
   const faqEntities = [service.answer, ...service.faqs];
 
+  const route = `/services/${service.slug}/`;
+  const mainImage = imageFor(route, "main");
+  const detailImage = imageFor(route, "detail");
+  const workImage = imageFor(route, "work");
+  const eager = leadSlotOf(route, ["main", "detail", "work"]);
+
   return (
     <>
       <JsonLd data={serviceJsonLd(service)} />
@@ -78,17 +86,26 @@ export default async function ServiceDetailPage({ params }: PageProps) {
               </p>
             </div>
 
-            {/* Decorative: an abstract illustration of the service, sitting directly under an H1
-                that already states the service name. `alt={service.h1}` made a screen reader
-                announce the heading twice (backlog §11.5); an empty alt is the correct choice for
-                an image carrying no information the surrounding text lacks. */}
-            <Image
-              src={service.image}
-              alt=""
-              width={600}
-              height={400}
-              className="mb-8 h-auto w-full rounded-2xl border border-ink/10"
-            />
+            {/* The manifest's `main`, directly under the answer block. Until one is approved the
+                decorative illustration stands in: it sits under an H1 that already states the
+                service name, and `alt={service.h1}` made a screen reader announce the heading
+                twice (backlog §11.5), so an empty alt is the correct choice for an image carrying no
+                information the surrounding text lacks. */}
+            {mainImage ? (
+              <Figure
+                image={mainImage}
+                priority={eager === "main"}
+                className="mb-8"
+              />
+            ) : (
+              <Image
+                src={service.image}
+                alt=""
+                width={600}
+                height={400}
+                className="mb-8 h-auto w-full rounded-2xl border border-ink/10"
+              />
+            )}
             {service.intro.map((paragraph) => (
               <p
                 key={paragraph.slice(0, 24)}
@@ -135,6 +152,14 @@ export default async function ServiceDetailPage({ params }: PageProps) {
               ))}
             </ol>
 
+            {detailImage ? (
+              <Figure
+                image={detailImage}
+                priority={eager === "detail"}
+                className="mt-8"
+              />
+            ) : null}
+
             {/* Honest limits — deliberate positioning, not hedging (content-standards §7). */}
             <div className="mt-10 rounded-2xl border border-ink/10 bg-white p-6">
               <h2 className="flex items-center gap-2 text-xl font-bold text-brand">
@@ -166,6 +191,14 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                 </p>
               ) : null}
             </div>
+
+            {workImage ? (
+              <Figure
+                image={workImage}
+                priority={eager === "work"}
+                className="mt-8"
+              />
+            ) : null}
 
             {/* Contextual cross-links with descriptive anchors (backlog §9.3). */}
             <p className="mt-8 leading-relaxed text-ink/80">

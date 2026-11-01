@@ -1,29 +1,48 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import {
-  gallery,
-  galleryImageSize,
-  galleryScenes,
-  gallerySrc,
-} from "@/lib/gallery";
+import { gallery, galleryScenes } from "@/lib/gallery";
+import { imagesFor } from "@/lib/images";
 import { getService } from "@/lib/services";
 import Container from "./Container";
+import Figure from "./Figure";
 import SectionHeading from "./SectionHeading";
 
-// Homepage gallery: each scene pairs a wide shot with a close-up of the thermal camera in use; a
-// three-image scene takes the full row from md up. The images are AI illustrations that, by the
-// owner's decision of 2026-10-26, carry no label at all —
-// not on the page, not in the alt text, not in the files (docs/eeat-and-trust.md §5). Their
-// provenance lives only in `source.kind` (lib/gallery.ts). Below the fold everywhere: lazy,
-// dimensioned, no client JS.
-export default function Gallery() {
+export interface GalleryProps {
+  /** The page whose `supplied` placements fill the scenes: `/` or `/gallery/`. */
+  route: string;
+  title?: string;
+  /** True on /gallery/, where the first tile is the page's LCP image. */
+  priorityFirst?: boolean;
+  /** The line under the scenes that points the homepage at /gallery/. */
+  allImagesLink?: boolean;
+}
+
+// The scenes of the homepage and of /gallery/: each pairs a wide shot with closer shots of the
+// thermal camera in use, and a three-image scene takes the full row from md up. Every picture is an
+// illustration under the site-wide note (CLAUDE.md §15); the files, alt text and provenance come
+// from the manifest, the scene captions from lib/gallery.ts. On the homepage it sits below the fold
+// everywhere: lazy, dimensioned, no client JS.
+export default function Gallery({
+  route,
+  title = gallery.title,
+  priorityFirst = false,
+  allImagesLink = false,
+}: GalleryProps) {
+  const tiles = imagesFor(route, "supplied");
+  const scenes = galleryScenes
+    .map((scene) => ({
+      ...scene,
+      images: tiles.filter((image) => scene.orders.includes(image.order)),
+    }))
+    .filter((scene) => scene.images.length > 0);
+  if (scenes.length === 0) return null;
+
   return (
     <section className="py-16 md:py-20">
       <Container>
-        <SectionHeading eyebrow={gallery.eyebrow} title={gallery.title} />
+        <SectionHeading eyebrow={gallery.eyebrow} title={title} />
         <ul className="mx-auto mt-10 grid max-w-5xl gap-6 md:grid-cols-2">
-          {galleryScenes.map((scene) => {
+          {scenes.map((scene) => {
             const service = getService(scene.service);
             if (!service) {
               throw new Error(
@@ -41,13 +60,12 @@ export default function Gallery() {
                     className={`grid gap-2 ${triple ? "grid-cols-3" : "grid-cols-2"}`}
                   >
                     {scene.images.map((image) => (
-                      <Image
-                        key={image.slug}
-                        src={gallerySrc(image)}
-                        alt={image.alt}
-                        width={galleryImageSize.width}
-                        height={galleryImageSize.height}
-                        className="h-auto w-full rounded-xl"
+                      <Figure
+                        key={image.id}
+                        image={image}
+                        bare
+                        priority={priorityFirst && image.id === tiles[0]?.id}
+                        imageClassName="h-auto w-full rounded-xl"
                       />
                     ))}
                   </div>
@@ -71,6 +89,16 @@ export default function Gallery() {
             );
           })}
         </ul>
+        {allImagesLink ? (
+          <p className="mt-8 text-center">
+            <Link
+              href="/gallery/"
+              className="font-semibold text-brand underline underline-offset-2"
+            >
+              {gallery.allImagesLink}
+            </Link>
+          </p>
+        ) : null}
       </Container>
     </section>
   );

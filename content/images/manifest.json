@@ -1,0 +1,621 @@
+{
+  "version": 1,
+  "site": "thermoleak.co.il",
+  "gates": {
+    "minPerContentPage": 0,
+    "maxImageBytes": 204800,
+    "maxPageImageBytes": 921600,
+    "maxTotalBytes": 12582912,
+    "pageBudgets": {
+      "/": 1048576,
+      "/gallery/": 3145728
+    }
+  },
+  "images": [
+    {
+      "id": "gallery-legacy-01",
+      "file": "gallery/kitchen-sink-thermal-scan.webp",
+      "legacySrc": "/images/gallery/kitchen-sink-thermal-scan.webp",
+      "width": 720,
+      "height": 1200,
+      "bytes": 55714,
+      "sha256": "1a7bb098a024aba6a1f2f9f195fcacaaa512026f50ddbe37127d7255c164fd3b",
+      "sizeClass": "half",
+      "alt": "טכנאי בחולצת טרמוליק מכוון מצלמה תרמית אל בסיס הברז של כיור מטבח כפול, במטבח פתוח עם סלון ברקע.",
+      "caption": null,
+      "altEn": null,
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/",
+          "slot": "supplied",
+          "order": 1
+        },
+        {
+          "route": "/gallery/",
+          "slot": "supplied",
+          "order": 1
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "diagnosis",
+      "service": "water-leak-detection",
+      "city": null,
+      "provenance": {
+        "kind": "owner-supplied",
+        "received": "2026-10-22",
+        "originAsserted": false,
+        "note": "AI-made in the Gemini app from a reference portrait of omer; register in assets/gallery/README.md"
+      },
+      "watermark": null,
+      "review": {
+        "automated": null,
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-10-27",
+          "note": "approved for the homepage gallery, 2026-10-22 and 2026-10-27"
+        }
+      },
+      "approved": "2026-10-27 — owner, in chat",
+      "retired": null
+    },
+    {
+      "id": "gallery-legacy-02",
+      "file": "gallery/kitchen-tap-thermal-scan.webp",
+      "legacySrc": "/images/gallery/kitchen-tap-thermal-scan.webp",
+      "width": 720,
+      "height": 1200,
+      "bytes": 55610,
+      "sha256": "c8567b5a1830a195de437e1d3251f857094fb8819591dc351d3f38879007959d",
+      "sizeClass": "half",
+      "alt": "טכנאי בחולצת טרמוליק מחזיק מצלמה תרמית ליד ברז של כיור מטבח מנירוסטה; על המסך רקע סגול ופס צהוב וכתום שיורד לאורך מרכזו.",
+      "caption": null,
+      "altEn": null,
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/",
+          "slot": "supplied",
+          "order": 2
+        },
+        {
+          "route": "/gallery/",
+          "slot": "supplied",
+          "order": 2
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "diagnosis",
+      "service": "water-leak-detection",
+      "city": null,
+      "provenance": {
+        "kind": "owner-supplied",
+        "received": "2026-10-27",
+        "originAsserted": false,
+        "note": "AI-made in the Gemini app from a reference portrait of omer; register in assets/gallery/README.md"
+      },
+      "watermark": null,
+      "review": {
+        "automated": null,
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-10-27",
+          "note": "approved for the homepage gallery, 2026-10-22 and 2026-10-27"
+        }
+      },
+      "approved": "2026-10-27 — owner, in chat",
+      "retired": null
+    },
+    {
+      "id": "gallery-legacy-03",
+      "file": "gallery/kitchen-sink-thermal-screen.webp",
+      "legacySrc": "/images/gallery/kitchen-sink-thermal-screen.webp",
+      "width": 720,
+      "height": 1200,
+      "bytes": 55524,
+      "sha256": "3edd560bbac68cf0620806f6a4d41662be548ef90225f5c56d0b96d50302e62e",
+      "sizeClass": "half",
+      "alt": "טכנאי מחזיק מצלמה תרמית מעל כיור מטבח כפול; על המסך רקע סגול ופס אנכי צהוב וכתום במרכזו, שקצהו העליון לבן.",
+      "caption": null,
+      "altEn": null,
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/",
+          "slot": "supplied",
+          "order": 3
+        },
+        {
+          "route": "/gallery/",
+          "slot": "supplied",
+          "order": 3
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "diagnosis",
+      "service": "water-leak-detection",
+      "city": null,
+      "provenance": {
+        "kind": "owner-supplied",
+        "received": "2026-10-22",
+        "originAsserted": false,
+        "note": "AI-made in the Gemini app from a reference portrait of omer; register in assets/gallery/README.md"
+      },
+      "watermark": null,
+      "review": {
+        "automated": null,
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-10-27",
+          "note": "approved for the homepage gallery, 2026-10-22 and 2026-10-27"
+        }
+      },
+      "approved": "2026-10-27 — owner, in chat",
+      "retired": null
+    },
+    {
+      "id": "gallery-legacy-04",
+      "file": "gallery/damp-wall-thermal-scan.webp",
+      "legacySrc": "/images/gallery/damp-wall-thermal-scan.webp",
+      "width": 720,
+      "height": 1200,
+      "bytes": 44320,
+      "sha256": "20da3fd8b6fe8dd8b861cb8378d3690389c7395467b5a53f70cc5ffbe422e251",
+      "sizeClass": "half",
+      "alt": "טכנאי בחולצת טרמוליק נשען על אדן חלון ומכוון מצלמה תרמית אל כתם רטיבות בקיר; על המסך כחול קר למעלה ופס אדום בתחתית.",
+      "caption": null,
+      "altEn": null,
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/",
+          "slot": "supplied",
+          "order": 4
+        },
+        {
+          "route": "/gallery/",
+          "slot": "supplied",
+          "order": 4
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "diagnosis",
+      "service": "moisture-detection",
+      "city": null,
+      "provenance": {
+        "kind": "owner-supplied",
+        "received": "2026-10-22",
+        "originAsserted": false,
+        "note": "AI-made in the Gemini app from a reference portrait of omer; register in assets/gallery/README.md"
+      },
+      "watermark": null,
+      "review": {
+        "automated": null,
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-10-27",
+          "note": "approved for the homepage gallery, 2026-10-22 and 2026-10-27"
+        }
+      },
+      "approved": "2026-10-27 — owner, in chat",
+      "retired": null
+    },
+    {
+      "id": "gallery-legacy-05",
+      "file": "gallery/damp-wall-thermal-screen.webp",
+      "legacySrc": "/images/gallery/damp-wall-thermal-screen.webp",
+      "width": 720,
+      "height": 1200,
+      "bytes": 30124,
+      "sha256": "a3fe347a9c7c4f5710514a2cd423299a1ecc8639ddd4d5ef0cb774c051b5fbad",
+      "sizeClass": "half",
+      "alt": "טכנאי מחזיק מצלמה תרמית מול קיר ורדיאטור מתחת לחלון; על המסך כחול למעלה עם פס ירקרק שיורד במרכז, צהוב באמצע ושורת כתמים אדומים בחלק התחתון.",
+      "caption": null,
+      "altEn": null,
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/",
+          "slot": "supplied",
+          "order": 5
+        },
+        {
+          "route": "/gallery/",
+          "slot": "supplied",
+          "order": 5
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "diagnosis",
+      "service": "moisture-detection",
+      "city": null,
+      "provenance": {
+        "kind": "owner-supplied",
+        "received": "2026-10-22",
+        "originAsserted": false,
+        "note": "AI-made in the Gemini app from a reference portrait of omer; register in assets/gallery/README.md"
+      },
+      "watermark": null,
+      "review": {
+        "automated": null,
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-10-27",
+          "note": "approved for the homepage gallery, 2026-10-22 and 2026-10-27"
+        }
+      },
+      "approved": "2026-10-27 — owner, in chat",
+      "retired": null
+    },
+    {
+      "id": "gallery-legacy-06",
+      "file": "gallery/shower-floor-thermal-scan.webp",
+      "legacySrc": "/images/gallery/shower-floor-thermal-scan.webp",
+      "width": 720,
+      "height": 1200,
+      "bytes": 72896,
+      "sha256": "c896e472153119278a5483c1fe37d9675863939a07d83e181a65dc6f9f71ecb4",
+      "sizeClass": "half",
+      "alt": "טכנאי בחולצת טרמוליק ובמשקפי מגן כורע בתא מקלחת עם דלת זכוכית ומכוון מצלמה תרמית אל רצפת המקלחת.",
+      "caption": null,
+      "altEn": null,
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/",
+          "slot": "supplied",
+          "order": 6
+        },
+        {
+          "route": "/gallery/",
+          "slot": "supplied",
+          "order": 6
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "diagnosis",
+      "service": "water-leak-detection",
+      "city": null,
+      "provenance": {
+        "kind": "owner-supplied",
+        "received": "2026-10-27",
+        "originAsserted": false,
+        "note": "AI-made in the Gemini app from a reference portrait of omer; register in assets/gallery/README.md"
+      },
+      "watermark": null,
+      "review": {
+        "automated": null,
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-10-27",
+          "note": "approved for the homepage gallery, 2026-10-22 and 2026-10-27"
+        }
+      },
+      "approved": "2026-10-27 — owner, in chat",
+      "retired": null
+    },
+    {
+      "id": "gallery-legacy-07",
+      "file": "gallery/shower-floor-thermal-screen.webp",
+      "legacySrc": "/images/gallery/shower-floor-thermal-screen.webp",
+      "width": 720,
+      "height": 1200,
+      "bytes": 45270,
+      "sha256": "7a50e12c01f1bfd9a67284d5b339f8c476bc3836d2dadbc91c643c1b7a8839c1",
+      "sizeClass": "half",
+      "alt": "טכנאי מחזיק מצלמה תרמית מעל רצפת מקלחת אפורה עם תעלת ניקוז, ליד דופן זכוכית; על המסך רקע סגול וצורה צהובה וכתומה במרכזו.",
+      "caption": null,
+      "altEn": null,
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/",
+          "slot": "supplied",
+          "order": 7
+        },
+        {
+          "route": "/gallery/",
+          "slot": "supplied",
+          "order": 7
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "diagnosis",
+      "service": "water-leak-detection",
+      "city": null,
+      "provenance": {
+        "kind": "owner-supplied",
+        "received": "2026-10-27",
+        "originAsserted": false,
+        "note": "AI-made in the Gemini app from a reference portrait of omer; register in assets/gallery/README.md"
+      },
+      "watermark": null,
+      "review": {
+        "automated": null,
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-10-27",
+          "note": "approved for the homepage gallery, 2026-10-22 and 2026-10-27"
+        }
+      },
+      "approved": "2026-10-27 — owner, in chat",
+      "retired": null
+    },
+    {
+      "id": "gallery-legacy-08",
+      "file": "gallery/ceiling-thermal-scan.webp",
+      "legacySrc": "/images/gallery/ceiling-thermal-scan.webp",
+      "width": 720,
+      "height": 1200,
+      "bytes": 52158,
+      "sha256": "35083bcf0b3364a1a86576fb44bd34078bd022cfa5ed71e7963c1e751ab94e4b",
+      "sizeClass": "half",
+      "alt": "טכנאי בחולצת טרמוליק כורע על רצפת אריחים בהירה ומרים מצלמה תרמית אל כתם רטיבות חום בתקרה, ליד חלון עם תריס גלילה ונוף של בנייני אבן.",
+      "caption": null,
+      "altEn": null,
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/",
+          "slot": "supplied",
+          "order": 8
+        },
+        {
+          "route": "/gallery/",
+          "slot": "supplied",
+          "order": 8
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "diagnosis",
+      "service": "water-leak-detection",
+      "city": null,
+      "provenance": {
+        "kind": "owner-supplied",
+        "received": "2026-10-27",
+        "originAsserted": false,
+        "note": "AI-made in the Gemini app from a reference portrait of omer; register in assets/gallery/README.md"
+      },
+      "watermark": null,
+      "review": {
+        "automated": null,
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-10-27",
+          "note": "approved for the homepage gallery, 2026-10-22 and 2026-10-27"
+        }
+      },
+      "approved": "2026-10-27 — owner, in chat",
+      "retired": null
+    },
+    {
+      "id": "gallery-legacy-09",
+      "file": "gallery/ceiling-thermal-screen.webp",
+      "legacySrc": "/images/gallery/ceiling-thermal-screen.webp",
+      "width": 720,
+      "height": 1200,
+      "bytes": 32296,
+      "sha256": "b930dff2c05dd382a5894d0c4b0477c24756d89c9719227f051d91eb997b948a",
+      "sizeClass": "half",
+      "alt": "טכנאי מחזיק מצלמה תרמית בחדר לבן ומאחוריו כתם רטיבות בתקרה; על המסך רקע כתום וכתם סגול כהה במרכזו.",
+      "caption": null,
+      "altEn": null,
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/",
+          "slot": "supplied",
+          "order": 9
+        },
+        {
+          "route": "/gallery/",
+          "slot": "supplied",
+          "order": 9
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "diagnosis",
+      "service": "water-leak-detection",
+      "city": null,
+      "provenance": {
+        "kind": "owner-supplied",
+        "received": "2026-10-27",
+        "originAsserted": false,
+        "note": "AI-made in the Gemini app from a reference portrait of omer; register in assets/gallery/README.md"
+      },
+      "watermark": null,
+      "review": {
+        "automated": null,
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-10-27",
+          "note": "approved for the homepage gallery, 2026-10-22 and 2026-10-27"
+        }
+      },
+      "approved": "2026-10-27 — owner, in chat",
+      "retired": null
+    },
+    {
+      "id": "gallery-legacy-10",
+      "file": "gallery/living-room-wall-thermal-scan.webp",
+      "legacySrc": "/images/gallery/living-room-wall-thermal-scan.webp",
+      "width": 720,
+      "height": 1200,
+      "bytes": 50566,
+      "sha256": "e670abc59f9f171e16fae68f100c92ff025c0f21f40f39413bc23121e9a16b9a",
+      "sizeClass": "half",
+      "alt": "טכנאי בחולצת טרמוליק כורע ברך על רצפת אריחים בהירה ומכוון מצלמה תרמית אל כתמים חיוורים בקיר לבן, ליד דלתות הזזה מזכוכית בסלון מואר.",
+      "caption": null,
+      "altEn": null,
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/",
+          "slot": "supplied",
+          "order": 10
+        },
+        {
+          "route": "/gallery/",
+          "slot": "supplied",
+          "order": 10
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "diagnosis",
+      "service": "moisture-detection",
+      "city": null,
+      "provenance": {
+        "kind": "owner-supplied",
+        "received": "2026-10-27",
+        "originAsserted": false,
+        "note": "AI-made in the Gemini app from a reference portrait of omer; register in assets/gallery/README.md"
+      },
+      "watermark": null,
+      "review": {
+        "automated": null,
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-10-27",
+          "note": "approved for the homepage gallery, 2026-10-22 and 2026-10-27"
+        }
+      },
+      "approved": "2026-10-27 — owner, in chat",
+      "retired": null
+    },
+    {
+      "id": "gallery-legacy-11",
+      "file": "gallery/living-room-wall-thermal-camera.webp",
+      "legacySrc": "/images/gallery/living-room-wall-thermal-camera.webp",
+      "width": 720,
+      "height": 1200,
+      "bytes": 46324,
+      "sha256": "57f1f2ba2abf208cc400c78f7e2f8498e246df8b23a71ea6e181539bc063040a",
+      "sizeClass": "half",
+      "alt": "טכנאי בחולצת טרמוליק עומד ליד קיר לבן ומכוון מצלמה תרמית אל כתם רטיבות גדול עם שוליים חומים.",
+      "caption": null,
+      "altEn": null,
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/",
+          "slot": "supplied",
+          "order": 11
+        },
+        {
+          "route": "/gallery/",
+          "slot": "supplied",
+          "order": 11
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "diagnosis",
+      "service": "moisture-detection",
+      "city": null,
+      "provenance": {
+        "kind": "owner-supplied",
+        "received": "2026-10-27",
+        "originAsserted": false,
+        "note": "AI-made in the Gemini app from a reference portrait of omer; register in assets/gallery/README.md"
+      },
+      "watermark": null,
+      "review": {
+        "automated": null,
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-10-27",
+          "note": "approved for the homepage gallery, 2026-10-22 and 2026-10-27"
+        }
+      },
+      "approved": "2026-10-27 — owner, in chat",
+      "retired": null
+    },
+    {
+      "id": "home-legacy-hero",
+      "file": "home/hero-legacy.webp",
+      "legacySrc": "/images/hero.webp",
+      "width": 828,
+      "height": 670,
+      "bytes": 33210,
+      "sha256": "593cdccfd2169678fbed2d2094da854ececdde635088e2a38be3fa3b6796b980",
+      "sizeClass": "tile",
+      "alt": "שני טכנאים בדירה מוארת: האחד מחזיק מצלמה תרמית, והשני רוכן עם מיקרופון קרקע ליד מזוודת ציוד פתוחה.",
+      "caption": null,
+      "altEn": null,
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/",
+          "slot": "main",
+          "order": 1
+        }
+      ],
+      "status": "approved",
+      "people": [],
+      "phase": "diagnosis",
+      "service": null,
+      "city": null,
+      "provenance": {
+        "kind": "owner-supplied",
+        "received": "2026-06-10",
+        "originAsserted": false,
+        "note": "the site's original hero; replaced by the home-main render"
+      },
+      "watermark": null,
+      "review": {
+        "automated": null,
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-06-10",
+          "note": "the hero the site launched with"
+        }
+      },
+      "approved": "2026-06-10 — owner, at launch",
+      "retired": null
+    }
+  ]
+}

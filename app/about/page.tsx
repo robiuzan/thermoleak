@@ -9,7 +9,9 @@ import {
   BadgeCheck,
 } from "lucide-react";
 import { site, pageOpenGraph } from "@/lib/site";
+import { imageFor, imagesNote, leadSlotOf } from "@/lib/images";
 import Container from "@/components/Container";
+import Figure from "@/components/Figure";
 import PageHero from "@/components/PageHero";
 import TrustBar from "@/components/TrustBar";
 import ContactCTA from "@/components/ContactCTA";
@@ -103,6 +105,11 @@ const values: AboutValue[] = [
 ];
 
 export default function AboutPage() {
+  const teamImage = imageFor("/about/", "team");
+  const workImage = imageFor("/about/", "work");
+  const kitImage = imageFor("/about/", "survey");
+  const eager = leadSlotOf("/about/", ["team", "work", "survey"]);
+
   return (
     <>
       <JsonLd
@@ -122,7 +129,7 @@ export default function AboutPage() {
       />
 
       <section className="py-16 md:py-20">
-        <Container className="max-w-3xl">
+        <Container max="3xl">
           {story.map((paragraph) => (
             <p
               key={paragraph.slice(0, 24)}
@@ -131,6 +138,24 @@ export default function AboutPage() {
               {paragraph}
             </p>
           ))}
+
+          {/* The only figure that may carry the note naming the two technicians. The founder is
+              never depicted, so no image sits beside the card below. */}
+          {teamImage ? (
+            <>
+              <Figure
+                image={teamImage}
+                priority={eager === "team"}
+                className="mt-8"
+              />
+              <p
+                data-images-notice="about"
+                className="mt-3 text-sm leading-relaxed text-ink/70"
+              >
+                {imagesNote.about}
+              </p>
+            </>
+          ) : null}
         </Container>
       </section>
 
@@ -141,7 +166,7 @@ export default function AboutPage() {
           ח.פ. — both were confirmed ABSENT, not merely unverified, so nothing here may imply
           either. A photo and permission to publish it are still 🔶. */}
       <section className="py-12">
-        <Container className="max-w-3xl">
+        <Container max="3xl">
           {/* scroll-mt-20 clears the h-16 sticky header. This diff created the FIRST in-site link
               to this anchor (the guide bylines), and without the offset the arriving reader lands
               with the "מי עומד מאחורי טרמוליק" label — the thing they clicked for — behind the
@@ -164,7 +189,7 @@ export default function AboutPage() {
       </section>
 
       <section className="py-16 md:py-20">
-        <Container className="max-w-3xl">
+        <Container max="3xl">
           <h2 className="text-2xl font-extrabold text-brand sm:text-3xl">
             איך אנחנו עובדים
           </h2>
@@ -176,6 +201,14 @@ export default function AboutPage() {
               </div>
             ))}
           </div>
+
+          {workImage ? (
+            <Figure
+              image={workImage}
+              priority={eager === "work"}
+              className="mt-10"
+            />
+          ) : null}
         </Container>
       </section>
 
@@ -231,6 +264,14 @@ export default function AboutPage() {
                 </li>
               ))}
             </ul>
+
+            {kitImage ? (
+              <Figure
+                image={kitImage}
+                priority={eager === "survey"}
+                className="mx-auto mt-6 max-w-3xl"
+              />
+            ) : null}
           </div>
         </Container>
       </section>

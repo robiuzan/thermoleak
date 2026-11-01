@@ -52,6 +52,7 @@ does not apply. Quote them from the pricing page above; do not paraphrase them.
 
 ## על העסק / About
 - אודות: https://thermoleak.co.il/about/
+- גלריה: https://thermoleak.co.il/gallery/
 - הצהרת נגישות: https://thermoleak.co.il/accessibility/
 - מדיניות פרטיות: https://thermoleak.co.il/privacy/
 
@@ -66,3 +67,4 @@ does not apply. Quote them from the pricing page above; do not paraphrase them.
 ## הערות / Notes
 - הקובץ מכסה את כל העמודים המאונדקסים של האתר, כמו ב-https://thermoleak.co.il/sitemap.xml
 - הקובץ נכתב ומתוחזק ידנית: כל הוספה או הסרה של עמוד מחייבת עדכון שלו באותו commit.
+- התמונות באתר הן הדמיות להמחשת שיטת העבודה, לא תיעוד של עבודה מסוימת.

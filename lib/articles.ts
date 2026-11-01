@@ -18,7 +18,9 @@ export type Block =
   | { kind: "table"; head: string[]; rows: string[][] }
   | { kind: "answer"; q: string; a: string }
   | { kind: "faq"; items: { q: string; a: string }[] }
-  | { kind: "callout"; tone: "note" | "warn"; text: string };
+  | { kind: "callout"; tone: "note" | "warn"; text: string }
+  // A manifest image for this slot on the guide's route (CLAUDE.md §15). Copy and FAQ schema skip it.
+  | { kind: "figure"; slot: "mid" | "end" };
 
 export interface Article {
   slug: string;
@@ -84,6 +86,7 @@ export const articles: Article[] = [
         kind: "paragraph",
         text: "תמונה תרמית נראית מרשימה, וזו בדיוק הסכנה שלה. הצבעים אינם ״מים״ ואינם ״נזק״ — הם מפת טמפרטורה שהמצלמה צובעת לפי טווח שנבחר. שינוי הטווח משנה את התמונה לחלוטין בלי ששום דבר בקיר השתנה. לכן צילום בודד, בלי הקשר, לא אומר הרבה.",
       },
+      { kind: "figure", slot: "mid" },
       {
         kind: "list",
         items: [
@@ -203,6 +206,7 @@ export const articles: Article[] = [
           "דו״ח עם התמונות התרמיות והממצאים, כשנדרש — למשל להגשה לחברת ביטוח.",
         ],
       },
+      { kind: "figure", slot: "mid" },
       {
         kind: "callout",
         tone: "note",
@@ -306,6 +310,7 @@ export const articles: Article[] = [
           ["דחיפות / מחוץ לשעות", "משתנה", "נזילה פעילה שדורשת הגעה מיידית"],
         ],
       },
+      { kind: "figure", slot: "mid" },
       { kind: "heading", text: "מה כלול בביקור" },
       {
         kind: "paragraph",

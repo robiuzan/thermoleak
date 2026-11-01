@@ -1,10 +1,35 @@
 import Link from "next/link";
 import { Info, TriangleAlert } from "lucide-react";
 import type { Block } from "@/lib/articles";
+import { imageFor, type SlotId } from "@/lib/images";
+import Figure from "./Figure";
 
 // Renders the typed block model from lib/articles.ts. Keeping rendering in one place is what lets
 // the FAQPage schema be DERIVED from the same blocks — copy and schema cannot drift.
-export default function ArticleBody({ blocks }: { blocks: Block[] }) {
+//
+// Images (CLAUDE.md §15): with `route`, the page's lead image (`leadSlot`) sits right after the
+// `answer` box — the answer stays first in the DOM — and `figure` blocks render the manifest's image
+// for their slot. Both render nothing while no image is placed there. The page's single priority
+// image is the lead or, when the lead was rejected, the first `figure` block that renders.
+export default function ArticleBody({
+  blocks,
+  route,
+  leadSlot,
+}: {
+  blocks: Block[];
+  route?: string;
+  leadSlot?: SlotId;
+}) {
+  const lead = route && leadSlot ? imageFor(route, leadSlot) : undefined;
+  const firstFigure =
+    route && !lead
+      ? blocks.findIndex(
+          (block) =>
+            block.kind === "figure" &&
+            imageFor(route, block.slot) !== undefined,
+        )
+      : -1;
+
   return (
     <>
       {blocks.map((block, index) => {
@@ -15,11 +40,29 @@ export default function ArticleBody({ blocks }: { blocks: Block[] }) {
             // The AEO answer block: question-form heading, complete answer in the first sentence,
             // first in the DOM. docs/content-standards.md §5.
             return (
-              <div key={key} className="mb-8 rounded-2xl border-s-4 border-brand bg-paper p-6">
-                <h2 className="text-xl font-bold text-brand">{block.q}</h2>
-                <p className="mt-3 leading-relaxed text-ink/80">{block.a}</p>
+              <div key={key}>
+                <div className="mb-8 rounded-2xl border-s-4 border-brand bg-paper p-6">
+                  <h2 className="text-xl font-bold text-brand">{block.q}</h2>
+                  <p className="mt-3 leading-relaxed text-ink/80">{block.a}</p>
+                </div>
+                {lead ? (
+                  <Figure image={lead} priority className="mb-8" />
+                ) : null}
               </div>
             );
+
+          case "figure": {
+            const image = route ? imageFor(route, block.slot) : undefined;
+            if (!image) return null;
+            return (
+              <Figure
+                key={key}
+                image={image}
+                priority={index === firstFigure}
+                className="mb-6"
+              />
+            );
+          }
 
           case "heading":
             return (
@@ -43,7 +86,10 @@ export default function ArticleBody({ blocks }: { blocks: Block[] }) {
                 className={`mb-4 space-y-2 ps-6 ${block.ordered ? "list-decimal" : "list-disc"}`}
               >
                 {block.items.map((item) => (
-                  <li key={item.slice(0, 32)} className="leading-relaxed text-ink/80">
+                  <li
+                    key={item.slice(0, 32)}
+                    className="leading-relaxed text-ink/80"
+                  >
                     {item}
                   </li>
                 ))}
@@ -55,7 +101,10 @@ export default function ArticleBody({ blocks }: { blocks: Block[] }) {
             // Wide content scrolls in its own container so the page body never scrolls sideways
             // (WCAG 1.4.10 Reflow; docs/mobile-ux-and-personalization.md §3).
             return (
-              <div key={key} className="mb-6 overflow-x-auto rounded-2xl border border-ink/10">
+              <div
+                key={key}
+                className="mb-6 overflow-x-auto rounded-2xl border border-ink/10"
+              >
                 <table className="w-full min-w-[34rem] border-collapse text-sm">
                   <thead>
                     <tr className="bg-paper">
@@ -72,12 +121,17 @@ export default function ArticleBody({ blocks }: { blocks: Block[] }) {
                   </thead>
                   <tbody>
                     {block.rows.map((row) => (
-                      <tr key={row[0]} className="border-b border-ink/10 last:border-0">
+                      <tr
+                        key={row[0]}
+                        className="border-b border-ink/10 last:border-0"
+                      >
                         {row.map((cell, cellIndex) => (
                           <td
                             key={cell}
                             className={`p-3 align-top leading-relaxed ${
-                              cellIndex === 0 ? "font-semibold text-brand" : "text-ink/75"
+                              cellIndex === 0
+                                ? "font-semibold text-brand"
+                                : "text-ink/75"
                             }`}
                           >
                             {cell}
@@ -97,14 +151,18 @@ export default function ArticleBody({ blocks }: { blocks: Block[] }) {
               <div
                 key={key}
                 className={`mb-6 flex items-start gap-3 rounded-2xl border p-5 ${
-                  warn ? "border-accent-strong/30 bg-accent/10" : "border-brand/20 bg-brand/5"
+                  warn
+                    ? "border-accent-strong/30 bg-accent/10"
+                    : "border-brand/20 bg-brand/5"
                 }`}
               >
                 <Icon
                   className={`mt-0.5 size-5 shrink-0 ${warn ? "text-accent-strong" : "text-brand"}`}
                   aria-hidden="true"
                 />
-                <p className="text-sm leading-relaxed text-ink/80">{block.text}</p>
+                <p className="text-sm leading-relaxed text-ink/80">
+                  {block.text}
+                </p>
               </div>
             );
           }
@@ -114,7 +172,9 @@ export default function ArticleBody({ blocks }: { blocks: Block[] }) {
             // FAQPage schema honest and the content extractable by answer engines.
             return (
               <div key={key} className="mt-10">
-                <h2 className="mb-4 text-xl font-bold text-brand">שאלות נוספות</h2>
+                <h2 className="mb-4 text-xl font-bold text-brand">
+                  שאלות נוספות
+                </h2>
                 <div className="divide-y divide-ink/10 overflow-hidden rounded-2xl border border-ink/10 bg-white">
                   {block.items.map((item) => (
                     <details key={item.q} className="group">
@@ -124,7 +184,9 @@ export default function ArticleBody({ blocks }: { blocks: Block[] }) {
                           +
                         </span>
                       </summary>
-                      <p className="px-5 pb-5 text-sm leading-relaxed text-ink/75">{item.a}</p>
+                      <p className="px-5 pb-5 text-sm leading-relaxed text-ink/75">
+                        {item.a}
+                      </p>
                     </details>
                   ))}
                 </div>
@@ -139,14 +201,21 @@ export default function ArticleBody({ blocks }: { blocks: Block[] }) {
   );
 }
 
-export function RelatedServices({ slugs }: { slugs: { href: string; label: string }[] }) {
+export function RelatedServices({
+  slugs,
+}: {
+  slugs: { href: string; label: string }[];
+}) {
   return (
     <p className="mt-10 leading-relaxed text-ink/80">
       רוצים שנטפל בזה?{" "}
       {slugs.map((item, index) => (
         <span key={item.href}>
           {index > 0 ? " · " : ""}
-          <Link href={item.href} className="font-semibold text-brand underline underline-offset-2">
+          <Link
+            href={item.href}
+            className="font-semibold text-brand underline underline-offset-2"
+          >
             {item.label}
           </Link>
         </span>

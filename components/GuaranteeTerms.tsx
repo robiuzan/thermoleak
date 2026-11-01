@@ -14,7 +14,7 @@ export default function GuaranteeTerms() {
       id="guarantee"
       className="scroll-mt-20 border-t border-ink/10 bg-paper py-14 md:py-16"
     >
-      <Container className="max-w-3xl">
+      <Container max="3xl">
         <div className="flex items-start gap-3">
           <ShieldCheck
             className="mt-1 size-7 shrink-0 text-accent-strong"

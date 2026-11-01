@@ -6,11 +6,15 @@
     "dev": "next dev",
     "prebuild": "node scripts/live/check-live-copy.mjs && node scripts/live/check-live-register.mjs && node scripts/live/check-live-schedule.mjs",
     "build": "next build",
-    "postbuild": "node scripts/live/check-live-out.mjs && node scripts/keep-previous-assets.mjs",
+    "postbuild": "node scripts/live/check-live-out.mjs && node scripts/images/check-images-out.mjs out && node scripts/keep-previous-assets.mjs",
     "start": "next start",
     "lint": "eslint",
     "check:sitemap": "node scripts/check-sitemap-parity.mjs",
-    "live:remind": "node scripts/live/check-reminders.mjs"
+    "live:remind": "node scripts/live/check-reminders.mjs",
+    "images:check": "node scripts/images/check-images-out.mjs out",
+    "images:status": "node scripts/images/images-status.mjs",
+    "dev:images": "node scripts/images/images-dev.mjs",
+    "gate": "npm run lint && npm run build && npm run check:sitemap"
   },
   "dependencies": {
     "lucide-react": "^1.17.0",

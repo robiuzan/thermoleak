@@ -80,7 +80,7 @@ export default async function GuidePage({ params }: PageProps) {
       />
 
       <section className="py-14 md:py-20">
-        <Container className="max-w-3xl">
+        <Container max="3xl">
           {/* Dates are real and verifiable, and the byline is a confirmed person — רונן דהן, on
               file since 2026-08-24 (docs/business-facts.md §A). NEVER invent one: an article with
               no known author publishes unattributed instead.
@@ -113,7 +113,11 @@ export default async function GuidePage({ params }: PageProps) {
             ) : null}
           </p>
 
-          <ArticleBody blocks={article.blocks} />
+          <ArticleBody
+            blocks={article.blocks}
+            route={`/guides/${article.slug}/`}
+            leadSlot="lead"
+          />
 
           {related.length > 0 ? <RelatedServices slugs={related} /> : null}
 

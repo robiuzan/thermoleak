@@ -57,7 +57,11 @@ function pageOfSource(file, source) {
   const text = readFileSync(path, "utf8");
   const slugs = [...text.matchAll(/^\s*slug: "([a-z0-9-]+)",\s*$/gm)];
   const pages = new Set();
-  for (let at = text.indexOf(quote); at >= 0; at = text.indexOf(quote, at + 1)) {
+  for (
+    let at = text.indexOf(quote);
+    at >= 0;
+    at = text.indexOf(quote, at + 1)
+  ) {
     let page = "/";
     for (const s of slugs) if (s.index < at) page = `${prefix}${s[1]}/`;
     pages.add(page);
@@ -98,6 +102,11 @@ const config = {
    * a form field has focus.)
    */
   noDialog: ["/contact/"],
+  /**
+   * Sources a live line may never cite: an image caption is an illustration under the site-wide
+   * note (CLAUDE.md §15), so nothing on the live surfaces may quote one as a claim.
+   */
+  forbiddenSources: ["content/images/"],
 
   /** The homepage strip sits in the site's own container width (components/Container.tsx). */
   updatesContainerClass: "mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8",

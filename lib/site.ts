@@ -34,6 +34,13 @@ export interface TrustStat {
   label: string;
 }
 
+export interface StaticRoute {
+  path: string;
+  lastModified: string;
+  priority: number;
+  freq: "weekly" | "monthly" | "yearly";
+}
+
 export const site = {
   name: "ThermoLeak",
   nameHe: "טרמוליק",
@@ -181,6 +188,84 @@ export const navLinks: NavLink[] = [
   { href: "/guides", label: "מדריכים" },
   { href: "/about", label: "אודות" },
   { href: "/contact", label: "צור קשר" },
+];
+
+// The footer's ניווט column only. The header row is full: a sixth link beside the call button wraps
+// at 768–970 px (backlog §8.7). The footer note links /gallery/ from every page as well.
+export const secondaryLinks: NavLink[] = [{ href: "/gallery", label: "גלריה" }];
+
+// Every route that is not generated from a data file — one registry for app/sitemap.ts,
+// lib/images.ts and scripts/images/. Per-route content dates: update a route's date when its CONTENT
+// meaningfully changes — the previous `new Date()` stamped build time on every URL, telling search
+// engines the whole site changed on every deploy, which made the signal worthless (backlog §1.3).
+// Google only uses lastmod on a site where it stays accurate, so a content commit bumps its route's
+// date in the SAME commit; markup, OG tags and the live-kit strip do not count
+// (content/live/_updates.mjs). A new captioned figure counts; re-issuing an existing image with the
+// logo does not (CLAUDE.md §15). Re-baselined 2026-10-19 against git and the fleet deploy log: 17 of
+// 19 dates had drifted. Services, guides and cities carry their own date in lib/ and are read in
+// app/sitemap.ts. /thank-you/ is deliberately absent: it is noindex (see app/thank-you/page.tsx).
+export const staticRoutes: StaticRoute[] = [
+  // 2026-10-28: a tenth visible FAQ shipped on the homepage (the guarantee question), which is
+  // new body copy and a tenth Question node — this comment's own rule says that bumps the date in
+  // the same commit. The service pages are deliberately NOT bumped: their visible copy is unchanged,
+  // they only gained an internal link and a schema node. The location pages carry their own dates
+  // in lib/locations.ts (2026-10-28: nine cities added and the first three's copy corrected).
+  { path: "", lastModified: "2026-10-28", priority: 1, freq: "weekly" },
+  {
+    path: "/services",
+    lastModified: "2026-08-17",
+    priority: 0.9,
+    freq: "monthly",
+  },
+  {
+    path: "/pricing",
+    lastModified: "2026-09-17",
+    priority: 0.9,
+    freq: "monthly",
+  },
+  {
+    path: "/guides",
+    lastModified: "2026-08-30",
+    priority: 0.8,
+    freq: "weekly",
+  },
+  // The hub lists every city page: nine more cards on 2026-10-28.
+  {
+    path: "/locations",
+    lastModified: "2026-10-28",
+    priority: 0.8,
+    freq: "monthly",
+  },
+  {
+    path: "/about",
+    lastModified: "2026-09-17",
+    priority: 0.7,
+    freq: "monthly",
+  },
+  {
+    path: "/contact",
+    lastModified: "2026-09-17",
+    priority: 0.8,
+    freq: "monthly",
+  },
+  {
+    path: "/gallery",
+    lastModified: "2026-11-01",
+    priority: 0.5,
+    freq: "monthly",
+  },
+  {
+    path: "/accessibility",
+    lastModified: "2026-09-17",
+    priority: 0.3,
+    freq: "yearly",
+  },
+  {
+    path: "/privacy",
+    lastModified: "2026-09-17",
+    priority: 0.3,
+    freq: "yearly",
+  },
 ];
 
 // --- contact helpers ---------------------------------------------------------

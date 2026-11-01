@@ -8,11 +8,12 @@ export default function NotFound() {
           live.config.mjs can mark it calm — it marks itself: no seasonal line, no card
           (lib/live/live-core.css, public/assets/live.js). */}
       <div data-live-calm-page hidden />
-      <Container className="max-w-xl text-center">
+      <Container max="xl" className="text-center">
         <p className="text-6xl font-extrabold text-brand">404</p>
         <h1 className="mt-4 text-2xl font-bold text-brand">הדף לא נמצא</h1>
         <p className="mt-3 leading-relaxed text-ink/70">
-          ייתכן שהקישור שגוי או שהעמוד הוסר. אפשר לחזור לדף הבית או ליצור איתנו קשר ונשמח לעזור.
+          ייתכן שהקישור שגוי או שהעמוד הוסר. אפשר לחזור לדף הבית או ליצור איתנו
+          קשר ונשמח לעזור.
         </p>
         <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
           <CtaButton href="/" variant="primary">

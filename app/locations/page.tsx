@@ -7,6 +7,7 @@ import { collectionPageJsonLd } from "@/lib/jsonld";
 import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
 import ContactCTA from "@/components/ContactCTA";
+import FieldStrip from "@/components/FieldStrip";
 import JsonLd from "@/components/JsonLd";
 
 export const metadata: Metadata = {
@@ -14,7 +15,12 @@ export const metadata: Metadata = {
   description:
     "היכן אנחנו עובדים: איתור נזילות ורטיבות במצלמה תרמית בגוש דן והמרכז, ושירות ארצי בתיאום מראש. שירות עד בית הלקוח, ללא צורך להגיע למשרד.",
   alternates: { canonical: "/locations/" },
-  ...pageOpenGraph({ path: "/locations", title: `אזורי שירות — איתור נזילות בגוש דן והמרכז | ${site.nameHe}`, description: "היכן אנחנו עובדים: איתור נזילות ורטיבות במצלמה תרמית בגוש דן והמרכז, ושירות ארצי בתיאום מראש. שירות עד בית הלקוח, ללא צורך להגיע למשרד." }),
+  ...pageOpenGraph({
+    path: "/locations",
+    title: `אזורי שירות — איתור נזילות בגוש דן והמרכז | ${site.nameHe}`,
+    description:
+      "היכן אנחנו עובדים: איתור נזילות ורטיבות במצלמה תרמית בגוש דן והמרכז, ושירות ארצי בתיאום מראש. שירות עד בית הלקוח, ללא צורך להגיע למשרד.",
+  }),
 };
 
 export default function LocationsPage() {
@@ -38,13 +44,15 @@ export default function LocationsPage() {
       />
 
       <section className="py-14 md:py-20">
-        <Container className="max-w-3xl">
+        <Container max="3xl">
           <p className="leading-relaxed text-ink/80">
-            אנחנו עובדים בכל גוש דן והמרכז — {site.address.note}. המרחק משפיע על זמינות ולא על
-            איכות הבדיקה: באזור הקרוב נשתדל להגיע באותו יום לנזילה פעילה, ובמרחק גדול יותר נתאם
-            מועד. אם היישוב שלכם לא מופיע כאן, עדיין שווה להתקשר — אנחנו נותנים שירות ארצי בתיאום
-            מראש.
+            אנחנו עובדים בכל גוש דן והמרכז — {site.address.note}. המרחק משפיע על
+            זמינות ולא על איכות הבדיקה: באזור הקרוב נשתדל להגיע באותו יום לנזילה
+            פעילה, ובמרחק גדול יותר נתאם מועד. אם היישוב שלכם לא מופיע כאן,
+            עדיין שווה להתקשר — אנחנו נותנים שירות ארצי בתיאום מראש.
           </p>
+
+          <FieldStrip route="/locations/" className="mt-8" />
 
           {locations.length > 0 ? (
             <>
@@ -75,7 +83,9 @@ export default function LocationsPage() {
             </>
           ) : null}
 
-          <h2 className="mt-10 text-xl font-bold text-brand">כל היישובים שאנחנו מכסים</h2>
+          <h2 className="mt-10 text-xl font-bold text-brand">
+            כל היישובים שאנחנו מכסים
+          </h2>
           <ul className="mt-4 flex flex-wrap gap-2">
             {site.serviceAreas.map((area) => (
               <li

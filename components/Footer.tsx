@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
-import { navLinks, site, telHref, mailHref } from "@/lib/site";
+import { navLinks, secondaryLinks, site, telHref, mailHref } from "@/lib/site";
+import { imagesNote, imagesNoteLive } from "@/lib/images";
 import { services } from "@/lib/services";
 import { locations } from "@/lib/locations";
 import Container from "./Container";
@@ -14,6 +15,16 @@ import WhatsappIcon from "./WhatsappIcon";
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  // The owner-approved sentence with its link inside: the gate compares the visible text verbatim
+  // with content/images/notice.json, so the words are split here, never retyped.
+  const [noteBefore, noteAfter] = imagesNote.footer.split(
+    imagesNote.footerLinkLabel,
+  );
+  if (noteAfter === undefined) {
+    throw new Error(
+      "content/images/notice.json: `footer` must contain `footerLinkLabel`",
+    );
+  }
 
   return (
     // pb-20 clears the mobile StickyContact bar (fixed, ~3.5rem + safe area). It lives HERE rather
@@ -97,7 +108,7 @@ export default function Footer() {
             ניווט
           </p>
           <ul className="mt-4 space-y-2 text-sm">
-            {navLinks.map((link) => (
+            {[...navLinks, ...secondaryLinks].map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
@@ -152,6 +163,20 @@ export default function Footer() {
       </Container>
 
       <div className="border-t border-white/15">
+        {imagesNoteLive() ? (
+          <Container>
+            <p
+              data-images-notice="footer"
+              className="pt-5 text-center text-xs text-white/80"
+            >
+              {noteBefore}
+              <Link href="/gallery/" className="underline hover:text-white">
+                {imagesNote.footerLinkLabel}
+              </Link>
+              {noteAfter}
+            </p>
+          </Container>
+        ) : null}
         <Container className="flex flex-col items-center justify-between gap-4 py-6 text-sm text-white/70 sm:flex-row">
           <p>
             © {year} {site.nameHe}. כל הזכויות שמורות.

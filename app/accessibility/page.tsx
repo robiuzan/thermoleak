@@ -9,7 +9,12 @@ export const metadata: Metadata = {
   description:
     "הצהרת הנגישות של אתר טרמוליק — האתר עומד ברמת AA של תקן ישראלי 5568 ובהנחיות WCAG 2.0. דרכי פנייה לדיווח על בעיית נגישות.",
   alternates: { canonical: "/accessibility/" },
-  ...pageOpenGraph({ path: "/accessibility", title: `הצהרת נגישות | ${site.nameHe}`, description: "הצהרת הנגישות של אתר טרמוליק — האתר עומד ברמת AA של תקן ישראלי 5568 ובהנחיות WCAG 2.0. דרכי פנייה לדיווח על בעיית נגישות." }),
+  ...pageOpenGraph({
+    path: "/accessibility",
+    title: `הצהרת נגישות | ${site.nameHe}`,
+    description:
+      "הצהרת הנגישות של אתר טרמוליק — האתר עומד ברמת AA של תקן ישראלי 5568 ובהנחיות WCAG 2.0. דרכי פנייה לדיווח על בעיית נגישות.",
+  }),
 };
 
 export default function AccessibilityPage() {
@@ -23,16 +28,20 @@ export default function AccessibilityPage() {
         ]}
       />
       <section className="py-14 md:py-16">
-        <Container className="max-w-3xl text-ink/80 leading-relaxed">
+        <Container max="3xl" className="text-ink/80 leading-relaxed">
           <p>
-            ב{site.nameHe} אנו רואים חשיבות רבה במתן שירות שוויוני לכלל הלקוחות, ופועלים כדי שהאתר יהיה
-            נגיש לאנשים עם מוגבלות. אנו מאמינים שלכל אדם מגיעה הזכות לגלוש באתר בכבוד, בעצמאות ובנוחות.
+            ב{site.nameHe} אנו רואים חשיבות רבה במתן שירות שוויוני לכלל הלקוחות,
+            ופועלים כדי שהאתר יהיה נגיש לאנשים עם מוגבלות. אנו מאמינים שלכל אדם
+            מגיעה הזכות לגלוש באתר בכבוד, בעצמאות ובנוחות.
           </p>
 
-          <h2 className="mt-8 text-xl font-bold text-brand">רמת הנגישות באתר</h2>
+          <h2 className="mt-8 text-xl font-bold text-brand">
+            רמת הנגישות באתר
+          </h2>
           <p className="mt-2">
-            האתר נבנה בהתאם לתקנות שוויון זכויות לאנשים עם מוגבלות (התאמות נגישות לשירות), התשע״ג–2013,
-            ובהתאם לרמה AA של התקן הישראלי 5568, המבוסס על הנחיות הנגישות הבינלאומיות WCAG 2.0.
+            האתר נבנה בהתאם לתקנות שוויון זכויות לאנשים עם מוגבלות (התאמות
+            נגישות לשירות), התשע״ג–2013, ובהתאם לרמה AA של התקן הישראלי 5568,
+            המבוסס על הנחיות הנגישות הבינלאומיות WCAG 2.0.
           </p>
 
           <h2 className="mt-8 text-xl font-bold text-brand">מה הונגש באתר</h2>
@@ -45,25 +54,36 @@ export default function AccessibilityPage() {
             <li>אפשרות לדלג ישירות לתוכן המרכזי בראש כל עמוד.</li>
           </ul>
 
-          <h2 className="mt-8 text-xl font-bold text-brand">דיווח על בעיית נגישות</h2>
+          <h2 className="mt-8 text-xl font-bold text-brand">
+            דיווח על בעיית נגישות
+          </h2>
           <p className="mt-2">
             {/* Deliberately does NOT name a "רכז נגישות". The owner confirmed 2026-09-17 that no
                 accessibility coordinator has been appointed, so asserting one on a legal
                 declaration would be a false statement. The contact route is the business itself. */}
-            אנו משקיעים מאמץ מתמשך בשיפור נגישות האתר. אם נתקלתם בקושי או בתקלת נגישות, נשמח שתעדכנו אותנו
-            ונפעל לתקן בהקדם. ניתן לפנות אלינו בכל אחת מהדרכים הבאות:
+            אנו משקיעים מאמץ מתמשך בשיפור נגישות האתר. אם נתקלתם בקושי או בתקלת
+            נגישות, נשמח שתעדכנו אותנו ונפעל לתקן בהקדם. ניתן לפנות אלינו בכל
+            אחת מהדרכים הבאות:
           </p>
           <ul className="mt-3 space-y-1">
             <li>
               טלפון:{" "}
-              <a href={telHref} dir="ltr" className="font-semibold text-brand underline">
+              <a
+                href={telHref}
+                dir="ltr"
+                className="font-semibold text-brand underline"
+              >
                 {site.phone.display}
               </a>
             </li>
             <li>
               אימייל:{" "}
               <EmailOff>
-                <a href={mailHref} dir="ltr" className="font-semibold text-brand underline">
+                <a
+                  href={mailHref}
+                  dir="ltr"
+                  className="font-semibold text-brand underline"
+                >
                   {site.email}
                 </a>
               </EmailOff>
@@ -73,7 +93,9 @@ export default function AccessibilityPage() {
           {/* Re-dated 2026-09-17, AFTER the seven SC 1.4.3 contrast failures were fixed — never
               before. This page is a legal declaration under תקנות שוויון זכויות; re-dating a page
               whose claims are not yet true is worse than leaving the old date in place. */}
-          <p className="mt-8 text-sm text-ink/70">הצהרת הנגישות עודכנה לאחרונה בספטמבר 2026.</p>
+          <p className="mt-8 text-sm text-ink/70">
+            הצהרת הנגישות עודכנה לאחרונה בספטמבר 2026.
+          </p>
         </Container>
       </section>
     </>

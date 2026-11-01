@@ -22,6 +22,8 @@
 # full-size gallery masters, never shipped: public repo, unpublished likeness (scripts/optimize-gallery.mjs)
 /assets/gallery/*
 !/assets/gallery/README.md
+# staged image candidates (Media Studio page-images): faces in a public repo, never committed
+/public/images/_candidates/
 
 # production
 /build

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, Check, Wallet, X } from "lucide-react";
 import { services } from "@/lib/services";
+import { imageFor, leadSlotOf } from "@/lib/images";
 import { pricing } from "@/lib/pricing";
 import {
   site,
@@ -14,6 +15,7 @@ import { faqPageJsonLd } from "@/lib/jsonld";
 import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
 import CtaButton from "@/components/CtaButton";
+import Figure from "@/components/Figure";
 import ContactCTA from "@/components/ContactCTA";
 import JsonLd from "@/components/JsonLd";
 import WhatsappIcon from "@/components/WhatsappIcon";
@@ -32,6 +34,9 @@ export const metadata: Metadata = {
 
 export default function PricingPage() {
   const faqEntities = [pricing.answer, ...pricing.faqs];
+  const surveyImage = imageFor("/pricing/", "survey");
+  const layersImage = imageFor("/pricing/", "layers");
+  const eager = leadSlotOf("/pricing/", ["survey", "layers"]);
 
   return (
     <>
@@ -47,7 +52,7 @@ export default function PricingPage() {
       />
 
       <section className="py-14 md:py-20">
-        <Container className="max-w-4xl">
+        <Container max="4xl">
           {/* The AEO answer block — also part of this page's FAQPage graph. */}
           <div className="rounded-2xl border-s-4 border-brand bg-paper p-6">
             <h2 className="text-xl font-bold text-brand">{pricing.answer.q}</h2>
@@ -103,6 +108,14 @@ export default function PricingPage() {
             </div>
           </section>
 
+          {surveyImage ? (
+            <Figure
+              image={surveyImage}
+              priority={eager === "survey"}
+              className="mt-10"
+            />
+          ) : null}
+
           <h2 className="mt-12 text-2xl font-extrabold text-brand">
             {pricing.ratesHeading}
           </h2>
@@ -152,6 +165,14 @@ export default function PricingPage() {
               </li>
             ))}
           </ul>
+
+          {layersImage ? (
+            <Figure
+              image={layersImage}
+              priority={eager === "layers"}
+              className="mt-10"
+            />
+          ) : null}
 
           <div className="on-dark mt-10 rounded-2xl bg-brand p-6 text-white sm:flex sm:items-center sm:justify-between sm:gap-6">
             <div>

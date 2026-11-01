@@ -7,6 +7,7 @@ import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
 import Process from "@/components/Process";
 import ContactCTA from "@/components/ContactCTA";
+import FieldStrip from "@/components/FieldStrip";
 import JsonLd from "@/components/JsonLd";
 import { collectionPageJsonLd } from "@/lib/jsonld";
 
@@ -44,6 +45,11 @@ export default function ServicesPage() {
 
       <section className="py-16 md:py-20">
         <Container>
+          <FieldStrip
+            route="/services/"
+            cols={2}
+            className="mx-auto mb-10 max-w-4xl"
+          />
           <div className="grid gap-6">
             {services.map((service) => {
               const Icon = service.icon;
