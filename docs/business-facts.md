@@ -67,12 +67,19 @@ homepage gallery only. CLAUDE.md §15 is the operating rule, and [eeat-and-trust
 - **Existing images.** The hero is regenerated. The 11 gallery images are re-issued with the logo at
   new file names; the old files stay at least 60 days, and their removal is a separate decision.
 - **The camera.** Every thermal camera in a picture is the FLIR E8, and the small FLIR mark on its side
-  stays (the user's choice over the recommendation to drop it).
+  stays (the user's choice over the recommendation to drop it). **The small «E8» above its screen may
+  show too** (the user, in chat, 2026-11-02): the image checks accept it, the prompts still ask for the
+  FLIR mark only, and an alt or a caption still never names the camera.
 - **The emblem.** The shield alone on the left chest of every frame with a person, as the request asks.
 - **Kit that may appear** besides the E8, the pin moisture meter and the acoustic detector: a small
   masking-tape or chalk mark, a plain tablet showing only a thermal image, a plain grey case (the user confirmed this reading the same day). Nothing else, ever: no drain camera, no pressure-test kit, no tool of repair.
 - **The export budget** is 25,000,000 B, and the page-width fix (`Container`'s `max` prop) ships with this
   work.
+- **Installed 2026-11-02.** The prompts of batch `e95502a2` were approved by the user in chat. The user then
+  approved all 63 candidates on the review board: 52 renderings and the 11 gallery images re-issued with the
+  logo. The old hero and the 11 originals are `retired` (files kept, removal not before 2027-01-01 and a
+  separate decision). Three planned slots stay empty after eight attempts each: `gallery-generated-2`,
+  `gallery-generated-4` and `services-insurance-reports-work`. A new scene for any of them needs a new yes.
 
 > ⚠️ **A ❌ row is an answer, not a gap.** Three rows below are confirmed ABSENT. Do not re-open
 > them as "missing facts to chase", and never let a future agent refill them.

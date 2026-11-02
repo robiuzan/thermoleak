@@ -210,16 +210,16 @@ export const staticRoutes: StaticRoute[] = [
   // the same commit. The service pages are deliberately NOT bumped: their visible copy is unchanged,
   // they only gained an internal link and a schema node. The location pages carry their own dates
   // in lib/locations.ts (2026-10-28: nine cities added and the first three's copy corrected).
-  { path: "", lastModified: "2026-10-28", priority: 1, freq: "weekly" },
+  { path: "", lastModified: "2026-11-02", priority: 1, freq: "weekly" }, // page images installed 2026-11-02
   {
     path: "/services",
-    lastModified: "2026-08-17",
+    lastModified: "2026-11-02", // page images installed 2026-11-02
     priority: 0.9,
     freq: "monthly",
   },
   {
     path: "/pricing",
-    lastModified: "2026-09-17",
+    lastModified: "2026-11-02", // page images installed 2026-11-02
     priority: 0.9,
     freq: "monthly",
   },
@@ -238,19 +238,19 @@ export const staticRoutes: StaticRoute[] = [
   },
   {
     path: "/about",
-    lastModified: "2026-09-17",
+    lastModified: "2026-11-02", // page images installed 2026-11-02
     priority: 0.7,
     freq: "monthly",
   },
   {
     path: "/contact",
-    lastModified: "2026-09-17",
+    lastModified: "2026-11-02", // page images installed 2026-11-02
     priority: 0.8,
     freq: "monthly",
   },
   {
     path: "/gallery",
-    lastModified: "2026-11-01",
+    lastModified: "2026-11-02", // page images installed 2026-11-02
     priority: 0.5,
     freq: "monthly",
   },

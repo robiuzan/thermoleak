@@ -86,7 +86,7 @@ export interface Location {
 export const locations: Location[] = [
   {
     slug: "tel-aviv",
-    lastModified: "2026-10-28", // first deploy 2026-08-30 (7c9bbda); job-history and same-day wording corrected 2026-10-28
+    lastModified: "2026-11-02", // first deploy 2026-08-30 (7c9bbda); job-history and same-day wording corrected 2026-10-28; page images installed 2026-11-02
     name: "תל אביב",
     kind: "city",
     // NOT "בתל אביב-יפו" — that reads badly in a title. This is exactly why the field exists.
@@ -147,7 +147,7 @@ export const locations: Location[] = [
   },
   {
     slug: "holon",
-    lastModified: "2026-10-28", // first deploy 2026-08-30 (7c9bbda); job-history and same-day wording corrected 2026-10-28
+    lastModified: "2026-11-02", // first deploy 2026-08-30 (7c9bbda); job-history and same-day wording corrected 2026-10-28; page images installed 2026-11-02
     name: "חולון",
     kind: "city",
     prefixed: "בחולון",
@@ -203,7 +203,7 @@ export const locations: Location[] = [
   },
   {
     slug: "bat-yam",
-    lastModified: "2026-10-28", // first deploy 2026-08-30 (7c9bbda); job-history and same-day wording corrected 2026-10-28
+    lastModified: "2026-11-02", // first deploy 2026-08-30 (7c9bbda); job-history and same-day wording corrected 2026-10-28; page images installed 2026-11-02
     name: "בת ים",
     kind: "city",
     prefixed: "בבת ים",
@@ -259,7 +259,7 @@ export const locations: Location[] = [
   },
   {
     slug: "ramat-gan",
-    lastModified: "2026-10-28",
+    lastModified: "2026-11-02", // page images installed 2026-11-02
     name: "רמת גן",
     kind: "city",
     prefixed: "ברמת גן",
@@ -311,7 +311,7 @@ export const locations: Location[] = [
   },
   {
     slug: "givatayim",
-    lastModified: "2026-10-28",
+    lastModified: "2026-11-02", // page images installed 2026-11-02
     name: "גבעתיים",
     kind: "city",
     prefixed: "בגבעתיים",
@@ -363,7 +363,7 @@ export const locations: Location[] = [
   },
   {
     slug: "herzliya",
-    lastModified: "2026-10-28",
+    lastModified: "2026-11-02", // page images installed 2026-11-02
     name: "הרצליה",
     kind: "city",
     prefixed: "בהרצליה",
@@ -415,7 +415,7 @@ export const locations: Location[] = [
   },
   {
     slug: "petah-tikva",
-    lastModified: "2026-10-28",
+    lastModified: "2026-11-02", // page images installed 2026-11-02
     name: "פתח תקווה",
     kind: "city",
     prefixed: "בפתח תקווה",
@@ -467,7 +467,7 @@ export const locations: Location[] = [
   },
   {
     slug: "rishon-lezion",
-    lastModified: "2026-10-28",
+    lastModified: "2026-11-02", // page images installed 2026-11-02
     name: "ראשון לציון",
     kind: "city",
     prefixed: "בראשון לציון",
@@ -519,7 +519,7 @@ export const locations: Location[] = [
   },
   {
     slug: "raanana",
-    lastModified: "2026-10-28",
+    lastModified: "2026-11-02", // page images installed 2026-11-02
     name: "רעננה",
     kind: "city",
     prefixed: "ברעננה",
@@ -571,7 +571,7 @@ export const locations: Location[] = [
   },
   {
     slug: "kfar-saba",
-    lastModified: "2026-10-28",
+    lastModified: "2026-11-02", // page images installed 2026-11-02
     name: "כפר סבא",
     kind: "city",
     prefixed: "בכפר סבא",
@@ -627,7 +627,7 @@ export const locations: Location[] = [
   },
   {
     slug: "rosh-haayin",
-    lastModified: "2026-10-28",
+    lastModified: "2026-11-02", // page images installed 2026-11-02
     name: "ראש העין",
     kind: "city",
     prefixed: "בראש העין",
@@ -679,7 +679,7 @@ export const locations: Location[] = [
   },
   {
     slug: "modiin",
-    lastModified: "2026-10-28",
+    lastModified: "2026-11-02", // page images installed 2026-11-02
     // The official name is מודיעין-מכבים-רעות; `name` stays מודיעין to match site.serviceAreas.
     name: "מודיעין",
     kind: "city",

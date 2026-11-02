@@ -2,7 +2,7 @@
   "version": 1,
   "site": "thermoleak.co.il",
   "gates": {
-    "minPerContentPage": 0,
+    "minPerContentPage": 2,
     "maxImageBytes": 204800,
     "maxPageImageBytes": 921600,
     "maxTotalBytes": 12582912,
@@ -37,7 +37,7 @@
           "order": 1
         }
       ],
-      "status": "approved",
+      "status": "retired",
       "people": [
         "omer"
       ],
@@ -60,8 +60,8 @@
           "note": "approved for the homepage gallery, 2026-10-22 and 2026-10-27"
         }
       },
-      "approved": "2026-10-27 — owner, in chat",
-      "retired": null
+      "approved": null,
+      "retired": "2026-11-02"
     },
     {
       "id": "gallery-legacy-02",
@@ -88,7 +88,7 @@
           "order": 2
         }
       ],
-      "status": "approved",
+      "status": "retired",
       "people": [
         "omer"
       ],
@@ -111,8 +111,8 @@
           "note": "approved for the homepage gallery, 2026-10-22 and 2026-10-27"
         }
       },
-      "approved": "2026-10-27 — owner, in chat",
-      "retired": null
+      "approved": null,
+      "retired": "2026-11-02"
     },
     {
       "id": "gallery-legacy-03",
@@ -139,7 +139,7 @@
           "order": 3
         }
       ],
-      "status": "approved",
+      "status": "retired",
       "people": [
         "omer"
       ],
@@ -162,8 +162,8 @@
           "note": "approved for the homepage gallery, 2026-10-22 and 2026-10-27"
         }
       },
-      "approved": "2026-10-27 — owner, in chat",
-      "retired": null
+      "approved": null,
+      "retired": "2026-11-02"
     },
     {
       "id": "gallery-legacy-04",
@@ -190,7 +190,7 @@
           "order": 4
         }
       ],
-      "status": "approved",
+      "status": "retired",
       "people": [
         "omer"
       ],
@@ -213,8 +213,8 @@
           "note": "approved for the homepage gallery, 2026-10-22 and 2026-10-27"
         }
       },
-      "approved": "2026-10-27 — owner, in chat",
-      "retired": null
+      "approved": null,
+      "retired": "2026-11-02"
     },
     {
       "id": "gallery-legacy-05",
@@ -241,7 +241,7 @@
           "order": 5
         }
       ],
-      "status": "approved",
+      "status": "retired",
       "people": [
         "omer"
       ],
@@ -264,8 +264,8 @@
           "note": "approved for the homepage gallery, 2026-10-22 and 2026-10-27"
         }
       },
-      "approved": "2026-10-27 — owner, in chat",
-      "retired": null
+      "approved": null,
+      "retired": "2026-11-02"
     },
     {
       "id": "gallery-legacy-06",
@@ -292,7 +292,7 @@
           "order": 6
         }
       ],
-      "status": "approved",
+      "status": "retired",
       "people": [
         "omer"
       ],
@@ -315,8 +315,8 @@
           "note": "approved for the homepage gallery, 2026-10-22 and 2026-10-27"
         }
       },
-      "approved": "2026-10-27 — owner, in chat",
-      "retired": null
+      "approved": null,
+      "retired": "2026-11-02"
     },
     {
       "id": "gallery-legacy-07",
@@ -343,7 +343,7 @@
           "order": 7
         }
       ],
-      "status": "approved",
+      "status": "retired",
       "people": [
         "omer"
       ],
@@ -366,8 +366,8 @@
           "note": "approved for the homepage gallery, 2026-10-22 and 2026-10-27"
         }
       },
-      "approved": "2026-10-27 — owner, in chat",
-      "retired": null
+      "approved": null,
+      "retired": "2026-11-02"
     },
     {
       "id": "gallery-legacy-08",
@@ -394,7 +394,7 @@
           "order": 8
         }
       ],
-      "status": "approved",
+      "status": "retired",
       "people": [
         "omer"
       ],
@@ -417,8 +417,8 @@
           "note": "approved for the homepage gallery, 2026-10-22 and 2026-10-27"
         }
       },
-      "approved": "2026-10-27 — owner, in chat",
-      "retired": null
+      "approved": null,
+      "retired": "2026-11-02"
     },
     {
       "id": "gallery-legacy-09",
@@ -445,7 +445,7 @@
           "order": 9
         }
       ],
-      "status": "approved",
+      "status": "retired",
       "people": [
         "omer"
       ],
@@ -468,8 +468,8 @@
           "note": "approved for the homepage gallery, 2026-10-22 and 2026-10-27"
         }
       },
-      "approved": "2026-10-27 — owner, in chat",
-      "retired": null
+      "approved": null,
+      "retired": "2026-11-02"
     },
     {
       "id": "gallery-legacy-10",
@@ -496,7 +496,7 @@
           "order": 10
         }
       ],
-      "status": "approved",
+      "status": "retired",
       "people": [
         "omer"
       ],
@@ -519,8 +519,8 @@
           "note": "approved for the homepage gallery, 2026-10-22 and 2026-10-27"
         }
       },
-      "approved": "2026-10-27 — owner, in chat",
-      "retired": null
+      "approved": null,
+      "retired": "2026-11-02"
     },
     {
       "id": "gallery-legacy-11",
@@ -547,7 +547,7 @@
           "order": 11
         }
       ],
-      "status": "approved",
+      "status": "retired",
       "people": [
         "omer"
       ],
@@ -570,8 +570,8 @@
           "note": "approved for the homepage gallery, 2026-10-22 and 2026-10-27"
         }
       },
-      "approved": "2026-10-27 — owner, in chat",
-      "retired": null
+      "approved": null,
+      "retired": "2026-11-02"
     },
     {
       "id": "home-legacy-hero",
@@ -593,7 +593,7 @@
           "order": 1
         }
       ],
-      "status": "approved",
+      "status": "retired",
       "people": [],
       "phase": "diagnosis",
       "service": null,
@@ -614,7 +614,4424 @@
           "note": "the hero the site launched with"
         }
       },
-      "approved": "2026-06-10 — owner, at launch",
+      "approved": null,
+      "retired": "2026-11-02"
+    },
+    {
+      "id": "about-work",
+      "file": "about/technician-full-figure-meter-on-plaster-shuttered-light-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 800,
+      "bytes": 44290,
+      "sha256": "882c80b38cdbeec857602a073f34901c3a922c5f91212b5ff343bc1a69d9f410",
+      "sizeClass": "half",
+      "alt": "טכנאי בחולצה כהה לוחץ מד לחות אל קיר טיח לבן ליד כתם רטיבות חיוור, ובידו השנייה מצלמה תרמית מורדת, בחדר עם אריחים ואור יום.",
+      "caption": "מד לחות נצמד אל הקיר ליד כתם נראה לעין, ולצדו סריקה תרמית: כך משלבים שתי שיטות מדידה כדי להבין את היקף הרטיבות לפני המשך הבדיקה.",
+      "altEn": "A technician presses a moisture meter against a white plaster wall beside a pale damp stain, holding a lowered thermal camera in a tiled room.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/about/",
+          "slot": "work",
+          "order": 2
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "in-progress",
+      "service": "moisture-detection",
+      "city": null,
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/about-work.md",
+        "promptSha": "bf38ffe58202669952a06696a6fab4c8cb18b27be51335116b51be28bc474b7f",
+        "masterSha": "6345053536a3d953ba411d40e754a57cba25a65394e339f43631f9604960eeb9",
+        "refs": [
+          "omer-01",
+          "omer-03",
+          "omer-02",
+          "camera",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "object-mismatch",
+            "scene-mismatch",
+            "badge-mismatch"
+          ],
+          "judges": {
+            "claude": "reject",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": true,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "about-team",
+      "file": "about/two-technicians-by-window-camera-closed-case-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 800,
+      "bytes": 52172,
+      "sha256": "5923d1d5d86368420dec1c441d7484f331491b1db9c7ce94a07d09135a0fcc99",
+      "sizeClass": "half",
+      "alt": "שני טכנאים בחולצות כהות עומדים זה לצד זה בחדר לבן, האחד אוחז מצלמה תרמית ליד גופו, לצדם מזוודת ציוד אפורה סגורה על האריחים.",
+      "caption": "לפני סריקה תרמית מכינים את הציוד: מצלמה תרמית, אוזניות ומזוודת ציוד סגורה, כדי שכל כלי יהיה בהישג יד בעת העבודה.",
+      "altEn": "Two technicians in dark polo shirts stand side by side in a white room, one holding a thermal camera, a closed grey equipment case at their feet.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/about/",
+          "slot": "team",
+          "order": 1
+        },
+        {
+          "route": "/contact/",
+          "slot": "team",
+          "order": 2
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer",
+        "yoav"
+      ],
+      "phase": "materials",
+      "service": "water-leak-detection",
+      "city": null,
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/about-team.md",
+        "promptSha": "1c7cd93d452960ae17a7c9f1c038a3d5d6c127aff08f817019e5b04e160440f1",
+        "masterSha": "f938e660374e66d8825d96f19fdceb69e1165b761c827fa75e0bee3472bffc5b",
+        "refs": [
+          "omer-01",
+          "omer-03",
+          "yoav-01",
+          "yoav-04",
+          "camera",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "stray-mark",
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "locations-strip-2",
+      "file": "areas/damp-bloom-balcony-door-threshold-new-tower-flat-01.webp",
+      "legacySrc": null,
+      "width": 960,
+      "height": 720,
+      "bytes": 29466,
+      "sha256": "cadd2217d54acf44c47267f1a02bc2324bb25ca98e53610ddf78e5e28197dd7e",
+      "sizeClass": "tile",
+      "alt": "אריחי ריצוף גדולים בהירים בחדר ריק מול דלת זכוכית למרפסת, ובתחתית הקיר הלבן ליד הסף כתם רטיבות בהיר בעל קצוות רכים.",
+      "caption": null,
+      "altEn": "Low view across large pale floor tiles to a glass balcony door, with a soft-edged pale damp stain at the base of the white wall beside the threshold.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/locations/",
+          "slot": "strip-2",
+          "order": 2
+        }
+      ],
+      "status": "approved",
+      "people": [],
+      "phase": "diagnosis",
+      "service": null,
+      "city": null,
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-nano-banana-2.1",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/locations-strip-2.md",
+        "promptSha": "67b78a7098db66a1aaa49db2928a5017006e2cac672d1fa211f40b4b7aed9c40",
+        "masterSha": "eb60b64548ae7067007219bb87d8736051dace2b1abecdff41e11ea60b0f499d",
+        "refs": []
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass",
+          "codes": [],
+          "judges": {
+            "claude": "pass",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "locations-strip-1",
+      "file": "areas/technician-climbing-curved-terrazzo-stairs-grey-case-01.webp",
+      "legacySrc": null,
+      "width": 960,
+      "height": 720,
+      "bytes": 102174,
+      "sha256": "a407fc792897c4abf37efb845ce315fa2dc891e7491d24bec12e3cebce1d17dc",
+      "sizeClass": "tile",
+      "alt": "טכנאי בחולצת פולו אפורה עולה במדרגות טרצו בחדר מדרגות מעוגל, יד אחת על מעקה פלדה צבוע ובידו השנייה מזוודת ציוד אפורה סגורה",
+      "caption": null,
+      "altEn": "A technician in a grey polo climbs a curved terrazzo stairwell, one hand on a painted steel rail, carrying a closed grey equipment case.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/locations/",
+          "slot": "strip-1",
+          "order": 1
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "materials",
+      "service": null,
+      "city": null,
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/locations-strip-1.md",
+        "promptSha": "ea14eee84d42b08e2e87e71564b4208561c639b192d5156332eb5f6a11ca0e99",
+        "masterSha": "dba0f4268e9b5681a7b2640bf1b45365253b6ec5e5fc111675e7b1e04bab812d",
+        "refs": [
+          "omer-01",
+          "omer-03",
+          "omer-02",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "stray-mark",
+            "near-duplicate-note"
+          ],
+          "judges": {
+            "claude": "pass",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "locations-strip-3",
+      "file": "areas/technician-wet-garden-path-scanning-under-window-red-roof-house-01.webp",
+      "legacySrc": null,
+      "width": 960,
+      "height": 720,
+      "bytes": 116702,
+      "sha256": "ce214ca5db5ab3bd897ad5df7f67ff602e44fc69a109ab7cce05e0d1a5513375",
+      "sizeClass": "tile",
+      "alt": "טכנאי בחולצה כהה מחזיק מצלמה תרמית מול כתם רטיבות חום בהיר בטיח מתחת לחלון אלומיניום, על שביל מרוצף רטוב",
+      "caption": null,
+      "altEn": "A technician in a dark polo shirt aims a thermal camera at a pale brown damp stain on plaster below a window, standing on a wet paved path.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/locations/",
+          "slot": "strip-3",
+          "order": 3
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "yoav"
+      ],
+      "phase": "diagnosis",
+      "service": "moisture-detection",
+      "city": null,
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/locations-strip-3.md",
+        "promptSha": "85ec7ecec52d7cbc59f8785ee123dadb3468bce90684e0beaab98ac967ef20c4",
+        "masterSha": "233499f600dd8691e9f84282ff852edeab8446f1bd2e49020b60d6d50aaf7ea1",
+        "refs": [
+          "yoav-01",
+          "yoav-04",
+          "yoav-02",
+          "camera",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "stray-mark",
+            "scene-mismatch",
+            "busy-corner",
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass-with-note"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "locations-rosh-haayin-detail",
+      "file": "cities/bare-new-wall-tape-cross-pale-damp-patch-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 800,
+      "bytes": 18472,
+      "sha256": "2dde9ed622f8fa0e6969efd695ccfc9c8d953b4fc5331496f5d24fe8a566f6bc",
+      "sizeClass": "half",
+      "alt": "קיר טיח לבן וחלק עם כתם רטיבות בהיר בגובה המותניים, צלב מנייר דבק כחול לצדו וגליל נייר דבק עומד על אריחי הריצוף.",
+      "caption": "סימון בנייר דבק ליד כתם רטיבות מאפשר לחזור לאותה נקודה בדיוק בעת מדידה בטכנאי מד לחות או בסריקה תרמית, ולתעד אותה.",
+      "altEn": "White plastered wall with a pale damp stain at waist height, a blue masking tape cross beside it and a tape roll standing on light floor tiles.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/locations/rosh-haayin/",
+          "slot": "detail",
+          "order": 2
+        }
+      ],
+      "status": "approved",
+      "people": [],
+      "phase": "done",
+      "service": null,
+      "city": "rosh-haayin",
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-nano-banana-2.1",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/locations-rosh-haayin-detail.md",
+        "promptSha": "6d37cf22125ceab97ff76e8d2ba11eca5f53b728de70bcc82082a4b205f818fc",
+        "masterSha": "fb52453f2fb182eee24459c1661eb42b08a7f077e77706375a63df052d53823c",
+        "refs": []
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "impossible"
+          ],
+          "judges": {
+            "claude": "reject",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": true,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "locations-tel-aviv-detail",
+      "file": "cities/curved-plaster-corner-rounded-balcony-ceiling-tide-mark-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 800,
+      "bytes": 50008,
+      "sha256": "13cc887dd1bbfc1993e3de605edb65392dfa8b4cde670ca0b2351bb63390eab0",
+      "sizeClass": "half",
+      "alt": "פינת קיר מעוגלת בחדר ריק עם כתם רטיבות חום בקו התקרה, ריצוף טרצו בהיר ופתח מקושת למרפסת באור יום נמוך.",
+      "caption": "בשלב האבחון בוחנים בעין את קו המפגש בין קיר לתקרה, ואז משלימים בסריקה תרמית ובמד לחות כדי להבין את מקור הרטיבות.",
+      "altEn": "Empty room with a rounded plaster corner, a brown damp stain along the ceiling line, pale terrazzo floor and an arched opening to a balcony.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/locations/tel-aviv/",
+          "slot": "detail",
+          "order": 2
+        }
+      ],
+      "status": "approved",
+      "people": [],
+      "phase": "diagnosis",
+      "service": null,
+      "city": "tel-aviv",
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-nano-banana-2.1",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/locations-tel-aviv-detail.md",
+        "promptSha": "c39d9ffaa5218da8ce39f6f7f7eda8c9365da3fdd7c8480586b24b827c1f9758",
+        "masterSha": "a2a151144bdd9c7b908f15d728f2d1fc07053b0080dfca25382b9b7d2822c0ee",
+        "refs": []
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "scene-mismatch",
+            "busy-corner"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "locations-petah-tikva-detail",
+      "file": "cities/garden-door-wall-base-tide-mark-drip-irrigation-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 800,
+      "bytes": 38656,
+      "sha256": "8deadc5be819a74c194e30e321fe04a2abd4f3cb3234c0793ad46f9c0ffe7e38",
+      "sizeClass": "half",
+      "alt": "קיר טיח לבן ליד דלת זכוכית לגינה, עם כתם רטיבות חום בתחתית הקיר, אריחים בהירים ואור בוקר בפסים על הרצפה.",
+      "caption": "בשלב האבחון מתבוננים בקיר ובסביבתו, גם מבפנים וגם מבחוץ, כדי להבין מאיפה הרטיבות עשויה להגיע לפני סריקה תרמית.",
+      "altEn": "White plaster wall beside a glass garden door with a brown damp stain at its base, pale floor tiles and streaks of morning light.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/locations/petah-tikva/",
+          "slot": "detail",
+          "order": 2
+        }
+      ],
+      "status": "approved",
+      "people": [],
+      "phase": "diagnosis",
+      "service": null,
+      "city": "petah-tikva",
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-nano-banana-2.1",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/locations-petah-tikva-detail.md",
+        "promptSha": "a7d779a3ea39e027ccdebfcc7970ebd56d6a5edd61c491da9c517e6f7a8fef32",
+        "masterSha": "c4ba4245af1df85d1ac63ded136d0ac658ded3143fe9393eb803f17f4c7d8419",
+        "refs": []
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "stray-mark",
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "locations-givatayim-detail",
+      "file": "cities/narrow-passage-retaining-wall-tide-line-bougainvillea-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 800,
+      "bytes": 144610,
+      "sha256": "d736573a11b68d8de26264b1e1e4348627fe5844d5a3b066087416ca47661387",
+      "sizeClass": "half",
+      "alt": "שביל צר בין קיר מטויח בהיר עם כתם רטיבות חום בגובה הברך לבין קיר אבן גבוה, ובוגנוויליה סגולה גולשת מלמעלה על ריצוף בטון אפור",
+      "caption": "סיור ראשוני לפני סריקה תרמית: בוחנים את הקירות מבחוץ ומחפשים סימני רטיבות, כדי להחליט היכן למדוד ולתעד.",
+      "altEn": "Narrow passage between a pale plastered wall with a brown damp stain near its base and a tall stone wall topped with magenta bougainvillea, over grey paving.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/locations/givatayim/",
+          "slot": "detail",
+          "order": 2
+        }
+      ],
+      "status": "approved",
+      "people": [],
+      "phase": "diagnosis",
+      "service": null,
+      "city": "givatayim",
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-nano-banana-2.1",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/locations-givatayim-detail.md",
+        "promptSha": "dcae78662c6200209ad58bb7c3ed37b6d2c16971a14ea631b3fd68baf4650f6e",
+        "masterSha": "44e9826ec227759ace58c0412328818d4e5d88f90ec10a6ff5657518e335efb8",
+        "refs": []
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "stray-mark",
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "locations-herzliya-detail",
+      "file": "cities/new-flat-film-on-frames-wide-pale-damp-bloom-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 800,
+      "bytes": 27350,
+      "sha256": "623af0df88c549e7efa829e3ffb4ba30f2bfffdc665b65045fd99605953555de",
+      "sizeClass": "half",
+      "alt": "מסדרון ריק עם אריחים בהירים וקיר לבן ארוך, ועליו כתם רטיבות רחב בגוון בהיר בגובה הכתף, ולצדו חלון עם יריעת הגנה על המסגרת.",
+      "caption": "לפני סריקה תרמית סוקרים את החלל בעין: צורת הכתם ומיקומו על הקיר עוזרים לכוון את הבדיקה, ובהמשך מצלמה תרמית ומד לחות משלימים את התמונה.",
+      "altEn": "Empty hallway with pale floor tiles and a long white wall showing a wide soft-edged damp stain at shoulder height, beside a window with protective film.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/locations/herzliya/",
+          "slot": "detail",
+          "order": 2
+        }
+      ],
+      "status": "approved",
+      "people": [],
+      "phase": "diagnosis",
+      "service": null,
+      "city": "herzliya",
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-nano-banana-2.1",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/locations-herzliya-detail.md",
+        "promptSha": "25947285c4a7795bcbb76f5af3d667986778d2759a814377c00ec15f191f4bc8",
+        "masterSha": "5dce7981d2c4fa57bb9d35427a841ba993c3312df6ffb1dad6173be4b1e79aa6",
+        "refs": []
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "stray-mark",
+            "near-duplicate-note",
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "locations-raanana-detail",
+      "file": "cities/office-corridor-open-distribution-cabinet-breakers-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 800,
+      "bytes": 27088,
+      "sha256": "cb35b8b0413ee122079b4bbbb58b4b496022cf96c6fa3a476557a073236d87dd",
+      "sizeClass": "half",
+      "alt": "מסדרון משרדים ארוך עם אריחי ריצוף אפורים, ולוח חשמל פתוח בגומחה בקיר השמאלי ומפסקים בשורות, ודלת זכוכית מוארת ברקע.",
+      "caption": "לפני סריקה תרמית בודקים את סביבת לוח החשמל, כדי להבין איפה עובר החשמל ואיפה כדאי להתחיל לתעד את הקירות והריצוף.",
+      "altEn": "Long office corridor with grey floor tiles, an open electrical panel with breakers in the left wall recess, and a glass door glowing at the far end.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/locations/raanana/",
+          "slot": "detail",
+          "order": 2
+        }
+      ],
+      "status": "approved",
+      "people": [],
+      "phase": "diagnosis",
+      "service": null,
+      "city": "raanana",
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-nano-banana-2.1",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/locations-raanana-detail.md",
+        "promptSha": "775438c515c57626c8281a94215653d0934142e2f217ed50e79aab6221505c2b",
+        "masterSha": "3a04d14d7e093676a49b20135877876087b210cf0264adcbce32bd73169dcee7",
+        "refs": []
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "stray-mark",
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "locations-rishon-lezion-detail",
+      "file": "cities/old-bathroom-small-tiles-riser-boxing-tide-mark-cistern-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 800,
+      "bytes": 27086,
+      "sha256": "921a5295bd913595d343fe5815b07b4ca3eb0df3098807b199ecb42797d8b873",
+      "sizeClass": "half",
+      "alt": "שירותים ישנים עם אריחי קרמיקה קרם עד חצי גובה הקיר, ובקיר הצבוע מעל מיכל ההדחה כתם רטיבות חום בעל קצוות רכים, באור חלון מפוזר.",
+      "caption": "סקירה ראשונית של החדר לפני הסריקה התרמית: מתבוננים בקירות ובאריחים ובודקים במד לחות איפה כדאי למקד את המדידה.",
+      "altEn": "Old narrow bathroom with cream wall tiles, a white toilet and cistern, and a brown damp stain on the painted wall above, lit by a frosted window.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/locations/rishon-lezion/",
+          "slot": "detail",
+          "order": 2
+        }
+      ],
+      "status": "approved",
+      "people": [],
+      "phase": "diagnosis",
+      "service": null,
+      "city": "rishon-lezion",
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-nano-banana-2.1",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/locations-rishon-lezion-detail.md",
+        "promptSha": "9f320fd72a8565cf7528fe333e122a925e596954e92b6f5333a9bb0f5f45e407",
+        "masterSha": "c2d77fa412ce141413e836af2ad9c9923a00ddc21340e9bf5f084f640a2172de",
+        "refs": []
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "locations-ramat-gan-detail",
+      "file": "cities/old-bitumen-roof-new-storey-wall-junction-puddle-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 800,
+      "bytes": 89454,
+      "sha256": "5975e2a12a79eba72c401bfa8f5c7268fcb38b3bc002238011142e7b4980c393",
+      "sizeClass": "half",
+      "alt": "גג שטוח ישן מיריעת ביטומן אפורה, ובמרכזו ניקוז עגול בתוך שלולית מים, לצד קיר טיח בהיר ודודי שמש לבנים על הגגות ברקע.",
+      "caption": "סקירה ויזואלית של הגג לפני הסריקה התרמית: בודקים את קו המפגש שבין הקיר ליריעה ואת אזור הניקוז, שבו מים עומדים והרטיבות מתרכזת.",
+      "altEn": "Old grey bitumen flat roof with a round drain in a shallow puddle beside a pale plastered wall, with white solar water heaters on nearby roofs.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/locations/ramat-gan/",
+          "slot": "detail",
+          "order": 2
+        }
+      ],
+      "status": "approved",
+      "people": [],
+      "phase": "diagnosis",
+      "service": null,
+      "city": "ramat-gan",
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-nano-banana-2.1",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/locations-ramat-gan-detail.md",
+        "promptSha": "39b8d6afe2b39184b3aa0d22dd3e2dfee6391deb42b4d6c1039b24181bcaf12a",
+        "masterSha": "98f7a5d425da1db9f53ec92324cc622275b4f17cb42d1595014d80af95e85803",
+        "refs": []
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "stray-mark",
+            "scene-mismatch",
+            "busy-corner"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "locations-holon-detail",
+      "file": "cities/old-house-doorway-wet-paved-yard-tide-line-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 800,
+      "bytes": 57548,
+      "sha256": "74b94afae58957b234c0899f901b50778b032207016e908e01ab9c784b64f661",
+      "sizeClass": "half",
+      "alt": "מבט מגובה הרצפה לאורך אריחים אפורים בהירים אל דלת אלומיניום פתוחה וחצר רטובה, עם כתם רטיבות חום לאורך תחתית הקיר משמאל.",
+      "caption": "בשלב האבחון מתחילים בבדיקה ויזואלית של הקיר והסף, ורק אחר כך עוברים למד לחות ולסריקה תרמית שמאתרת את מקור הרטיבות.",
+      "altEn": "Low view along pale grey floor tiles to an open aluminium door and wet yard, with a brown damp stain along the base of the left wall.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/locations/holon/",
+          "slot": "detail",
+          "order": 2
+        }
+      ],
+      "status": "approved",
+      "people": [],
+      "phase": "diagnosis",
+      "service": null,
+      "city": "holon",
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-nano-banana-2.1",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/locations-holon-detail.md",
+        "promptSha": "82fbf3a72c9c5da6e781bf777b59a2d698f0b6e55ccc9260ba441e58395a3d3f",
+        "masterSha": "2b425de8ab1646d3efe605c43dac66b458316e1d43b0b7108dc14f277e2a2a86",
+        "refs": []
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "locations-bat-yam-detail",
+      "file": "cities/old-stairwell-landing-pipe-boxing-stain-iron-rail-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 800,
+      "bytes": 46282,
+      "sha256": "9f63b673f992665911d5215eeb7abd6b06c80af2e8529784f7c003de98289936",
+      "sizeClass": "half",
+      "alt": "חדר מדרגות ישן עם מדרגות טראצו, מעקב ברזל כהה ועמוד טיח מרובע, וכתם חום רך בבסיסו; אור יום חולף מחלון קטן בפודסט.",
+      "caption": "בשלב האבחון מתחילים בהתבוננות בחדר המדרגות: בודקים את בסיס העמודים והקירות, ואז משלימים בסריקה תרמית ובמד לחות.",
+      "altEn": "Old stairwell with terrazzo steps, a dark iron rail and a square plastered column with a brown stain at its base, lit by a small window.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/locations/bat-yam/",
+          "slot": "detail",
+          "order": 2
+        }
+      ],
+      "status": "approved",
+      "people": [],
+      "phase": "diagnosis",
+      "service": null,
+      "city": "bat-yam",
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-nano-banana-2.1",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/locations-bat-yam-detail.md",
+        "promptSha": "6d1cc6ce00a8a043da9f1650f935b7162815cec130c1b394c20317d69bedaf8d",
+        "masterSha": "98325ef15fbcfeee2ca98b3165ebe7603d81efb00dcd84c4f1254866ffb37dee",
+        "refs": []
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "near-duplicate-note",
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "locations-kfar-saba-detail",
+      "file": "cities/shower-corner-linear-drain-damp-patch-painted-wall-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 800,
+      "bytes": 29320,
+      "sha256": "4becb58f6927fc7fe25ef278f6c525a925122c23ebce396b908d4df1f9b806e5",
+      "sizeClass": "half",
+      "alt": "קיר מקלחת מצופה אריחים בהירים עם תעלת ניקוז ארוכה ברצפה, ומעל האריחים כתם רטיבות חום דהוי סמוך לברז, ואור יום רך מחלון עם תריס גלילה.",
+      "caption": "בשלב האבחון סורקים את הקיר והרצפה יחד, כדי לראות איך כתם רטיבות בטיח קשור לברז, לתעלת הניקוז ולמישקי האריחים, לפני שבוחרים שיטת בדיקה.",
+      "altEn": "Bathroom shower wall with pale tiles, a linear floor drain, a chrome tap and a faded brown damp stain on the plaster above, with soft daylight from a window.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/locations/kfar-saba/",
+          "slot": "detail",
+          "order": 2
+        }
+      ],
+      "status": "approved",
+      "people": [],
+      "phase": "diagnosis",
+      "service": null,
+      "city": "kfar-saba",
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-nano-banana-2.1",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/locations-kfar-saba-detail.md",
+        "promptSha": "793b1cfee1b37c59cf65dfdde84932885e6f19e3627259f20b99cb3f6735bfdc",
+        "masterSha": "f31389d3a3f06eb83832142cbceddb30d3843b101ffe24469bf4826fc669596f",
+        "refs": []
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "locations-petah-tikva-main",
+      "file": "cities/technician-crouching-shower-threshold-glass-screen-grey-tiles-01.webp",
+      "legacySrc": null,
+      "width": 1400,
+      "height": 1050,
+      "bytes": 74382,
+      "sha256": "283fcbbde1b5c9c90f8ae6d0e08dee5e958049189daf31903f110911ad93b00e",
+      "sizeClass": "large",
+      "alt": "טכנאי בחולצת פולו כהה כורע ליד מקלחון זכוכית ומכוון מצלמה תרמית אל כתם רטיבות חום בתחתית קיר צבוע, מעל ריצוף אפור",
+      "caption": "סריקה תרמית של אזור הרטיבות נעשית מקרוב ובגובה הכתם, כדי להשוות את התמונה התרמית למראה העין ולהבחין בין אזור קר לאזור חם.",
+      "altEn": "Technician in a dark polo crouches beside a glass shower screen, aiming a thermal camera at a brown damp stain low on a painted wall above grey floor tiles.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/locations/petah-tikva/",
+          "slot": "main",
+          "order": 1
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "yoav"
+      ],
+      "phase": "diagnosis",
+      "service": "water-leak-detection",
+      "city": "petah-tikva",
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/locations-petah-tikva-main.md",
+        "promptSha": "29737a42e82192c880a737c2b5102025ae69e2492bb87878ee07cb5ab5d6b234",
+        "masterSha": "7b3f58dfc4b6f48fe1ebbdda2ce0433bd46fe7e8d31ab26e66c363985608e4ed",
+        "refs": [
+          "yoav-01",
+          "yoav-04",
+          "yoav-02",
+          "camera",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "stray-mark",
+            "scene-mismatch",
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass-with-note"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "locations-holon-main",
+      "file": "cities/technician-crouching-tide-line-thick-old-wall-ground-floor-01.webp",
+      "legacySrc": null,
+      "width": 1400,
+      "height": 1050,
+      "bytes": 62274,
+      "sha256": "382df50369e7d30fc72923def143f7984de4416c2e29dfde22ead120cbca8d5c",
+      "sizeClass": "large",
+      "alt": "טכנאי כורע ליד קיר טיח בהיר ומחזיק מצלמה תרמית נמוך מול כתם רטיבות חום בתחתית הקיר, ובמסך שלה גוונים כתומים וסגולים.",
+      "caption": "סריקה תרמית של תחתית הקיר נעשית מקרוב ובגובה נמוך, כדי להשוות בין אזורים קרים וחמים לאורך הקיר ולתעד את התמונה התרמית.",
+      "altEn": "A technician crouches beside a pale plaster wall, aiming a thermal camera at a brown damp stain along the base, with a small window behind him.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/locations/holon/",
+          "slot": "main",
+          "order": 1
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "yoav"
+      ],
+      "phase": "diagnosis",
+      "service": "moisture-detection",
+      "city": "holon",
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/locations-holon-main.md",
+        "promptSha": "33ba71b016de51b17bbedc024908c0a92ed512bc25f39529f1a6e3f4715c6a5c",
+        "masterSha": "57dffa9076af93028d2c3716a46d74a7d8b5e20055e58ff44efce118671eaece",
+        "refs": [
+          "yoav-01",
+          "yoav-04",
+          "yoav-02",
+          "camera",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "scene-mismatch",
+            "busy-corner"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "locations-raanana-main",
+      "file": "cities/technician-foot-of-internal-stair-meter-ceiling-plaster-01.webp",
+      "legacySrc": null,
+      "width": 1400,
+      "height": 1050,
+      "bytes": 60000,
+      "sha256": "7ff57dfb1140a6735f54595930b0cc75035e3194424f8adab41ab9f07f12368f",
+      "sizeClass": "large",
+      "alt": "טכנאי בחדר מדרגות מצמיד מד לחות לתקרת הטיח ליד כתם רטיבות חיוור, ובידו השנייה מצמידה למטה מצלמה תרמית.",
+      "caption": "מד לחות מודד נקודתית את הטיח ליד כתם רטיבות, ולצידו סריקה תרמית. כך משלבים בדיקת מגע עם תרמוגרפיה לפני שמחליטים היכן להמשיך.",
+      "altEn": "Technician on a stairwell step presses a moisture meter to the ceiling plaster beside a pale damp stain, holding a thermal camera low in the other hand.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/locations/raanana/",
+          "slot": "main",
+          "order": 1
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "in-progress",
+      "service": "moisture-detection",
+      "city": "raanana",
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/locations-raanana-main.md",
+        "promptSha": "59ab076b506b819ac325503809e09f06d043aa2bc9c4d3fe3915d6f99d4c37d2",
+        "masterSha": "6ffc141a1e8b59cf81a6ae80125e2ad53c7f7c6533e43dca686be15a53a44c74",
+        "refs": [
+          "omer-01",
+          "omer-03",
+          "omer-02",
+          "camera",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "impossible",
+            "scene-mismatch",
+            "busy-corner",
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "reject",
+            "gemini": "pass-with-note"
+          },
+          "judgesDisagreed": true,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "locations-tel-aviv-main",
+      "file": "cities/technician-high-ceiling-terrazzo-rounded-balcony-scan-01.webp",
+      "legacySrc": null,
+      "width": 1400,
+      "height": 1050,
+      "bytes": 77336,
+      "sha256": "442fb7f3a7060863ff274954b6be6c20540f910d0460ecdcf481a4758ee520a6",
+      "sizeClass": "large",
+      "alt": "טכנאי בחולצת פולו כהה מחזיק מצלמה תרמית בגובה הראש בחדר לבן עם ריצוף טרצו, ולצדו חלון צר ופתח למרפסת",
+      "caption": "סריקה תרמית של התקרה והקירות מתחילה מעמידה במרכז החדר, כך שהמצלמה התרמית רואה את כל המשטח ומאפשרת להשוות בין אזורים קרים וחמים.",
+      "altEn": "Technician in a dark polo shirt holds a thermal camera at head height in a white room with terrazzo floor, a narrow window and a balcony doorway.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/locations/tel-aviv/",
+          "slot": "main",
+          "order": 1
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "diagnosis",
+      "service": "moisture-detection",
+      "city": "tel-aviv",
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/locations-tel-aviv-main.md",
+        "promptSha": "d5c7d3ccfc335fd35302f7f698c86657854cc5a1a873c4d0c11d009f364ce7ea",
+        "masterSha": "d49024e01037d816c0d589680d9c49babb0db51e7cd23e9af4cf0bbf6299e1ae",
+        "refs": [
+          "omer-01",
+          "omer-03",
+          "omer-02",
+          "camera",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "stray-mark",
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "locations-givatayim-main",
+      "file": "cities/technician-kneeling-meter-even-damp-band-long-wall-01.webp",
+      "legacySrc": null,
+      "width": 1400,
+      "height": 1050,
+      "bytes": 139858,
+      "sha256": "090577822718e96783128e54113b3ca124f4cad026a3fc08f66d5d85e0859602",
+      "sizeClass": "large",
+      "alt": "טכנאי כורע ליד קיר טיח לבן ולוחץ מד לחות אל כתם רטיבות בהיר, ולצדו על ריצוף בהיר מצלמה תרמית כבויה עומדת על הידית.",
+      "caption": "מד לחות נלחץ אל הטיח בגובה כתם הרטיבות כדי לבדוק את הקיר במגע. המצלמה התרמית משלימה את הבדיקה בסריקה תרמית של אותו קיר.",
+      "altEn": "A technician kneels by a white plaster wall pressing a grey moisture meter to a damp stain, with a switched-off thermal camera standing on the floor tiles.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/locations/givatayim/",
+          "slot": "main",
+          "order": 1
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "in-progress",
+      "service": "moisture-detection",
+      "city": "givatayim",
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/locations-givatayim-main.md",
+        "promptSha": "d3d4742bc051d8cb7f65165cbd1b6b824a54ea91d61fea5bc6ec4ab4be683a28",
+        "masterSha": "2dcede34a3bec503ec41a579c5dd29eb40036056cc2e44270dd6f8e6a0a0880a",
+        "refs": [
+          "omer-01",
+          "omer-03",
+          "omer-02",
+          "camera",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "stray-mark",
+            "scene-mismatch",
+            "scene-mismatch",
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass-with-note"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "locations-herzliya-main",
+      "file": "cities/technician-large-window-hazy-sky-scanning-frame-edge-01.webp",
+      "legacySrc": null,
+      "width": 1400,
+      "height": 1050,
+      "bytes": 69782,
+      "sha256": "bdda14062095527f00c2b5a0b881b440cec24e7aca58461294ed7cabbd26505b",
+      "sizeClass": "large",
+      "alt": "טכנאי בחולצה אפורה מחזיק מצלמה תרמית ליד חלון אלומיניום גדול, וכתם רטיבות חום בהיר על הקיר הלבן מתחת לאדן החלון.",
+      "caption": "סריקה תרמית של פינת החלון נעשית מרחוק ובזווית נוחה, כדי לעקוב אחר אזורים קרים וחמים סביב המסגרת לפני שבוחרים את שיטת הבדיקה הבאה.",
+      "altEn": "Technician in a gray polo holds a thermal camera beside a large aluminium window, with a pale brown damp stain on the white wall below the sill.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/locations/herzliya/",
+          "slot": "main",
+          "order": 1
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "yoav"
+      ],
+      "phase": "diagnosis",
+      "service": "moisture-detection",
+      "city": "herzliya",
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/locations-herzliya-main.md",
+        "promptSha": "e2171fe5f3a40de05360dbf4b6d61f13861c504146d0312389779965c566fc70",
+        "masterSha": "1b24edd82a5cfa544fd663f373b55684fe35d50c2584042d60fec12a85f4abaa",
+        "refs": [
+          "yoav-01",
+          "yoav-04",
+          "yoav-02",
+          "camera",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "stray-mark",
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "locations-ramat-gan-main",
+      "file": "cities/technician-meter-fresh-plaster-band-ceiling-line-01.webp",
+      "legacySrc": null,
+      "width": 1400,
+      "height": 1050,
+      "bytes": 45312,
+      "sha256": "bf6a3ef92ca8787c2bbf6635f6d86c0f451344963a722ea8dae2385adb8f3de8",
+      "sizeClass": "large",
+      "alt": "טכנאי בחדר ריק צמוד לתקרה לוחץ מד לחות אל קיר לבן ליד כתם רטיבות חום בהיר, ובידו השנייה מצלמה תרמית עם מסך סגול וכתום.",
+      "caption": "בדיקת רטיבות משלבת סריקה תרמית עם מד לחות במגע: המצלמה מראה אזורים קרים וחמים, והמד בודק את הטיח בקצה הכתם.",
+      "altEn": "Technician in an empty room presses a moisture meter to a white wall beside a pale brown damp stain, holding a thermal camera in his other hand.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/locations/ramat-gan/",
+          "slot": "main",
+          "order": 1
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "in-progress",
+      "service": "moisture-detection",
+      "city": "ramat-gan",
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/locations-ramat-gan-main.md",
+        "promptSha": "4fa78a5a7f582345742e4ce58839e84367f7f4e6ae7f2e63c2bc5093bdd5091f",
+        "masterSha": "c86b43273f39a7f617f3c0f9c161895f1f9a51409c652f797ec6840d203e5921",
+        "refs": [
+          "omer-01",
+          "omer-03",
+          "omer-02",
+          "camera",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "near-duplicate-note",
+            "scene-mismatch",
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass-with-note"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "locations-bat-yam-main",
+      "file": "cities/technician-scanning-ceiling-corner-small-old-kitchen-01.webp",
+      "legacySrc": null,
+      "width": 1400,
+      "height": 1050,
+      "bytes": 78622,
+      "sha256": "de1b564ebcc54a285e1c8fa56eb6dc7a86dc5123d02b84d26e5846534a11b87d",
+      "sizeClass": "large",
+      "alt": "טכנאי במדי עבודה כהים מחזיק מצלמה תרמית בגובה הראש ומכוון אותה אל פינת התקרה שבה כתם רטיבות חום, ליד כיור, אריחים ותריס גלילה.",
+      "caption": "סריקה תרמית של פינת התקרה היא שלב אבחון: מסתכלים על המסך ובודקים אם יש הבדלי טמפרטורה סביב כתם הרטיבות, לפני שבוחרים שיטת בדיקה נוספת.",
+      "altEn": "Technician in a dark work shirt aims a thermal camera at a brown damp stain in a kitchen ceiling corner, near a sink, tiles and a roller shutter.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/locations/bat-yam/",
+          "slot": "main",
+          "order": 1
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "yoav"
+      ],
+      "phase": "diagnosis",
+      "service": "water-leak-detection",
+      "city": "bat-yam",
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/locations-bat-yam-main.md",
+        "promptSha": "f53d9b39b58deefa108eaa93c78137ad37637bbde8794211f5775434e5525b0b",
+        "masterSha": "699b339fce4c83af5d846cfe90e9bc66feb8cbcd2f06c9fad60af901fe06e1d7",
+        "refs": [
+          "yoav-01",
+          "yoav-04",
+          "yoav-02",
+          "camera",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "near-duplicate-note",
+            "scene-mismatch",
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass-with-note"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "locations-kfar-saba-main",
+      "file": "cities/technician-scanning-up-ceiling-tide-mark-sliding-balcony-door-01.webp",
+      "legacySrc": null,
+      "width": 1400,
+      "height": 1050,
+      "bytes": 88214,
+      "sha256": "ec4ae42f2409c655604adec502694491db6444303d80a54e76e90898f647a5b6",
+      "sizeClass": "large",
+      "alt": "טכנאי במדי עבודה כהים מחזיק מצלמה תרמית בגובה הראש וכוונה אל כתם רטיבות חום בהיר בתקרה ליד דלת הזזה מאלומיניום, באור אפור.",
+      "caption": "סריקה תרמית של התקרה מתבצעת מרחוק כדי לראות את קו התקרה, מסגרת הדלת והחוץ יחד, ולהבין את הקשר בין אזור הכתם לבין מעטפת המבנה.",
+      "altEn": "A technician in a dark work shirt holds a thermal camera up toward a pale-brown damp stain on the ceiling beside a sliding aluminium balcony door.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/locations/kfar-saba/",
+          "slot": "main",
+          "order": 1
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "yoav"
+      ],
+      "phase": "diagnosis",
+      "service": "moisture-detection",
+      "city": "kfar-saba",
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/locations-kfar-saba-main.md",
+        "promptSha": "646fbec378e8cfce9307147e2469b206576714893a853d49c4e865ae7ba8d3a7",
+        "masterSha": "23c51b8be9cf16cf187be563847032ec36e46157a1c55e3a709377ef51865199",
+        "refs": [
+          "yoav-01",
+          "yoav-04",
+          "yoav-02",
+          "camera",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "stray-mark",
+            "scene-mismatch",
+            "busy-corner",
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass-with-note"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "locations-modiin-main",
+      "file": "cities/technician-thermal-tablet-ceiling-stain-roof-terrace-door-01.webp",
+      "legacySrc": null,
+      "width": 1400,
+      "height": 1050,
+      "bytes": 65456,
+      "sha256": "8f94425d9a6c887bb8d5f202bc3e93c69fbe20debd7306a649e9b9926d338851",
+      "sizeClass": "large",
+      "alt": "טכנאי עומד ליד קיר לבן מתחת לכתם חום בתקרה, מביט בטאבלט עם תמונה תרמית כחולה־סגולה, ומצלמה תרמית מושלת בידו השנייה.",
+      "caption": "סימון בנייר דבק מתחת לכתם הרטיבות מאפשר להשוות את התמונה התרמית במסך למה שנראה על הקיר, ולתעד את אזור הסריקה בדו״ח.",
+      "altEn": "Technician stands by a white wall under a brown ceiling stain, viewing a blue-purple thermal image on a tablet, thermal camera hanging in his other hand.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/locations/modiin/",
+          "slot": "main",
+          "order": 1
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "done",
+      "service": "insurance-reports",
+      "city": "modiin",
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/locations-modiin-main.md",
+        "promptSha": "39269254af810dcdf7bc58d4e4823a6958ba4feb211834b2a87befc91432f54c",
+        "masterSha": "8c9b61bac8c7f7e2fef1460cedb656be2a1ea7841cc33991e4fe5b95c64f003c",
+        "refs": [
+          "omer-01",
+          "omer-03",
+          "omer-02",
+          "camera",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "stray-mark",
+            "scene-mismatch",
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "locations-rosh-haayin-main",
+      "file": "cities/technician-tracking-diagonal-tide-mark-deep-window-kitchen-01.webp",
+      "legacySrc": null,
+      "width": 1400,
+      "height": 1050,
+      "bytes": 58904,
+      "sha256": "34d36b664f9d6adfa6e6f707ca8d45f9bd0e19093d82d8439828cca997e852a0",
+      "sizeClass": "large",
+      "alt": "טכנאי במדי עבודה כהים מכוון מצלמה תרמית אל קיר טיח לבן עם כתם רטיבות חום באלכסון, ומאחוריו משטח עבודה וחלון עמוק בקיר עבה",
+      "caption": "סריקה תרמית לאורך סימן על הקיר מאפשרת להשוות בין אזורים קרים וחמים ולעקוב אחר מסלול צנרת סמויה, לפני שבוחרים היכן להמשיך בבדיקה.",
+      "altEn": "Technician in a dark work shirt aims a thermal camera along a brown damp stain on a white plastered wall in a kitchen with a deep window recess.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/locations/rosh-haayin/",
+          "slot": "main",
+          "order": 1
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "yoav"
+      ],
+      "phase": "diagnosis",
+      "service": "water-leak-detection",
+      "city": "rosh-haayin",
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/locations-rosh-haayin-main.md",
+        "promptSha": "e5b2545374593499acfbbe478105764fff07731af22a237985b1870d8e0c72cf",
+        "masterSha": "bf2c8361e5c3b98c380474f7c2ff1ecec90b83fee572e777bd4607310a7971f1",
+        "refs": [
+          "yoav-01",
+          "yoav-04",
+          "yoav-02",
+          "camera",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "near-duplicate-note",
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "locations-rishon-lezion-main",
+      "file": "cities/technician-walking-line-across-spotless-tile-floor-scanning-01.webp",
+      "legacySrc": null,
+      "width": 1400,
+      "height": 1050,
+      "bytes": 85346,
+      "sha256": "f0316f03b0323bd1c23fe0914265c73d3f0cbd39cacb76b819045151b6d129a4",
+      "sizeClass": "large",
+      "alt": "טכנאי בחולצת פולו אפורה צועד בסלון ריק עם ריצוף בהיר ומחזיק מצלמה תרמית נמוכה, עדשתה כלפי האריחים ואור יום נכנס מהחלון.",
+      "caption": "סריקה תרמית של הריצוף נעשית בהליכה איטית לאורך קו הצנרת הסמויה, כשהמצלמה מופנית אל הרצפה, כדי לזהות אזורים קרים וחמים על פני האריחים.",
+      "altEn": "A technician in a grey polo walks across an empty living room with pale floor tiles, holding a thermal camera low with its lens aimed at the floor.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/locations/rishon-lezion/",
+          "slot": "main",
+          "order": 1
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "diagnosis",
+      "service": "water-leak-detection",
+      "city": "rishon-lezion",
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/locations-rishon-lezion-main.md",
+        "promptSha": "e3d94e2a88f74b3f1eacf02440d551d928453f9958f7352c4d82076a08d81f52",
+        "masterSha": "b077265648b0c32ecd24a370d1079d60017cd09c407f279ed4c2bf0a30570579",
+        "refs": [
+          "omer-01",
+          "omer-03",
+          "omer-02",
+          "camera",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "scene-mismatch",
+            "season-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "locations-modiin-detail",
+      "file": "cities/tiled-roof-terrace-drain-planter-damp-line-parapet-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 800,
+      "bytes": 100160,
+      "sha256": "61b1952c693c716e0f40fd7811a1ba6af82e273f745ef012d84fe6c0490f7db2",
+      "sizeClass": "half",
+      "alt": "מרפסת גג מרוצפת באריחים אפורים־חומים לצד מעקה טיח בהיר, עם קו כהה לח לאורך שולי המעקה, מחסום ניקוז עגול, עציץ זית ועמודי פרגולה מעץ.",
+      "caption": "סריקה של גג מתחילה בהליכה לאורך שולי המעקה והריצוף ובבדיקה איפה המים אמורים לזרום אל הניקוז, ורק אחר כך מוסיפים תרמוגרפיה ומד לחות.",
+      "altEn": "Tiled roof terrace with a pale plaster parapet, a thin damp line at its base, a round floor drain, an olive tree in a planter and timber pergola posts.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/locations/modiin/",
+          "slot": "detail",
+          "order": 2
+        }
+      ],
+      "status": "approved",
+      "people": [],
+      "phase": "diagnosis",
+      "service": null,
+      "city": "modiin",
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-nano-banana-2.1",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/locations-modiin-detail.md",
+        "promptSha": "d159136a9e7778bbe15ab84df0877398f39e06cf18e7cea5b81083a6912dfc0b",
+        "masterSha": "a936dad8db2ea8e4ea65efc033ef12f9886fb5971d00b788d5ada7ad69546db8",
+        "refs": []
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "stray-mark",
+            "scene-mismatch",
+            "busy-corner"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "contact-main",
+      "file": "contact/technician-flat-doorway-seen-from-landing-grey-case-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 800,
+      "bytes": 46038,
+      "sha256": "8119d31192403577947ec626ff39c948a985370f73f72706796bf7da8d9663e2",
+      "sizeClass": "half",
+      "alt": "טכנאי בחולצת פולו כהה עומד בפתח דירה פתוח ומחזיק מזוודת ציוד אפורה סגורה, על רצפת טרצו בחדר מדרגות מואר באור רך.",
+      "caption": null,
+      "altEn": "Technician in a dark polo shirt stands in an open flat doorway holding a closed grey equipment case, on a terrazzo stairwell landing in soft light.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/contact/",
+          "slot": "main",
+          "order": 1
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "yoav"
+      ],
+      "phase": "materials",
+      "service": null,
+      "city": null,
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/contact-main.md",
+        "promptSha": "ba9e09eed92dc055befff42dc6b2c500bda2e5e103f3fa05a9c4a5cc68e64e22",
+        "masterSha": "9fbb723fe234e5665aa2b1d7676bea57c07c7b44903e92cef6c83703e2877e09",
+        "refs": [
+          "yoav-01",
+          "yoav-04",
+          "yoav-02",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "scene-mismatch",
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass-with-note"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "gallery-generated-3",
+      "file": "gallery/bedroom-tide-mark-returning-through-fresh-paint-shutter-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 900,
+      "bytes": 40792,
+      "sha256": "7a47e61b6e448b6787cd98b5d3978e469da8abdf740bd15959dd72412242f144",
+      "sizeClass": "half",
+      "alt": "חדר ריק עם תריס גלילה מוסגר מתחת לאדן החלון, כתם רטיבות חום על קיר לבן ושכבת צבע חדשה סביבו, ופסי אור על האריחים.",
+      "caption": "לפני סריקה תרמית סוקרים את החדר במבט רחב: כתמי רטיבות, קירות סמוכים והריצוף, כדי להחליט היכן למדוד עם מצלמה תרמית ומד לחות.",
+      "altEn": "Empty bedroom with a lowered roller shutter, a brown damp stain under the windowsill with fresh paint around it, and stripes of daylight on the floor tiles.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/gallery/",
+          "slot": "generated",
+          "order": 14
+        }
+      ],
+      "status": "approved",
+      "people": [],
+      "phase": "diagnosis",
+      "service": null,
+      "city": null,
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-nano-banana-2.1",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/gallery-generated-3.md",
+        "promptSha": "8caceae624d0e7beae3b8288dc81eaaa1fc6be8e2d8cc46e47fdac659106be5a",
+        "masterSha": "8fa52ce4a5a4180a02813e4c76b44e1899e08a057d21ab78e1a215f78f563daf",
+        "refs": []
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "near-duplicate-note",
+            "scene-mismatch",
+            "busy-corner"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "gallery-supplied-8",
+      "file": "gallery/ceiling-thermal-scan-02.webp",
+      "legacySrc": null,
+      "width": 720,
+      "height": 1200,
+      "bytes": 51064,
+      "sha256": "7362481f0009c1ffe8a3a197d792b0ca84c847f65c43ea0ead6dfc5bb483a495",
+      "sizeClass": "half",
+      "alt": "טכנאי בחולצת טרמוליק כורע על רצפת אריחים בהירה ומרים מצלמה תרמית אל כתם רטיבות חום בתקרה, ליד חלון עם תריס גלילה ונוף של בנייני אבן.",
+      "caption": null,
+      "altEn": "A technician kneels on light tiles raising a thermal camera at a brown ceiling stain, beside a window with a roller shutter and stone blocks outside.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/",
+          "slot": "supplied",
+          "order": 8
+        },
+        {
+          "route": "/gallery/",
+          "slot": "supplied",
+          "order": 8
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "diagnosis",
+      "service": "water-leak-detection",
+      "city": null,
+      "provenance": {
+        "kind": "owner-supplied",
+        "received": "2026-10-27",
+        "originAsserted": false,
+        "note": "re-issued with the logo from public/images/gallery/ceiling-thermal-scan.webp (gallery-legacy-08: AI-made in the Gemini app from a reference portrait of omer; register in assets/gallery/README.md)"
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass",
+          "codes": [],
+          "judges": {},
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null,
+      "imported": true,
+      "replaces": [
+        "gallery-legacy-08"
+      ]
+    },
+    {
+      "id": "gallery-supplied-9",
+      "file": "gallery/ceiling-thermal-screen-02.webp",
+      "legacySrc": null,
+      "width": 720,
+      "height": 1200,
+      "bytes": 32758,
+      "sha256": "00eba688348e53f143c8d4b45a8984440cd4a86a5e7df80fe6bcd2350f6f975d",
+      "sizeClass": "half",
+      "alt": "טכנאי מחזיק מצלמה תרמית בחדר לבן ומאחוריו כתם רטיבות בתקרה; על המסך רקע כתום וכתם סגול כהה במרכזו.",
+      "caption": null,
+      "altEn": "A technician holds a thermal camera in a white room with a ceiling stain behind him; the screen is orange with a dark purple patch in the middle.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/",
+          "slot": "supplied",
+          "order": 9
+        },
+        {
+          "route": "/gallery/",
+          "slot": "supplied",
+          "order": 9
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "diagnosis",
+      "service": "water-leak-detection",
+      "city": null,
+      "provenance": {
+        "kind": "owner-supplied",
+        "received": "2026-10-27",
+        "originAsserted": false,
+        "note": "re-issued with the logo from public/images/gallery/ceiling-thermal-screen.webp (gallery-legacy-09: AI-made in the Gemini app from a reference portrait of omer; register in assets/gallery/README.md)"
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass",
+          "codes": [],
+          "judges": {},
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null,
+      "imported": true,
+      "replaces": [
+        "gallery-legacy-09"
+      ]
+    },
+    {
+      "id": "gallery-supplied-4",
+      "file": "gallery/damp-wall-thermal-scan-02.webp",
+      "legacySrc": null,
+      "width": 720,
+      "height": 1200,
+      "bytes": 43336,
+      "sha256": "9af00072c29f11f54a418d0fe5606255e99934492593c86ffad4396ec5a1c9e3",
+      "sizeClass": "half",
+      "alt": "טכנאי בחולצת טרמוליק נשען על אדן חלון ומכוון מצלמה תרמית אל כתם רטיבות בקיר; על המסך כחול קר למעלה ופס אדום בתחתית.",
+      "caption": null,
+      "altEn": "A technician leans on a windowsill aiming a thermal camera at a damp stain on the wall; the screen is cool blue with a red band at the bottom.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/",
+          "slot": "supplied",
+          "order": 4
+        },
+        {
+          "route": "/gallery/",
+          "slot": "supplied",
+          "order": 4
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "diagnosis",
+      "service": "moisture-detection",
+      "city": null,
+      "provenance": {
+        "kind": "owner-supplied",
+        "received": "2026-10-22",
+        "originAsserted": false,
+        "note": "re-issued with the logo from public/images/gallery/damp-wall-thermal-scan.webp (gallery-legacy-04: AI-made in the Gemini app from a reference portrait of omer; register in assets/gallery/README.md)"
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass",
+          "codes": [],
+          "judges": {},
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null,
+      "imported": true,
+      "replaces": [
+        "gallery-legacy-04"
+      ]
+    },
+    {
+      "id": "gallery-supplied-5",
+      "file": "gallery/damp-wall-thermal-screen-02.webp",
+      "legacySrc": null,
+      "width": 720,
+      "height": 1200,
+      "bytes": 30992,
+      "sha256": "7d8cad542bfa1671835cc99d09cbe97c81c3dfced306bce965577fa8e375eea6",
+      "sizeClass": "half",
+      "alt": "טכנאי מחזיק מצלמה תרמית מול קיר ורדיאטור מתחת לחלון; על המסך כחול למעלה עם פס ירקרק שיורד במרכז, צהוב באמצע ושורת כתמים אדומים בחלק התחתון.",
+      "caption": null,
+      "altEn": "A technician holds a thermal camera facing a wall under a window; the screen is blue above, a green band down the middle, red spots along the bottom.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/",
+          "slot": "supplied",
+          "order": 5
+        },
+        {
+          "route": "/gallery/",
+          "slot": "supplied",
+          "order": 5
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "diagnosis",
+      "service": "moisture-detection",
+      "city": null,
+      "provenance": {
+        "kind": "owner-supplied",
+        "received": "2026-10-22",
+        "originAsserted": false,
+        "note": "re-issued with the logo from public/images/gallery/damp-wall-thermal-screen.webp (gallery-legacy-05: AI-made in the Gemini app from a reference portrait of omer; register in assets/gallery/README.md)"
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass",
+          "codes": [],
+          "judges": {},
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null,
+      "imported": true,
+      "replaces": [
+        "gallery-legacy-05"
+      ]
+    },
+    {
+      "id": "gallery-generated-6",
+      "file": "gallery/empty-white-room-tape-cross-beside-pale-stain-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 900,
+      "bytes": 32306,
+      "sha256": "0fed1d92cfecd51c53fedc4717af37fffba753a7afae4e81e3e7b9bc3b9b37f8",
+      "sizeClass": "half",
+      "alt": "קיר טיח לבן בחדר ריק עם סימון בנייר דבק כחול בצורת איקס ליד כתם רטיבות חיוור, ואור שמש נמוך על האריחים עד אדן החלון",
+      "caption": "סימון בנייר דבק על הקיר מצביע על נקודה לבדיקה, וכך אפשר לחזור אליה במד לחות או במצלמה תרמית ולתעד אותה בלי לפגוע בצבע.",
+      "altEn": "White plaster wall in an empty room with a blue masking tape cross beside a pale damp stain, low sun across floor tiles toward the windowsill",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/gallery/",
+          "slot": "generated",
+          "order": 17
+        }
+      ],
+      "status": "approved",
+      "people": [],
+      "phase": "done",
+      "service": null,
+      "city": null,
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-nano-banana-2.1",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/gallery-generated-6.md",
+        "promptSha": "9d5228465379791ee9e43bab7e1c4fb2108f416255cc47a9bdc9849852b067ef",
+        "masterSha": "868b713aea7049ed05a6d3cec1b3c32fa37a85693d148c63d272bd9dfa131ee7",
+        "refs": []
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "stray-mark",
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "gallery-supplied-1",
+      "file": "gallery/kitchen-sink-thermal-scan-02.webp",
+      "legacySrc": null,
+      "width": 720,
+      "height": 1200,
+      "bytes": 54830,
+      "sha256": "c261e7665b3c4222226f779ec8d0129e7fc4868e521760d1be90dba6810feef8",
+      "sizeClass": "half",
+      "alt": "טכנאי בחולצת טרמוליק מכוון מצלמה תרמית אל בסיס הברז של כיור מטבח כפול, במטבח פתוח עם סלון ברקע.",
+      "caption": null,
+      "altEn": "A technician aims a thermal camera at the tap base of a double kitchen sink, in an open kitchen with a living room behind him.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/",
+          "slot": "supplied",
+          "order": 1
+        },
+        {
+          "route": "/gallery/",
+          "slot": "supplied",
+          "order": 1
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "diagnosis",
+      "service": "water-leak-detection",
+      "city": null,
+      "provenance": {
+        "kind": "owner-supplied",
+        "received": "2026-10-22",
+        "originAsserted": false,
+        "note": "re-issued with the logo from public/images/gallery/kitchen-sink-thermal-scan.webp (gallery-legacy-01: AI-made in the Gemini app from a reference portrait of omer; register in assets/gallery/README.md)"
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass",
+          "codes": [],
+          "judges": {},
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null,
+      "imported": true,
+      "replaces": [
+        "gallery-legacy-01"
+      ]
+    },
+    {
+      "id": "gallery-supplied-3",
+      "file": "gallery/kitchen-sink-thermal-screen-02.webp",
+      "legacySrc": null,
+      "width": 720,
+      "height": 1200,
+      "bytes": 54170,
+      "sha256": "95c4a1704e62b3b473658cd5a8a309856532f339c0ed48a94350b7961eadebf8",
+      "sizeClass": "half",
+      "alt": "טכנאי מחזיק מצלמה תרמית מעל כיור מטבח כפול; על המסך רקע סגול ופס אנכי צהוב וכתום במרכזו, שקצהו העליון לבן.",
+      "caption": null,
+      "altEn": "A technician holds a thermal camera over a double kitchen sink; the screen is purple with a vertical yellow and orange band, white at the top.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/",
+          "slot": "supplied",
+          "order": 3
+        },
+        {
+          "route": "/gallery/",
+          "slot": "supplied",
+          "order": 3
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "diagnosis",
+      "service": "water-leak-detection",
+      "city": null,
+      "provenance": {
+        "kind": "owner-supplied",
+        "received": "2026-10-22",
+        "originAsserted": false,
+        "note": "re-issued with the logo from public/images/gallery/kitchen-sink-thermal-screen.webp (gallery-legacy-03: AI-made in the Gemini app from a reference portrait of omer; register in assets/gallery/README.md)"
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass",
+          "codes": [],
+          "judges": {},
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null,
+      "imported": true,
+      "replaces": [
+        "gallery-legacy-03"
+      ]
+    },
+    {
+      "id": "gallery-supplied-2",
+      "file": "gallery/kitchen-tap-thermal-scan-02.webp",
+      "legacySrc": null,
+      "width": 720,
+      "height": 1200,
+      "bytes": 53844,
+      "sha256": "6b0e600dd6441b7f1ebf3091183c48b9fc9cc608583cf62a01dec4dff80aa173",
+      "sizeClass": "half",
+      "alt": "טכנאי בחולצת טרמוליק מחזיק מצלמה תרמית ליד ברז של כיור מטבח מנירוסטה; על המסך רקע סגול ופס צהוב וכתום שיורד לאורך מרכזו.",
+      "caption": null,
+      "altEn": "A technician holds a thermal camera beside a stainless kitchen tap; the screen is purple with a yellow and orange band down the middle.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/",
+          "slot": "supplied",
+          "order": 2
+        },
+        {
+          "route": "/gallery/",
+          "slot": "supplied",
+          "order": 2
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "diagnosis",
+      "service": "water-leak-detection",
+      "city": null,
+      "provenance": {
+        "kind": "owner-supplied",
+        "received": "2026-10-27",
+        "originAsserted": false,
+        "note": "re-issued with the logo from public/images/gallery/kitchen-tap-thermal-scan.webp (gallery-legacy-02: AI-made in the Gemini app from a reference portrait of omer; register in assets/gallery/README.md)"
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "stray-mark"
+          ],
+          "judges": {},
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null,
+      "imported": true,
+      "replaces": [
+        "gallery-legacy-02"
+      ]
+    },
+    {
+      "id": "gallery-supplied-11",
+      "file": "gallery/living-room-wall-thermal-camera-02.webp",
+      "legacySrc": null,
+      "width": 720,
+      "height": 1200,
+      "bytes": 45614,
+      "sha256": "97346b81ac00d0a33e32b1c94b7d98245b1660a9a14ebde987c78c81842c90be",
+      "sizeClass": "half",
+      "alt": "טכנאי בחולצת טרמוליק עומד ליד קיר לבן ומכוון מצלמה תרמית אל כתם רטיבות גדול עם שוליים חומים.",
+      "caption": null,
+      "altEn": "A technician stands beside a white wall aiming a thermal camera at a large damp stain with brown edges.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/",
+          "slot": "supplied",
+          "order": 11
+        },
+        {
+          "route": "/gallery/",
+          "slot": "supplied",
+          "order": 11
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "diagnosis",
+      "service": "moisture-detection",
+      "city": null,
+      "provenance": {
+        "kind": "owner-supplied",
+        "received": "2026-10-27",
+        "originAsserted": false,
+        "note": "re-issued with the logo from public/images/gallery/living-room-wall-thermal-camera.webp (gallery-legacy-11: AI-made in the Gemini app from a reference portrait of omer; register in assets/gallery/README.md)"
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass",
+          "codes": [],
+          "judges": {},
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null,
+      "imported": true,
+      "replaces": [
+        "gallery-legacy-11"
+      ]
+    },
+    {
+      "id": "gallery-supplied-10",
+      "file": "gallery/living-room-wall-thermal-scan-02.webp",
+      "legacySrc": null,
+      "width": 720,
+      "height": 1200,
+      "bytes": 48882,
+      "sha256": "1439466f7894196f4ffc055ed794acb74b98430905f0ea30667147cb5110cea0",
+      "sizeClass": "half",
+      "alt": "טכנאי בחולצת טרמוליק כורע ברך על רצפת אריחים בהירה ומכוון מצלמה תרמית אל כתמים חיוורים בקיר לבן, ליד דלתות הזזה מזכוכית בסלון מואר.",
+      "caption": null,
+      "altEn": "A technician on one knee on light tiles aims a thermal camera at pale stains on a white wall, beside glass sliding doors in a bright living room.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/",
+          "slot": "supplied",
+          "order": 10
+        },
+        {
+          "route": "/gallery/",
+          "slot": "supplied",
+          "order": 10
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "diagnosis",
+      "service": "moisture-detection",
+      "city": null,
+      "provenance": {
+        "kind": "owner-supplied",
+        "received": "2026-10-27",
+        "originAsserted": false,
+        "note": "re-issued with the logo from public/images/gallery/living-room-wall-thermal-scan.webp (gallery-legacy-10: AI-made in the Gemini app from a reference portrait of omer; register in assets/gallery/README.md)"
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass",
+          "codes": [],
+          "judges": {},
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null,
+      "imported": true,
+      "replaces": [
+        "gallery-legacy-10"
+      ]
+    },
+    {
+      "id": "gallery-supplied-6",
+      "file": "gallery/shower-floor-thermal-scan-02.webp",
+      "legacySrc": null,
+      "width": 720,
+      "height": 1200,
+      "bytes": 66664,
+      "sha256": "6e9c698c7799673010e69c792aff19939619ce283510b77a8048c5382754d896",
+      "sizeClass": "half",
+      "alt": "טכנאי בחולצת טרמוליק ובמשקפי מגן כורע בתא מקלחת עם דלת זכוכית ומכוון מצלמה תרמית אל רצפת המקלחת.",
+      "caption": null,
+      "altEn": "A technician in safety glasses kneels in a glass-door shower cubicle, aiming a thermal camera at the shower floor.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/",
+          "slot": "supplied",
+          "order": 6
+        },
+        {
+          "route": "/gallery/",
+          "slot": "supplied",
+          "order": 6
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "diagnosis",
+      "service": "water-leak-detection",
+      "city": null,
+      "provenance": {
+        "kind": "owner-supplied",
+        "received": "2026-10-27",
+        "originAsserted": false,
+        "note": "re-issued with the logo from public/images/gallery/shower-floor-thermal-scan.webp (gallery-legacy-06: AI-made in the Gemini app from a reference portrait of omer; register in assets/gallery/README.md)"
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "stray-mark"
+          ],
+          "judges": {},
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null,
+      "imported": true,
+      "replaces": [
+        "gallery-legacy-06"
+      ]
+    },
+    {
+      "id": "gallery-supplied-7",
+      "file": "gallery/shower-floor-thermal-screen-02.webp",
+      "legacySrc": null,
+      "width": 720,
+      "height": 1200,
+      "bytes": 43620,
+      "sha256": "b5ece16ba42b1400956abca0d9a1a3572770671eadf14e7f7f9b18819363c3d8",
+      "sizeClass": "half",
+      "alt": "טכנאי מחזיק מצלמה תרמית מעל רצפת מקלחת אפורה עם תעלת ניקוז, ליד דופן זכוכית; על המסך רקע סגול וצורה צהובה וכתומה במרכזו.",
+      "caption": null,
+      "altEn": "A technician holds a thermal camera over a grey shower floor with a drain channel; the screen is purple with a yellow and orange shape.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/",
+          "slot": "supplied",
+          "order": 7
+        },
+        {
+          "route": "/gallery/",
+          "slot": "supplied",
+          "order": 7
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "diagnosis",
+      "service": "water-leak-detection",
+      "city": null,
+      "provenance": {
+        "kind": "owner-supplied",
+        "received": "2026-10-27",
+        "originAsserted": false,
+        "note": "re-issued with the logo from public/images/gallery/shower-floor-thermal-screen.webp (gallery-legacy-07: AI-made in the Gemini app from a reference portrait of omer; register in assets/gallery/README.md)"
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass",
+          "codes": [],
+          "judges": {},
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null,
+      "imported": true,
+      "replaces": [
+        "gallery-legacy-07"
+      ]
+    },
+    {
+      "id": "gallery-generated-5",
+      "file": "gallery/technician-scanning-tiled-wall-above-bath-tap-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 900,
+      "bytes": 57930,
+      "sha256": "5b8e7766cd121a0e78edcff84af07366f737b7581ae8fa270cdff3765e7c586d",
+      "sizeClass": "half",
+      "alt": "טכנאי בחולצת פולו כהה מחזיק מצלמה תרמית בזרוע מושטת וכוון אל קיר אריחים בהירים מעל ברז אמבטיה לבנה, כשעל המסך כתם סגול.",
+      "caption": "סריקה תרמית של קיר האמבטיה נעשית מטווח קצר ובתנועה איטית לאורך האריחים, כדי לאתר הבדלי טמפרטורה שמעידים על רטיבות או על צנרת סמויה.",
+      "altEn": "A technician in a dark polo shirt holds a thermal camera toward a pale tiled bathroom wall above a white bathtub and chrome tap.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/gallery/",
+          "slot": "generated",
+          "order": 16
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "diagnosis",
+      "service": "water-leak-detection",
+      "city": null,
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/gallery-generated-5.md",
+        "promptSha": "93bdafd34ccc6b4d0b792661a8cb2d1685d580f407c528b1e3c9ad75a5b28884",
+        "masterSha": "1d877de8b5327f1cc31ae6c42f92c8bd1858f7949df017ebe93ce1c539a951b6",
+        "refs": [
+          "omer-01",
+          "omer-03",
+          "omer-02",
+          "camera",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "stray-mark",
+            "near-duplicate-note",
+            "scene-mismatch",
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": null
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "gallery-generated-1",
+      "file": "gallery/two-technicians-stairwell-riser-scan-acoustic-check-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 900,
+      "bytes": 105238,
+      "sha256": "f9001b643876e2690c5a8328264d893bb11710b38305e18b4c6f3c387784d450",
+      "sizeClass": "half",
+      "alt": "שני טכנאים בחדר מדרגות: אחד עומד ומחזיק מצלמה תרמית מול עמוד טיח, השני כורע עם אוזניות ומיקרופון קרקע על הריצוף.",
+      "caption": "סריקה תרמית משולבת בהאזנה בגלאי נזילות אקוסטי: המצלמה בוחנת את המשטח, ומיקרופון הקרקע מאזין לצנרת סמויה. כך משלימים שיטות זו את זו.",
+      "altEn": "Two technicians in a stairwell: one stands holding a thermal camera toward a plastered column, the other kneels wearing headphones with a ground microphone.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/gallery/",
+          "slot": "generated",
+          "order": 12
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer",
+        "yoav"
+      ],
+      "phase": "in-progress",
+      "service": "water-leak-detection",
+      "city": null,
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/gallery-generated-1.md",
+        "promptSha": "2c22c86fa9573781d372fcca969810b9e86aac9f7d20120738d4d2cd1da7236d",
+        "masterSha": "1b99ce4d021248ec76c1a746b86ff890edce87537d8d21b1d936d095ec939d37",
+        "refs": [
+          "omer-01",
+          "omer-03",
+          "yoav-01",
+          "yoav-04",
+          "camera",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "stray-mark",
+            "scene-mismatch",
+            "busy-corner",
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass-with-note"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "guides-what-a-thermal-camera-sees-lead",
+      "file": "guides/technician-scanning-faint-stain-plain-white-room-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 900,
+      "bytes": 38574,
+      "sha256": "3f163b9824f7e4934dcc06ccf7ec3ad83a2afd0c97c9edaf596cd8d71c04608b",
+      "sizeClass": "half",
+      "alt": "טכנאי בחולצת פולו כהה מכוון מצלמה תרמית אל כתם רטיבות חיוור על קיר לבן, ועל המסך כתמים סגולים וכתומים, ליד חלון ואריחים בהירים.",
+      "caption": "סריקה תרמית של קיר מתחילה בהצבעת המצלמה על האזור החשוד ממרחק קצר, כדי להשוות אזור קר או חם לסביבתו לפני בדיקה נוספת.",
+      "altEn": "A technician in a dark polo shirt aims a thermal camera at a faint damp stain on a white wall, beside a window and light floor tiles.",
+      "thumb": {
+        "file": "guides/technician-scanning-faint-stain-plain-white-room-01-thumb.webp",
+        "width": 480,
+        "height": 360,
+        "bytes": 9894,
+        "sha256": "e2889de38ccb8e5b112ce6bdd01c81e3e9526cff9d253e5e44c97ff424706939"
+      },
+      "placements": [
+        {
+          "route": "/guides/what-a-thermal-camera-sees/",
+          "slot": "lead",
+          "order": 1
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "diagnosis",
+      "service": "moisture-detection",
+      "city": null,
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/guides-what-a-thermal-camera-sees-lead.md",
+        "promptSha": "dacf49fbbefbdd3475c13b2f49188753a8dd63df34bf4b3aad2544eb54a05859",
+        "masterSha": "4b355f3c7a93d80af0d7353cadd9e0e50da48f808c3214af9a93bc79f030c39e",
+        "refs": [
+          "omer-01",
+          "omer-03",
+          "omer-02",
+          "camera",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "scene-mismatch",
+            "screen-mismatch"
+          ],
+          "judges": {
+            "claude": "reject",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": true,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "guides-leak-detection-cost-lead",
+      "file": "guides/technician-scanning-single-ceiling-stain-small-living-room-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 900,
+      "bytes": 52430,
+      "sha256": "4d08e46b8d4ed50c26e9d9deccd8242b30fda977367d77d7368a7b1ae76f4788",
+      "sizeClass": "half",
+      "alt": "טכנאי בחולצה כהה מכוון מצלמה תרמית כלפי כתם חום על תקרה לבנה ליד גוף תאורה עגול, בחדר עם ספה, שולחן נמוך ופתח דלת.",
+      "caption": "סריקה תרמית של התקרה נעשית מזווית רחבה, כדי לראות את כתם הרטיבות בהקשר של החדר ולהשוות אותו לאזורים הסמוכים לפני תיעוד.",
+      "altEn": "Technician in a dark polo aims a thermal camera up at a brown stain on a white ceiling beside a round light, in a room with a sofa and open doorway.",
+      "thumb": {
+        "file": "guides/technician-scanning-single-ceiling-stain-small-living-room-01-thumb.webp",
+        "width": 480,
+        "height": 360,
+        "bytes": 13436,
+        "sha256": "8c33f6a139d80a2038c35811144b848b9fa194f46823a436a623b37d8380f2e3"
+      },
+      "placements": [
+        {
+          "route": "/guides/leak-detection-cost/",
+          "slot": "lead",
+          "order": 1
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "yoav"
+      ],
+      "phase": "diagnosis",
+      "service": "moisture-detection",
+      "city": null,
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/guides-leak-detection-cost-lead.md",
+        "promptSha": "0f560f1be9fe0f761a6ffe47ae4b2b0bc36acc534e5b9cd0cfac352df694457b",
+        "masterSha": "111baa2a2be00a393d6fd88172b8c3cdd5709e653663b6b4d0cdf3ac0ec0aa3c",
+        "refs": [
+          "yoav-01",
+          "yoav-04",
+          "yoav-02",
+          "camera",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "stray-mark",
+            "scene-mismatch",
+            "object-mismatch"
+          ],
+          "judges": {
+            "claude": "reject",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": true,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "guides-find-leak-without-breaking-lead",
+      "file": "guides/three-instruments-lined-up-below-stained-wall-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 900,
+      "bytes": 61700,
+      "sha256": "66fe6645e723ade247fbb11e5eb205668c19681c5d4366e3564c190ae32fc397",
+      "sizeClass": "half",
+      "alt": "מצלמה תרמית, מד לחות ואוזניות עם מיקרופון קרקע עומדים בשורה על אריחים בהירים, מול קיר לבן עם כתם רטיבות חום מעל הציוד.",
+      "caption": "לפני הסריקה מכינים את הכלים: מצלמה תרמית לתמונה תרמית, מד לחות לבדיקת הקיר, ואוזניות עם מיקרופון קרקע להאזנה לצנרת סמויה.",
+      "altEn": "A thermal camera, a moisture meter and headphones beside a ground microphone stand in a row on light tiles before a white wall with a brown damp stain.",
+      "thumb": {
+        "file": "guides/three-instruments-lined-up-below-stained-wall-01-thumb.webp",
+        "width": 480,
+        "height": 360,
+        "bytes": 9780,
+        "sha256": "353dba345b6d4a3aa5a040bad0ca4603f3924c0c44d8198d22d0b0bc5dcb65b9"
+      },
+      "placements": [
+        {
+          "route": "/guides/find-leak-without-breaking/",
+          "slot": "lead",
+          "order": 1
+        }
+      ],
+      "status": "approved",
+      "people": [],
+      "phase": "materials",
+      "service": "water-leak-detection",
+      "city": null,
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/guides-find-leak-without-breaking-lead.md",
+        "promptSha": "ca9c4c0327c78f017268cc5066b91c7346c8aa9f7274855a17bc77d7639d9ab3",
+        "masterSha": "84974ab3c9869abc4d19aac292b0d75644bfbd26d170fbb0108f71adfa9ad7f1",
+        "refs": [
+          "camera"
+        ]
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "stray-mark",
+            "scene-mismatch",
+            "busy-corner",
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass-with-note"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "home-detail",
+      "file": "home/thermal-camera-screen-matching-tide-mark-on-wall-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 800,
+      "bytes": 31204,
+      "sha256": "175167551a24a8b49a255981b8d5099b4c2658a11a5c38c9dc3f10af1f2def05",
+      "sizeClass": "half",
+      "alt": "מצלמה תרמית עומדת על שרפרף לבן מול קיר טיח לבן, על המסך כתם סגול כהה על רקע כתום, ומאחוריה כתם רטיבות חום על הקיר.",
+      "caption": "סריקה תרמית מתחילה בהצבת המצלמה מול הקיר ובהשוואה בין התמונה התרמית למה שנראה לעין, כדי להבין איפה כדאי להמשיך ולבדוק.",
+      "altEn": "A thermal camera on a white stool faces a white wall, its screen showing a dark purple patch on orange, with a brown damp stain on the wall behind.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/",
+          "slot": "detail",
+          "order": 2
+        },
+        {
+          "route": "/guides/what-a-thermal-camera-sees/",
+          "slot": "mid",
+          "order": 2
+        }
+      ],
+      "status": "approved",
+      "people": [],
+      "phase": "diagnosis",
+      "service": "water-leak-detection",
+      "city": null,
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/home-detail.md",
+        "promptSha": "bc2835485d8566069a00ac497eb81ffd5b1baf445df3db41ccfc8e81f4825f8d",
+        "masterSha": "257ac7fb630e7639e9e9b997d3951d4f506469f98cc083ee7dea2707024a35eb",
+        "refs": [
+          "camera"
+        ]
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "scene-mismatch",
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "home-main",
+      "file": "home/two-technicians-thermal-camera-acoustic-check-living-room-01.webp",
+      "legacySrc": null,
+      "width": 960,
+      "height": 768,
+      "bytes": 40806,
+      "sha256": "f019a7b05cfece224b6007f776d07eed7d3484e92135e0f085bf04d96925357f",
+      "sizeClass": "tile",
+      "alt": "טכנאי עומד ומכוון מצלמה תרמית אל כתם רטיבות בפינת קיר ותקרה, וטכנאי שני כורע על האריחים עם אוזניות ומיקרופון קרקע ליד החלון.",
+      "caption": null,
+      "altEn": "A technician aims a thermal camera at a damp stain near the ceiling while a second kneels on floor tiles wearing headphones, holding a ground microphone.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/",
+          "slot": "main",
+          "order": 1
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer",
+        "yoav"
+      ],
+      "phase": "diagnosis",
+      "service": "water-leak-detection",
+      "city": null,
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/home-main.md",
+        "promptSha": "73e3a05ce052a0e3e1fe1563d28963e9ff158545eba15ff7e74a9dc1f81e412b",
+        "masterSha": "9a7c3bf09a738bbfe163e12566c7386530b09455c6556ba3ca795e13031aca69",
+        "refs": [
+          "omer-01",
+          "omer-03",
+          "yoav-01",
+          "yoav-04",
+          "camera",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "stray-mark",
+            "scene-mismatch",
+            "scene-mismatch",
+            "busy-corner"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass-with-note"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "pricing-survey",
+      "file": "pricing/open-grey-case-camera-meter-headphones-by-front-door-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 800,
+      "bytes": 57324,
+      "sha256": "8e9bdf3ae7e78535ed5aef5f9443f965aa8f0c75ed100af68b550606e90d38ab",
+      "sizeClass": "half",
+      "alt": "מזוודת ציוד פתוחה על ריצוף בהיר ובה מצלמה תרמית, מד לחות, אוזניות, מיקרופון קרקע וגליל נייר דבק כחול בתוך ספוג אפור כהה",
+      "caption": "הציוד נארז במזוודה אחת, כל כלי במקומו בספוג: מצלמה תרמית, מד לחות ומיקרופון קרקע לאיתור נזילות, ונייר דבק לסימון.",
+      "altEn": "Open grey equipment case on light floor tiles holding a thermal camera, moisture meter, headphones, ground microphone, cable and blue masking tape in foam.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/pricing/",
+          "slot": "survey",
+          "order": 1
+        },
+        {
+          "route": "/about/",
+          "slot": "survey",
+          "order": 3
+        }
+      ],
+      "status": "approved",
+      "people": [],
+      "phase": "materials",
+      "service": "water-leak-detection",
+      "city": null,
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/pricing-survey.md",
+        "promptSha": "a4dd6083ce0fc4287297fa6066d5f2d192e4cdf6d75f947b9fa476f2c6d026b8",
+        "masterSha": "2b8bea77978228197187ec1ded0ffd3dde931637c54c5d6502b9ffcedf8f0650",
+        "refs": [
+          "camera"
+        ]
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "near-duplicate-note",
+            "scene-mismatch",
+            "busy-corner",
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass-with-note"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "pricing-layers",
+      "file": "pricing/technician-hallway-ceiling-second-spot-next-room-tape-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 800,
+      "bytes": 40490,
+      "sha256": "a20d5c8baf1a4299c76a17ea08f6c89148f841d2aa55dc2135d0665106dc4fc7",
+      "sizeClass": "half",
+      "alt": "טכנאי בחולצה אפורה מחזיק מצלמה תרמית בגובה הראש בפתח דלת במסדרון, ובחדר שמאחוריו כתם רטיבות על קיר עם סימון בנייר דבק כחול.",
+      "caption": "סריקה תרמית של משטחים סמוכים מתבצעת משני צדי הדלת, וסימון בנייר דבק עוזר לזהות את האזור הנבדק בחדר הסמוך ולהמשיך בתיעוד.",
+      "altEn": "Technician in a gray polo holds a thermal camera at head height in a doorway; a damp stain and blue masking tape mark show on the wall behind.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/pricing/",
+          "slot": "layers",
+          "order": 2
+        },
+        {
+          "route": "/guides/leak-detection-cost/",
+          "slot": "mid",
+          "order": 2
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "yoav"
+      ],
+      "phase": "diagnosis",
+      "service": "moisture-detection",
+      "city": null,
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/pricing-layers.md",
+        "promptSha": "33668c8e2736383afb1e6d6d6b88f88a7db5017539e4e9d300c25ccf47e78d45",
+        "masterSha": "861a61ff9db82ff86459baa2c8e7aec8875a7b8ac39f6b8827fc32f3c1e83035",
+        "refs": [
+          "yoav-01",
+          "yoav-04",
+          "yoav-02",
+          "camera",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "stray-mark",
+            "scene-mismatch",
+            "season-mismatch",
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass-with-note"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "services-water-leak-detection-work",
+      "file": "services/tape-cross-at-wall-base-camera-on-stool-thermal-tablet-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 800,
+      "bytes": 60922,
+      "sha256": "89fea724ed7000acf640a2185f2caa33bc919f2ff1120b5eb7b473a14d065129",
+      "sizeClass": "half",
+      "alt": "מצלמה תרמית ניצבת על שרפרף מול קיר לבן, על המסך כתם סגול כהה במרכז רקע כתום, וליד כתם רטיבות חום מסומן בנייר דבק כחול על הריצוף",
+      "caption": "סריקה תרמית של קיר רטוב נעשית מול המשטח, ותמונה תרמית בטאבלט מסייעת בתיעוד. סימון בנייר דבק מציין את הנקודה לבדיקה בהמשך.",
+      "altEn": "Thermal camera on a wooden stool facing a white wall with a brown damp stain, a tablet beside it and blue masking tape cross on the tiles.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/services/water-leak-detection/",
+          "slot": "work",
+          "order": 3
+        }
+      ],
+      "status": "approved",
+      "people": [],
+      "phase": "done",
+      "service": "water-leak-detection",
+      "city": null,
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/services-water-leak-detection-work.md",
+        "promptSha": "fe75f76f8c44dad93acb14cc1cdb033466b83298652e309e152e9e5ed1965d15",
+        "masterSha": "7c4d23656995957cf5ae1ddc5e7d8f77d9f8f00fac68b4f33deb4511cff4855e",
+        "refs": [
+          "camera"
+        ]
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "stray-mark",
+            "scene-mismatch",
+            "screen-mismatch"
+          ],
+          "judges": {
+            "claude": "reject",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": true,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "services-insurance-reports-detail",
+      "file": "services/tape-cross-beside-tide-mark-camera-on-chair-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 800,
+      "bytes": 29606,
+      "sha256": "a36c2005868f35a661ccc1e3a7390b1201e32896686f0049e2901eae05272f12",
+      "sizeClass": "half",
+      "alt": "מצלמה תרמית עומדת על מושב כיסא לבן וכוונה אל כתם רטיבות חום על קיר טיח, ועל המסך כתם סגול כהה במרכז רקע כתום",
+      "caption": "סימון בנייר דבק ליד כתם הרטיבות מאפשר לכוון את המצלמה התרמית לאותה נקודה בכל תיעוד, ולהשוות בין התמונה התרמית למראה הקיר.",
+      "altEn": "A thermal camera stands upright on a white chair seat, aimed at a brown damp stain on a white wall beside a blue masking tape cross.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/services/insurance-reports/",
+          "slot": "detail",
+          "order": 2
+        }
+      ],
+      "status": "approved",
+      "people": [],
+      "phase": "done",
+      "service": "insurance-reports",
+      "city": null,
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/services-insurance-reports-detail.md",
+        "promptSha": "a69186726d9e85d92dfca61619bae51f6f95be30bbfa8ba8da3ffb00ef531f4d",
+        "masterSha": "45664d8479e9fbea1634bc0c197b9436c102ddedb04c9c472d70fd1d110fdaee",
+        "refs": [
+          "camera"
+        ]
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "screen-mismatch",
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "reject",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": true,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "services-moisture-detection-work",
+      "file": "services/technician-balcony-scanning-stone-wall-roof-edge-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 800,
+      "bytes": 115150,
+      "sha256": "d0e6a84917a3f691b41c8172230d6ff69fb454f9b5bd5cd5990f9a245ee0a7e5",
+      "sizeClass": "half",
+      "alt": "טכנאי במרפסת מרוצפת מרים מצלמה תרמית אל קיר חיפוי אבן מול המרפסת, ועל המסך כתם סגול כהה עם גוון כתום במרכז",
+      "caption": "סריקה תרמית של חזית מבחוץ נעשית ממרחק, כדי לראות משטח רחב בבת אחת ולהשוות בין אזורים קרים וחמים לפני בדיקה מקרוב.",
+      "altEn": "A technician on a tiled balcony raises a thermal camera toward a stone-clad facade, with a dark purple and orange patch on its screen.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/services/moisture-detection/",
+          "slot": "work",
+          "order": 3
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "yoav"
+      ],
+      "phase": "diagnosis",
+      "service": "moisture-detection",
+      "city": null,
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/services-moisture-detection-work.md",
+        "promptSha": "63f6f162d19ad7063434563f25360f77853c0a82cb776aa719444dcfa080c72f",
+        "masterSha": "6bf11a2677158b3da9f6b9cd2e16c84fccdbc347eb735adf6be3d3a3fb5847a4",
+        "refs": [
+          "yoav-01",
+          "yoav-04",
+          "yoav-02",
+          "camera",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "stray-mark",
+            "scene-mismatch",
+            "scene-mismatch",
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass-with-note"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "services-water-leak-detection-detail",
+      "file": "services/technician-headphones-ground-microphone-corridor-tiles-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 800,
+      "bytes": 36058,
+      "sha256": "eb2e1891f8db3b998a779b28f3a232920d06fccb317a1dbbcedf520127ec580b",
+      "sizeClass": "half",
+      "alt": "טכנאי באוזניות מכופף ברכיים במסדרון לבן, לוחץ מיקרופון קרקע על אריח ומחזיק מכשיר קטן, ומצלמה תרמית כבויה עומדת לצדו על הריצוף.",
+      "caption": "האזנה דרך אוזניות למיקרופון קרקע על האריחים עוזרת לשמוע רעש של צנרת סמויה. השיטה משלימה את הסריקה התרמית ומסייעת לצמצם את אזור החיפוש.",
+      "altEn": "Technician in headphones crouches in a white corridor, pressing a ground microphone onto a floor tile, with a switched-off thermal camera standing beside him.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/services/water-leak-detection/",
+          "slot": "detail",
+          "order": 2
+        },
+        {
+          "route": "/guides/find-leak-without-breaking/",
+          "slot": "mid",
+          "order": 2
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "yoav"
+      ],
+      "phase": "in-progress",
+      "service": "water-leak-detection",
+      "city": null,
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/services-water-leak-detection-detail.md",
+        "promptSha": "2c1f34012e6ab2a2197555ce6ef2827dc645bc35845611467d79cc78c68840d2",
+        "masterSha": "2dd3b75e0bd11af9e8ea6479442dd6ec8fe3be2595071ea67061e6f0cb63ba03",
+        "refs": [
+          "yoav-01",
+          "yoav-04",
+          "yoav-02",
+          "camera",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "services-water-leak-detection-main",
+      "file": "services/technician-kneeling-scanning-wall-base-closed-kitchen-cabinets-01.webp",
+      "legacySrc": null,
+      "width": 1400,
+      "height": 1050,
+      "bytes": 77654,
+      "sha256": "5ff5d2b66b614c7513b839d234d18b1e6f89a12275228e2e18cc7b66e82e4b4a",
+      "sizeClass": "large",
+      "alt": "טכנאי כורע על אריחים בהירים במטבח ומחזיק מצלמה תרמית נמוך מול בסיס הקיר, שם כתם חום מעומעם על הטיח הלבן מתחת לשיש.",
+      "caption": "סריקה תרמית של בסיס הקיר ליד ארון הכיור נעשית מגובה נמוך, כדי לראות את פני הטיח מקרוב ולהשוות בין אזורים קרים וחמים.",
+      "altEn": "Technician kneeling on light floor tiles in a kitchen, aiming a thermal camera at a brown stain low on white plaster beside the sink cabinet.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/services/water-leak-detection/",
+          "slot": "main",
+          "order": 1
+        },
+        {
+          "route": "/services/",
+          "slot": "pair-1",
+          "order": 1
+        },
+        {
+          "route": "/gallery/",
+          "slot": "generated",
+          "order": 18
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "diagnosis",
+      "service": "water-leak-detection",
+      "city": null,
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/services-water-leak-detection-main.md",
+        "promptSha": "588f35ad6d99663956117d2a74465d61e65873ccf7f975454f615a46f19dc828",
+        "masterSha": "1a76919f11af9330299ffea704be1885cd8b255efb0602fd300cf3dbebe6278d",
+        "refs": [
+          "omer-01",
+          "omer-03",
+          "omer-02",
+          "camera",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "stray-mark",
+            "scene-mismatch",
+            "busy-corner",
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass-with-note"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "services-moisture-detection-detail",
+      "file": "services/technician-moisture-meter-pins-on-plaster-thigh-up-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 800,
+      "bytes": 40070,
+      "sha256": "2f43263d623aced6c594a3684fe3a1006af3d12bcd7bc52d03d1c86e7c81447d",
+      "sizeClass": "half",
+      "alt": "טכנאי בחולצה כהה מצמיד מד לחות אל קיר לבן ליד כתם רטיבות חום, ובידו השנייה מצלמה תרמית שעל מסכה צבעים סגול וכתום.",
+      "caption": "בבדיקת רטיבות משלבים מד לחות, שנוגע בשטח הקיר, עם מצלמה תרמית. כך משווים בין אזורים באותו קיר ומתעדים את הבדיקה לפני שמחליטים על המשך.",
+      "altEn": "A technician presses a moisture meter to a white wall beside a brown damp stain while holding a thermal camera with a purple and orange screen.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/services/moisture-detection/",
+          "slot": "detail",
+          "order": 2
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "omer"
+      ],
+      "phase": "in-progress",
+      "service": "moisture-detection",
+      "city": null,
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/services-moisture-detection-detail.md",
+        "promptSha": "1c1054bfacb6df5cbb27899f456e295271e52340d3f42c6a8c29396274b7d7d1",
+        "masterSha": "9d41b8d0dcd910ec657252356fd9baa20afc0f09f48832524e706f743fc321f0",
+        "refs": [
+          "omer-01",
+          "omer-03",
+          "omer-02",
+          "camera",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "screen-mismatch",
+            "scene-mismatch",
+            "scene-mismatch"
+          ],
+          "judges": {
+            "claude": "reject",
+            "gemini": "pass-with-note"
+          },
+          "judgesDisagreed": true,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "services-moisture-detection-main",
+      "file": "services/technician-scanning-damp-bloom-window-corner-bedroom-01.webp",
+      "legacySrc": null,
+      "width": 1400,
+      "height": 1050,
+      "bytes": 74820,
+      "sha256": "0ca1b22b43eb4a1d443d7fa2e7d9be1a63ebd87f869eb7c2cb406c6c6c2a4c47",
+      "sizeClass": "large",
+      "alt": "טכנאי במדי עבודה כהים מחזיק מצלמה תרמית מול כתם רטיבות חום בהיר בפינת חלון אלומיניום עם תריס גלילה, כשעל המסך כתם כתום וסגול.",
+      "caption": "סריקה תרמית של קיר ליד החלון נעשית ממרחק קצר מהמשטח, כדי להשוות בין אזורים קרים וחמים ולהחליט איפה להמשיך לבדוק במד לחות.",
+      "altEn": "A technician in a dark work shirt aims a thermal camera at a pale damp stain on a white bedroom wall beside a window with a half-lowered roller shutter.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/services/moisture-detection/",
+          "slot": "main",
+          "order": 1
+        },
+        {
+          "route": "/gallery/",
+          "slot": "generated",
+          "order": 19
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "yoav"
+      ],
+      "phase": "diagnosis",
+      "service": "moisture-detection",
+      "city": null,
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/services-moisture-detection-main.md",
+        "promptSha": "862f48a26976fd0ad46cd16902d9fb8ae29d2b51efe6d6bdbfc57df21e90ecae",
+        "masterSha": "aadab694fcca6e9e502b86354fbaca195c79e96c36e8067ed1b0820d1950752a",
+        "refs": [
+          "yoav-01",
+          "yoav-04",
+          "yoav-02",
+          "camera",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "scene-mismatch",
+            "busy-corner"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "services-electrical-thermography-main",
+      "file": "services/technician-scanning-open-three-phase-panel-plant-room-01.webp",
+      "legacySrc": null,
+      "width": 1400,
+      "height": 1050,
+      "bytes": 90248,
+      "sha256": "4afc94415452b44b56b8214ee90a5f6d5ca5b93b2976d60c6802ce28963e3931",
+      "sizeClass": "large",
+      "alt": "טכנאי בחולצת פולו כהה מחזיק מצלמה תרמית מול לוח חשמל אפור פתוח עם שורות מפסקים, בחדר מכונות עם צנרת מבודדת ותאורת פס.",
+      "caption": "סריקה תרמית של לוח חשמל נעשית מרחק צעד מהלוח כשהדלת פתוחה, כדי לראות את שורות המפסקים בתמונה תרמית ולחפש נקודות חום.",
+      "altEn": "A technician in a dark polo holds a thermal camera toward an open grey electrical panel with rows of breakers in a plant room with insulated pipes.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/services/electrical-thermography/",
+          "slot": "main",
+          "order": 1
+        },
+        {
+          "route": "/services/",
+          "slot": "pair-2",
+          "order": 2
+        },
+        {
+          "route": "/gallery/",
+          "slot": "generated",
+          "order": 20
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "yoav"
+      ],
+      "phase": "diagnosis",
+      "service": "electrical-thermography",
+      "city": null,
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/services-electrical-thermography-main.md",
+        "promptSha": "3a89465971096e3407cd1b1a4d044a4b2d69a4da46ed32d2b9c36e3fbd87d619",
+        "masterSha": "44f680f9ec6c97a3a394b4430ae225b86d89c8c141721d2bf010567741541125",
+        "refs": [
+          "yoav-01",
+          "yoav-04",
+          "yoav-02",
+          "camera",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "stray-mark",
+            "scene-mismatch",
+            "busy-corner"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": null
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "services-electrical-thermography-work",
+      "file": "services/technician-scanning-small-home-panel-entrance-hall-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 800,
+      "bytes": 54922,
+      "sha256": "76b1fb94ae55caac50848b926a200ea3a2e2f875616ade85ec8a327e8e79f64e",
+      "sizeClass": "half",
+      "alt": "טכנאי במדי עבודה עומד בכניסה לדירה ומחזיק מצלמה תרמית מול לוח חשמל פתוח, כשעל המסך כתם סגול וצהוב במרכז.",
+      "caption": "סריקה תרמית של לוח חשמל נעשית ממרחק קצר ובקו ראייה פנוי למפסקים, כדי לתעד את פיזור החום על פני המפסקים.",
+      "altEn": "Technician in a dark polo holds a thermal camera toward an open electrical panel in a bright hallway, screen showing purple and orange.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/services/electrical-thermography/",
+          "slot": "work",
+          "order": 3
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "yoav"
+      ],
+      "phase": "diagnosis",
+      "service": "electrical-thermography",
+      "city": null,
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/services-electrical-thermography-work.md",
+        "promptSha": "f3f84e28a62b30107182f3a6dd890de8905a6ef07e79987903c469e1cc4dc706",
+        "masterSha": "5dce1085ff11657f879d45406ad2bb985675ed4399b2dc86818a3c2eea879435",
+        "refs": [
+          "yoav-01",
+          "yoav-04",
+          "yoav-02",
+          "camera",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "white",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "wrong-trade",
+            "scene-mismatch",
+            "badge-mismatch",
+            "busy-corner"
+          ],
+          "judges": {
+            "claude": "reject",
+            "gemini": "pass-with-note"
+          },
+          "judgesDisagreed": true,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "services-insurance-reports-main",
+      "file": "services/technician-thermal-tablet-camera-lowered-marked-ceiling-corner-01.webp",
+      "legacySrc": null,
+      "width": 1400,
+      "height": 1050,
+      "bytes": 68088,
+      "sha256": "fd7ba593c61ebdb93e8458564293393134d43e4fafb030a33da7c2f84dee454e",
+      "sizeClass": "large",
+      "alt": "טכנאי בחולצה כהה עומד ליד קיר לבן ומחזיק מצלמה תרמית וטאבלט עם תמונה תרמית סגולה וכתומה, מעל סימון בנייר דבק כחול וכתם רטיבות בפינת התקרה.",
+      "caption": "לפני סריקה תרמית מסמנים בנייר דבק את הנקודה הנבדקת על הקיר, וכך אפשר להשוות בין התמונה התרמית לבין מה שנראה בחדר ולהכין תיעוד לדו״ח.",
+      "altEn": "A technician stands by a white wall holding a thermal camera and a tablet with a purple and orange thermal image, below a blue tape cross and a brown stain.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/services/insurance-reports/",
+          "slot": "main",
+          "order": 1
+        },
+        {
+          "route": "/gallery/",
+          "slot": "generated",
+          "order": 21
+        }
+      ],
+      "status": "approved",
+      "people": [
+        "yoav"
+      ],
+      "phase": "done",
+      "service": "insurance-reports",
+      "city": null,
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/services-insurance-reports-main.md",
+        "promptSha": "33b917e95bb33d7341a01d6bf5dcaa466cd9b3980e60be7091a92f01b28b786e",
+        "masterSha": "0f75ecf6e6fe3e3fffddea73aaa7e2d14aa07e116c47612dd99f3f1fcf249900",
+        "refs": [
+          "yoav-01",
+          "yoav-04",
+          "yoav-02",
+          "camera",
+          "badge"
+        ]
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "stray-mark",
+            "scene-mismatch",
+            "busy-corner"
+          ],
+          "judges": {
+            "claude": "pass-with-note",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": false,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
+      "retired": null
+    },
+    {
+      "id": "services-electrical-thermography-detail",
+      "file": "services/thermal-camera-screen-hot-breaker-open-panel-behind-01.webp",
+      "legacySrc": null,
+      "width": 1200,
+      "height": 800,
+      "bytes": 31446,
+      "sha256": "f9dbf65bb765386636daa93dc8dadb4625d53f7b924b3dbf0f30aeffaf7dfc80",
+      "sizeClass": "half",
+      "alt": "מצלמה תרמית עומדת על מזוודת ציוד אפורה מול לוח חשמל לבן פתוח, ועל מסכה שורות מפסקים סגולות עם נקודה כתומה אחת.",
+      "caption": "סריקה תרמית של לוח חשמל נעשית מול המפסקים ממרחק קצר, כדי לראות בתמונה תרמית איזה מפסק חם יותר משכניו ולתעד זאת.",
+      "altEn": "Thermal camera standing on a grey equipment case facing an open white electrical panel, its screen showing purple breaker rows and one orange spot.",
+      "thumb": null,
+      "placements": [
+        {
+          "route": "/services/electrical-thermography/",
+          "slot": "detail",
+          "order": 2
+        }
+      ],
+      "status": "approved",
+      "people": [],
+      "phase": "diagnosis",
+      "service": "electrical-thermography",
+      "city": null,
+      "provenance": {
+        "kind": "ai-generated",
+        "tool": "google-gemini",
+        "model": "gemini-3-pro-image",
+        "created": "2026-11-02",
+        "prompt": "prompts/thermoleak/services-electrical-thermography-detail.md",
+        "promptSha": "132b192b3612b7f44888cd6e4b59cd7a463300194aa84d641f57f6d2c0e27bab",
+        "masterSha": "735d19fc38158cf99a73413bd20baaccb8f674e52a218e163130ccedfe10d744",
+        "refs": [
+          "camera"
+        ]
+      },
+      "watermark": {
+        "logo": "navy",
+        "corner": "bottom-right",
+        "widthPct": 20
+      },
+      "review": {
+        "automated": {
+          "verdict": "pass-with-note",
+          "codes": [
+            "screen-mismatch",
+            "scene-mismatch",
+            "object-mismatch"
+          ],
+          "judges": {
+            "claude": "reject",
+            "gemini": "pass"
+          },
+          "judgesDisagreed": true,
+          "checkedAt": "2026-11-02"
+        },
+        "owner": {
+          "decision": "approved",
+          "by": "owner",
+          "at": "2026-11-02",
+          "note": null
+        }
+      },
+      "approved": "2026-11-02 — owner, board 52638c3a",
       "retired": null
     }
   ]

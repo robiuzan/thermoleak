@@ -37,7 +37,7 @@ these.
 
 | Asset class                             | Budget                                                  | Current (2026-09-06)                                                                                                                |
 | --------------------------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| Total `out/`                            | ≤ 25,000,000 B (the user, 2026-11-01; was 15,000,000 B) | **5,910,433 B — 98.5% of the 6 MB budget of the day** ⚠️ 220 files; re-measured 2026-10-12 below                                    |
+| Total `out/`                            | ≤ 25,000,000 B (the user, 2026-11-01; was 15,000,000 B) | **5,910,433 B — 98.5% of the 6 MB budget of the day** ⚠️ 220 files; **16,120,503 B (64.5%) on 2026-11-02**, after the page images — see below |
 | ├ RSC segment payloads (`out/**/*.txt`) | _no budget — set one_                                   | **2,769,645 B / 158 files = 46.9% of the export**                                                                                   |
 | ├ HTML                                  | —                                                       | 1,984,248 B / 23 files                                                                                                              |
 | └ `out/_next` (JS, CSS, fonts)          | —                                                       | 936,350 B                                                                                                                           |
@@ -141,7 +141,13 @@ four tiles ≈ 0.25 MB, three thumbnails ≈ 0.05 MB, 11 re-issued gallery image
 ≤ 0.12 MB, the `/gallery/` route ≈ 0.3 MB, and about 60 figures' markup emitted four times each ≈ 0.5 MB.
 That lands near 18 MB raw, 72% of the budget, and about 22.6 MB (90%) if every image hits its class budget.
 A 20 MB budget would have sat at 90–113% and forced another raise within a sprint. These are estimates
-from betonplus's per-class averages. **Replace them with the measured figure on install day.**
+from betonplus's per-class averages.
+
+**Measured on install day, 2026-11-02** (`npm run gate`, clean build): **16,120,503 B raw, 64.5% of the
+budget**; 15,204,596 B net of the 915,907 B of earlier builds' chunks carried in. `out/images` is
+4,245 KB of its 12 MB budget. The renders came in well under the estimate: 52 frames instead of 55, and most
+large and half frames at 30–90 KB rather than betonplus's averages. The retired originals (the old hero and
+the 11 gallery files, ≈ 0.57 MB) still ship until their removal is decided.
 
 **On the JS rows.** The old "≤ 120 KB per route, well under ✅" was never measured and is 4.7×
 wrong against its own stated unit. The framework floor is what Next 16.2.9 + React 19.2.4 cost on
@@ -211,7 +217,9 @@ which gets `preload` and `fetchPriority="high"`. The files are WebP. Quality sta
 fit a size class, and **never goes below 80**, because thermal colour ramps band under it (q75 was
 measured to blotch them); a frame that still does not fit drops a size class. What actually matters:
 
-- **`hero.webp`** — the LCP candidate on `/` until the new hero installs. Measured: **33,210 B, 828×670 intrinsic**,
+- **The hero** — since 2026-11-02 the LCP image on `/` is `home/two-technicians-thermal-camera-acoustic-check-living-room-01.webp`,
+  **40,806 B at 960×768**, a third of its 120 KB `tile` budget. The paragraph below describes the retired `hero.webp`,
+  kept for crawled pages and measured before: **33,210 B, 828×670 intrinsic**,
   rendered at ≤ 448 CSS px (`max-w-md`) on desktop and ~358 px on mobile, and preloaded. That is
   4.5× inside the LCP-image budget and correct as a single size for DPR 2+. **There is nothing to
   win here** — a width-variant exercise buys a few KB, so do not schedule it as a performance sprint

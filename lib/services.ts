@@ -124,7 +124,7 @@ export const serviceChooser = {
 export const services: Service[] = [
   {
     slug: "water-leak-detection",
-    lastModified: "2026-09-17", // ₪450 → ₪350 (4beb407)
+    lastModified: "2026-11-02", // ₪450 → ₪350 (4beb407); page images installed 2026-11-02
     icon: Droplets,
     image: "/images/services/water-leak-detection.svg",
     title: "איתור נזילות מים",
@@ -217,7 +217,7 @@ export const services: Service[] = [
   },
   {
     slug: "moisture-detection",
-    lastModified: "2026-09-17", // ₪450 → ₪350 (4beb407)
+    lastModified: "2026-11-02", // ₪450 → ₪350 (4beb407); page images installed 2026-11-02
     icon: ThermometerSun,
     image: "/images/services/moisture-detection.svg",
     title: "איתור רטיבות ובידוד",
@@ -307,7 +307,7 @@ export const services: Service[] = [
   },
   {
     slug: "electrical-thermography",
-    lastModified: "2026-08-17", // later edits were alt text and OG only
+    lastModified: "2026-11-02", // later edits were alt text and OG only; page images installed 2026-11-02
     icon: Zap,
     image: "/images/services/electrical-thermography.svg",
     title: "בדיקת לוחות חשמל",
@@ -396,7 +396,7 @@ export const services: Service[] = [
   },
   {
     slug: "insurance-reports",
-    lastModified: "2026-09-17", // report turnaround "תוך 3 ימי עסקים" (3c5d98a)
+    lastModified: "2026-11-02", // report turnaround "תוך 3 ימי עסקים" (3c5d98a); page images installed 2026-11-02
     icon: FileCheck2,
     image: "/images/services/insurance-reports.svg",
     title: "דו״ח תרמוגרפי לביטוח",

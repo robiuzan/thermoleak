@@ -40,7 +40,7 @@ export const articles: Article[] = [
     description:
       "מצלמה תרמית מצלמת טמפרטורת פני שטח, לא מים. המדריך המלא למה השיטה מזהה, איפה היא מגיעה לגבול שלה, ואיך מאמתים ממצא לפני שקובעים מקור.",
     datePublished: "2026-08-24",
-    dateModified: "2026-08-24",
+    dateModified: "2026-11-02", // page images installed 2026-11-02
     author: "רונן דהן",
     blocks: [
       {
@@ -156,7 +156,7 @@ export const articles: Article[] = [
     description:
       "השוואה עניינית בין תרמוגרפיה, איתור אקוסטי ומד לחות: מה כל שיטה מזהה, כמה היא עולה, מתי היא נכשלת ואיך בוחרים את השילוב הנכון לנכס שלכם.",
     datePublished: "2026-08-24",
-    dateModified: "2026-08-24",
+    dateModified: "2026-11-02", // page images installed 2026-11-02
     author: "רונן דהן",
     blocks: [
       {
@@ -282,7 +282,7 @@ export const articles: Article[] = [
     description:
       "פירוט שקוף של עלות איתור נזילות: ממה מורכב המחיר, מה מייקר ומה לא, מתי נדרש דו״ח לביטוח, ולמה מחיר שנמסר רק בסוף הביקור הוא סימן אזהרה.",
     datePublished: "2026-08-24",
-    dateModified: "2026-09-17", // the answer's price went ₪450 → ₪350 (4beb407)
+    dateModified: "2026-11-02", // the answer's price went ₪450 → ₪350 (4beb407); page images installed 2026-11-02
     author: "רונן דהן",
     blocks: [
       {
