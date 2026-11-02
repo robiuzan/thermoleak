@@ -83,6 +83,16 @@ Nobody edits `approved:` by hand, and a new scene is a new batch.
    `branding` and `extra-person` reach ≥ 90 % recall. No labelled frame has a wrong face, so the pilot measures
    the face.
    Tune the wording in `judge.json`, never the labels.
+   **First run, 2026-11-02 (US$1.66, `review/thermoleak/calibration.json` in Media Studio): go.** Recall:
+   `wrong-trade` 93 % (14/15), `text` 100 %, `branding` 100 %, `extra-person` 100 % (2/2), `object-mismatch`
+   100 % (3/3); `foreign` 75 % (3/4) and the one-label `impossible` and `screen-mismatch` missed, none on the go
+   line. Verdicts 29/37. Precision looks poor (`text` 17 %, `branding` 28 %, `screen-mismatch` 10 false
+   positives), but read against the judges' reasons most of it is label drift: the 2026-10-22 labels predate
+   today's rules, and the judges rightly flag a lettered «טרמוליק» shirt (03, 17), the emblem on a sleeve (13,
+   24), temperature digits on a screen (17, 24) and a readable «E8» on the camera (43). Labels were not changed
+   after the run. Two things follow: renders will tend to copy the «E8» printed on the reference camera, which
+   today's `allowedText` (`FLIR` only) rejects — a question for the owner with the digest; and some of the 11
+   legacy gallery images break today's rules (24 is live), which the owner sees again on the board.
 2. **Pilot** (10 frames, about US$7): 3 עומר with the camera, 2 יואב with the camera, the hero, 2 people-free
    with the camera (the case, and a set-down camera with its screen), 1 people-free without it, 1 `done` frame
    with tape.
