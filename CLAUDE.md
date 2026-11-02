@@ -588,7 +588,8 @@ on each picture.
 11 gallery images re-issued with the logo. The old hero and the 11 originals are `retired` (files kept, removal
 not before 2027-01-01 and a separate decision), and `gates.minPerContentPage` is `2`. Three planned slots stay
 empty after eight attempts each: `gallery-generated-2`, `gallery-generated-4`, `services-insurance-reports-work`.
-**Committed on `feat/page-images`, not deployed yet.** **Move this line when that changes.**
+**Deployed to production 2026-11-02 21:59 UTC from `feat/page-images` (commit `d3864f7`), with the user's word;
+the branch is not merged into `main` or pushed yet.** **Move this line when that changes.**
 
 | Decision        | Value                                                                                                                                                                                                                                                                                                                                                                      |
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
