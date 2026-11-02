@@ -102,6 +102,36 @@ Nobody edits `approved:` by hand, and a new scene is a new batch.
    - **No-go:** rewrite `OBJECTS:camera`, promote the fallback framing, or take it to the owner. A prompt keeps
      its fixed blocks once briefed, so re-issue them with `brief --refresh-blocks`. Dropping the FLIR mark is the
      owner's decision.
+   **The pilot, 2026-11-02 (batch `e95502a2`, US$3.39): go.** All 10 pass. 7 of 10 within two attempts (the hero
+   needed three, the insurance `main` four), no refusal, no wrong camera, every kept face matches, the marks read
+   on 2 of 3 close-ups. The owner allowed a small «E8» beside «FLIR» the same day (`judge.json` `allowedText`);
+   the prompts still ask for FLIR only, and the set-down camera now renders both cleanly. What the pilot taught:
+   - **The judges see 1280 px and miss small things.** Readout digits and a scale bar on a tablet, a garbled
+     «ALIB» for FLIR, a beard on the clean-shaven manager, a blue ceiling stain and a breaker glowing orange all
+     passed both judges. So every batch gets a full-size review (crops of screens, the camera body, faces,
+     the chest and the corner) before the board, and what it finds is queued as a `reviewer` regenerate: the
+     sidecar's `qa.final` becomes `regenerate` with a `qa.reviewer` record, and the prompt gains a positive
+     `## Fix after attempt N` line. Only Fix sections change; the approved scene stays byte-identical.
+   - **A judge's own fix line can contradict the approved prompt** (asking for an E8 on the bezel that the NO TEXT
+     block rules out) or name a person by id, which the image model cannot use. Read the Fix lines QA writes and
+     rewrite them before the next render.
+   - **The agreement rule lets real faults through:** one judge's `panel-contact` on a panel with its cover plate
+     gone was downgraded. The reviewer catches those.
+   - `judge.json` gained the lens rule (a screen toward the viewer means a lens away from him), thermal colours
+     only on a screen, facial hair as part of the face, and `face-mismatch` only with `faceMatch: "no"`.
+   **The batches, 2026-11-02 (US$23.15 in all, pilot included): 52 of 55 slots staged with the 11 imports.**
+   - **The screen rule, as applied:** a man *facing the viewer* holds the camera with its screen toward himself;
+     a lit screen toward the viewer in his hands is a regenerate. Side-on or in profile, with the lens plausibly on
+     the surface, it is a board note. The image model poses men frontally with the screen out; "side-on to the
+     viewer, his face in profile, the small shield on his chest in view" in a Fix line is what worked.
+   - **A stopped slot (`needs-owner`) is restarted by hand:** move `needs-owner.json` aside (kept, never
+     deleted), add a Fix for the latest attempt, re-run. `runner.maxAttempts` is 8 here since 2026-11-02.
+   - **Left empty after eight attempts:** `gallery-generated-2` (painted bay numbers, then the emblem on a
+     sleeve), `gallery-generated-4` (always facing the viewer with the screen out), and
+     `services-insurance-reports-work` (the image model draws a temperature readout on every tablet). Every
+     route keeps two images or more; `/gallery/` keeps 19 tiles. A new scene for any of them needs a new yes.
+   - **The judges also missed** a picture rendered on its side (now in `impossible`), stripped or patched plaster
+     behind a man, and a hard-edged repainted patch. The full-size review catches these.
 3. **Batches:** services and gallery (18) → home, about, contact, pricing, the locations strip (10) → cities
    (24) → guides (3). `import` runs beside the first batch and spends nothing with Gemini.
 
