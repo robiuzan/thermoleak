@@ -6,6 +6,7 @@ import {
   whatsappHref,
   defaultWhatsappMessage,
 } from "@/lib/site";
+import { services } from "@/lib/services";
 import Container from "./Container";
 import ContactForm from "./ContactForm";
 import EmailOff from "./EmailOff";
@@ -111,7 +112,9 @@ export default function ContactCTA() {
           </h3>
           <p className="mt-1 text-sm text-ink/70">מענה מהיר, ללא התחייבות.</p>
           <div className="mt-4">
-            <ContactForm />
+            <ContactForm
+              serviceOptions={services.map((service) => service.title)}
+            />
           </div>
         </div>
       </Container>

@@ -4,7 +4,6 @@ import { useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Send } from "lucide-react";
-import { services } from "@/lib/services";
 import { whatsappHref } from "@/lib/site";
 import { pushEvent } from "@/lib/analytics";
 
@@ -31,13 +30,20 @@ export const LEAD_HANDOFF_KEY = "tl-lead";
 // (docs/data-tracking-infrastructure.md §3), so inflating it would bid real money on a phantom.
 export const THANK_YOU_COUNTED_KEY = "tl-lead-counted";
 
-const initialState: FormState = {
+const emptyState: Omit<FormState, "service"> = {
   name: "",
   phone: "",
   area: "",
-  service: services[0].title,
   message: "",
 };
+
+interface ContactFormProps {
+  // The service titles, passed in by the server-rendered ContactCTA. This component is a client
+  // component, so importing lib/services.ts here would ship every service's copy (answers, limits,
+  // FAQs…) to the browser as JavaScript on every page — it did, until 2026-11-13. Only the titles are
+  // needed, and they also serve as the <select>'s fixed enum for the `service` analytics field.
+  serviceOptions: readonly string[];
+}
 
 function validate(values: FormState): Errors {
   const errors: Errors = {};
@@ -55,9 +61,12 @@ function validate(values: FormState): Errors {
 const fieldClasses =
   "w-full rounded-xl border bg-white px-4 py-3 text-ink placeholder:text-ink/70 focus:border-brand focus:outline-none";
 
-export default function ContactForm() {
+export default function ContactForm({ serviceOptions }: ContactFormProps) {
   const router = useRouter();
-  const [values, setValues] = useState<FormState>(initialState);
+  const [values, setValues] = useState<FormState>(() => ({
+    ...emptyState,
+    service: serviceOptions[0] ?? "",
+  }));
   const [errors, setErrors] = useState<Errors>({});
   const nameRef = useRef<HTMLInputElement>(null);
   const phoneRef = useRef<HTMLInputElement>(null);
@@ -248,9 +257,9 @@ export default function ContactForm() {
           onChange={(event) => update("service", event.target.value)}
           className={`${fieldClasses} border-ink/55`}
         >
-          {services.map((service) => (
-            <option key={service.slug} value={service.title}>
-              {service.title}
+          {serviceOptions.map((option) => (
+            <option key={option} value={option}>
+              {option}
             </option>
           ))}
         </select>
