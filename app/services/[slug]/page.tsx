@@ -6,6 +6,7 @@ import { ArrowLeft, CheckCircle2, Eye } from "lucide-react";
 import { getService, services, serviceSlugs } from "@/lib/services";
 import { site, telHref, pageOpenGraph } from "@/lib/site";
 import { imageFor, leadSlotOf } from "@/lib/images";
+import { cityLinksOf, guidesOf } from "@/lib/links";
 import { serviceJsonLd, faqPageJsonLd } from "@/lib/jsonld";
 import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
@@ -13,6 +14,9 @@ import ContactCTA from "@/components/ContactCTA";
 import JsonLd from "@/components/JsonLd";
 import CtaButton from "@/components/CtaButton";
 import Figure from "@/components/Figure";
+import LinkLead from "@/components/LinkLead";
+import CityChips from "@/components/CityChips";
+import TrustRow from "@/components/TrustRow";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -29,15 +33,17 @@ export async function generateMetadata({
   const service = getService(slug);
   if (!service) return {};
 
+  // metaDescription, not `summary`: the summary is an 85–92-character card blurb with no call to
+  // action, and it was doing both jobs (finding SEO-03, docs/keyword-map.md §5).
   return {
     title: service.h1,
-    description: service.summary,
+    description: service.metaDescription,
     keywords: service.keywords,
     alternates: { canonical: `/services/${slug}/` },
     ...pageOpenGraph({
       path: `/services/${slug}`,
       title: `${service.h1} | ${site.nameHe}`,
-      description: service.summary,
+      description: service.metaDescription,
     }),
   };
 }
@@ -50,6 +56,9 @@ export default async function ServiceDetailPage({ params }: PageProps) {
   const related = services.filter((item) => item.slug !== service.slug);
   // The visible answer block is genuine on-page Q&A, so it legitimately joins the FAQPage graph.
   const faqEntities = [service.answer, ...service.faqs];
+  // The hub-and-spoke edges (LOC-2 and service → guide), resolved and checked in lib/links.ts.
+  const guides = guidesOf(service);
+  const cityLinks = cityLinksOf(service);
 
   const route = `/services/${service.slug}/`;
   const mainImage = imageFor(route, "main");
@@ -85,6 +94,10 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                 {service.answer.a}
               </p>
             </div>
+
+            {/* Confirmed facts near the top (the framework's trust signals) — never the guarantee,
+                never a credential that is not on file (components/TrustRow.tsx). */}
+            <TrustRow className="mb-8" />
 
             {/* The manifest's `main`, directly under the answer block. Until one is approved the
                 decorative illustration stands in: it sits under an H1 that already states the
@@ -192,6 +205,33 @@ export default async function ServiceDetailPage({ params }: PageProps) {
               ) : null}
             </div>
 
+            {/* "What to check before you book" — the buyer's guide, specific to this service. */}
+            <section
+              aria-labelledby={`checklist-${service.slug}`}
+              className="mt-10 rounded-2xl border border-ink/10 bg-paper p-6"
+            >
+              <h2
+                id={`checklist-${service.slug}`}
+                className="text-xl font-bold text-brand"
+              >
+                {service.checklist.title}
+              </h2>
+              <ul className="mt-4 space-y-3">
+                {service.checklist.items.map((item) => (
+                  <li
+                    key={item.slice(0, 32)}
+                    className="flex items-start gap-2 text-sm leading-relaxed text-ink/80"
+                  >
+                    <CheckCircle2
+                      className="mt-0.5 size-5 shrink-0 text-accent-strong"
+                      aria-hidden="true"
+                    />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </section>
+
             {workImage ? (
               <Figure
                 image={workImage}
@@ -201,20 +241,34 @@ export default async function ServiceDetailPage({ params }: PageProps) {
             ) : null}
 
             {/* Contextual cross-links with descriptive anchors (backlog §9.3). */}
-            <p className="mt-8 leading-relaxed text-ink/80">
-              {service.related.lead}{" "}
-              {service.related.links.map((link, index) => (
-                <span key={link.href}>
-                  {index > 0 ? " · " : ""}
-                  <Link
-                    href={link.href}
-                    className="font-semibold text-brand underline underline-offset-2"
-                  >
-                    {link.label}
-                  </Link>
-                </span>
-              ))}
-            </p>
+            <LinkLead
+              lead={service.related.lead}
+              links={service.related.links}
+              className="mt-8"
+            />
+
+            {/* A few chosen city pages, as a sentence (the panel service: the three cities whose own
+                pages discuss panel scans). */}
+            {service.cityLinks?.mode === "places" ? (
+              <LinkLead
+                lead={service.cityLinks.lead}
+                links={cityLinks}
+                className="mt-4"
+              />
+            ) : null}
+
+            {service.guides && guides.length > 0 ? (
+              <div className="mt-10">
+                <h2 className="text-xl font-bold text-brand">
+                  {service.guides.title}
+                </h2>
+                <LinkLead
+                  lead={service.guides.lead}
+                  links={guides}
+                  className="mt-3"
+                />
+              </div>
+            ) : null}
 
             <h2 className="mt-10 text-xl font-bold text-brand">
               שאלות נפוצות על {service.title}
@@ -234,6 +288,17 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                 </details>
               ))}
             </div>
+
+            {/* Every city page, under its own title as the anchor — the descriptive inbound edge
+                the location silo was missing (LOC-2). */}
+            {service.cityLinks?.mode === "all" ? (
+              <CityChips
+                title={service.cityLinks.title}
+                lead={service.cityLinks.lead}
+                links={cityLinks}
+                className="mt-10"
+              />
+            ) : null}
           </div>
 
           {/* Sticky sidebar: price + CTA */}
@@ -242,6 +307,14 @@ export default async function ServiceDetailPage({ params }: PageProps) {
               <h2 className="text-lg font-bold text-brand">{service.title}</h2>
               <p className="mt-2 text-sm leading-relaxed text-ink/75">
                 {service.priceModel}
+              </p>
+              <p className="mt-2 text-sm">
+                <Link
+                  href={service.priceLink.href}
+                  className="font-semibold text-brand underline underline-offset-2"
+                >
+                  {service.priceLink.label}
+                </Link>
               </p>
               <div className="mt-5 flex flex-col gap-3">
                 <CtaButton

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { locations } from "@/lib/locations";
+import { locations, locationTitle } from "@/lib/locations";
 import { site, pageOpenGraph } from "@/lib/site";
 import { collectionPageJsonLd } from "@/lib/jsonld";
 import Container from "@/components/Container";
@@ -66,7 +66,7 @@ export default function LocationsPage() {
                     >
                       <span className="flex-1">
                         <span className="block font-bold text-brand">
-                          איתור נזילות {location.prefixed}
+                          {locationTitle(location)}
                         </span>
                         <span className="mt-1 block text-sm leading-relaxed text-ink/70">
                           {location.claims[0]?.text}

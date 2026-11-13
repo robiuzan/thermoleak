@@ -57,8 +57,10 @@ export default function ContactPage() {
               {[
                 "אנחנו חוזרים אליכם בשעות הפעילות, ומבררים בקצרה מה קורה: איפה מופיע הכתם או הרטיבות, מתי הופיע, והאם הוא משתנה לפי שימוש.",
                 "על בסיס התיאור נמסור מחיר מראש — לפני שקובעים ביקור, לא בסופו.",
-                "מתאמים מועד שנוח לכם. לנזילה פעילה נשתדל להגיע באותו יום.",
-                "בסיום הבדיקה תדעו מה נמצא ומה ההמלצה. דו״ח כתוב, כשנדרש, נמסר תוך מספר ימי עסקים.",
+                // «באזור הקרוב»: the same-day wording belongs only to the nearest areas
+                // (content-standards §3; business-facts §E — no same-day radius is on file).
+                "מתאמים מועד שנוח לכם. באזור הקרוב, לנזילה פעילה נשתדל להגיע באותו יום.",
+                `בסיום הבדיקה תדעו מה נמצא ומה ההמלצה. דו״ח כתוב, כשנדרש, נמסר תוך ${site.reportTurnaroundDays} ימי עסקים.`,
               ].map((step, index) => (
                 <li key={step.slice(0, 20)} className="flex gap-3">
                   <span className="inline-flex size-7 shrink-0 items-center justify-center rounded-full bg-brand text-sm font-bold text-white">

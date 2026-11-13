@@ -2,6 +2,7 @@ import { imageFor } from "@/lib/images";
 import { methodExplainer } from "@/lib/services";
 import Container from "./Container";
 import Figure from "./Figure";
+import LinkLead from "./LinkLead";
 import SectionHeading from "./SectionHeading";
 
 // Homepage definition block: what thermal leak detection is — and, deliberately, what the camera
@@ -25,6 +26,12 @@ export default function MethodExplainer() {
               {paragraph}
             </p>
           ))}
+          {/* The homepage's permanent in-body link into /guides/. */}
+          <LinkLead
+            lead={methodExplainer.more.lead}
+            links={methodExplainer.more.links}
+            tail={methodExplainer.more.tail}
+          />
         </div>
         {image ? <Figure image={image} className="mt-8" /> : null}
       </Container>

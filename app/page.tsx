@@ -12,15 +12,22 @@ import JsonLd from "@/components/JsonLd";
 import { LiveUpdates } from "@/components/live/Live";
 import { generalFaqs } from "@/lib/faqs";
 import { faqPageJsonLd } from "@/lib/jsonld";
+import { site, pageOpenGraph } from "@/lib/site";
+
+// A layout's title.template does NOT apply to that segment's own page, so this must be the complete
+// rendered title — brand included, exactly once (the live bug fixed 2026-08-17; backlog §2.1). It
+// carries the head term «איתור נזילות» and the region, and stays off «איתור נזילות מים», which the
+// water-leak page owns (docs/seo-geo-aeo-strategy.md §2).
+const title = `איתור נזילות תרמי ורטיבות ${site.address.regionPrefixed} | ${site.nameHe}`;
+// Was «…עם אחריות ודו״ח לחברות הביטוח. חייגו לאיתור מהיר…» — an unqualified guarantee, a report
+// with every visit and a speed claim (business-facts §H).
+const description = `איתור נזילות ורטיבות ${site.address.regionPrefixed}, בלי לשבור קירות: סריקה במצלמה תרמית ואימות במדידה משלימה. ביקור איתור החל מ-₪${site.priceFrom}, והמחיר נמסר מראש. חייגו ${site.phone.display}.`;
 
 export const metadata: Metadata = {
-  // A layout's title.template does NOT apply to that segment's own page, so this must be the
-  // complete rendered title — brand included. A bare subject here ships with no brand at all
-  // (the live bug fixed 2026-08-17; docs/optimization-backlog.md §2.1).
-  title: "איתור נזילות תרמי, רטיבות ובדיקות תרמוגרפיה | טרמוליק",
-  description:
-    "איתור נזילות מים ורטיבות במצלמה תרמית בגוש דן והמרכז — ללא הרס, עם אחריות ודו״ח לחברות הביטוח. חייגו לאיתור מהיר ומדויק.",
+  title: { absolute: title },
+  description,
   alternates: { canonical: "/" },
+  ...pageOpenGraph({ path: "/", title, description }),
 };
 
 export default function HomePage() {

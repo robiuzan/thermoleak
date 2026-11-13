@@ -1,8 +1,9 @@
-import Link from "next/link";
 import { Info, TriangleAlert } from "lucide-react";
 import type { Block } from "@/lib/articles";
+import type { NavLink } from "@/lib/site";
 import { imageFor, type SlotId } from "@/lib/images";
 import Figure from "./Figure";
+import LinkLead from "./LinkLead";
 
 // Renders the typed block model from lib/articles.ts. Keeping rendering in one place is what lets
 // the FAQPage schema be DERIVED from the same blocks — copy and schema cannot drift.
@@ -193,33 +194,31 @@ export default function ArticleBody({
               </div>
             );
 
-          default:
+          case "related":
+            return (
+              <LinkLead
+                key={key}
+                lead={block.lead}
+                links={block.links}
+                className="mb-6"
+              />
+            );
+
+          default: {
+            // Exhaustive: a new Block kind without a case here is a type error, not a block that
+            // silently renders nothing (the build used to stay green when that happened).
+            const unhandled: never = block;
+            void unhandled;
             return null;
+          }
         }
       })}
     </>
   );
 }
 
-export function RelatedServices({
-  slugs,
-}: {
-  slugs: { href: string; label: string }[];
-}) {
+export function RelatedServices({ links }: { links: NavLink[] }) {
   return (
-    <p className="mt-10 leading-relaxed text-ink/80">
-      רוצים שנטפל בזה?{" "}
-      {slugs.map((item, index) => (
-        <span key={item.href}>
-          {index > 0 ? " · " : ""}
-          <Link
-            href={item.href}
-            className="font-semibold text-brand underline underline-offset-2"
-          >
-            {item.label}
-          </Link>
-        </span>
-      ))}
-    </p>
+    <LinkLead lead="רוצים שנטפל בזה?" links={links} className="mt-10" />
   );
 }

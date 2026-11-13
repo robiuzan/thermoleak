@@ -7,7 +7,7 @@ import {
   articleFaqs,
   articles,
 } from "@/lib/articles";
-import { getService } from "@/lib/services";
+import { servicesOfArticle } from "@/lib/links";
 import { site, pageOpenGraph } from "@/lib/site";
 import { articleJsonLd, faqPageJsonLd } from "@/lib/jsonld";
 import Container from "@/components/Container";
@@ -58,10 +58,9 @@ export default async function GuidePage({ params }: PageProps) {
   const article = getArticle(slug);
   if (!article) notFound();
 
-  const related = article.relatedServices
-    .map((s) => getService(s))
-    .filter((s) => s !== undefined)
-    .map((s) => ({ href: `/services/${s.slug}/`, label: s.title }));
+  // Resolved and checked in lib/links.ts: an unknown slug now fails the build instead of dropping the
+  // link without a word (the old .filter() did exactly that).
+  const related = servicesOfArticle(article);
 
   const others = articles.filter((a) => a.slug !== article.slug);
 
@@ -119,7 +118,7 @@ export default async function GuidePage({ params }: PageProps) {
             leadSlot="lead"
           />
 
-          {related.length > 0 ? <RelatedServices slugs={related} /> : null}
+          {related.length > 0 ? <RelatedServices links={related} /> : null}
 
           {others.length > 0 ? (
             <div className="mt-12 border-t border-ink/10 pt-8">

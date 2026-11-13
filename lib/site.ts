@@ -24,6 +24,19 @@ export interface NavLink {
   label: string;
 }
 
+/** A lead sentence, then descriptive in-copy links — the one shape of every prose link block
+ * (service `related`, article `related` blocks, hub links). Rendered by components/LinkLead.tsx. */
+export interface LinkLead {
+  lead: string;
+  links: NavLink[];
+  /** Text after the last link, e.g. the sentence's closing period. */
+  tail?: string;
+}
+
+/** Prose with links in the middle of it: text runs and links, in reading order. Rendered by
+ * components/LinkedText.tsx; every link is checked in lib/links.ts. */
+export type LinkedText = (string | NavLink)[];
+
 export interface BusinessHours {
   days: string;
   time: string;
@@ -51,10 +64,17 @@ export const site = {
   locale: "he_IL",
 
   tagline: "מאתרים את הנזילה. בלי לשבור קירות.",
+  // The hero's entity line, under the H1: brand + service + region in one visible sentence (the
+  // framework's Phase 1.1). Rewritten 2026-11-13: the old pitch promised «דו״ח מסודר שמתקבל בחברות
+  // הביטוח» — a report with every visit and insurer acceptance, neither of which is true (§H). It
+  // also stays clear of the exact «איתור נזילות מים», which the water-leak page owns.
   pitch:
-    "איתור נזילות מים ורטיבות בעזרת מצלמה תרמית — אבחון מדויק, ללא הרס מיותר, עם דו״ח מסודר שמתקבל בחברות הביטוח.",
+    "טרמוליק — איתור נזילות ורטיבות במצלמה תרמית בגוש דן והמרכז. מאתרים מאיפה מגיעים המים, ומאמתים כל ממצא במדידה משלימה כדי שהתיקון ייעשה רק במקום הנכון.",
+  // The LocalBusiness description and the default meta/OG description — and the text to paste into a
+  // future Google Business Profile, so the entity reads the same everywhere. «עם אחריות מלאה» was
+  // removed 2026-11-13: the guarantee is explicitly bounded (eeat-and-trust §6).
   description:
-    "טרמוליק מתמחים באיתור נזילות תרמי בגוש דן והמרכז. מאתרים את מקור הנזילה במצלמה תרמית, ללא שבירת קירות, עם אחריות מלאה ודו״ח מקצועי לחברות הביטוח. זמינות מהירה ושירות אמין.",
+    "טרמוליק — איתור נזילות תרמי בגוש דן והמרכז. מאתרים את מקור הנזילה או הרטיבות במצלמה תרמית ומאמתים במדידה משלימה, בלי לשבור קירות. שירות ארצי בתיאום מראש.",
 
   phone: { display: "055-660-1006", tel: "+972556601006" },
   whatsapp: { intl: "972556601006", display: "055-660-1006" },
@@ -62,6 +82,9 @@ export const site = {
 
   address: {
     region: "גוש דן והמרכז",
+    // The region WITH its preposition, written by hand — a bare `ב${region}` is the banned
+    // `ב{name}` pattern (docs/keyword-map.md §3). Answer blocks and titles use this one.
+    regionPrefixed: "בגוש דן והמרכז",
     country: "IL",
     note: "שירות עד בית הלקוח — אין צורך להגיע למשרד",
   },
@@ -155,7 +178,8 @@ export const site = {
     years: { value: "20+", label: "שנות ניסיון בשטח" },
     duration: { value: "כשעה", label: "משך בדיקה ברוב הדירות" },
     method: { value: "ללא הרס", label: "איתור במצלמה תרמית, בלי לשבור" },
-    report: { value: "דו״ח", label: "מסודר ומקובל בחברות הביטוח" },
+    // Was «מסודר ומקובל בחברות הביטוח» — insurer acceptance is not documented (business-facts §H).
+    report: { value: "דו״ח", label: "מסודר להגשה לחברת הביטוח" },
   } satisfies Record<string, TrustStat>,
 
   // Renamed from `certifications` on 2026-09-17, because none of these is a certification.
@@ -167,6 +191,15 @@ export const site = {
   // Everything in this array must be a concrete, owner-confirmed capability. Never a credential
   // without a number behind it.
   credentials: ["מצלמה תרמית FLIR E8", "ביטוח צד ג׳", "צוות של שני טכנאים"],
+
+  // The trust row (components/TrustRow.tsx) near the top of the service pages, /services/, /pricing/
+  // and the homepage TrustBar: the founder's field experience, the three credentials above, and the
+  // tax invoice. NEVER the guarantee (EEAT-6 — it borrows the credentials' verifiability) and never the
+  // electrician licence (text on the panel page only — business-facts §H).
+  trustRow: {
+    label: "פרטי העסק",
+    taxInvoice: "מנפיקים חשבונית מס",
+  },
 
   // Shared Israeli-fleet GTM container (10 of 12 fleet sites carry it). Verified HTTP 200 on
   // 2026-08-24 — a snippet in the HTML proves nothing, so re-assert with:
@@ -210,16 +243,16 @@ export const staticRoutes: StaticRoute[] = [
   // the same commit. The service pages are deliberately NOT bumped: their visible copy is unchanged,
   // they only gained an internal link and a schema node. The location pages carry their own dates
   // in lib/locations.ts (2026-10-28: nine cities added and the first three's copy corrected).
-  { path: "", lastModified: "2026-11-02", priority: 1, freq: "weekly" }, // page images installed 2026-11-02
+  { path: "", lastModified: "2026-11-13", priority: 1, freq: "weekly" }, // entity line, problem selector, trust row, process step 4, hub links
   {
     path: "/services",
-    lastModified: "2026-11-02", // page images installed 2026-11-02
+    lastModified: "2026-11-13", // hub prose, trust row, the 12-city grid, links to /pricing/ and /guides/
     priority: 0.9,
     freq: "monthly",
   },
   {
     path: "/pricing",
-    lastModified: "2026-11-02", // page images installed 2026-11-02
+    lastModified: "2026-11-13", // entity tie in the answer, trust row, link to the cost guide
     priority: 0.9,
     freq: "monthly",
   },
@@ -238,13 +271,13 @@ export const staticRoutes: StaticRoute[] = [
   },
   {
     path: "/about",
-    lastModified: "2026-11-02", // page images installed 2026-11-02
+    lastModified: "2026-11-13", // no report with every visit; the guarantee card renders its terms
     priority: 0.7,
     freq: "monthly",
   },
   {
     path: "/contact",
-    lastModified: "2026-11-02", // page images installed 2026-11-02
+    lastModified: "2026-11-13", // same-day wording limited to the nearest areas; 3-day turnaround
     priority: 0.8,
     freq: "monthly",
   },

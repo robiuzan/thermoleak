@@ -9,7 +9,7 @@
 // a future article by someone else must set its own, and an article with no known author publishes
 // unattributed rather than borrowing a name. NEVER invent a byline.
 
-import { site } from "./site";
+import { site, type NavLink } from "./site";
 
 export type Block =
   | { kind: "paragraph"; text: string }
@@ -20,7 +20,11 @@ export type Block =
   | { kind: "faq"; items: { q: string; a: string }[] }
   | { kind: "callout"; tone: "note" | "warn"; text: string }
   // A manifest image for this slot on the guide's route (CLAUDE.md §15). Copy and FAQ schema skip it.
-  | { kind: "figure"; slot: "mid" | "end" };
+  | { kind: "figure"; slot: "mid" | "end" }
+  // A contextual in-copy link block: a lead sentence, then descriptive anchors into a service, a
+  // guide, /pricing/ or a city (the hub-and-spoke edge a guide owes its commercial page). Every href
+  // is validated at build time in lib/links.ts. FAQ schema skips it.
+  | { kind: "related"; lead: string; links: NavLink[] };
 
 export interface Article {
   slug: string;
@@ -329,6 +333,20 @@ export const articles: Article[] = [
       {
         kind: "paragraph",
         text: "מה שאינו נכלל: התיקון עצמו. אנחנו מאתרים ומתעדים; את התיקון מבצע בעל מקצוע — אינסטלטור, איטום או חשמלאי, לפי הממצא. ההפרדה הזו מכוונת: מי שגם מאתר וגם מתקן נמצא בניגוד עניינים מובנה לגבי היקף הממצא.",
+      },
+      // The informational page hands the ready buyer down to the commercial one (keyword-map §7:
+      // until 2026-11-13 the only link to /pricing/ here was the navbar's). The guarantee is linked by
+      // its own slogan, never paraphrased (content-standards §6).
+      {
+        kind: "related",
+        lead: "את התנאים המלאים ריכזנו בעמוד המחירון:",
+        links: [
+          {
+            label: `מה כולל ביקור איתור ב-₪${site.priceFrom}`,
+            href: "/pricing/#visit-scope",
+          },
+          { label: site.guarantee, href: "/pricing/#guarantee" },
+        ],
       },
       { kind: "heading", text: "שלוש דוגמאות אופייניות" },
       {

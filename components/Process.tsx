@@ -1,49 +1,24 @@
 import { PhoneCall, ScanLine, Target, FileText } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { processSteps } from "@/lib/services";
 import Container from "./Container";
 import SectionHeading from "./SectionHeading";
 
-interface ProcessStep {
-  icon: LucideIcon;
-  title: string;
-  desc: string;
-}
-
-const steps: ProcessStep[] = [
-  {
-    icon: PhoneCall,
-    title: "פנייה ותיאום מהיר",
-    desc: "מתקשרים או שולחים וואטסאפ, מתארים את הבעיה, ואנחנו מתאמים הגעה בזמן שנוח לכם.",
-  },
-  {
-    icon: ScanLine,
-    title: "בדיקה תרמוגרפית בשטח",
-    desc: "סורקים את האזורים החשודים במצלמה תרמית מקצועית ובאמצעי איתור משלימים.",
-  },
-  {
-    icon: Target,
-    title: "איתור מדויק של המקור",
-    desc: "מזהים ומסמנים את נקודת הבעיה המדויקת — לא ניחוש, אלא ממצא ברור.",
-  },
-  {
-    icon: FileText,
-    title: "דו״ח, ממצאים וליווי",
-    desc: "מקבלים דו״ח ברור עם תמונות והמלצה לתיקון, ואנחנו מלווים אתכם עד הפתרון.",
-  },
-];
+// The copy lives in lib/services.ts (processSteps); the icons stay here, one per step, by position.
+const icons: LucideIcon[] = [PhoneCall, ScanLine, Target, FileText];
 
 export default function Process() {
   return (
     <section className="bg-paper py-16 md:py-20">
       <Container>
         <SectionHeading
-          eyebrow="איך זה עובד"
-          title="ארבעה צעדים פשוטים לפתרון"
-          subtitle="תהליך מסודר ושקוף — מהשיחה הראשונה ועד הדו״ח הסופי."
+          eyebrow={processSteps.eyebrow}
+          title={processSteps.title}
+          subtitle={processSteps.subtitle}
         />
         <ol className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {steps.map((step, index) => {
-            const Icon = step.icon;
+          {processSteps.steps.map((step, index) => {
+            const Icon = icons[index] ?? FileText;
             return (
               <li
                 key={step.title}

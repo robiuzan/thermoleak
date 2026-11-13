@@ -12,7 +12,10 @@ import {
   pageOpenGraph,
 } from "@/lib/site";
 import { faqPageJsonLd } from "@/lib/jsonld";
+import { guideLink } from "@/lib/links";
 import Container from "@/components/Container";
+import LinkLead from "@/components/LinkLead";
+import TrustRow from "@/components/TrustRow";
 import PageHero from "@/components/PageHero";
 import CtaButton from "@/components/CtaButton";
 import Figure from "@/components/Figure";
@@ -61,10 +64,16 @@ export default function PricingPage() {
             </p>
           </div>
 
+          <TrustRow className="mt-6" />
+
           {/* What the base visit covers. Owner-approved terms from site.visitScope — the #1
               pre-purchase question, and the answer a price alone does not give. Placed directly
-              under the price answer block because that is where the question is asked. */}
-          <section className="mt-10 rounded-2xl border border-ink/10 bg-white p-6">
+              under the price answer block because that is where the question is asked.
+              `id="visit-scope"` is the target of the water-leak sidebar and the cost guide. */}
+          <section
+            id="visit-scope"
+            className="mt-10 scroll-mt-20 rounded-2xl border border-ink/10 bg-white p-6"
+          >
             <h2 className="text-xl font-bold text-brand">
               מה כולל ביקור איתור ב-₪{site.priceFrom}?
             </h2>
@@ -136,11 +145,12 @@ export default function PricingPage() {
                   <p className="mt-2 flex-1 text-sm leading-relaxed text-ink/75">
                     {service.priceModel}
                   </p>
+                  {/* A descriptive anchor — the page's own H1 — instead of «על השירות» ×4. */}
                   <Link
                     href={`/services/${service.slug}/`}
                     className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand underline underline-offset-2"
                   >
-                    על השירות
+                    {service.h1}
                     <ArrowLeft className="size-4" aria-hidden="true" />
                   </Link>
                 </div>
@@ -148,7 +158,11 @@ export default function PricingPage() {
             })}
           </div>
 
-          <h2 className="mt-12 flex items-center gap-2 text-2xl font-extrabold text-brand">
+          {/* `id="price-factors"` is the target of the moisture service's sidebar link. */}
+          <h2
+            id="price-factors"
+            className="mt-12 flex scroll-mt-20 items-center gap-2 text-2xl font-extrabold text-brand"
+          >
             <Wallet className="size-6 text-accent-strong" aria-hidden="true" />
             {pricing.factors.title}
           </h2>
@@ -165,6 +179,12 @@ export default function PricingPage() {
               </li>
             ))}
           </ul>
+
+          <LinkLead
+            lead={pricing.guideLead}
+            links={[guideLink("leak-detection-cost")]}
+            className="mt-6"
+          />
 
           {layersImage ? (
             <Figure

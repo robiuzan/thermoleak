@@ -4,7 +4,7 @@ import { articles } from "@/lib/articles";
 import { gallery, generatedLinks } from "@/lib/gallery";
 import { imagesFor, imagesNote, type PlacedImage } from "@/lib/images";
 import { collectionPageJsonLd } from "@/lib/jsonld";
-import { locations } from "@/lib/locations";
+import { locations, locationTitle } from "@/lib/locations";
 import { services } from "@/lib/services";
 import { pageOpenGraph, site } from "@/lib/site";
 import ContactCTA from "@/components/ContactCTA";
@@ -32,9 +32,7 @@ export const metadata: Metadata = {
 const pageTitles = new Map<string, string>([
   ...services.map((s) => [`/services/${s.slug}/`, s.title] as const),
   ...articles.map((a) => [`/guides/${a.slug}/`, a.title] as const),
-  ...locations.map(
-    (l) => [`/locations/${l.slug}/`, `איתור נזילות ${l.prefixed}`] as const,
-  ),
+  ...locations.map((l) => [`/locations/${l.slug}/`, locationTitle(l)] as const),
 ]);
 
 /**

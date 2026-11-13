@@ -1,5 +1,6 @@
 import { site } from "@/lib/site";
 import Container from "./Container";
+import TrustRow from "./TrustRow";
 
 // Only verifiable figures ship here. The previous "3,000+ jobs / 97% first-visit / 4.9 rating"
 // tiles were removed 2026-08-17 — unverifiable numbers presented as measurements
@@ -16,6 +17,14 @@ export default function TrustBar() {
             <p className="mt-1 text-sm text-ink/70">{stat.label}</p>
           </div>
         ))}
+      </Container>
+      {/* The confirmed credentials, right under the hero (the framework's trust signals near the
+          top) — no guarantee among them (EEAT-6), no seal graphics. */}
+      <Container>
+        <TrustRow
+          withExperience={false}
+          className="justify-center border-t border-ink/10 py-4"
+        />
       </Container>
     </section>
   );

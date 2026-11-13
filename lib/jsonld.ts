@@ -7,6 +7,7 @@
 // docs/business-facts.md §B/§E.
 import { site, canonicalUrl } from "./site";
 import type { Service, ServiceFaq } from "./services";
+import { locationTitle } from "./locations";
 
 const businessId = `${site.domain}/#business`;
 // One node for the founder, referenced from everywhere he appears. Without this, LocalBusiness.founder
@@ -78,6 +79,24 @@ export function serviceJsonLd(service: Service) {
     url: canonicalUrl(`/services/${service.slug}`),
     provider: { "@id": businessId },
     areaServed: { "@type": "AdministrativeArea", name: site.address.region },
+    // The starting price, only on the services whose visible priceModel states it (pricing ===
+    // "from" is checked against the priceModel text in lib/services.ts). ₪350 was confirmed by the
+    // owner 2026-09-17 with what the visit includes (business-facts §C), which is what this node had
+    // been waiting for. «החל מ» is a floor, so it is a minPrice, never a `price`.
+    ...(service.pricing === "from"
+      ? {
+          offers: {
+            "@type": "Offer",
+            url: canonicalUrl("/pricing"),
+            priceCurrency: "ILS",
+            priceSpecification: {
+              "@type": "PriceSpecification",
+              minPrice: site.priceFrom,
+              priceCurrency: "ILS",
+            },
+          },
+        }
+      : {}),
     // No inLanguage: schema.org does not define it on Service. It belongs on the creative works —
     // WebSite, the page nodes and Article — which is where it still is.
   };
@@ -89,6 +108,7 @@ export function serviceJsonLd(service: Service) {
 export function locationServiceJsonLd(location: {
   slug: string;
   name: string;
+  areaServedName?: string;
   kind: "city" | "region";
   prefixed: string;
   answer: { q: string; a: string };
@@ -98,15 +118,17 @@ export function locationServiceJsonLd(location: {
     "@context": "https://schema.org",
     "@type": "Service",
     "@id": `${url}#service`,
-    name: `איתור נזילות ${location.prefixed}`,
+    name: locationTitle(location),
     serviceType: "איתור נזילות",
     description: location.answer.a,
     url,
     provider: { "@id": businessId },
     // A region typed as a City is a factual error in the graph, which is why `kind` exists.
+    // The schema spelling matches LocalBusiness.areaServed byte for byte (LOC-11): «תל אביב-יפו» in
+    // both graphs, while the visible name stays «תל אביב». lib/links.ts checks the pairing.
     areaServed: {
       "@type": location.kind === "region" ? "AdministrativeArea" : "City",
-      name: location.name,
+      name: location.areaServedName ?? location.name,
     },
     // No inLanguage — see serviceJsonLd above.
   };
@@ -130,9 +152,8 @@ export function faqPageJsonLd(faqs: ServiceFaq[]) {
 }
 
 // Page-type nodes (docs/schema-graph.md §2). Each ties the page to the business node so the graph
-// is connected rather than a set of orphans. `Offer`/`PriceSpecification` is deliberately NOT here:
-// it is blocked on price confirmation (docs/business-facts.md §C) and must never ship a guessed
-// value.
+// is connected rather than a set of orphans. The `Offer` lives on the two priced Service nodes above
+// (₪350 confirmed 2026-09-17); a page node never carries one, and no Offer ever ships a guessed value.
 interface PageNodeOptions {
   path: string;
   name: string;

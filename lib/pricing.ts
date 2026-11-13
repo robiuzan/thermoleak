@@ -1,7 +1,7 @@
 // Pricing page (/pricing/) content. Per-service price lines render from lib/services.ts
 // `priceModel` — this file never restates a per-service price.
-// The ₪350 base is CONFIRMED (owner, 2026-09-17) and reads from site.priceFrom. 🔶 STILL open:
-// what the visit includes and excludes (docs/business-facts.md §C) — do not invent an inclusions list.
+// The ₪350 base and what the visit includes and excludes are CONFIRMED (owner, 2026-09-17,
+// business-facts §C) and read from site.priceFrom and site.visitScope — never retyped here.
 import type { ServiceFaq } from "./services";
 import { site } from "./site";
 
@@ -17,10 +17,14 @@ export const pricing = {
   // The AEO answer block — also joins the page's FAQPage structured data.
   answer: {
     q: "כמה עולה איתור נזילות?",
-    a: `ביקור איתור נזילות מתחיל ב-₪${site.priceFrom} ברוב הדירות. המחיר הסופי נקבע לפי גודל הנכס, מספר המוקדים החשודים והיקף התיעוד הנדרש — ונמסר לכם מראש, בטלפון או בוואטסאפ, לפני שמתאמים ביקור. בדיקות לוחות חשמל ודו״חות לביטוח מתומחרים בנפרד לפי היקף העבודה.`,
+    a: `ביקור איתור נזילות של ${site.nameHe} ${site.address.regionPrefixed} מתחיל ב-₪${site.priceFrom} ברוב הדירות. המחיר הסופי נקבע לפי גודל הנכס, מספר המוקדים החשודים והיקף התיעוד הנדרש — ונמסר לכם מראש, בטלפון או בוואטסאפ, לפני שמתאמים ביקור. בדיקות לוחות חשמל ודו״חות לביטוח מתומחרים בנפרד לפי היקף העבודה.`,
   } satisfies ServiceFaq,
 
   ratesHeading: "מחירון לפי שירות",
+
+  // The commercial page hands the reader who wants the "why" to the informational one (the cost
+  // guide owns what DRIVES the price; this page states it — keyword-map §7).
+  guideLead: "ממה בדיוק מורכב המחיר, ומתי לא כדאי להזמין בדיקה בכלל, מוסבר במדריך:",
 
   factors: {
     title: "ממה מושפע המחיר?",

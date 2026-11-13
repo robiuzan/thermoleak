@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, MapPin } from "lucide-react";
-import { getLocation, locationSlugs, locations } from "@/lib/locations";
+import {
+  getLocation,
+  locationSlugs,
+  locations,
+  locationTitle,
+} from "@/lib/locations";
 import { services } from "@/lib/services";
 import { site, pageOpenGraph } from "@/lib/site";
 import { imageFor, leadSlotOf } from "@/lib/images";
@@ -10,6 +15,7 @@ import { locationServiceJsonLd, faqPageJsonLd } from "@/lib/jsonld";
 import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
 import ContactCTA from "@/components/ContactCTA";
+import CityChips from "@/components/CityChips";
 import Figure from "@/components/Figure";
 import JsonLd from "@/components/JsonLd";
 
@@ -30,12 +36,12 @@ export async function generateMetadata({
 
   // Title formula per docs/keyword-map.md §3 — bare subject, the layout template appends the brand.
   return {
-    title: `איתור נזילות ${location.prefixed}`,
+    title: locationTitle(location),
     description: location.metaDescription,
     alternates: { canonical: `/locations/${city}/` },
     ...pageOpenGraph({
       path: `/locations/${city}`,
-      title: `איתור נזילות ${location.prefixed} | ${site.nameHe}`,
+      title: `${locationTitle(location)} | ${site.nameHe}`,
       description: location.answer.a,
     }),
   };
@@ -65,7 +71,7 @@ export default async function LocationPage({ params }: PageProps) {
       <JsonLd data={faqPageJsonLd([location.answer, ...location.faqs])} />
 
       <PageHero
-        title={`איתור נזילות ${location.prefixed}`}
+        title={locationTitle(location)}
         subtitle={`שירות עד בית הלקוח ${location.prefixed} — אבחון תרמי ללא הרס.`}
         crumbs={[
           { name: "בית", href: "/" },
@@ -185,21 +191,14 @@ export default async function LocationPage({ params }: PageProps) {
           ) : null}
 
           {nearby.length > 0 ? (
-            <div className="mt-10 border-t border-ink/10 pt-8">
-              <h2 className="text-lg font-bold text-brand">אזורים סמוכים</h2>
-              <ul className="mt-3 flex flex-wrap gap-2">
-                {nearby.map((other) => (
-                  <li key={other.slug}>
-                    <Link
-                      href={`/locations/${other.slug}/`}
-                      className="inline-block rounded-full border border-ink/15 px-4 py-1.5 text-sm font-semibold text-brand transition hover:border-brand/40 hover:bg-brand/5"
-                    >
-                      {other.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <CityChips
+              title="אזורים סמוכים"
+              links={nearby.map((other) => ({
+                href: `/locations/${other.slug}/`,
+                label: other.name,
+              }))}
+              className="mt-10 border-t border-ink/10 pt-8"
+            />
           ) : null}
         </Container>
       </section>

@@ -3,7 +3,7 @@ import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import { navLinks, secondaryLinks, site, telHref, mailHref } from "@/lib/site";
 import { imagesNote, imagesNoteLive } from "@/lib/images";
 import { services } from "@/lib/services";
-import { locations } from "@/lib/locations";
+import { locations, locationTitle } from "@/lib/locations";
 import Container from "./Container";
 import EmailOff from "./EmailOff";
 import Logo from "./Logo";
@@ -153,7 +153,7 @@ export default function Footer() {
                     href={`/locations/${location.slug}/`}
                     className="text-white/70 hover:text-white"
                   >
-                    איתור נזילות {location.prefixed}
+                    {locationTitle(location)}
                   </Link>
                 </li>
               ))}
