@@ -35,13 +35,18 @@ clear a floor is the failure mode now, not the fix.
 
 - **Tone:** מקצועי · אמין · רגוע · ברור · ענייני. Confident without hype.
 - **Person:** "אנחנו" / טרמוליק, addressing the reader as "אתם".
-- **Favour:** בלי לשבור קירות · אבחון מדויק · ללא הרס · דו״ח מסודר · שקיפות מחירים · זמינות מהירה ·
+- **Favour:** בלי לשבור קירות · אבחון מדויק · ללא הרס · שקיפות מחירים · זמינות מהירה ·
   מאתרים את המקור, לא את הסימפטום.
 - **Avoid:** "זול", unevidenced superlatives, exclamation spam, unnecessary jargon, "פתרון קסם",
-  "המובילים בישראל".
+  "המובילים בישראל" — and the two false claims removed 2026-11-13 (business-facts §H): a written
+  report at the end of every visit (the findings are verbal; a report is ordered separately), and
+  «מקובל / קביל / מתקבל בחברות הביטוח».
 - Emoji: a `✓` inside a UI element is fine; never in body copy.
-- **Register reference:** _"מאתרים את מקור הנזילה במדויק — בלי לשבור קירות, עם דו״ח שמתקבל בחברות
-  הביטוח."_
+- **Register reference:** _"מאתרים את מקור הנזילה במדויק — בלי לשבור קירות, ומסבירים לכם במקום מה
+  נמצא."_
+- **Brand, service and area together.** An answer block is quoted out of context, so it names
+  טרמוליק (`${site.nameHe}`), the service and «בגוש דן והמרכז» (`site.address.regionPrefixed`) —
+  never «אנחנו» alone, and never `ב${region}`.
 
 ## Where copy lives
 
@@ -51,7 +56,7 @@ Everything user-facing goes in **`lib/`**:
   `steps`, `limits`, `related`, `priceModel`, `faqs`, `keywords`), plus the homepage `methodExplainer`
   and `serviceChooser` blocks.
 - `lib/faqs.ts` — the general FAQ.
-- `lib/site.ts` — `tagline`, `pitch`, `description`, `stats`, `certifications`, `guaranteeTerms`.
+- `lib/site.ts` — `tagline`, `pitch`, `description`, `stats`, `credentials`, `guaranteeTerms`.
 - `lib/pricing.ts` — `/pricing/` copy. It **never restates a per-service price**; those interpolate
   from `services.ts` `priceModel` and `site.priceFrom`. Keep it that way.
 - `lib/articles.ts` — the `/guides/` articles as **typed blocks** (`paragraph`, `heading`, `list`,
@@ -79,9 +84,16 @@ zero `aggregateRating`, zero `Review`, zero `sameAs`. Fabricated reviews are a G
 violation, not a style problem, and this site has already paid for that decision once.
 
 That history is the rule, not a backlog item. **Never reintroduce any of it** — not as an example,
-not as sample data, not as a placeholder for the owner to replace. Certification claims still ship
-in `site.certifications` with no certificate on file and are marked 🔶; they are a gap to write
-around, not one to fill in more convincingly.
+not as sample data, not as a placeholder for the owner to replace. There is **no thermography
+certificate, no ח.פ. and no association membership** (confirmed absent 2026-09-17); `site.credentials`
+holds only concrete capabilities. The one licence on file — an electrician licence, 2026-11-13 — is
+stated in text on the panel page only, never as a badge, a level or a number.
+
+**Registered sentences.** `content/live/_campaigns.mjs` quotes a handful of sentences from
+`lib/services.ts`, `lib/pricing.ts` and `lib/articles.ts`. Each must stay verbatim, in place, and
+appear nowhere else in its file — a copy under another slug makes the build fail as "ambiguous", and
+editing one needs the owner's new approval (CLAUDE.md §14). Grep the register before rewording a
+sentence on those pages.
 
 **Image alts and captions are not yours.** The toolkit's alt step writes them from the pixels, and they live
 in `content/images/manifest.json`, which is never edited by hand (CLAUDE.md §15). The scene captions in
@@ -94,17 +106,19 @@ If a fact is not confirmed in `lib/site.ts`, the roster manifest, or `docs/busin
 3. Add or update the row in `docs/business-facts.md`.
 4. Say so in your handoff.
 
-**Still unconfirmed — write around every one of these:** the ₪450 starting price, the certification
-body and number, the equipment model, insurance, ח.פ., the Google Business Profile URL, real reviews
-and any rating, report turnaround time, technician count, the owner's years in the trade, payment
-terms, emergency-availability specifics, and geo coordinates. Also: job counts, success percentages,
-customer names and quotes, and any superlative. **Never invent a testimonial**, not even as a
-placeholder.
+**Still unconfirmed — write around every one of these:** payment methods, the Google Business
+Profile URL, real reviews and any rating, an arrival time or same-day radius, geo coordinates, and
+the open rows of business-facts §H (licence number, return-visit price, the price of a non-insurer
+report, «כשעה», «ליווי בהגשה», acoustic detection as our method, the moisture-visit duration). Also:
+job counts, success percentages, customer names and quotes, and any superlative. **Never invent a
+testimonial**, not even as a placeholder.
 
-**Already confirmed — you may state these plainly, no 🔶:** the 2015 founding (so "10+ שנות ניסיון"
-is defensible), the founder **רונן דהן** (`docs/business-facts.md` §A), the guarantee's scope,
-exclusions and no-call-out-fee terms (`site.guaranteeTerms`), the phone, WhatsApp, email, hours and
-service area. Take the wording from `lib/site.ts`, never retype the values.
+**Already confirmed — you may state these plainly, no 🔶:** the 2015 founding; the founder **רונן
+דהן** and his «20+ שנות ניסיון בשטח»; a team of two; the FLIR E8; «ביטוח צד ג׳» (no insurer or
+amount); tax invoices; ₪350-from and `site.visitScope`; the 3-business-day report turnaround; the
+guarantee's terms (`site.guaranteeTerms` — render or link, never paraphrase); `site.emergencyNote`;
+the phone, WhatsApp, email, hours and service area. Take the wording from `lib/site.ts`, never retype
+the values.
 
 **Bylines are unblocked.** `lib/articles.ts` carries `author: "רונן דהן"` on all three guides and the
 `Article` node emits a `Person`. A new article by him uses that name; an article by anyone else needs
@@ -163,8 +177,7 @@ requires is a **business fact**, not general knowledge — it goes to `docs/busi
 ## Rules
 
 - Hebrew only in user-facing strings; no mid-sentence language mixing. An English equipment name gets
-  its own clause — but the specific model is 🔶 unconfirmed, so don't introduce one that isn't
-  already in `site.certifications`.
+  its own clause — the FLIR E8 is the one confirmed model (`site.credentials`); introduce no other.
 - Israeli formats: phone `055-660-1006`, currency with the shekel **before** the number (`₪` + value)
   as the site already does, `dd/mm/yyyy`, en dashes in ranges (`08:00–18:00`). The price value itself
   interpolates from `site.priceFrom` — never type the number.

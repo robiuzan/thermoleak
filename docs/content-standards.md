@@ -164,8 +164,9 @@ you only fix a typo, do not — a `lastmod` that moves without the content movin
 - **Avoid:** "זול", superlatives without evidence, exclamation spam, unnecessary jargon, "פתרון קסם",
   "המובילים בישראל" (unprovable).
 - **Emoji:** a `✓` inside a UI element is fine. Never in body copy.
-- **Reference line for the register:** _"מאתרים את מקור הנזילה במדויק — בלי לשבור קירות, עם דו״ח
-  שמתקבל בחברות הביטוח."_
+- **Reference line for the register:** _"מאתרים את מקור הנזילה במדויק — בלי לשבור קירות, ומסבירים
+  לכם במקום מה נמצא."_ (Until 2026-11-13 this line ended «עם דו״ח שמתקבל בחברות הביטוח», which claimed
+  both a report with every visit and insurer acceptance; neither is true — business-facts §H.)
 
 ---
 
@@ -206,7 +207,8 @@ using native `<details>/<summary>` — every answer ships in the DOM with zero J
 
 **Free to state** (verified in `lib/site.ts` or the roster): the phone number, WhatsApp, email, the
 opening hours, the four services, the 12 service areas, the גוש דן והמרכז coverage, the 2015 founding
-year and therefore "10+ שנות ניסיון", the non-destructive method, "בלי לשבור קירות".
+year, the founder's «20+ שנות ניסיון בשטח» (never "20 years in business"), the non-destructive method,
+"בלי לשבור קירות".
 
 Two facts moved onto this list after the owner confirmed them 2026-08-24:
 
@@ -218,16 +220,23 @@ Two facts moved onto this list after the owner confirmed them 2026-08-24:
   only permitted source.** Restating the terms in your own words anywhere else re-opens exactly the
   gap the confirmation closed — link or render, never paraphrase.
 
+**Also free since 2026-09-17** (business-facts §A–§E): the ₪350 starting price and what the visit
+includes (`site.visitScope`), the FLIR E8 camera, «ביטוח צד ג׳» (no insurer, no amount), a team of
+two, «20+ שנות ניסיון בשטח» (always with בשטח), tax invoices, the 3-business-day report turnaround,
+and «שירות ארצי בתיאום מראש». **Since 2026-11-13** (§H): the electrician licence, in text on the
+panel page only. Two things are **never** stated: that a written report comes with every visit (the
+findings are verbal; a report is ordered separately), and that insurers accept the report.
+
 **Gated on [business-facts.md](business-facts.md)** — mark `// 🔶 confirm` and never state as fact
 until confirmed:
 
 - Any rating, review count, or customer quote (§B)
-- The ₪350 starting price and what it includes (§C)
-- Certifications, equipment brand, insurance, association membership, ח.פ. (§B)
-- Any person other than the confirmed founder — and any claim about the founder beyond his name and
-  role (§A). The two technicians appear by first name in the note on `/about/` and nowhere else
-- Report turnaround, technician count, payment terms, emergency-availability specifics (§C)
-- "שירות ארצי" as a coverage claim (§E)
+- Certifications and association membership — confirmed **absent**, never refill (§B ❌), and a
+  ח.פ. (§A ❌)
+- Any person other than the confirmed founder — and any claim about the founder beyond his name,
+  role and field experience (§A). The two technicians appear by first name in the note on `/about/`
+  and nowhere else
+- Payment methods, an arrival time or a same-day radius (§C, §E), and the open rows of §H
 - Superlatives: "המובילים", "הטובים ביותר", "מספר 1"
 
 **Never permitted:** an invented customer name or quote; a rating without a public source; a

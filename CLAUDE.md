@@ -27,8 +27,14 @@
   > — that is the founder's field experience, not the company's age. "20 years in business" is false.
 - **Audience:** homeowners mid-crisis (a damp stain, a jumped water bill), ועדי בתים, property managers,
   loss adjusters, businesses needing electrical-panel scans.
-- **Core promise:** find the **source**, not the symptom — without breaking walls — and hand over a
-  report an insurer accepts.
+- **Core promise:** find the **source**, not the symptom — without breaking walls. The findings are
+  given verbally on site; a written report, organised for submission to the insurer, is ordered
+  separately. **Never write that insurers accept the report** («מקובל / קביל בחברות הביטוח»): it is
+  not documented (business-facts §H, 2026-11-13), and the decision always sits with the insurer.
+- **Electrical panels:** a team member holds an electrician licence covering high voltage too, and a
+  scan is done by him or in his presence and under his supervision (confirmed 2026-11-13, §H). It is
+  stated **in text on the panel page only** — never a badge, a level or a number, because none is on
+  file.
 - **Conversion goals, in order:** (1) phone call, (2) WhatsApp, (3) contact form. Every page keeps a
   call/WhatsApp action within reach; `StickyContact` is a mobile-only fixed bottom bar.
 - **Images:** every content page carries illustrations of the method, never evidence of a job, under

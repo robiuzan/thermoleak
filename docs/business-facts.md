@@ -131,8 +131,8 @@ this section the highest-priority ask. The rows below are what replaces them leg
 with **no definition of "found", no exclusions, and no stated call-out fee**. It is simultaneously the
 strongest conversion asset on the site and its largest undefined liability.
 
-`site.priceFrom` is `450` and three of the four services state "החל מ-₪350"; the fourth
-(`insurance-reports`) and `electrical-thermography` quote per job. The roster marks prices unverified.
+`site.priceFrom` is `350` (confirmed 2026-09-17, table below). The leak and moisture services state
+"החל מ-₪350"; `insurance-reports` and `electrical-thermography` quote per job.
 
 ### ✅ APPROVED guarantee wording — confirmed by the owner 2026-08-24, now PUBLISHED
 
@@ -311,6 +311,35 @@ the same day** on the fleet wording sign-off page; every answer he gave there is
 | The homepage updates strip                               | ships as is, no new item (the owner left "anything to add?" empty). Its newest item is 17/09/2026, so it hides itself from 01/11/2026 until a real newer item is added                                                                         | owner, 2026-10-12                                                                                                                                                               | ✅                                                                    |
 | Export size budget                                       | raised from 6 MB to 7.5 MB (2026-10-12), to 8 MB (2026-10-27), to **15 MB** (2026-10-28), then to **25 MB** (2026-11-01) — [performance-guidelines.md](performance-guidelines.md) §1                                                           | owner, 2026-10-12 ("Raise the cap to 7.5 MB"); owner, 2026-10-27 ("Raise limit to 8 MB"); owner, 2026-10-28 ("increase size limit to 15M"); the user, 2026-11-01, plan approval | ✅                                                                    |
 | Header call button wraps at 768–820 px (live today)      | fix approved **as a separate change, later** — not part of the live-kit port; [optimization-backlog.md](optimization-backlog.md) §8.7                                                                                                          | owner, 2026-10-12                                                                                                                                                               | ✅ decided — not fixed yet                                            |
+
+## H. The GEO round — answers given 2026-11-13 (the user, in chat)
+
+Asked while planning the GEO pass (plan `master-geo-linear-bumblebee`). Each answer is the user's own
+words in a Claude Code session, and each corrects or confirms a claim the site already made. **Six are
+answers; the rows under them are what is still open.**
+
+| Fact                                                | Value                                                                                                                                                                                                                                                                                                                       | Lands in                                                                 | Status |
+| --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ------ |
+| Electrician licence on the team                     | **Yes.** A team member holds an Israeli electrician licence that also covers **high voltage** (so at least חשמלאי טכנאי — תקנות החשמל (עבודה במיתקן חי או בקרבתו), התשע״ד–2014, reg. 15(ב)). Holder, level and licence number were **not** supplied                                                                    | `/services/electrical-thermography/` text only — never a badge, a level or a number | ✅     |
+| Who performs a panel scan                           | The licence holder, **or** the other technician in his presence and under his supervision (reg. 15(ג)). The page says «בידי חשמלאי בעל רישיון או בנוכחותו ובהשגחתו»                                                                                                                                                           | `lib/services.ts` electrical `answer`, `steps[1]`, `checklist`           | ✅     |
+| Panels — which installations                        | Low and high voltage; the page keeps factories                                                                                                                                                                                                                                                                              | `lib/services.ts`                                                        | ✅     |
+| Written report in an ordinary visit                 | **No.** A ₪350 leak or moisture visit gives the findings **verbally, on site** (as `site.visitScope` already said). Any written report is ordered separately. Every "a report at the end of every visit" line was rewritten 2026-11-13 — the service pages, the homepage process, `/about/` and nine city pages | `lib/services.ts`, `lib/locations.ts`, `lib/services.ts` `processSteps`  | ✅     |
+| Insurer acceptance («מקובל / קביל בחברות הביטוח») | **Not documented.** Softened everywhere to wording that is true without proof («מסודר להגשה לחברת הביטוח»; the decision always sits with the insurer). **Never** restore «מקובל» or «קביל» without a named, verifiable instance                                                                                      | everywhere it appeared                                                   | ❌     |
+| Market price ranges                                 | **Not published.** The site states its own prices only (₪350-from + the cost model). Competitor and directory ranges are not "market data" this site may quote                                                                                                                                                           | —                                                                        | ❌     |
+
+**Still open after the round — 🔶, write around every one:**
+
+| Field                                                                  | Why it's needed                                                            | Lands in                | Status |
+| ---------------------------------------------------------------------- | -------------------------------------------------------------------------- | ----------------------- | ------ |
+| Electrician licence: holder, level, number                             | The only thing that would let the licence appear as a badge or credential | `lib/site.ts`           | 🔶     |
+| Is ₪350 also the floor for a panel scan or an insurance report?        | `priceRange` and any Offer on those two services                          | `lib/jsonld.ts`         | 🔶     |
+| Price and turnaround of a written report that is not for an insurer    | Guides mention only the insurer report                                    | `lib/services.ts`       | 🔶     |
+| Is a return visit charged, when one visit was inconclusive?            | Guides say «נעדיף לחזור בתנאים אחרים» without a price                     | `lib/articles.ts`       | 🔶     |
+| Scanning the flat above, or the roof, in the same visit — price        | Guide and city FAQs advise it without a price                              | `lib/articles.ts`       | 🔶     |
+| «כשעה» — the typical visit length                                      | Published (water page, `site.stats`, the FAQ) but never sourced            | `lib/site.ts` stats     | 🔶     |
+| «ליווי בהגשה» — accompanying the customer's submission to the insurer  | Published on the insurance page, never confirmed                           | `lib/services.ts`       | 🔶     |
+| Acoustic detection as an owned method                                  | Appears in images and one guide; not a confirmed method                    | `lib/articles.ts`       | 🔶     |
+| Moisture-visit duration                                                | The moisture answer block has no timeframe                                 | `lib/services.ts`       | 🔶     |
 
 ---
 
