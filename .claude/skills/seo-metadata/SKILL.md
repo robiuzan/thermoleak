@@ -1,6 +1,6 @@
 ---
 name: seo-metadata
-description: Per-route metadata for thermoleak — the Hebrew title and description formulas, the layout template rule and the two brand-token traps it sets (both fixed 2026-08-17, both easy to reintroduce), self-referencing trailing-slash canonicals, the openGraph shallow-merge trap (fixed 2026-09-17 by pageOpenGraph(), easy to reintroduce), Search Console verification, and the hand-maintained staticRoutes array in lib/site.ts. Use when writing metadata for a route, fixing duplicate or malformed titles, or auditing on-page SEO. Triggers "set the metadata", "titles and descriptions", "canonical", "brand suffix", "sitemap", "one H1".
+description: Per-route metadata for thermoleak — the Hebrew title and description formulas, the layout template rule and the two brand-token traps it sets (both fixed 2026-08-17, both easy to reintroduce; the homepage writes its complete title as title.absolute since 2026-11-13), the per-service metaDescription field (SEO-03, fixed 2026-11-13 and length-checked at build), self-referencing trailing-slash canonicals, the openGraph shallow-merge trap (fixed 2026-09-17 by pageOpenGraph(), easy to reintroduce), Search Console verification, and the hand-maintained staticRoutes array in lib/site.ts. Use when writing metadata for a route, fixing duplicate or malformed titles, or auditing on-page SEO. Triggers "set the metadata", "titles and descriptions", "canonical", "brand suffix", "sitemap", "one H1".
 ---
 
 # Per-route SEO metadata
@@ -42,7 +42,10 @@ title: "איתור נזילות תרמי, רטיבות ובדיקות תרמוג
 **Why the homepage loses the brand:** a `template` declared in a layout applies to titles from **child
 segments**, not to that same segment's own `page.tsx`. `app/page.tsx` is the root layout's own page, so
 its title is used verbatim. This is not a bug in Next — it is the documented behaviour, and the reason
-`app/page.tsx` writes a complete title including the brand (`title.absolute` would work too).
+`app/page.tsx` writes a complete title including the brand. Since 2026-11-13 it passes that title as
+`title: { absolute: title }` and renders `איתור נזילות תרמי ורטיבות בגוש דן והמרכז | טרמוליק` — the
+head term and the region (`site.address.regionPrefixed`), and deliberately **not** «איתור נזילות מים»,
+which the water-leak page owns (`docs/seo-geo-aeo-strategy.md` §2).
 
 Every route currently renders the brand exactly once. Copy any of them — and when you add a route,
 check the **rendered** `<title>` in `out/`, not the source string.
@@ -51,11 +54,11 @@ check the **rendered** `<title>` in `out/`, not the source string.
 
 | Route          | What you write                                                            |
 | -------------- | ------------------------------------------------------------------------- |
-| Home           | a complete title including the brand — the template will not add it       |
+| Home           | a complete title including the brand, as `title.absolute` — the template will not add it |
 | Service        | `service.h1` — e.g. `איתור נזילות מים במצלמה תרמית`                       |
-| Services index | `שירותים — איתור נזילות, רטיבות ותרמוגרפיה`                               |
+| Services index | `servicesHub.title` (`lib/hubs.ts`) — `שירותים — איתור נזילות, רטיבות ותרמוגרפיה` |
 | Static         | the page name — `צור קשר`, `אודות`, `הצהרת נגישות`                        |
-| Location       | `איתור נזילות ב{prefixed}` — all 12 service areas; a 13th via `/new-city` |
+| Location       | `locationTitle(location)` → `איתור נזילות {prefixed}` (e.g. `איתור נזילות בחולון`) — all 12 areas; a 13th via `/new-city` |
 | Article        | the question verbatim — `article.title` (`/new-article`)                  |
 
 Keep the **rendered** title under ~60 characters. Hebrew is compact, and no route is close to the limit
@@ -67,23 +70,34 @@ today — a title that gets there is usually trap 1 coming back.
 differentiator, then an action with the phone. All 29 indexable routes are currently unique — verify
 that still holds after any change.
 
-Two live gaps against that spec, both **code** defects, both open:
+Two gaps against that spec used to be open; both are closed — and one new one is open:
 
-- The four service descriptions come straight from `service.summary`, a field `lib/services.ts` comments
-  as the **card blurb** — so they run well short of 150 chars and carry no phone CTA (SEO-03). Most
-  other routes are short too, so this is a site-wide convention rather than a regression; fixing it
-  properly means a separate `metaDescription` field, the way `lib/articles.ts` already splits it.
+- ✅ **The service descriptions were fixed 2026-11-13 (SEO-03).** They used to come straight from
+  `service.summary`, the 85–92-character **card blurb**, with no phone CTA. `Service` now carries an
+  authored **`metaDescription`** — what + where (`site.address.regionPrefixed`), one true
+  differentiator, then `חייגו ${site.phone.display}` — which `generateMetadata` and `pageOpenGraph()`
+  both use; `summary` stays the card blurb and the `Service` node's description. `lib/services.ts`
+  **fails the build** when a `metaDescription` is outside 150–160 characters after interpolation (the
+  four measure 155–157 on the 2026-11-13 build). The homepage (`app/page.tsx`: region, the ₪350
+  start, the phone — 156) and `/services/` (`servicesHub.description` — 160) were rewritten the same
+  day.
 - ✅ **The location descriptions were fixed in Sprint 4 (SEO-02) — do not reapply the old recipe.**
   They used to be a raw `location.answer.slice(0, 155)`, which cut mid-word on all three pages
   (בת ים's severed its own name). `Location` now carries an **authored `metaDescription`** field,
   written to the keyword-map §5 Location formula and ending in the phone number; the twelve values
-  measure 152–158 characters (2026-10-28). Two reasons not to go back: `location.answer` became
+  measure 152–158 characters (2026-10-28; 153–158 on 2026-11-13). Two reasons not to go back: `location.answer` became
   `{ q, a }` on 2026-10-28, so `.slice` on it is a **type error**; and the answer block already
   appears in the first visible paragraph, so reusing it wastes the one field that can carry a
   distinct hook. **Availability is per city:** only תל אביב, חולון, בת ים and רמת גן say
   `לנזילה פעילה נשתדל להגיע באותו יום`; the other eight schedule the visit in advance with no time
   promised. A description never promises more than its page — three of them said
-  `נגיע`/`הגעה באותו יום` until 2026-10-28, when they became `נשתדל`.
+  `נגיע`/`הגעה באותו יום` until 2026-10-28, when they became `נשתדל`. On 2026-11-13 the ones that
+  promised a «דו״ח» (four) were rewritten with the city answers: a visit gives verbal findings
+  (business-facts §H).
+- ❌ **Open: the twelve location `metaDescription`s type the phone as a literal** — `055-660-1006`
+  appears 12 times in `lib/locations.ts` instead of `site.phone.display`. The value is correct today,
+  but a number change would miss all twelve (golden rule 2). Logged, not fixed; when you touch them,
+  interpolate.
 
 Only claim what `docs/business-facts.md` confirms. **This list was corrected 2026-10-28 — most of it
 is now confirmed, and re-gating a confirmed fact is as wrong as inventing one.** CONFIRMED and usable:
@@ -94,7 +108,11 @@ Aviv), tax invoices, the **3-day** report turnaround, and what the visit include
 **certificate**, and an accessibility coordinator. Still 🔶: accepted payment methods, and the
 insurer's name and coverage amount. The guarantee scope and the no-call-out-fee terms **are**
 confirmed — `site.guaranteeTerms` is the only permitted source for them.
-The purged claims (a rating, a job count, a success rate) must never come back in any field.
+The purged claims (a rating, a job count, a success rate) must never come back in any field. And from
+the 2026-11-13 answers (business-facts §H): never an insurer's acceptance («קביל», «מקובל בחברות
+הביטוח»), never a report with every visit, and the electrician licence only on the panel page, in
+text; whether ₪350 is also the floor for a panel scan or a report is still 🔶, so those two
+descriptions state no price.
 
 ## Canonicals
 
@@ -145,8 +163,8 @@ indexable pages asserted `og:url` = the homepage.
 
 Fixed 2026-09-17 (`b954357`) by `pageOpenGraph()` in `lib/site.ts`: one block with `images`, a
 per-page `og:url` from `canonicalUrl(path)`, and a matching `twitter` block. Every indexed route
-except `/` spreads it — all twelve city pages included — and both halves check clean on the
-2026-10-28 build. **A new route uses the helper; never hand-write an `openGraph` object.** Then check
+spreads it — all twelve city pages included, and `/` since 2026-11-13 (it kept the layout's block
+until then) — and both halves check clean on the 2026-10-28 and 2026-11-13 builds. **A new route uses the helper; never hand-write an `openGraph` object.** Then check
 the emitted HTML, which is the only place this is visible:
 
 ```bash

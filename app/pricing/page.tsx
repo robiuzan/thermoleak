@@ -24,14 +24,17 @@ import JsonLd from "@/components/JsonLd";
 import WhatsappIcon from "@/components/WhatsappIcon";
 import GuaranteeTerms from "@/components/GuaranteeTerms";
 
+// 150–160 chars with the region and a phone CTA (keyword-map §5); the old one had neither.
+const description = `כמה עולה איתור נזילות? ביקור איתור ${site.address.regionPrefixed} החל מ-₪${site.priceFrom}, ומחיר סופי שנמסר מראש לפי גודל הנכס. מה כלול בביקור ומה מתומחר בנפרד. חייגו ${site.phone.display}.`;
+
 export const metadata: Metadata = {
   title: "מחירון איתור נזילות",
-  description: `כמה עולה איתור נזילות? ביקור איתור החל מ-₪${site.priceFrom}, מחיר סופי שקוף שנמסר מראש לפי גודל הנכס והיקף הבדיקה. כל המחירים וההסברים — בעמוד אחד.`,
+  description,
   alternates: { canonical: "/pricing/" },
   ...pageOpenGraph({
     path: "/pricing",
     title: `מחירון איתור נזילות | ${site.nameHe}`,
-    description: `כמה עולה איתור נזילות? ביקור איתור החל מ-₪${site.priceFrom}, מחיר סופי שקוף שנמסר מראש לפי גודל הנכס והיקף הבדיקה. כל המחירים וההסברים — בעמוד אחד.`,
+    description,
   }),
 };
 

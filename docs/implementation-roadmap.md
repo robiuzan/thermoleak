@@ -47,10 +47,11 @@ decision, not on a sprint.
 | **4 — Stop the bleeding**                     | ✅ **shipped 2026-09-17** (see below)                |
 | **5 — Re-arm the instruments**                | ✅ **shipped 2026-09-06** (see below)                |
 | **6 — Make the funnel measurable**            | ✅ **shipped 2026-10-28** (`e6d4111`)                |
-| **7 — Repair the location silo, then extend** | ⏳ **12 of 12 built 2026-10-28**, not yet deployed   |
-| **8 — The second guide triplet**              | after 7                                              |
+| **7 — Repair the location silo, then extend** | ✅ **12 of 12 deployed 2026-10-28**; LOC-2 and LOC-11 closed 2026-11-13 on `geo-r1` |
+| **8 — The second guide triplet**              | ⏳ next: GEO release 2 — stain, condensation, insurer claim (see below) |
 | **9 — Owner-gated upside**                    | a queue, not a sequence                              |
-| **10 — Page images**                          | ⏳ **kit and plan in, 2026-11-01**; renders pending  |
+| **10 — Page images**                          | ✅ **deployed 2026-11-02** (`d3864f7`); 3 planned slots empty |
+| GEO release 1 (unnumbered)                    | ✅ committed 2026-11-13 (`3492fb8`, branch `geo-r1`); **not yet deployed** — backlog "Where it stands now" |
 
 ---
 
@@ -74,18 +75,20 @@ rather than hidden inside a sprint's "done when".
 > Rows 3, 9 and 11 are therefore **❌ closed, not outstanding** — do not re-ask them.
 >
 > **Still genuinely open:** GBP (#1 — none exists yet, owner will open one), reviews (#2), photo
-> (#12), job references (#13), imagery (#14) — plus two new ones: **what the ₪350 visit
-> includes/excludes**, and **report turnaround as a number**. Both were asked and came back as "use
-> your judgement", which is not an answer a site may publish. See business-facts §C.
+> (#12), job references (#13), imagery (#14), payment methods (#16), and the GEO round's open rows
+> (#17). _(This line also listed **what the ₪350 visit includes/excludes** and **report turnaround as
+> a number**, which first came back as "use your judgement". Both were closed the same day: a draft
+> built from published claims was approved verbatim, and the turnaround came back as **3 business
+> days** — rows #6 and #15, business-facts §C.)_
 
 | #   | Ask                                                                                                              | Status                                                                             | Unlocks                                                                   | Backlog |
 | --- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | ------- |
 | 1   | **Google Business Profile URL**                                                                                  | 🔶 **open** — none exists yet; owner will open one                                 | first non-empty `sameAs`; map pack; the only legitimate route to a rating | §5.3    |
 | 2   | **Real reviews with source URLs**                                                                                | 🔶 **open** — ask at the job; ~10 over 60 days                                     | retires the `/reviews/` 301; `Review` + honest `AggregateRating`          | §7.1    |
 | 3   | **Thermography certificate**                                                                                     | ❌ **closed — none held.** The "Level 1" badge was removed                         | nothing. Do not re-ask; do not reintroduce a certification claim          | §7.3    |
-| 4   | **Starting price**                                                                                               | ✅ **₪350** (was an unverified ₪350)                                               | `Offer`/`PriceSpecification` once inclusions are known too                | §7.7    |
+| 4   | **Starting price**                                                                                               | ✅ **₪350** (was an unverified ₪350)                                               | `Offer`/`PriceSpecification` — ✅ shipped 2026-11-13 on the two priced services | §4.5, §7.7 |
 | 5   | **Thermal camera model**                                                                                         | ✅ **FLIR E8**                                                                     | model-level specificity; shipped in `site.credentials`                    | §7.3    |
-| 6   | **Report turnaround as a number**                                                                                | 🔶 **open** — answered "use the standard", which is not a fact about this business | a concrete answer block on `/services/insurance-reports/`                 | §7.7    |
+| 6   | **Report turnaround as a number**                                                                                | ✅ **3 business days** (2026-09-17; first answered "use the standard")            | a concrete answer block on `/services/insurance-reports/` — ✅ it states it since 2026-11-13 | §7.7    |
 | 7   | **Travel reach**                                                                                                 | ✅ **~2 hours' drive from Tel Aviv** — lifts the batch-4 distance gate             | location batches 4–5 on distance                                          | §5.4    |
 | 8   | **Is "שירות ארצי בתיאום מראש" true?**                                                                            | ✅ **yes**                                                                         | the clause it renders in 6 places is now backed                           | §5.4    |
 | 9   | **ח.פ. number**                                                                                                  | ❌ **closed — not a registered company.** `בע״מ` removed from `legalName`          | nothing. Do not re-ask                                                    | §7.3    |
@@ -94,8 +97,9 @@ rather than hidden inside a sprint's "done when".
 | 12  | **Owner photo + permission** (renderings never depict the founder, so they close nothing here)                   | 🔶 **open**                                                                        | author bio block; strongest single trust element on `/about/`             | §7.5    |
 | 13  | **One real job reference per city**                                                                              | 🔶 **open** — operational                                                          | the only doorway-test item research cannot supply                         | §3.4    |
 | 14  | **Before/after thermal pairs with consent** (renderings are illustrations, not pairs; a real photo replaces one) | 🔶 **open** — operational                                                          | the E-E-A-T unfair advantage                                              | §7.1    |
-| 15  | **What the ₪350 visit includes / excludes**                                                                      | 🔶 **open** — answered "use your judgement"; a draft awaits approval               | the #1 pre-purchase question; `Offer` schema; AEO answer block            | §7.7    |
+| 15  | **What the ₪350 visit includes / excludes**                                                                      | ✅ **approved verbatim 2026-09-17** — `site.visitScope`, rendered on `/pricing/`   | the #1 pre-purchase question; `Offer` schema (✅ 2026-11-13); AEO answer block | §7.7    |
 | 16  | **Accepted payment methods**                                                                                     | 🔶 **open** — only "issues a חשבונית מס" is confirmed                              | removes a conversion objection for ועדי בתים                              | §7.7    |
+| 17  | **The GEO round's open rows** (business-facts §H): the licence's holder, level and number; ₪350 as a floor for panels and reports; a non-insurer report's price and turnaround; return-visit and flat-above pricing; «כשעה»; «ליווי בהגשה»; acoustic detection; the moisture-visit length | 🔶 **open** — asked 2026-11-13; three are already published unsourced | each answer confirms copy that ships, or removes it | §7.11   |
 
 **Two asks are fleet decisions, not facts:**
 
@@ -454,6 +458,12 @@ Asking the owner to run it would have had them conclude the sprint was broken.
 > statement's source is in [location-sources/](location-sources/README.md); the first three cities
 > have no register yet. **Phase B went ahead with Phase A's link mesh still half done** — LOC-2 is
 > open. Per-line status is under "Done when".
+>
+> **2026-11-13 — the code residue is closed (GEO release 1, `3492fb8` on `geo-r1`, not yet
+> deployed).** The twelve pages themselves were deployed 2026-10-28. LOC-2: the water-leak and
+> moisture pages link all twelve city pages, the electrical page three, `/services/` all twelve. The
+> `areaServed` byte match (LOC-11) is enforced by `lib/links.ts`. What remains is not code: the first
+> three source registers and the owner's confirmation of every claim (business-facts §E).
 
 **Goal:** make the three shipped city pages earn their keep, then add only the cities the evidence
 supports.
@@ -473,7 +483,8 @@ _2026-10-28:_ `nearby` reciprocity is **enforced** — a module-scope check in `
 the build on an unknown or one-way slug (מודיעין has no edge; רמת גן and פתח תקווה do not border).
 Every city page's `Service` types `areaServed` as `City`. The mesh is half done: the footer lists
 all 12 cities on every page, the hub shows 12 cards and each city links to all four services — but
-no service page links to a city (LOC-2 · backlog §9.6).
+no service page links to a city (LOC-2 · backlog §9.6). _(2026-11-13: closed — see the status note
+above.)_
 
 ### Phase B — extend, in this order
 
@@ -512,24 +523,35 @@ it ships.** The gate is re-run per city, not inherited from batch 1.
 
 ### Done when
 
-Status against the local build of 2026-10-28 (31 emitted routes, 28 indexed; not yet deployed):
+Status against the local build of 2026-10-28 (31 emitted routes, 28 indexed; deployed the same day).
+The two lines dated 2026-11-13 were checked against a fresh build of `3492fb8`:
 
 - Every shipped city passes the substitution test; ≥350 unique words each; zero orphans.
   ✅ The nine new pages carry 446–469 unique non-chrome words, the first three 409–461; an editor
   read all 12 side by side for the doorway test; every city page is linked from 30 other pages.
 - `Service.areaServed` name matches `LocalBusiness.areaServed` byte-for-byte on every city page.
-  ⏳ Not part of the 2026-10-28 verification.
+  ✅ 2026-11-13 (LOC-11, backlog §4.8): not part of the 2026-10-28 verification; now 12 of 12
+  byte-identical, and `lib/links.ts` fails the build otherwise.
 - `du -sb out` under 6,291,456 bytes. **Superseded** by the owner's 15,000,000 B budget — see the
   budget note.
 - Claim research for each new city is recorded with untruncated source text, and business-facts §E
   links to it. ✅ For the nine: `docs/location-sources/{slug}.md`, linked from §E. ⏳ The first
   three still have no register.
 - ✅ `nearby` is bidirectional, enforced at build time (Phase A).
-- ❌ Service pages link to a city — LOC-2, still open (backlog §9.6).
+- ✅ Service pages link to a city — LOC-2, closed 2026-11-13 (backlog §9.6): every city page now
+  has in-body links from 4–8 other pages.
 
 ---
 
 ## Sprint 8 — The second guide triplet
+
+> **Status 2026-11-13 — this round's triplet is not quite the one listed below.** GEO release 2 (a
+> branch of its own; six new images and the owner's approvals) writes **why the stain is not above
+> the leak** (item 1), **condensation or leak** (new — not a Gate-3 topic), and **why a water-damage
+> claim is rejected or reduced, and what a report must show** (item 2). Item 3, the panel guide,
+> moves to the next wave as its first item. So after release 2 five of the six Gate-3 topics have a
+> guide; topic 5, the panel under load, does not. Release 1 already fed the service side: new answer
+> blocks, a buyer's checklist on each service, and service → guide links (backlog §6.7, §9.6).
 
 **Goal:** finish the six gate-3 citable topics and give the two thinnest commercial pages long-form
 support.
@@ -544,10 +566,13 @@ and a repaired mesh to plug into (Sprint 7).
    service page. Today it appears only in city-page copy (the תל אביב riser claim and FAQ; since
    2026-10-28 the רמת גן and כפר סבא FAQs).
 2. **מה חברת ביטוח באמת דורשת בדו״ח נזילה — ומה גורם לדחיית תביעה** → links down to
-   `/services/insurance-reports/`, the page sitting closest to its word floor. Turnaround as a
-   number is Track O #6 — **write around it; do not invent it.**
+   `/services/insurance-reports/`, the page sitting closest to its word floor. Turnaround is
+   confirmed — **3 business days** (Track O #6, business-facts §C); state it from
+   `site.reportTurnaroundDays`, never retyped.
 3. **למה בודקים לוח חשמל תחת עומס — ומה אומרת דרגת חומרה של נקודה חמה** → links down to
-   `/services/electrical-thermography/`. Equipment model is Track O #5 — write around it.
+   `/services/electrical-thermography/`. The camera is confirmed — the **FLIR E8** (Track O #5);
+   body copy may name it, an image's alt or caption never does (CLAUDE.md §15). _(Moved to the next
+   wave, 2026-11-13.)_
 
 Plus: add a **freshness rule** to `/new-article` and the build gate. Nothing in `.claude/` currently
 instructs bumping `dateModified` on a _later_ edit, while the sitemap reads it directly — without
@@ -575,15 +600,15 @@ Start any row the day its fact lands. None blocks another.
 | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
 | GBP URL (#1)                                                                    | `sameAs` on the LocalBusiness node; GBP link on `/contact/` and `/about/`                                                                               | §5.3, §4.2 |
 | ≥5 sourced reviews (#2)                                                         | Rebuild `/reviews/`, retire the 301, `Review` + honest `AggregateRating`. **Sourced or not at all — golden rule 3.**                                    | §7.1       |
-| Certificate number (#3)                                                         | `hasCredential` on the founder; restore `הסמכות` as the heading                                                                                         | §7.3       |
-| Price confirmed (#4)                                                            | `Offer`/`PriceSpecification`; clears 🔶 on 5 routes                                                                                                     | §7.7       |
-| FLIR model (#5)                                                                 | Replace the generic equipment phrasing; author-bio line                                                                                                 | §7.3       |
-| Turnaround (#6)                                                                 | Concrete answer block on `/services/insurance-reports/`                                                                                                 | §7.7       |
+| Certificate number (#3)                                                         | ❌ **closed** — none held (Track O #3); nothing to build                                                                                                | §7.3       |
+| Price confirmed (#4)                                                            | ✅ `Offer`/`PriceSpecification` on the two priced services, 2026-11-13                                                                                  | §4.5, §7.7 |
+| FLIR model (#5)                                                                 | ✅ in `site.credentials` (2026-09-17) and the trust row (2026-11-13); an author-bio line waits on #12                                                   | §7.3       |
+| Turnaround (#6)                                                                 | ✅ the insurance answer block states it, 2026-11-13                                                                                                     | §7.7       |
 | Radius (#7)                                                                     | Unblocked location batch 4 — built 2026-10-28 with the rest of Phase B                                                                                  | §5.4       |
-| National claim (#8)                                                             | Restore the clause, or leave it removed permanently                                                                                                     | §5.4       |
-| ח.פ. (#9)                                                                       | `legalName` on the business node                                                                                                                        | §7.3       |
-| Insurance (#10)                                                                 | The signal ועדי בתים and property managers ask for                                                                                                      | §7.3       |
-| Coordinator name (#11)                                                          | `/accessibility/` currently asserts one with no name                                                                                                    | §11.2      |
+| National claim (#8)                                                             | ✅ true — the clause stays (`serviceAreaText`, `site.description`)                                                                                      | §5.4       |
+| ח.פ. (#9)                                                                       | ❌ **closed** — not a registered company (Track O #9); `legalName` is `טרמוליק`                                                                         | §7.3       |
+| Insurance (#10)                                                                 | ✅ in `site.credentials` (2026-09-17); insurer and amount still not supplied                                                                            | §7.3       |
+| Coordinator name (#11)                                                          | ❌ **closed** — none appointed; `/accessibility/` no longer asserts one                                                                                 | §11.2      |
 | Photo + consent (#12)                                                           | Author bio block on all guides                                                                                                                          | §7.5       |
 | Job references (#13)                                                            | Strengthens every city page's doorway margin                                                                                                            | §3.4       |
 | Imagery + consent (#14)                                                         | Before/after thermal gallery; case studies. Solves E-E-A-T, doorway, AEO and CRO at once. If a slider ships, WCAG 2.5.1 applies — no path-only gestures | §7.1       |
@@ -599,6 +624,10 @@ Nothing above depends on it.
 
 Decided by the user 2026-11-01. Every content page carries two or more realistic AI-made illustrations
 under one site-wide note. CLAUDE.md §15 is the rule; the `page-images-pipeline` skill is the runbook.
+
+**Status 2026-11-02 — shipped.** 63 images installed and approved by the user on the board, deployed
+2026-11-02 21:59 UTC (`d3864f7`); `gates.minPerContentPage` is `2`. Three planned slots stay empty
+after eight attempts each (CLAUDE.md §15). The "Blocked on" line below is history.
 
 **Done on 2026-11-01:** the site kit (`Figure`, `FieldStrip`, the manifest-fed `Gallery`, `/gallery/`, the
 postbuild gate, the `Container` width fix), the policy in `docs/`, the slot plan (55 renders, 27 routes), and
@@ -653,7 +682,7 @@ for `.claude/` and then tracked only the code.
 | Route counts, sitemap parity, orphans, fabrication greps, `og:image`/`og:url`, `text-ink/<70`, export size | `/qa-build-gate` — **derived assertions, not `# expect N` comments**                        |
 | Sitemap ↔ emitted tree ↔ `llms.txt` parity                                                                 | `npm run check:sitemap`                                                                     |
 | Sitemap `lastModified` vs `git log -1` on each backing file                                                | gate line                                                                                   |
-| Prettier on changed files                                                                                  | `.claude/hooks/format-changed.ps1` — a deliberate no-op until `prettier` is a devDependency |
+| Prettier on changed files                                                                                  | `.claude/hooks/format-changed.ps1` — live: `npx` finds a Prettier outside the project, though it is not a devDependency (CLAUDE.md §11) |
 
 ### Per-sprint (blocking)
 

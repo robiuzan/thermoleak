@@ -1,24 +1,28 @@
 ---
 name: new-service
-description: Add or deepen a service page the data-driven way — append to the services array in lib/services.ts so the route, the grid, the footer column, the pricing table, the form select, cross-links, schema and the sitemap all update automatically, and fill every depth field the shipped four already carry. Use when adding a service or deepening an existing one. Triggers "add a service", "new service page", "deepen the service copy", "per-service FAQ", "service page is thin".
+description: Add or deepen a service page the data-driven way — append to the services array in lib/services.ts so the route, the grid, the footer column, the pricing table, the form select, cross-links, schema and the sitemap all update automatically, and fill every depth field the shipped four already carry, including the 2026-11-13 fields (metaDescription, checklist, pricing, priceLink, featuredGuides, guides, cityLinks) and the build checks that guard them. Use when adding a service or deepening an existing one. Triggers "add a service", "new service page", "deepen the service copy", "per-service FAQ", "service page is thin".
 ---
 
 # Add or deepen a service page
 
 **Read this first: the four shipped service pages already carry the full depth model.** Each has its
 own `answer` block, `intro`, `benefits`, `steps`, an honest-`limits` section and contextual `related`
-links — the retrofit that this skill used to prescribe was completed in sprint 2. A fifth service is a
+links — the retrofit that this skill used to prescribe was completed in sprint 2 — and since
+2026-11-13 (release 1, `3492fb8`) a buyer's `checklist`, a trust row, a price link, and guide and
+city blocks where they apply. A fifth service is a
 legitimate ask; **the job is to match that bar, not to invent it.**
 
 Measured 2026-09-06 with the `docs/content-standards.md` §1 command, the four pages emit 565–661 raw
 words each (site chrome measures 116 words on `out/404.html`, and the shared `ContactCTA` roughly 113
-more — subtract before comparing to the 450 floor). Re-measure rather than quoting a number from any
-doc, including this one.
+more — subtract before comparing to the 450 floor). On the 2026-11-13 build (release 1, which added
+the checklist, trust row, guide and city blocks) all four clear 450: about 562–708 unique words
+(`<main>`, the `data-shared-block` lists stripped, minus 112 for `ContactCTA`). Re-measure rather than
+quoting a number from any doc, including this one.
 
 ## The data model — one array drives everything
 
-This is the shipped interface — copy it from `lib/services.ts`, not from memory. Every field is
-required:
+This is the shipped interface (2026-11-13) — copy it from `lib/services.ts`, not from memory. Every
+field except `guides` and `cityLinks` is required:
 
 ```ts
 // lib/services.ts
@@ -30,15 +34,22 @@ export interface Service {
   title: string; // short, for nav/cards/footer/form select
   h1: string; // the page heading AND the metadata title
   tagline: string; // one-line value statement, shown under the H1
-  summary: string; // card description AND the meta description
-  answer: ServiceFaq; // ⚠️ a { q, a } OBJECT, not a string — the AEO block, 40–60 words
+  summary: string; // card description AND Service.description in JSON-LD
+  metaDescription: string; // the meta + OG description, 150–160 chars, ends in the phone (build-checked)
+  answer: ServiceFaq; // ⚠️ a { q, a } OBJECT, not a string — the GEO snippet, 40–60 words
   intro: string[]; // page intro paragraphs
   forWho: string; // audience sentence
   benefits: string[]; // the "היתרונות עבורכם" grid
   steps: ServiceStep[]; // the numbered "איך התהליך עובד" list
   limits: ServiceLimits; // the honest "what this method cannot do" block
-  related: ServiceRelated; // the in-copy cross-link sentence
+  checklist: ServiceChecklist; // "what to check before you book" — { title, items }, 4 items on the shipped four
+  related: ServiceRelated; // the in-copy cross-link sentence (= LinkLead: lead, links, tail?)
+  pricing: "from" | "quote"; // "from" ⇒ priceModel shows ₪{site.priceFrom} and the node gets an Offer
   priceModel: string; // the sidebar price paragraph
+  priceLink: NavLink; // the sidebar link into /pricing/ (or one of its #anchors)
+  featuredGuides: string[]; // 0–3 guide slugs, in order — resolved in lib/links.ts
+  guides?: { title: string; lead: string }; // required exactly when featuredGuides is non-empty
+  cityLinks?: ServiceCityLinks; // { mode: "all", title, lead } | { mode: "places", lead, places }
   faqs: ServiceFaq[]; // 3+ — rendered as <details> AND emitted as FAQPage
   keywords: string[]; // metadata keywords
 }
@@ -57,19 +68,40 @@ export interface ServiceLimits {
   items: string[];
   outro?: string;
 }
-export interface ServiceRelated {
-  lead: string;
-  links: { label: string; href: string }[];
+export type ServiceRelated = LinkLead; // from lib/site.ts
+export interface ServiceChecklist {
+  title: string; // a different heading per service — one shared heading fails the doorway test
+  items: string[];
 }
+export type ServiceCityLinks =
+  | { mode: "all"; title: string; lead: string } // all twelve, anchor = locationTitle()
+  | { mode: "places"; lead: string; places: { place: string; city: string }[] };
 ```
+
+`guides` and `cityLinks` are optional in the type; every other field is required.
 
 **`answer` is `ServiceFaq`, not `string`.** `app/services/[slug]/page.tsx` renders `answer.q` as the
 heading and `answer.a` as the body, then folds the whole object into `faqEntities` for the `FAQPage`
 graph. Writing `answer: "…"` is a type error the build will catch, but it is a wasted cycle.
 
-Note `h1` doubles as the metadata `title` and `summary` doubles as the meta `description`. Write both to
-serve both jobs — `h1` under ~60 rendered characters with the brand appended, `summary` at 150–160
-characters. See `/seo-metadata`.
+Note `h1` doubles as the metadata `title` — under ~60 rendered characters with the brand appended. The
+meta description is **`metaDescription`**, not `summary` (since 2026-11-13, finding SEO-03): `summary`
+is the 85–92-character card blurb and the `Service` node's description, and it used to do both jobs.
+See `/seo-metadata`.
+
+**The build checks at the bottom of `lib/services.ts`** (module scope, so `npm run build` fails on
+them):
+
+- `metaDescription` is 150–160 characters after interpolation.
+- `pricing` agrees with `priceModel`: `"from"` must show `₪${site.priceFrom}`; `"quote"` must show no
+  ₪ figure at all.
+- `guides` is present exactly when `featuredGuides` is non-empty.
+- No sentence of 30+ characters in an `answer` or a `checklist` appears on two services — literal
+  reuse is the doorway pattern (content-standards §2).
+- `heroPicker` names each service exactly once.
+
+`lib/links.ts` adds the link checks: every `related` and `priceLink` href is a real route with its
+trailing slash, and every `featuredGuides` slug and `cityLinks` city exists.
 
 `icon` must be a real `LucideIcon` imported at the top of the file; `getService()` and `serviceSlugs`
 are derived from the array, so nothing else needs registering.
@@ -81,16 +113,24 @@ Adding an entry gives you, with no other edits: the `/services/{slug}/` route vi
 `/pricing/`, which renders `priceModel` · the footer services column · the `<select>` in `ContactForm`
 · the related-services strip on every other service page · the sitemap entry via `services`, dated
 from its own `lastModified` (set it to the first deploy day; when **deepening** a service, bump it in
-the same commit — since 2026-10-19, backlog §1.3) · `Service` + `FAQPage` + `BreadcrumbList` JSON-LD.
+the same commit — since 2026-10-19, backlog §1.3) · `Service` + `FAQPage` + `BreadcrumbList` JSON-LD,
+plus an `Offer` when `pricing` is `"from"` · the `TrustRow` under the answer block · the city links
+its `cityLinks` names and the guides block its `featuredGuides` names (both resolved in
+`lib/links.ts`).
 
 That is a well-built data layer. Use it rather than adding a bespoke page.
 
-**What does NOT follow automatically** — two hand-maintained lists a fifth service is silently absent
-from until you edit them:
+**What does NOT follow automatically** — hand-maintained lists a fifth service is absent from until
+you edit them:
 
+- `heroPicker.items` in the same file — the hero's «מה הבעיה?» selector. **The build fails** until the
+  new service is in it (each service exactly once), with a problem-first `label` and the key
+  `service:`, never `slug:` (`live.config.mjs` reads `slug: "…",` lines as page boundaries).
 - `serviceChooser.cases` in the same file. It is the homepage symptom-to-service decision aid, and each
   case is a hand-written symptom with a literal `href`. A new service needs its own case, written from
-  the symptom the customer arrives with — not from the service name.
+  the symptom the customer arrives with — not from the service name. Silently absent otherwise.
+- `servicesHub.intro` in `lib/hubs.ts` — the `/services/` hub prose names the four services in one
+  sentence with in-copy links. Silently absent otherwise.
 - `public/llms.txt`, which lists the four `/services/` URLs by hand under `## שירותים / Services`.
 
 ## The depth bar
@@ -107,7 +147,11 @@ do these; read one before writing, and match it:
   hide one. This is the `limits` field, and it is filled on all four — see
   `lib/services.ts` → `limits.title` `מה מצלמה תרמית לא רואה` for the model.
 - **What the visit actually includes** — how long, what gets scanned, what the customer needs to do
-  beforehand (e.g. run the system, avoid direct sun on the facade), what they receive at the end.
+  beforehand (e.g. run the system, avoid direct sun on the facade), what they receive at the end. A
+  leak or moisture visit gives the findings **verbally, on site**; a written report is ordered and
+  priced separately (business-facts §H, 2026-11-13). Never write "a report at the end of every visit".
+- **What to check before booking** — the `checklist`: four pieces of buyer's advice specific to this
+  service, under its own heading. Advice, never a credential the business lacks.
 - **What changes the price** — property size, number of suspected sources, access, whether a report is
   needed. This lives in `priceModel`.
 - **What happens next** — the site is explicit that it locates rather than repairs. Saying who does the
@@ -122,11 +166,24 @@ do these; read one before writing, and match it:
 
 1. Add the entry to `services` (new service) — array order drives grid and footer order, so put it
    where it belongs commercially.
-2. Fill every field. `summary` and `h1` do double duty as metadata; write them for both.
-3. Write the `answer` block: **40–60 words under a question-form `q`** (`docs/content-standards.md`
-   §5). The route already renders it first in the DOM, above `intro`, and folds it into the `FAQPage`
-   graph — so the `q` has to be a question a person would actually type, and the `a` has to be complete
-   in its first sentence.
+2. Fill every field. `h1` doubles as the title; `metaDescription` is the description (150–160,
+   keyword-map §5: what + `site.address.regionPrefixed`, one true differentiator, then
+   `חייגו ${site.phone.display}`); `summary` stays the card blurb. The 2026-11-13 fields:
+   `checklist` (4 items, its own heading); `pricing` (`"from"` only where the visible price is the ₪350
+   start — whether ₪350 is also the floor for a panel scan or a report is still 🔶, business-facts §H,
+   so those two are `"quote"`); `priceLink` (into `/pricing/` or its `#visit-scope` / `#price-factors`
+   anchor); `featuredGuides` (0–3 slugs) and `guides` when there are any; `cityLinks` only if the city
+   pages genuinely serve this service — `"all"` for one every city page discusses, `"places"` (a place
+   inside a city, as electrical does) for a few, none for a document like the insurance report.
+3. Write the `answer` block as the **GEO snippet: 40–60 words under a question-form `q`**
+   (`docs/content-standards.md` §5). The first sentence names the brand (`site.nameHe`), the service
+   and the region (`site.address.regionPrefixed`, never `ב${region}`); then what the visit includes
+   (compose from `site.visitScope`, never reorder it), the price (`site.priceFrom`) or the cost-model
+   sentence, and a timeframe only where one is confirmed (`site.reportTurnaroundDays`). Every fact is
+   interpolated, because the answer joins `FAQPage`. The route renders it first in the DOM, above
+   `intro`; the `q` must be a question a person would type, and must not be a query a guide owns (the
+   water, moisture and insurance questions changed on 2026-11-13 for exactly that reason). The shipped
+   four measure 57–60 words — at the top of the band.
 4. Write **3–5 service-specific FAQs**. They render in native `<details>/<summary>` and are emitted as
    `FAQPage`, so the copy and the schema come from one place — keep it that way.
 5. Add a new image to `public/images/services/`, and a line for it in `NON_CONTENT_IMAGES` in
@@ -137,8 +194,9 @@ do these; read one before writing, and match it:
 6. Fill `related`: a `lead` sentence plus 2–3 links to sibling services with descriptive Hebrew anchors
    (`/internal-linking`). All four shipped services do this; a bare "see also" list is not the pattern.
 7. Confirm the metadata: `h1` as the title with **no second brand token** (the layout template appends
-   it), `summary` as the description, `alternates.canonical` with a trailing slash.
-8. Add the `serviceChooser` case and the `public/llms.txt` line — the two lists that do not derive.
+   it), `metaDescription` as the description, `alternates.canonical` with a trailing slash.
+8. Add the `heroPicker` item, the `serviceChooser` case, the `servicesHub.intro` link and the
+   `public/llms.txt` line — the lists that do not derive.
 9. `npm run lint && npm run build`, then `npm run check:sitemap`.
 10. Verify the route exists in `out/` **and** in `out/sitemap.xml`, and that `<title>` carries the brand
     exactly once.
@@ -150,12 +208,17 @@ do these; read one before writing, and match it:
 - A new service changes `services.length`, which changes the related-services strip on **every** service
   page — currently `filter(s => s.slug !== current)` returns all others. At 4 that's a 3-card row; at 8
   it needs a relevance map and a slice.
-- `ContactForm`'s `initialState` uses `services[0].title`, so reordering the array changes the form's
-  default selection.
-- **Never restate a price as a literal.** `priceModel` on two shipped services hardcodes `₪450` instead
-  of interpolating `site.priceFrom` the way `lib/pricing.ts` does — a live golden-rule-2 defect, not the
-  pattern to copy. Interpolate, and remember the number itself is still 🔶 unconfirmed
-  (`docs/business-facts.md` §C).
+- `ContactForm`'s default selection is `serviceOptions[0]`, and `ContactCTA` builds `serviceOptions`
+  from `services` in array order, so reordering the array changes the form's default. `ContactForm` is
+  a client component and takes the titles as a prop since `51c884d` — never import `lib/services.ts`
+  (or `lib/links.ts`) into it, or every service's copy ships as JavaScript again.
+- **Never restate a price as a literal.** The shipped `priceModel`s and answers interpolate
+  `site.priceFrom` (₪350, confirmed 2026-09-17, business-facts §C); the `₪450` literals were removed in
+  `4beb407`. The `pricing` check now catches a priced service whose sidebar lost its ₪ figure, and a
+  quoted service that gained one.
+- Never claim the insurer accepts a report («קביל», «מקובל/מתקבל בחברות הביטוח») — not documented,
+  and the decision is the insurer's (business-facts §H). The electrician licence is stated in text on
+  the panel page only, never as a badge, a level or a number (§H).
 - Never invent durations, materials, certifications, equipment models or prices. Unverified →
   `// 🔶 confirm` + `docs/business-facts.md`.
 - Four services with genuine depth beat eight that paraphrase each other.
@@ -164,7 +227,10 @@ do these; read one before writing, and match it:
 
 - [ ] Entry complete — every field including `answer`, `limits` and `related` — with a valid
       `LucideIcon` and an SVG in `public/images/services/`.
-- [ ] `answer` is a `{ q, a }` object, 40–60 words, complete in the first sentence.
+- [ ] `answer` is a `{ q, a }` object, 40–60 words, complete in the first sentence, naming the brand,
+      the service and the region.
+- [ ] `metaDescription`, `checklist`, `pricing`, `priceLink`, `featuredGuides` (+ `guides`) and, where
+      it fits, `cityLinks` filled; the build's checks pass.
 - [ ] ≥450 unique body words, re-measured rather than assumed.
 - [ ] `limits` states what the method cannot detect, not only what it can.
 - [ ] 3–5 service-specific FAQs, all rendered on the page.
@@ -172,8 +238,9 @@ do these; read one before writing, and match it:
 - [ ] `related` carries a lead sentence and 2–3 descriptive in-copy anchors.
 - [ ] Passes the service-name substitution test.
 - [ ] `Service` + `FAQPage` + `BreadcrumbList` emitted.
-- [ ] `serviceChooser` case added; `public/llms.txt` updated.
+- [ ] `heroPicker` item, `serviceChooser` case and `servicesHub.intro` link added; `public/llms.txt`
+      updated.
 - [ ] Present in `out/` and `out/sitemap.xml`; `npm run check:sitemap` passes; `<title>` carries the
       brand exactly once.
 
-**Images.** A new service needs its slots in `content/images/plan.json`. While `gates.minPerContentPage` is `0` it ships without them; once that gate is `2`, it needs two approved images first (the `page-imagery` and `page-images-pipeline` skills).
+**Images.** A new service needs its `main`, `detail` and `work` slots in `content/images/plan.json`. `gates.minPerContentPage` is `2` in the manifest, so it does not ship until two approved images are installed for it (the `page-imagery` and `page-images-pipeline` skills).

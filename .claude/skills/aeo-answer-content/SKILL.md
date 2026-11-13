@@ -1,6 +1,6 @@
 ---
 name: aeo-answer-content
-description: Answer-engine and LLM-citability layer for thermoleak — question-form H2s with a 40–60 word extractable answer first (on all four services, all 12 city pages, /pricing/ and three guides), definition and comparison blocks, the hand-maintained llms.txt and the parity check that keeps it inside the sitemap, verifying the live Cloudflare-served robots.txt rather than trusting app/robots.ts, and the freshness signals the guides now carry. Use when optimizing a page to be quoted by AI Overviews, ChatGPT or Perplexity. Triggers "AEO", "GEO", "AI Overviews", "llms.txt", "will an LLM cite this", "answer block", "AI crawlers".
+description: Answer-engine and LLM-citability layer for thermoleak — question-form H2s with a 40–60 word extractable answer first (on all four services, all 12 city pages, /pricing/ and three guides; the service and /pricing/ answers name the brand and the region since 2026-11-13), definition, comparison and buyer's-checklist blocks, the hand-maintained llms.txt and the parity check that keeps it inside the sitemap, verifying the live Cloudflare-served robots.txt rather than trusting app/robots.ts, and the freshness signals the guides now carry. Use when optimizing a page to be quoted by AI Overviews, ChatGPT or Perplexity. Triggers "AEO", "GEO", "AI Overviews", "llms.txt", "will an LLM cite this", "answer block", "AI crawlers".
 ---
 
 # Answer-engine optimization
@@ -72,11 +72,30 @@ so each city page emits 3 `Question`s — and the visible answer and the marked-
 string by construction.
 
 So the job here is **matching the shipped pattern, not introducing it** — and holding the 40–60 word
-band, which is the part that drifts. Measure the words; don't eyeball it.
+band, which is the part that drifts. Measure the words; don't eyeball it. On the 2026-11-13 build the
+four service answers measure 57–60 words (at the top of the band), `/pricing/` 44.
+
+**The service answer is the GEO snippet (release 1, 2026-11-13).** On a commercial page the first
+sentence names the **brand** (`site.nameHe`), the **service** and the **region**
+(`site.address.regionPrefixed` — «בגוש דן והמרכז», never `ב${region}`), so a lifted sentence still
+says who does what where. Then, in order: what the visit includes (composed from `site.visitScope`,
+never reordered), the price (`site.priceFrom`) or the cost-model sentence, and a timeframe only where
+one is confirmed (`site.reportTurnaroundDays`). `pricing.answer` on `/pricing/` carries the same
+brand-and-region tie. City answers name the city instead; guide answers answer the question and need
+no brand. Every fact is interpolated, because the answer is also the first `FAQPage` entity.
+
+What an answer must never say (business-facts §H, 2026-11-13): that an insurer accepts the report
+(«קביל», «מקובל/מתקבל בחברות הביטוח» — not documented); that a report comes with every visit (a
+visit gives the findings verbally; a written report is ordered separately). «כשעה» is published on
+the water page but its source is still an open §H row — don't spread it to a new answer. And a service
+answer's question must not be a query a guide owns: the water, moisture and insurance questions changed
+on 2026-11-13 because they collided with guide queries.
 
 Other liftable shapes worth using: a **definition** ("בדיקה תרמוגרפית היא…"), a **comparison table**
-(תרמוגרפיה מול איתור אקוסטי מול מד לחות — what each detects, cost, when it fails), and a **spec list**
-(which wall and floor types the method works on).
+(תרמוגרפיה מול איתור אקוסטי מול מד לחות — what each detects, cost, when it fails), a **spec list**
+(which wall and floor types the method works on), and a **buyer's checklist** — every service page
+carries one since 2026-11-13 (`checklist` in `lib/services.ts`: four items under a heading of its own
+per service, and the build refuses a 30+-character sentence two services share).
 
 **Rendering rules:** the answer must be in the HTML at first paint — not behind a tab, not
 client-fetched. This site already passes on FAQs: both `components/Faq.tsx` and the per-service FAQ
@@ -96,16 +115,25 @@ with a number. This category rewards technical honesty. Half of it now ships (ba
 - **תרמוגרפיה מול איתור אקוסטי מול מד לחות** — the three-method comparison table in
   `/guides/find-leak-without-breaking/` (what each suits, what each cannot do).
 - **What changes the price of a visit** — `/pricing/` (the factors block) plus
-  `/guides/leak-detection-cost/` and its tables.
+  `/guides/leak-detection-cost/` and its tables; the two now link each other (2026-11-13).
+- **What to check before you book** — the four service checklists (2026-11-13). The insurance one
+  covers the policy's prior-notice condition, asking the insurer what it needs, findings verified by a
+  second measurement, and access to the neighbours' side.
 
-❌ **Still unwritten** — these are the remaining gate-3 topics, and where a new guide should go:
+❌ **Still unwritten** — these are the remaining gate-3 topics, and where a new guide should go. As of
+2026-11-13 the first two are drafted for release 2 of the GEO plan (branch `geo-guides`, waiting on six
+images and the owner's approvals) and the third is the next wave — **none has shipped**:
 
 - **Why the damp stain is usually not directly beneath the leak** — water tracks along pipes, slabs and
-  porous walls. Fragments exist inside two existing pages, but no page owns the question.
-- **What an insurer actually requires in a report**, and what gets a claim rejected. One sentence in a
-  guide today; `/services/insurance-reports/` is the natural home for the full treatment.
-- **Electrical thermography intervals.** The "under load" point and hotspot severity are already on
-  `/services/electrical-thermography/`; how often a panel should be rescanned is not.
+  porous walls. Fragments exist inside two existing pages, but no page owns the question (drafted:
+  `stain-not-above-leak`).
+- **What an insurer actually requires in a report**, and what gets a claim rejected or reduced. The
+  insurance page now has the checklist above and says plainly that the decision is the insurer's; the
+  full treatment is a guide (drafted: `water-damage-insurance-claim`), so the service page keeps «מה
+  מקבלים כשמזמינים דו״ח».
+- **Electrical thermography intervals.** The "under load" point, hotspot severity and (since
+  2026-11-13) who may perform the scan are on `/services/electrical-thermography/`; how often a panel
+  should be rescanned is not. That is the panel guide, the next wave's first item.
 
 These are also the Tier-3 keyword targets in `docs/keyword-map.md` §2 and the natural spine of the
 `/guides/` hub. One genuinely useful comparison table earns more citations than ten reassuring pages.
@@ -121,7 +149,7 @@ Two standing rules:
 
 - **Bump `dateModified` whenever you substantively edit an article.** Nothing enforces it, and the
   sitemap will keep advertising the old date. Same for the hand-maintained per-route dates in
-  `app/sitemap.ts`.
+  `staticRoutes` (`lib/site.ts` since 2026-11-01; `app/sitemap.ts` reads them).
 - **Never invent an author.** `author` is deliberately **optional** on `Article`, so an article by
   someone unnamed publishes unattributed rather than borrowing a name. A fabricated byline is a worse
   trust signal than an absent one, and this site already paid to remove six fabricated customers.
@@ -135,6 +163,12 @@ visitor or an assistant can check** — that is the top open trust gap, blocked 
 Profile URL (`docs/business-facts.md` §B), not a defect to re-report each pass. Name, phone, service
 area and description must be identical across the schema, the visible copy, and every off-site profile
 once they exist. See `/local-seo-il` §2.
+
+The on-site entity text was aligned on 2026-11-13: `site.description` (the `LocalBusiness`
+description, the default meta description, and the text to paste into a future Business Profile) and
+`site.pitch` (the hero's visible entity line, under the slogan H1) both open with «טרמוליק —» and name
+the service and גוש דן והמרכז; neither promises a guarantee, an insurer's acceptance or a report with
+every visit. `public/llms.txt` was brought into line the same day.
 
 ## llms.txt
 
@@ -154,6 +188,8 @@ same commit as the route.
 - [ ] Live `robots.txt` **fetched** and the AI-crawler stance recorded, not assumed.
 - [ ] Every service, city, guide and `/pricing/` opens with a 40–60 word answer block under a
       question heading — **counted**, not eyeballed.
+- [ ] A service or `/pricing/` answer names the brand, the service and the region in its first
+      sentence, with every fact interpolated from `lib/site.ts`.
 - [ ] Answers ship in the HTML at first paint (native `<details>`, never client-conditional).
 - [ ] Each answer is comprehensible with zero surrounding context.
 - [ ] At least one comparison or limits table exists that a competitor doesn't have.

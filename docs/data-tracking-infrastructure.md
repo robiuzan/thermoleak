@@ -100,13 +100,24 @@ whenever an ID is set or changed, and again after deploy.
 
 Click tracking reads the `data-cta` attribute — **no JS ships for it**, which is why the attribute
 is load-bearing. **This list is the single inventory**; [ux-cro-security.md](ux-cro-security.md) §1
-points here rather than keeping a second copy. Nineteen distinct values ship — eleven written
-literally in `components/`, eight passed through `CtaButton`'s `dataCta` prop:
+points here rather than keeping a second copy. Twenty-four distinct values ship — twelve written
+literally in `components/`, eight passed through `CtaButton`'s `dataCta` prop, and four built by one
+template in `components/Hero.tsx` (`hero-pick-${item.service}`, one per entry of `heroPicker` in
+`lib/services.ts`):
 
-`header-call` · `menu-call` · `hero-call` · `hero-whatsapp` · `sticky-call` · `sticky-whatsapp` ·
-`service-call` · `service-form` · `pricing-call` · `pricing-whatsapp` · `finalcta-call` ·
-`finalcta-whatsapp` · `finalcta-email` · `form-whatsapp` · `footer-call` · `footer-whatsapp` ·
-`footer-email` · `thankyou-call` · `thankyou-whatsapp`
+`header-call` · `menu-call` · `hero-call` · `hero-whatsapp` · `hero-emergency-call` ·
+`hero-pick-water-leak-detection` · `hero-pick-moisture-detection` ·
+`hero-pick-electrical-thermography` · `hero-pick-insurance-reports` · `sticky-call` ·
+`sticky-whatsapp` · `service-call` · `service-form` · `pricing-call` · `pricing-whatsapp` ·
+`finalcta-call` · `finalcta-whatsapp` · `finalcta-email` · `form-whatsapp` · `footer-call` ·
+`footer-whatsapp` · `footer-email` · `thankyou-call` · `thankyou-whatsapp`
+
+The five hero values were added 2026-11-13 (GEO release 1). `hero-emergency-call` is a second `tel:`
+link in the hero, the out-of-hours line (`site.emergencyNote`), on the same number as `hero-call`.
+The four `hero-pick-*` are plain links to the service pages, not contact actions, so a click report
+must not count them with calls. A grep of `components/` finds their template, not the four values;
+`out/index.html` carries all four. The in-copy links and city chips added the same day carry no
+`data-cta`.
 
 Any new CTA without one is an incomplete CTA — the click becomes permanently invisible.
 
@@ -399,7 +410,7 @@ today "check the reports" means a DevTools console on a preview deploy, not a co
 - [x] Container decision recorded (§2 + business-facts §F), with the CWV trade-off stated.
 - [x] GA4 property exists for this domain — resolved inside the container by hostname.
 - [x] `gtm.js` verified 200.
-- [x] Every CTA carries `data-cta`; no orphan CTAs — 19 values, §4.
+- [x] Every CTA carries `data-cta`; no orphan CTAs — 24 values, §4.
 - [x] **At least one event beyond `page_view` is pushed from code** — three are: `lead_whatsapp_open`,
       `lead_handoff_blocked`, `thank_you_view` (§1, `lib/analytics.ts`).
 - [ ] **At least one of them reaches GA4.** A push with no container trigger behind it is not a

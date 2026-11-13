@@ -105,15 +105,18 @@ export default function ServicesPage() {
             })}
           </div>
 
-          <div className="mx-auto mt-12 max-w-4xl">
-            <LinkedText text={servicesHub.more} />
+          {/* Under its own heading, so the prose is not filed under the last card's h2. */}
+          <section aria-labelledby="hub-more" className="mx-auto mt-12 max-w-4xl">
+            <h2 id="hub-more" className="text-xl font-bold text-brand">
+              {servicesHub.moreTitle}
+            </h2>
+            <LinkedText text={servicesHub.more} className="mt-3" />
             <CityChips
-              title={servicesHub.cities.title}
               lead={servicesHub.cities.lead}
               links={allCityLinks()}
-              className="mt-8"
+              className="mt-6"
             />
-          </div>
+          </section>
 
           <p className="mt-10 text-center text-ink/70">
             לא בטוחים איזה שירות מתאים לכם? התקשרו{" "}

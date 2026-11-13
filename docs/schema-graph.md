@@ -9,7 +9,8 @@ no external SEO kit): `localBusinessJsonLd` · `webSiteJsonLd` · `serviceJsonLd
 
 **Status verified against the build of 2026-09-06** — 22 `index.html` files, 19 of them in
 `sitemap.xml`; route counts are re-stated for the 2026-11-01 build — 32 `index.html` files, 29 in
-`sitemap.xml`. Every ✅/❌ below was read out of `out/`, not inferred from the source. When this file
+`sitemap.xml` — and re-verified on the 2026-11-13 build of `3492fb8`, which added the `Offer` (§7a)
+and fixed LOC-11 (§5). Every ✅/❌ below was read out of `out/`, not inferred from the source. When this file
 and a fresh `out/` disagree, `out/` wins and this file gets fixed in the same commit.
 
 ---
@@ -22,10 +23,10 @@ Stable `@id`s let nodes reference each other instead of repeating themselves.
 | -------------------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------- |
 | The business         | `https://thermoleak.co.il/#business`                 | ✅ emitted on all 32 pages                                                         |
 | The website          | `https://thermoleak.co.il/#website`                  | ✅ emitted on all 32 pages                                                         |
-| A service            | `https://thermoleak.co.il/services/{slug}/#service`  | ✅ `lib/jsonld.ts:69`                                                              |
-| A location's service | `https://thermoleak.co.il/locations/{slug}/#service` | ✅ `lib/jsonld.ts:94`                                                              |
-| An article           | `https://thermoleak.co.il/guides/{slug}/#article`    | ✅ `lib/jsonld.ts:172`                                                             |
-| A page / hub node    | `{pageUrl}#page`                                     | ✅ `lib/jsonld.ts:135` — see §2 for which pages                                    |
+| A service            | `https://thermoleak.co.il/services/{slug}/#service`  | ✅ `lib/jsonld.ts:75`                                                              |
+| A location's service | `https://thermoleak.co.il/locations/{slug}/#service` | ✅ `lib/jsonld.ts:120`                                                             |
+| An article           | `https://thermoleak.co.il/guides/{slug}/#article`    | ✅ `lib/jsonld.ts:204`                                                             |
+| A page / hub node    | `{pageUrl}#page`                                     | ✅ `lib/jsonld.ts:167` — see §2 for which pages                                    |
 | The founder          | `https://thermoleak.co.il/about/#founder`            | ✅ on `LocalBusiness.founder` **and** on `Article.author` (SD-5 closed 2026-10-28) |
 | A page's breadcrumb  | `{pageUrl}#breadcrumb`                               | ❌ breadcrumbs still have no `@id`                                                 |
 
@@ -47,19 +48,20 @@ concatenating URLs by hand.
 
 ## 2. Node per route type
 
-Required = what this spec demands. Emitted = what the 2026-09-06 build actually contains.
+Required = what this spec demands. Emitted = what the 2026-09-06 build actually contained,
+re-checked against the 2026-11-13 build.
 
 | Route                         | Required                                                | Emitted today                                                                               |
 | ----------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
 | every page (root layout)      | `LocalBusiness` + `WebSite`                             | ✅ both, 32/32 pages                                                                        |
 | `/`                           | + `FAQPage` from `generalFaqs`                          | ✅ **10** questions (the 10th is the guarantee, added 2026-10-28); no breadcrumb, by design |
 | `/services/`                  | `CollectionPage` + `BreadcrumbList`                     | ✅ both                                                                                     |
-| `/services/{slug}/` ×4        | `Service` + `FAQPage` + `BreadcrumbList`                | ✅ all three (FAQPage = `answer` + 3 `faqs`)                                                |
+| `/services/{slug}/` ×4        | `Service` + `FAQPage` + `BreadcrumbList`                | ✅ all three (FAQPage = `answer` + 3 `faqs`); `Offer` on water-leak and moisture only (§7a) |
 | `/guides/`                    | `CollectionPage` + `BreadcrumbList`                     | ✅ both                                                                                     |
 | `/guides/{slug}/` ×3          | `Article` + `FAQPage` + `BreadcrumbList`                | ✅ all three; `Article.image` ❌ (SD-6, §7b)                                                |
 | `/locations/`                 | `CollectionPage` + `BreadcrumbList`                     | ✅ both                                                                                     |
 | `/locations/{city}/` ×12      | `Service` + `areaServed` + `FAQPage` + `BreadcrumbList` | ✅ all four — see §5                                                                        |
-| `/pricing/`                   | `FAQPage` + `BreadcrumbList`                            | ✅ both (FAQPage = `answer` + 4 `faqs`)                                                     |
+| `/pricing/`                   | `FAQPage` + `BreadcrumbList`                            | ✅ both (FAQPage = `answer` + 3 `faqs`)                                                     |
 | `/about/`                     | `AboutPage` + `BreadcrumbList`                          | ✅ both; the `Person` is the global `founder`                                               |
 | `/gallery/`                   | `CollectionPage` + `BreadcrumbList`                     | ✅ both; **no `ImageObject`**, by policy (CLAUDE.md §15)                                    |
 | `/contact/`                   | `ContactPage` + `BreadcrumbList`                        | ✅ both                                                                                     |
@@ -74,7 +76,7 @@ sourced reviews (§4.1).
 ### 2a. The page-node convention
 
 A page gets a `#page` node (`AboutPage` / `ContactPage` / `CollectionPage`, all built by the private
-`pageNode` helper at `lib/jsonld.ts:131`) **only when it has no other content node to carry it**. Hub
+`pageNode` helper at `lib/jsonld.ts:163`) **only when it has no other content node to carry it**. Hub
 and narrative pages qualify; a page already emitting `Service`, `Article` or `FAQPage` does not.
 
 So `/pricing/` carrying `FAQPage` and no `#page` node is a **decision, not a gap** — the same reason
@@ -141,14 +143,15 @@ These are correctness rules, not preferences. Getting them wrong is worse than e
 
 1. **`Review` and `AggregateRating` ship only when the reviews are real and publicly verifiable.**
    This is a standing prohibition, and **the gate currently passes** — `aggregateRating`, `Review`,
-   `sameAs` and `GeoCoordinates` each return **zero files** across the 31-page export. It did not
+   `sameAs` and `GeoCoordinates` each return **zero files** across the 32-page export. It did not
    always: until 2026-08-17 the business node carried a 4.9/6 `aggregateRating` computed from six
    invented testimonials in a `lib/reviews.ts` that no longer exists. An invented rating is a Google
    policy violation and a Rich Results failure. The only thing that unblocks the node is real, sourced
    reviews on a public profile (business-facts §B). **Do not seed sample data "to test the markup",
    and do not treat the historical breach as precedent.**
 2. **Schema must match what the user sees.** A `FAQPage` question that isn't rendered is a violation.
-   Any `Offer` price must equal the visible price text. Never mark up hidden content.
+   Any `Offer` price must equal the visible price text. Never mark up hidden content. The two
+   `Offer`s shipped 2026-11-13 do: `minPrice` 350 sits on the same page as the visible «החל מ-₪350».
 3. **`FAQPage` only where FAQs are visible, and always derived from the same array the page renders.**
    Twenty-one pages qualify: `/`, the 4 services, the 3 guides, the 12 locations and `/pricing/`. Each
    builds `mainEntity` from the same typed data the DOM renders — `generalFaqs`, `service.answer` +
@@ -156,11 +159,11 @@ These are correctness rules, not preferences. Getting them wrong is worse than e
    schema cannot drift from the copy. The service, pricing and homepage FAQs use native
    `<details>/<summary>`, which keeps every answer in the DOM, merely collapsed; a client-state
    accordion that conditionally renders answers would break this rule. Keep the `<details>` pattern.
-4. **Never emit an empty `FAQPage`.** `faqPageJsonLd` has no empty guard, so an empty array ships
+4. **Never emit an empty `FAQPage`.** An empty array would ship
    `{"@type":"FAQPage","mainEntity":[]}` — a page type the page is not, and a Rich Results failure.
-   `/locations/{city}/` gates the call on `location.faqs.length > 0`; `/guides/{slug}/` does **not**,
-   so a future article with neither an `answer` nor a `faq` block would ship one (SD-8, §7b). Not live
-   today — all three guides carry both blocks.
+   Since 2026-10-28 the guard is central (SD-8 closed): `faqPageJsonLd` returns `null` for an empty
+   list and `<JsonLd>` renders nothing for `null`, so no route has to remember it. Zero files carry
+   `"mainEntity":[]` on the 2026-11-13 build.
 5. **No dangling `@id`s.** `serviceJsonLd` wires `provider` to `${site.domain}/#business`, which the
    root layout always emits; `articleJsonLd` wires `publisher` to the same node; the `pageNode` helper
    wires `isPartOf` → `#website` and `about` → `#business`. Every reference in the graph resolves.
@@ -176,14 +179,18 @@ These are correctness rules, not preferences. Getting them wrong is worse than e
 
 The silo exists: `/locations/` plus **twelve** city pages, one per service area — תל אביב, חולון and
 בת ים since 2026-08-30, the other nine added 2026-10-28 with their sources in
-`location-sources/{slug}.md`. Built by `locationServiceJsonLd` (`lib/jsonld.ts:83`).
+`location-sources/{slug}.md`. Built by `locationServiceJsonLd` (`lib/jsonld.ts:108`).
 
 Each location page emits, and every new one must:
 
-- **`Service`** — `@id` `{url}#service`, `name: "איתור נזילות {prefixed}"`,
+- **`Service`** — `@id` `{url}#service`, `name: "איתור נזילות {prefixed}"` (from `locationTitle()`),
   `serviceType: "איתור נזילות"`, `description: location.answer.a`, `url`,
   `provider: { "@id": ".../#business" }`,
-  `areaServed: { "@type": "City" | "AdministrativeArea", name }`. ✅ all twelve.
+  `areaServed: { "@type": "City" | "AdministrativeArea", name }`. ✅ all twelve. The `name` is
+  `areaServedName ?? name` since 2026-11-13 (LOC-11 fixed): Tel Aviv emits `תל אביב-יפו`, the same
+  string as `LocalBusiness.areaServed`, while its visible name stays `תל אביב`. All twelve match the
+  business node byte for byte, and `lib/links.ts` fails the build on a schema name that is not in
+  `site.serviceAreas`.
 - **`BreadcrumbList`** — `בית › אזורי שירות › {city}`, emitted by `PageHero` (§2b). ✅ all twelve.
 - **`FAQPage`** from `[location.answer, ...location.faqs]` (changed 2026-10-28). ✅ all twelve, **3
   questions each**. The empty-array gate moved INTO `faqPageJsonLd`, which returns `null` for an
@@ -229,7 +236,7 @@ four service pages, which is correct.
 
 ## 6. Article schema — shipped 2026-08-24
 
-`/guides/` plus **three** articles. Built by `articleJsonLd` (`lib/jsonld.ts:160`).
+`/guides/` plus **three** articles. Built by `articleJsonLd` (`lib/jsonld.ts:192`).
 
 | Property           | Required | Emitted today                                                         |
 | ------------------ | -------- | --------------------------------------------------------------------- |
@@ -239,7 +246,7 @@ four service pages, which is correct.
 | `url`              | yes      | ✅                                                                    |
 | `datePublished`    | yes      | ✅ ISO date from `lib/articles.ts`                                    |
 | `dateModified`     | yes      | ✅ ISO date from `lib/articles.ts`                                    |
-| `author`           | yes      | ✅ `Person` with the **confirmed** founder name — but no `@id` (SD-5) |
+| `author`           | yes      | ✅ `Person`, the **confirmed** founder, `@id` `about/#founder` (SD-5) |
 | `publisher`        | yes      | ✅ `@id` → `#business`                                                |
 | `mainEntityOfPage` | yes      | ✅                                                                    |
 | `inLanguage`       | yes      | ✅ (in-domain here — `Article` is a `CreativeWork`)                   |
@@ -252,15 +259,16 @@ the real, confirmed byline (business-facts §A) — do not strip it as a suspect
 
 **On `image`.** This spec requires it and the builder omits it, which is the one place §2's table shows
 a required property missing. The resolution is `image: "${site.domain}/og.png"` — the site's own
-existing 1200×630 asset, so nothing is fabricated — paired with the same `/og.png` being restored to
-each guide's `openGraph.images`, which the page-level `generateMetadata` currently drops. Until real
+existing 1200×630 asset, so nothing is fabricated. The `openGraph.images` half is done: since
+`pageOpenGraph()` (2026-09-17) every guide carries `og:image` `/og.png`, as do the other dynamic
+routes (19 of 19 on the 2026-11-13 build). Until real
 job photography exists, `/og.png` is the honest source; do **not** reference a photo the site does not
 own. **A page image is never the answer here:** a rendering stays out of JSON-LD and `og:image` by policy
 (CLAUDE.md §15), even once the guides carry one. This needs a code change (§7b).
 
 Deriving `FAQPage` from the typed blocks via `articleFaqs()` rather than authoring it separately is what
 keeps rule §4.2 from breaking as copy is edited — the same property the `<details>`-based service FAQs
-already have. Note the missing empty-array guard on this route (§4.4).
+already have. The empty-array guard this route lacked is central since 2026-10-28 (§4.4).
 
 ---
 
@@ -270,28 +278,33 @@ already have. Note the missing empty-array guard on this route (§4.4).
 
 | Node                           | Where                        | Blocked on                                                   |
 | ------------------------------ | ---------------------------- | ------------------------------------------------------------ |
-| `Offer` / `PriceSpecification` | `Service` nodes, `/pricing/` | business-facts §C — the ₪350 base is **unconfirmed**         |
+| `Offer` / `PriceSpecification` | the electrical and insurance `Service` nodes | business-facts §H — whether ₪350 is also their floor is **open**; both are priced per job |
 | `Review` / `AggregateRating`   | the business node            | business-facts §B — no sourced public reviews exist (§4.1)   |
 | `sameAs`                       | the business node            | business-facts §B — no confirmed Google Business Profile URL |
 | `geo`                          | the business node            | business-facts §E — no real operating base to state          |
 
-**On the `Offer`.** The ₪350 figure is already visible in the copy (`lib/pricing.ts`,
-`lib/services.ts`), carried under a `🔶 confirm` marker. Restating an unconfirmed number in
-machine-readable form makes it harder to retract and is exactly what §4.2 warns about, so the node
-stays out. **Do not write this node "and confirm the price later"** — the sequence is: owner confirms
-in business-facts §C, then the `Offer` ships. `priceRange: "₪₪"` on the business node is the honest
-placeholder in the meantime.
+**On the `Offer` — shipped 2026-11-13 on the two priced services.** The owner confirmed ₪350 and
+what the visit includes on 2026-09-17 (business-facts §C), which is what this node was waiting for.
+`serviceJsonLd` now emits `offers` on `/services/water-leak-detection/` and
+`/services/moisture-detection/` only: an `Offer` (`priceCurrency` ILS, `url` `/pricing/`) with a
+`PriceSpecification` of `minPrice` 350. «החל מ» is a floor, so it is a `minPrice`, never a `price`.
+It ships only where `service.pricing === "from"`, and `lib/services.ts` fails the build when that
+disagrees with the visible `priceModel`. Electrical and insurance quote per job and carry none (row
+above), and `/pricing/` carries none: it has no `#page` node to hold one (§2a). `priceRange: "₪₪"`
+stays on the business node. **The sequence that held here still holds:** the owner confirms in
+business-facts first, then the node ships, never the other way round.
 
 ### 7b. Open defects in the emitted graph — all need a CODE change
 
-None of these fabricate anything; all four are mechanical.
+None of these fabricate anything; all four are mechanical. **Status 2026-11-13:** SD-5, SD-8 and
+SD-9 closed 2026-10-28, and SD-6 is half closed. The rows keep the original findings.
 
 | #    | Defect                                                                                                                                                                                                                                                                                          | Fix location                                                                              |
 | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| SD-6 | `Article.image` absent, though §6 requires it — and the same `generateMetadata` blocks drop `og:image` from the 10 dynamic routes                                                                                                                                                               | `lib/jsonld.ts` (Article builder) + the three `[slug]`/`[city]` `generateMetadata` blocks |
-| SD-5 | `Article.author` has no `@id`, so the founder is two unlinked `Person` nodes                                                                                                                                                                                                                    | `lib/jsonld.ts` (Article builder)                                                         |
-| SD-9 | `Service.inLanguage` is outside schema.org's declared domain for `Service` — the schema.org Validator flags it on all 7 `Service` nodes (4 services + 3 locations). Google ignores it silently. Removal is the clean fix; `inLanguage` on the `CreativeWork`-derived nodes is correct and stays | `lib/jsonld.ts` (both `Service` builders)                                                 |
-| SD-8 | `/guides/{slug}/` emits `FAQPage` ungated, unlike `/locations/{city}/` (§4.4)                                                                                                                                                                                                                   | `app/guides/[slug]/page.tsx`, or guard centrally in `faqPageJsonLd`                       |
+| SD-6 | **Half open.** `Article.image` absent, though §6 requires it — still true on the 2026-11-13 build. The `og:image` half is fixed: `pageOpenGraph()` (2026-09-17) gives all 19 dynamic routes `/og.png`. Original finding: the same `generateMetadata` blocks dropped `og:image` from the 10 dynamic routes | `lib/jsonld.ts` (Article builder)                                                         |
+| SD-5 | **✅ Closed 2026-10-28** (§1). `Article.author` had no `@id`, so the founder was two unlinked `Person` nodes                                                                                                                                                                                   | `lib/jsonld.ts` (Article builder)                                                         |
+| SD-9 | **✅ Closed 2026-10-28** — no `Service` node carries `inLanguage` on the 2026-11-13 build. `Service.inLanguage` is outside schema.org's declared domain for `Service` — the schema.org Validator flagged it on all 7 `Service` nodes of the day (4 services + 3 locations). Google ignores it silently. `inLanguage` on the `CreativeWork`-derived nodes is correct and stays | `lib/jsonld.ts` (both `Service` builders)                                                 |
+| SD-8 | **✅ Closed 2026-10-28** — guarded centrally in `faqPageJsonLd` (§4.4). `/guides/{slug}/` emitted `FAQPage` ungated, unlike `/locations/{city}/`                                                                                                                                              | `lib/jsonld.ts` (`faqPageJsonLd`)                                                         |
 
 Plus the standing low-value gap from §1: `BreadcrumbList` carries no `{pageUrl}#breadcrumb` `@id`.
 
@@ -304,15 +317,18 @@ Plus the standing low-value gap from §1: `BreadcrumbList` carries no `{pageUrl}
 grep -rL 'application/ld+json' out --include=index.html          # expect none
 
 # the global pair, on every emitted page
-find out -name index.html | wc -l                                # expect 31
-grep -rl 'LocalBusiness' out --include=index.html | wc -l        # expect 31
-grep -rl '"@type":"WebSite"' out --include=index.html | wc -l    # expect 31
+find out -name index.html | wc -l                                # expect 32
+grep -rl 'LocalBusiness' out --include=index.html | wc -l        # expect 32
+grep -rl '"@type":"WebSite"' out --include=index.html | wc -l    # expect 32
 
 # breadcrumbs everywhere they should be — all but /, /thank-you/ and the two 404 artifacts
-grep -rl 'BreadcrumbList' out --include=index.html | wc -l       # expect 27
+grep -rl 'BreadcrumbList' out --include=index.html | wc -l       # expect 28
 
 # FAQPage — /, 4 services, 3 guides, 12 locations, /pricing/
 grep -rl 'FAQPage' out --include=index.html | wc -l              # expect 21
+
+# Offer — the two "from"-priced services only (water-leak, moisture), §7a
+grep -rl '"@type":"Offer"' out --include=index.html | wc -l      # expect 2
 
 # the fabrication gate — currently PASSING, all four at zero
 grep -rl 'aggregateRating' out --include=index.html | wc -l                  # expect 0
@@ -321,11 +337,11 @@ grep -rl 'sameAs' out --include=index.html | wc -l                           # e
 grep -rl 'GeoCoordinates' out --include=index.html | wc -l                   # expect 0
 ```
 
-Every count above is re-stated for the 2026-10-28 build (first measured on 2026-09-06). When a route is
+Every count above is re-stated for the 2026-11-13 build (first measured on 2026-09-06). When a route is
 added, the counts move — update them here in the same commit rather than letting an operator learn to
 wave a mismatch through.
 
 Then run Google's **Rich Results Test** on one page per route family: the homepage, one service page
 (`/services/water-leak-detection/`), one guide (`/guides/leak-detection-cost/`) and one location
 (`/locations/tel-aviv/`). Zero errors is the bar; warnings get triaged against this file. The
-schema.org Validator is the stricter second pass and is the one that surfaces SD-9.
+schema.org Validator is the stricter second pass and is the one that surfaced SD-9 (closed).

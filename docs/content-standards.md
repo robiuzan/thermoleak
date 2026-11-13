@@ -11,24 +11,32 @@ Measured 2026-09-06 from a clean `out/`. Two numbers per row: `<main>` is everyt
 content landmark; **Unique** subtracts the shared `ContactCTA` block, which contributes **112 words**
 to every page that renders it. The floor is judged against **Unique**.
 
-| Page type                      | Floor | `<main>`  | Unique  | vs floor                                                |
-| ------------------------------ | ----- | --------- | ------- | ------------------------------------------------------- |
-| Homepage                       | 800   | 972       | 860     | ✅                                                      |
-| Service page                   | 450   | 475–571   | 363–459 | ⚠️ only `water-leak-detection` clears                   |
-| Location page                  | 350   | 696–766   | 584–654 | ✅ all three; all 12 on 2026-10-28 (below)              |
-| Article                        | 900   | 798–936   | 686–824 | ❌ all three short — see the note below                 |
-| Hub `/services/`               | 250   | 367       | 255     | ✅ on the line                                          |
-| Hub `/locations/`              | 250   | 357       | 245     | ⚠️ on the line                                          |
-| Hub `/guides/`                 | 250   | 267       | 155     | ❌ thin — a one-line subtitle and three cards           |
-| `/pricing/`                    | 450   | 552       | 440     | ⚠️ on the line (money-intent → service floor)           |
-| About                          | 500   | 610       | 498     | ⚠️ on the line                                          |
-| Contact                        | 200   | 275       | n/a     | ✅ the CTA **is** the page here, so no deduction        |
-| Legal (privacy, accessibility) | none  | 171 / 154 | —       | fine as-is                                              |
-| `/gallery/`                    | none  | —         | —       | a picture page: its words are the note and the captions |
+| Page type                      | Floor | `<main>`  | Unique  | vs floor                                                              |
+| ------------------------------ | ----- | --------- | ------- | --------------------------------------------------------------------- |
+| Homepage                       | 800   | 972       | 860     | ✅                                                                    |
+| Service page                   | 450   | 475–571   | 363–459 | ⚠️ only `water-leak-detection` clears; all four on 2026-11-13 (below) |
+| Location page                  | 350   | 696–766   | 584–654 | ✅ all three; all 12 on 2026-10-28 (below)                            |
+| Article                        | 900   | 798–936   | 686–824 | ❌ all three short — see the note below                               |
+| Hub `/services/`               | 250   | 367       | 255     | ✅ on the line                                                        |
+| Hub `/locations/`              | 250   | 357       | 245     | ⚠️ on the line                                                        |
+| Hub `/guides/`                 | 250   | 267       | 155     | ❌ thin — a one-line subtitle and three cards                         |
+| `/pricing/`                    | 450   | 552       | 440     | ⚠️ on the line (money-intent → service floor)                         |
+| About                          | 500   | 610       | 498     | ⚠️ on the line                                                        |
+| Contact                        | 200   | 275       | n/a     | ✅ the CTA **is** the page here, so no deduction                      |
+| Legal (privacy, accessibility) | none  | 171 / 154 | —       | fine as-is                                                            |
+| `/gallery/`                    | none  | —         | —       | a picture page: its words are the note and the captions               |
 
 **Location pages, 2026-10-28.** The row above is the first three on 2026-09-06. On the build that
 added the other nine, those nine carry 446–469 unique non-chrome words (949–997 raw, chrome
 included) and the first three 409–461 — all twelve clear the 350 floor.
+
+**GEO release 1, 2026-11-13.** Re-measured on a fresh build of `3492fb8` with the recipe below
+(`data-shared-block` lists stripped, then 112 subtracted). **All four service pages now clear 450:**
+`water-leak-detection` 708, `moisture-detection` 616, `electrical-thermography` 565,
+`insurance-reports` 562. Also: `/services/` 438 (its hub prose shipped), `/pricing/` 556, the homepage
+1,180. Still short: the `/guides/` hub at **150** (release 2 adds its prose with the new guides) and
+the three guides at 753–861 — the note below stands. On this build `ContactCTA` itself counts 105
+words, so subtracting 112 under-counts every row by 7; it is left at 112 so the rows stay comparable.
 
 **On the article shortfall.** All three guides carry real substance — an answer block, tables, an
 honest-limits section, a real byline. The gap is depth, not padding: close it with a section that
@@ -37,15 +45,18 @@ stands as written; do not lower it to make the table green.
 
 **"Unique" excludes site chrome and any block rendered identically on another route.** The navbar,
 footer and sticky CTA bar sit outside `<main>`, so the `<main>` extraction below excludes them by
-construction — there is no magic constant to subtract any more. The one shared block _inside_ `<main>`
-is `ContactCTA` (112 words), hence the second column.
+construction — there is no magic constant to subtract any more. The shared block _inside_ `<main>`
+behind the second column is `ContactCTA` (112 words). Since 2026-11-13 two more render the same list
+on several routes — `TrustRow` and `CityChips` — and each marks its list `data-shared-block`, which
+the recipe strips before counting.
 
 Measure with tags **and scripts** stripped (a naive `sed` that eats everything between the first
 `<script>` and the last `</script>` will report zero):
 
 ```bash
-# <main> word count for one route
+# <main> word count for one route, data-shared-block lists stripped
 perl -0777 -ne 's{<script.*?</script>}{}gs; s{<style.*?</style>}{}gs;
+  s{<ul\b[^>]*data-shared-block[^>]*>.*?</ul>}{}gs;
   if (/<main\b.*?>(.*)<\/main>/s) { $m = $1; $m =~ s{<[^>]*>}{ }gs; print $m }' \
   out/services/water-leak-detection/index.html \
   | tr -s " \t\n" "\n" | grep -c '[^[:space:]]'
@@ -102,22 +113,45 @@ If none of those can be said truthfully about a city, **that city does not warra
 
 ## 3. Required blocks per page type
 
-**Service page** — all nine ship on all four pages; this is now a regression checklist, not a to-do
-list.
+**Service page** — every block ships on all four pages, except where items 11–12 say otherwise;
+this is now a regression checklist, not a to-do list. Items 3, 6, 11 and 12 were added 2026-11-13.
 
 1. H1 = `service.h1`.
 2. **Answer block (§5)** — what this service is, under a question-form heading. `service.answer`,
    rendered first in the DOM at `app/services/[slug]/page.tsx`, and it also joins the `FAQPage` graph
-   because it is genuine on-page Q&A. **Keep it first in the DOM.**
-3. What it involves, concretely: what gets scanned, how long, what the customer prepares, what they
+   because it is genuine on-page Q&A. **Keep it first in the DOM.** Since 2026-11-13 it names the
+   brand (`site.nameHe`), the service and the region (`site.address.regionPrefixed`, «בגוש דן
+   והמרכז»), then what it includes, the price (`site.priceFrom`) or the per-job cost model, and the
+   timeframe **where one is confirmed** — about an hour on the water page, the written report in
+   `site.reportTurnaroundDays` business days on the panel and insurance pages, none on moisture.
+   Every fact is interpolated, never retyped. Moisture's first sentence is the definition, so its
+   brand and region sit in the second; the first sentence still answers completely.
+3. **Trust row** — `components/TrustRow.tsx`, directly under the answer block: «20+ שנות ניסיון
+   בשטח», `site.credentials` and the tax invoice. Confirmed facts only. It **never** renders
+   `site.guarantee` (EEAT-6), and never the electrician licence, which is stated in text on the panel
+   page only (business-facts §H).
+4. What it involves, concretely: what gets scanned, how long, what the customer prepares, what they
    receive.
-4. **What the method cannot detect** — `service.limits`. Non-negotiable for this category; see §7.
-5. Benefits and process (`benefits`, `steps`) — specific per service.
-6. Price language for this service (`service.priceModel`), from one source; never a second literal.
-7. **Per-service FAQ**, 3–5 questions, rendered in native `<details>` and feeding `FAQPage`.
-8. 2–3 contextual in-copy links to sibling services with descriptive anchors — `service.related`,
-   which is prose with inline links, not a card row. The card row below it is _additional_.
-9. CTA.
+5. **What the method cannot detect** — `service.limits`. Non-negotiable for this category; see §7.
+6. **Buyer's checklist** — `service.checklist`, after the limits: what to check before booking, four
+   items on each page today, under a heading that differs per service (one shared heading would fail
+   the §2 doorway test). Advice to the buyer, never a credential the business lacks.
+7. Benefits and process (`benefits`, `steps`) — specific per service.
+8. Price language for this service (`service.priceModel`), from one source; never a second literal.
+   The sidebar links it into `/pricing/` (`service.priceLink`: water-leak → `#visit-scope`, moisture
+   → `#price-factors`, the two per-job services → `/pricing/`).
+9. **Per-service FAQ**, 3–5 questions, rendered in native `<details>` and feeding `FAQPage`.
+10. 2–3 contextual in-copy links to sibling services with descriptive anchors — `service.related`,
+    which is prose with inline links, not a card row. The card row below it is _additional_.
+11. **Guide links** — `service.featuredGuides` (0–3 slugs, resolved and checked in `lib/links.ts`)
+    under `service.guides`, which is required exactly when the list is non-empty. Water-leak links
+    all three guides, moisture the thermal-camera guide, insurance the cost and find-a-leak guides;
+    electrical has none until the panel guide exists.
+12. **City links** — `service.cityLinks`. Water-leak and moisture link all twelve city pages as
+    `CityChips`, each anchored by the city page's own title (`locationTitle()`, «איתור נזילות ב…»).
+    Electrical links `holon`, `ramat-gan` and `raanana` in a sentence, anchored by a place inside
+    each city (the three whose pages discuss panel scans). Insurance links none.
+13. CTA.
 
 **Location page** — all seven ship on all twelve cities.
 
@@ -303,7 +337,8 @@ acoustic detection is the better tool.
 
 ## 9. Before publishing
 
-- [ ] Meets the §1 word floor **net of the shared `ContactCTA`** — measure `<main>`, subtract 112.
+- [ ] Meets the §1 word floor **net of the shared `ContactCTA`** — measure `<main>` with the
+      `data-shared-block` lists stripped, subtract 112.
 - [ ] Passes the §2 doorway test.
 - [ ] Has every required block from §3.
 - [ ] Opens with a §5 answer block, first in the DOM, in the HTML at first paint.

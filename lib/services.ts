@@ -478,7 +478,7 @@ export const services: Service[] = [
       // The licence sentence is the user's answer of 2026-11-13 (business-facts §H): stated in text,
       // never as a badge, a level or a number. Reg. 15(ג) allows a scan in the licence holder's
       // presence and under his supervision, hence «או בנוכחותו ובהשגחתו».
-      a: `בדיקה תרמוגרפית של לוח חשמל, ש${site.nameHe} מבצעת ${region}, מאתרת חיבורים רופפים ועומסי יתר שמתחממים לפני שנגרמת תקלה או שריפה. הסריקה מתבצעת בידי חשמלאי בעל רישיון או בנוכחותו ובהשגחתו, כשהמערכת תחת עומס וללא הפסקת חשמל, וכל נקודת חום מדורגת לפי חומרתה. ${panelPriceModel} דו״ח בטיחות כתוב נמסר תוך ${site.reportTurnaroundDays} ימי עסקים.`,
+      a: `בדיקה תרמוגרפית של לוח חשמל, ש${site.nameHe} מבצעת ${region}, מאתרת חיבורים רופפים ועומסי יתר שמתחממים לפני שנגרמת תקלה או שריפה. הסריקה מתבצעת בידי חשמלאי בעל רישיון או בנוכחותו ובהשגחתו, כשהמערכת תחת עומס וללא הפסקת חשמל, וכל נקודת חום מדורגת לפי חומרתה. ${panelPriceModel} בסיום מתקבל דו״ח בטיחות כתוב.`,
     },
     intro: [
       "חיבור חשמלי רופף או עומס יתר מתחילים להתחמם הרבה לפני שמשהו נשרף. בדיקה תרמוגרפית של לוח החשמל מזהה את נקודות החום הללו בזמן אמת — בדיוק במקום שבו העין לא רואה דבר.",
@@ -499,7 +499,7 @@ export const services: Service[] = [
       },
       {
         title: "סריקה תרמית",
-        desc: "צילום תרמי של החיבורים והמפסקים תחת עומס לאיתור התחממות חריגה, בידי חשמלאי בעל רישיון או בנוכחותו.",
+        desc: "צילום תרמי של החיבורים והמפסקים תחת עומס לאיתור התחממות חריגה, בידי חשמלאי בעל רישיון או בנוכחותו ובהשגחתו.",
       },
       {
         title: "אבחון ממצאים",
@@ -523,7 +523,7 @@ export const services: Service[] = [
       items: [
         "ודאו שהסריקה מתבצעת בידי חשמלאי בעל רישיון מתאים, או בנוכחותו ובהשגחתו: כך קובעות תקנות החשמל לגבי בדיקה תרמוגרפית של מתקן חשמל.",
         "ספרו מראש כמה לוחות יש במתקן ואיפה הם נמצאים, כי לפי זה נקבעים היקף הבדיקה והמחיר.",
-        "תאמו את הבדיקה לשעות שבהן העסק או הבניין צורכים חשמל כרגיל, ולא למועד שבו רוב המעגלים כבויים.",
+        "תאמו את הבדיקה לשעות שבהן העסק או הבניין צורך חשמל כרגיל, ולא למועד שבו רוב המעגלים כבויים.",
         "שאלו אם כל נקודת חום תקבל דירוג חומרה והמלצה, כדי לדעת מה מחייב טיפול מיידי ומה אפשר לתכנן.",
       ],
     },
@@ -541,14 +541,14 @@ export const services: Service[] = [
       ],
     },
     pricing: "quote",
-    priceModel: `${panelPriceModel} צרו קשר לקבלת הצעת מחיר מהירה.`,
+    priceModel: `${panelPriceModel} צרו קשר לקבלת הצעת מחיר.`,
     priceLink: {
       label: "למה בדיקת לוח חשמל מתומחרת בנפרד",
       href: "/pricing/",
     },
     featuredGuides: [],
     // Only the three city pages whose own claims discuss panel scans (lib/locations.ts: holon's
-    // industrial zone, ramat-gan's Bursa district, raanana's Kiryat Atidim). Never
+    // industrial zone, ramat-gan's Bursa district, raanana's Kiryat Etgarim). Never
     // «בדיקת לוחות חשמל ב{city}» as an anchor — no service×city page exists (keyword-map §6).
     cityLinks: {
       mode: "places",
@@ -596,7 +596,7 @@ export const services: Service[] = [
     metaDescription: `דו״ח תרמוגרפי לחברת הביטוח על נזקי מים ורטיבות, ${region}. תיעוד מקור הנזק, היקפו והקשר ביניהם בתמונות תרמיות. נמסר תוך ${site.reportTurnaroundDays} ימי עסקים. חייגו ${site.phone.display}.`,
     answer: {
       q: "מה מקבלים כשמזמינים דו״ח תרמוגרפי לביטוח?",
-      a: `כשמזמינים מ${site.nameHe} דו״ח תרמוגרפי לביטוח ${region}, מקבלים מסמך שמתעד את מקור הנזק, את היקפו ואת הקשר ביניהם, עם תמונות תרמיות וממצאים מסודרים. הדו״ח נשען על בדיקה תרמוגרפית בנכס עצמו, ואנחנו מלווים אתכם בהגשתו לחברת הביטוח לפי הצורך. ${reportPriceModel} את הדו״ח הכתוב תקבלו תוך ${site.reportTurnaroundDays} ימי עסקים מסיום הבדיקה.`,
+      a: `כשמזמינים מ${site.nameHe} דו״ח תרמוגרפי לביטוח ${region}, מקבלים מסמך שמתעד את מקור הנזק, את היקפו ואת הקשר ביניהם, עם תמונות תרמיות וממצאים מסודרים. הדו״ח נשען על בדיקה תרמוגרפית בנכס עצמו, וערוך להגשה לחברת הביטוח. ${reportPriceModel} את הדו״ח הכתוב תקבלו תוך ${site.reportTurnaroundDays} ימי עסקים מסיום הבדיקה.`,
     },
     intro: [
       "כשמגישים תביעת ביטוח על נזקי מים או רטיבות, חברת הביטוח דורשת הוכחה ברורה למקור הנזק והיקפו. דו״ח תרמוגרפי מקצועי מספק בדיוק את זה: תיעוד אובייקטיבי, תמונות תרמיות וממצאים שקל להגיש ולהבין.",
@@ -624,8 +624,9 @@ export const services: Service[] = [
         desc: "הכנת דו״ח מקצועי עם תמונות תרמיות, ממצאים והמלצות.",
       },
       {
-        title: "מסירה וליווי",
-        desc: "מסירת הדו״ח וליווי בהגשתו מול חברת הביטוח לפי הצורך.",
+        // Was «מסירה וליווי» — accompanying the submission is 🔶 unconfirmed (business-facts §H).
+        title: "מסירת הדו״ח",
+        desc: `הדו״ח הכתוב נמסר לכם תוך ${site.reportTurnaroundDays} ימי עסקים, ערוך להגשה לחברת הביטוח.`,
       },
     ],
     limits: {
@@ -639,7 +640,7 @@ export const services: Service[] = [
     checklist: {
       title: "מה לסדר מול חברת הביטוח לפני שמזמינים דו״ח",
       items: [
-        "בדקו בפוליסה אם הוצאות על מומחה מוכרות רק בתנאי שהודעתם למבטח מראש, ואם כן, הודיעו לו לפני שמזמינים בדיקה.",
+        "קראו בפוליסה מה נדרש כדי שהוצאות על בדיקה של מומחה מטעמכם יוכרו, ופעלו לפי זה לפני שמזמינים בדיקה.",
         "בררו מה בדיוק חברת הביטוח מבקשת, ומסרו לנו את זה כבר בשיחה, כדי שהבדיקה תתעד את מה שנדרש לתביעה שלכם.",
         "ודאו שכל ממצא בדו״ח אומת במדידה משלימה ולא נשען על תמונה תרמית בלבד.",
         "אם הנזק נוגע גם לשכנים או לרכוש המשותף, תאמו מראש גישה גם לשם, כדי שהדו״ח יראה מאיזה כיוון מגיעה הרטיבות.",
@@ -710,8 +711,16 @@ for (const item of heroPicker.items) {
     fail(`heroPicker names service '${item.service}', which does not exist.`);
   }
 }
-if (new Set(heroPicker.items.map((item) => item.service)).size !== services.length) {
+if (
+  heroPicker.items.length !== services.length ||
+  new Set(heroPicker.items.map((item) => item.service)).size !== services.length
+) {
   fail("heroPicker must offer each service exactly once.");
+}
+
+// The water answer composes site.visitScope by position; a shorter list would print «undefined».
+if (includes.length < 4 || excludes.length < 2) {
+  fail("the water answer composes visitScope.includes[1..3] and excludes[0..1] — the lists are shorter.");
 }
 
 // Sentences long enough to be quotable must not repeat across two services' answers or checklists —
@@ -737,6 +746,12 @@ for (const service of services) {
 
   if ((service.featuredGuides.length > 0) !== Boolean(service.guides)) {
     fail(`${where}: \`guides\` (the block's title and lead) is required exactly when featuredGuides is non-empty.`);
+  }
+
+  for (const text of [service.answer.a, service.metaDescription, ...service.checklist.items]) {
+    if (text.includes("undefined")) {
+      fail(`${where} interpolates a missing value: «${text.slice(0, 60)}…»`);
+    }
   }
 
   for (const text of [service.answer.a, ...service.checklist.items]) {

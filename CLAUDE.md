@@ -156,7 +156,7 @@ app/
   thank-you/              # noindex post-form conversion page; absent from the sitemap on purpose
   about/ contact/ accessibility/ privacy/
   gallery/                # /gallery/ — the 11 owner-approved images and the renderings, under the note (§15)
-components/               # FLAT — 30 files, one component per file, PascalCase, no subfolders
+components/               # FLAT — 34 files, one component per file, PascalCase, no subfolders
   Navbar Footer StickyContact          # chrome
   ConsentBanner                        # the Consent Mode v2 question (client, §7)
   Container CtaButton SectionHeading PageHero Breadcrumbs Logo JsonLd
@@ -167,6 +167,8 @@ components/               # FLAT — 30 files, one component per file, PascalCas
   Gallery                              # homepage and /gallery/ scenes, fed by the manifest; its words are in lib/gallery.ts
   ArticleBody                          # renders the typed blocks — the reason FAQPage can be DERIVED
   GuaranteeTerms                       # the bounded guarantee on /pricing/, from site.guaranteeTerms
+  TrustRow                             # confirmed facts near the top (credentials, 20+ בשטח, tax invoice) — never the guarantee
+  LinkLead LinkedText CityChips        # prose link blocks, mid-sentence links, 44 px link chips (the hub-and-spoke edges)
   ContactForm ThankYouContent          # the form + its post-submit page
   Analytics                            # the ONLY third-party script — GTM from site.analytics.gtmId
   EmailOff                             # Cloudflare Scrape Shield workaround
@@ -179,6 +181,8 @@ lib/
   pricing.ts    # /pricing/ copy — per-service prices stay in services.ts, never restated here
   articles.ts   # /guides/ typed blocks — FAQPage is DERIVED from them, so schema cannot drift
   locations.ts  # ⭐ the 12 city pages. READ its header before changing an entry
+  links.ts      # cross-file links (service → city/guide, guide → service, hubs) + their build-time checks; server routes only
+  hubs.ts       # /services/ hub copy (and /guides/ with the next guides)
   gallery.ts    # the scene register: eyebrow, captions, which image orders form a scene
   images.ts     # ⭐ the manifest's accessors, validated at module init (imagesFor, imageFor, leadSlotOf, stripFor)
   jsonld.ts     # every JSON-LD builder. faqPageJsonLd returns null for an empty list; <JsonLd> skips null
@@ -221,11 +225,17 @@ app/**/page.tsx  →  components/**
 ```
 
 **Identity and NAP live in `lib/site.ts`. Wording lives in `lib/services.ts` / `lib/faqs.ts`. Layout
-lives in components.** `lib/services.ts` and `lib/articles.ts` import `site` for exactly two things —
-`site.priceFrom` and `site.guaranteeTerms` — and that edge exists on purpose (2026-10-28): both files
-feed `FAQPage` JSON-LD, so a retyped price or a retyped guarantee term becomes a **mismatch between
-the visible page and its structured data** the first time the fact changes. Add a third such import
-only for a fact with the same property. Everything else in those files stays literal copy. Copy never gets typed directly into JSX — components render `{variable}`, which
+lives in components.** `lib/services.ts` and `lib/articles.ts` import `site` only for facts that feed
+`FAQPage` JSON-LD through an answer block or FAQ — `priceFrom`, `guarantee`/`guaranteeTerms`,
+`reportTurnaroundDays`, `visitScope`, `nameHe` and `address.regionPrefixed` (the GEO answer blocks of
+2026-11-13 name the brand and the region) — plus `phone.display` in `Service.metaDescription`, because
+no NAP literal may sit outside `lib/site.ts`. The edge exists on purpose: a retyped fact becomes a
+**mismatch between the visible page and its structured data** the first time it changes. Add another
+such field only for a fact with the same property. Everything else in those files stays literal copy.
+**The three content files never import each other**; every link between them lives in `lib/links.ts`,
+which checks it at build time and is imported only by server routes — and **no client component
+imports `lib/services.ts`** (ContactForm gets its options as props, so service copy never ships as
+client JS). Copy never gets typed directly into JSX — components render `{variable}`, which
 keeps `react/no-unescaped-entities` quiet and centralises content.
 
 The roster manifest is **not** an upstream build input (unlike the Cloudflare Pages sites in the same

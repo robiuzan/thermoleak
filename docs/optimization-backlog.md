@@ -57,12 +57,13 @@ is deliberately noindex and excluded; the two 404 artifacts are not content) · 
 `ThankYouContent`, `ConsentBanner`) · **zero** banned RTL utilities · **zero** `aggregateRating`, `Review`, `sameAs`
 and `GeoCoordinates` nodes.
 
-_(2026-10-28, with all 12 city pages built locally — not yet committed or deployed: 31 emitted
+_(2026-10-28, with all 12 city pages — committed and deployed the same day: 31 emitted
 `index.html` · 28 URLs in `sitemap.xml` · `out/` 10,643,189 B net of carried chunks, 71.0% of the
 15,000,000 B budget. See §3.4 and §10.1.)_
 
-_(2026-11-01, with `/gallery/` built locally — not yet deployed: 32 emitted `index.html` · 29 URLs in
-`sitemap.xml` · llms.txt 30 URLs. The export budget is 25,000,000 B. See §7.10 and §10.6.)_
+_(2026-11-01, with `/gallery/` — deployed 2026-11-02 with the page images, `d3864f7` (CLAUDE.md §15):
+32 emitted `index.html` · 29 URLs in `sitemap.xml` · llms.txt 30 URLs. The export budget is
+25,000,000 B. See §7.10 and §10.6.)_
 
 **Updated 2026-10-28 — Sprint 6 shipped.** Item 1 is now **half** resolved — the half that lives
 in this repo. Items 2 and 3 were resolved in Sprint 4.
@@ -89,9 +90,38 @@ service) and the **removal** of three false claims (`בע״מ`, the thermography
 accessibility coordinator); `og:image` restored on all 19 indexed routes with self-referencing
 `og:url`; authored location meta descriptions; `/images/*` cache headers.
 
-**Still owner-blocked and unchanged:** §5.3 (Google Business Profile), §7.3 (certifications,
-insurance, ח.פ.), §7.7 (prices). Never fill these in yourself — see
+**Still owner-blocked (re-checked 2026-11-13):** §5.3 (Google Business Profile, and with it any real
+review — §4.1); accepted payment methods (§7.7); the insurer's name and cover amount (§7.3 — the
+insurance itself is confirmed); a founder photo (§7.5); and the open rows of business-facts §H, now
+§7.11. §7.3's certificate and ח.פ. were answered **absent** on 2026-09-17, and §7.7's ₪350 was
+confirmed the same day, so neither is blocked any more. Never fill these in yourself — see
 [business-facts.md](business-facts.md).
+
+**2026-11-13 — GEO release 1.** `3492fb8` on branch `geo-r1`, on top of `44e54b0` (the user's
+answers, business-facts §H) and `51c884d` (`ContactForm` takes its options as props). **Committed,
+not yet deployed or merged** — the last deploy is still 2026-11-02's (CLAUDE.md §15). Measured on a
+fresh build of `3492fb8`: 32 emitted `index.html` · 29 URLs in `sitemap.xml` · llms.txt 30 URLs ·
+`FAQPage` on 21 pages, `BreadcrumbList` on 28 · 34 files in `components/` (`LinkLead`, `LinkedText`,
+`CityChips` and `TrustRow` are new), still four client components · `out/` 16,512,515 B raw, carried
+chunks included, under the 25,000,000 B budget.
+
+- **Closed:** §4.5 (the `Offer` on the two priced services), §9.4 (hub prose on `/services/`),
+  §9.6 / LOC-2 (service → city links), §2.5 / SEO-03 (service meta descriptions), §4.8 / LOC-11 (one
+  spelling per city in the graph), EEAT-6 in full (§7.3), and §10.7 (no service copy in client JS).
+- **Also shipped:** the four service answer blocks rewritten to name the brand, the service and
+  «בגוש דן והמרכז» with the price or cost model (§6.2); a buyer's checklist and a trust row on every
+  service page; service → guide links; the cost guide ↔ `/pricing/` edge; the hero's entity line,
+  out-of-hours call link and four-problem selector (§13.2); an article `related` block kind.
+- **Removed as false** (business-facts §H): every insurer-acceptance line, and every line promising a
+  written report with each visit — the services, the homepage process, `/about/` and nine city pages
+  (11 cities' `lastModified` moved to 2026-11-13).
+- **Depth** (unique `<main>` words — `data-shared-block` lists stripped, minus 112): water 706,
+  moisture 614, electrical 563, insurance 560, all four over 450 · `/services/` 436 · `/pricing/` 551
+  · `/` 1,178 · `/guides/` **148, still under its 250 floor** · the guides 768 / 751 / 859, still
+  under 900 (§3.5).
+- **Still open:** §5.3 and real reviews; release 2's three guides (§6.7); the panel guide, moved to
+  the next wave; the phone literal in the 12 city meta descriptions (§5.6, logged, not fixed); the
+  owner asks of §H (§7.11).
 
 ---
 
@@ -261,6 +291,12 @@ live. ~~OG and Twitter tags present with a 1200×630 image~~ — **that was fals
 indexed routes; see §2.4.** The homepage, `/pricing/` and the hub pages do carry the 1200×630
 `og.png`.
 
+**2.5 ✅ (2026-11-13) The service pages get their own meta description — finding SEO-03.** Each
+`Service` now carries a `metaDescription`, split off the card `summary` that used to serve both jobs,
+and a module-scope check in `lib/services.ts` fails the build outside 150–160 characters after
+interpolation. In a fresh `out/` the four measure 155, 156, 155 and 157 and end «חייגו» plus the
+phone, read from `site.phone.display`. Not deployed yet.
+
 ---
 
 ## §3 Content depth
@@ -278,7 +314,10 @@ item said were missing: what the method **cannot** detect (the `limits` block), 
 includes, what changes the price, and what happens after the leak is found — all in
 `lib/services.ts` — plus an answer block (§6.2) and in-copy cross-links (§9.3). **The 432–469
 figures above are pre-rewrite and must not be quoted.** Re-measure against the baseline table in the
-`qa-build-gate` skill, which is derived from the current `out/`.
+`qa-build-gate` skill, which is derived from the current `out/`. _(2026-11-13, GEO release 1: water
+706 · moisture 614 · electrical 563 · insurance 560 unique — all four over 450. Each page gained a
+buyer's checklist, a trust row and guide or city blocks; the trust row and the city chips are shared
+lists and are not counted.)_
 
 **3.3 ✅ (2026-08-24) Both floors cleared.** `/about/` 552 unique (floor 500) — added how-we-work
 sections covering method, the deliberate detect-but-do-not-repair separation, and service-area
@@ -309,6 +348,10 @@ page emits `Service` (`areaServed` typed `City`), a `FAQPage` of 3 Questions and
 build time; מודיעין has no edge. The same day the first three pages lost their job-history and
 same-day-promise wording (business-facts §E). **Still open:** service → city links (§9.6), the first
 three registers, the owner's confirmation of every claim (business-facts §E), and the deploy.
+_(2026-11-13: the deploy happened 2026-10-28, and the service → city links closed in GEO release 1 —
+§9.6. Nine city answers and their meta descriptions, and the FAQ lines that assumed a written report,
+now say the findings are given on site (business-facts §H); 11 cities' `lastModified` moved. The
+first three registers and the owner's confirmation are still open.)_
 
 **3.5 🟠 Shipped, two of three under floor (2026-08-24).** `/guides/` is live with three articles
 built on a typed block model (`lib/articles.ts`) so `FAQPage` is DERIVED from the copy and cannot
@@ -321,8 +364,14 @@ node emits a `Person`. `author` stays **optional** in the type so a future artic
 unknown publishes unattributed rather than borrowing a name. **Do not strip these bylines as
 fabrications; they are sourced.** And still: never invent one.
 
-**✅ Verified good:** `/services/` at 450 raw ≈ 340 unique clears its 250 floor; the legal pages are
-substantive and well written; no page is a template clone of another.
+_(2026-11-13, by content-standards §1's method — the 2026-08-24 figures above are not on it:
+find-leak-without-breaking 768, leak-detection-cost 751, what-a-thermal-camera-sees 859, all three
+under 900. The `/guides/` hub is 148 against its 250 floor. Release 1 changed the guides only by the
+cost guide's new `related` block; release 2's three guides and the hub prose are what move both.)_
+
+**✅ Verified good:** `/services/` at 450 raw ≈ 340 unique clears its 250 floor _(2026-11-13: 436
+unique, with the hub prose — §9.4)_; the legal pages are substantive and well written; no page is a
+template clone of another.
 
 ---
 
@@ -367,6 +416,16 @@ via `pageNode()` in `lib/jsonld.ts`, each tied to the business node with `about`
 `isPartOf`. **Still open:** `Offer`/`PriceSpecification` — deliberately withheld, blocked on price
 confirmation (business-facts §C). Never ship a guessed price in schema.
 
+**4.5 ✅ (2026-11-13) The `Offer` ships on the two priced services.** `serviceJsonLd` in
+`lib/jsonld.ts` adds `offers` — an `Offer` (`priceCurrency: "ILS"`, `url` → `/pricing/`) with a
+`PriceSpecification` whose `minPrice` is `site.priceFrom` — only where `service.pricing === "from"`,
+and `lib/services.ts` fails the build if that flag disagrees with a ₪ figure in the visible
+`priceModel`. A fresh `out/` carries `"minPrice":350` on water-leak and moisture and no `Offer` on
+electrical or insurance, which quote per job. «החל מ» is a floor, so it is a `minPrice`, never a
+`price`. Not deployed yet. **Still open:** whether ₪350 is also the floor for a panel scan or a report
+(business-facts §H, §7.11) — until then those two carry none. The page nodes carry no `Offer` by
+design.
+
 **4.6 ✅ (2026-08-24) Shipped.** `Service` nodes carry an `@id` — `{canonical}#service` on the four
 service pages and `{url}#service` on the location Services, both built in `lib/jsonld.ts` — so other
 nodes can now reference them.
@@ -385,6 +444,14 @@ ship globally and cross-reference correctly; `foundingDate: "2015"` matches the 
 correctly use `AdministrativeArea` for the region and wire `provider` to the business `@id`; `FAQPage`
 questions all match visible rendered text — including the location answer blocks added to the graph
 2026-10-28, whose `q` **is** the string rendered as the visible H2 (§6.2).
+
+**4.8 ✅ (2026-11-13) One spelling per city in the graph — finding LOC-11.** The Tel Aviv page's
+visible name is `תל אביב` while `site.serviceAreas` says `תל אביב-יפו`, so its `Service.areaServed`
+and the global `LocalBusiness.areaServed` named one city two ways. `Location` gains an optional
+`areaServedName` (set on tel-aviv only), and `lib/links.ts` fails the build unless the twelve schema
+names are exactly the twelve `site.serviceAreas` entries, one to one. Checked in a fresh `out/`: every
+city page's `areaServed` name is byte-identical to a `LocalBusiness.areaServed` entry, 12 of 12. Not
+deployed yet.
 
 ---
 
@@ -414,10 +481,24 @@ Blocked on business-facts §B — this is an owner action, not a code task.
 גוש דן והמרכז. Confirm the national claim before using it as a keyword. Note where it renders: it
 comes from `lib/site.ts` into the footer on every page, plus `/about/` and `/locations/`. So it is
 sitewide and one data edit fixes it everywhere — and it is **not** a regression the location silo
-introduced.
+introduced. _(2026-09-17: confirmed true, with a reach of about two hours' drive from Tel Aviv —
+business-facts §E. Since 2026-11-13 the clause is also in `site.description` and the `/services/` hub
+prose.)_
 
 **5.5 🟡 GBP address visibility.** If a Business Profile exists with a visible address, it contradicts a
 site that shows none. It must be a service-area profile with the address hidden.
+
+**5.6 🟡 (opened 2026-11-13 — logged, not fixed) All 12 city meta descriptions carry the phone as a
+literal.** Every `metaDescription` in `lib/locations.ts` ends «חייגו 055-660-1006.», typed rather than
+read from `site.phone.display`: the first three since 2026-09-17 (`b954357`, SEO-02), the other nine
+since 2026-10-28 (`a419de9`). The four service metas and the `/services/` hub meta interpolate it. So
+CLAUDE.md golden rule 2's "the repo is currently clean of NAP literals" is not true, and a number
+change, already two edits (`lib/site.ts` and `live.config.mjs`, CLAUDE.md §14), becomes fourteen, with
+no check comparing the twelve against `lib/site.ts`. The number is correct today, so nothing
+published is false. **The fix is a §5 decision as well as an edit:** `lib/locations.ts` imports
+nothing by design (CLAUDE.md §5, "content only — no site import"), so either the city route composes
+the «חייגו …» ending from `site.phone.display`, or `lib/locations.ts` gains a reasoned `site` import.
+Re-check every meta at 150–160 characters afterwards.
 
 ---
 
@@ -438,7 +519,11 @@ heading and a short extractable answer, held in `lib/services.ts`, `lib/location
 AEO-5), so the markup and the visible text cannot drift. `Location.answer` changed from a bare
 string to the same `{ q, a }` pair the other three use, and the route renders `answer.q` as its H2 —
 so a city's question is data, not a template, and the schema cannot diverge from the heading. The
-spec is still the bar for anything new: content-standards §5.
+spec is still the bar for anything new: content-standards §5. _(2026-11-13: the four service answers
+were rewritten as one snippet each — brand, service and «בגוש דן והמרכז» in the first sentence, then
+what the visit includes, the price or cost model, and a timeframe where one is confirmed. Water,
+moisture and insurance have new questions, because the old ones collided with guide queries;
+electrical keeps its own. Each is still the visible H2 and the first `FAQPage` Question.)_
 
 **6.3 ✅ FAQs are fully extractable.** Both the homepage `Faq` component and the per-service FAQ blocks
 use native `<details>/<summary>`, so every answer ships in the DOM at first paint with **zero
@@ -465,6 +550,13 @@ rewrite is to soften it into marketing, which destroys the exact property that m
 topics that shipped, not on the whole list. Take the remaining topics from the `aeo-answer-content`
 skill's Gate 3 rather than inventing new ones, and hold each to the content-standards §5
 answer-block spec.
+
+_(2026-11-13: still open. Topics 1, 2 and 6 shipped as guides on 2026-08-24. The next three guides
+are release 2 of the GEO plan — a branch of their own, six new images and the owner's approvals:
+topic 3 (why the stain is not above the leak), topic 4 (why a water-damage claim is rejected or
+reduced, and what a report must show), and condensation-or-leak, which is not a Gate-3 topic. Topic 5,
+the panel under load, moved to the next wave. Release 1 did the service-page side only: the new
+answer blocks and a buyer's checklist on each service.)_
 
 ---
 
@@ -493,6 +585,14 @@ capabilities (FLIR E8, third-party insurance, a two-person team). The `/about/` 
 that array in the same pass — a promise rendered with a `BadgeCheck` beside real equipment borrows
 their verifiability (finding EEAT-6), and it now has its own bounded terms at `/pricing/#guarantee`.
 **Never refill any of the three absent claims.**
+
+**✅ EEAT-6 closed in full 2026-11-13.** The guarantee had left the credentials array, but two
+«אחריות מלאה» lines outlived it: `site.description` — the `LocalBusiness` description and the default
+meta description — and the title of the `/about/` values card. The description no longer says it, and
+the card is now «התחייבות בתנאים כתובים», rendering `site.guarantee` and
+`site.guaranteeTerms.ifNotFound` verbatim, still linked to `/pricing/#guarantee`. No built HTML page
+in a fresh `out/` contains «אחריות מלאה», and the new `TrustRow` never renders the guarantee. Not
+deployed yet.
 
 _Original finding:_ `site.certifications` claims a certified thermography
 technician (Level 1) and professional FLIR equipment. No certificate number, no issuing body, no
@@ -605,7 +705,30 @@ page carries two or more AI-made illustrations of the method. The kit, the `/gal
 (55 renders) and the policy are in; the renders, the owner's review and the deploy are not. Trust rests on
 the words and on the note, not on a label per image: [eeat-and-trust.md](eeat-and-trust.md) §5a. Renderings
 carry zero Experience weight, so this item closes no gap in §7.5 and does not replace real job photos
-(Track O #14). CLAUDE.md §15 is the operating rule.
+(Track O #14). CLAUDE.md §15 is the operating rule. _(2026-11-02: 63 images installed, approved by the
+user and deployed, `d3864f7`; three planned slots stay empty — CLAUDE.md §15.)_
+
+**7.11 🟡 (opened 2026-11-13) The owner asks the GEO round left open.** The user answered six
+questions on 2026-11-13 (business-facts §H). Nine rows stay 🔶, and every page writes around them
+until they are answered:
+
+- the electrician licence's holder, level and number — the only thing that would let it show as a
+  credential; today it is a sentence on `/services/electrical-thermography/` and nothing more;
+- whether ₪350 is also the floor for a panel scan or an insurance report — until then neither
+  carries an `Offer` (§4.5);
+- the price and turnaround of a written report that is not for an insurer;
+- whether a return visit is charged after an inconclusive one;
+- the price of scanning the flat above, or the roof, in the same visit;
+- the source of «כשעה», the typical visit length;
+- «ליווי בהגשה» — accompanying the customer's submission to the insurer;
+- acoustic detection as a method the business owns;
+- how long a moisture visit takes.
+
+**Three of them are already published without a source**, by §H's own account: «כשעה», «ליווי
+בהגשה» and acoustic detection. Since release 1 the insurance answer block — and so its `FAQPage`
+Question — also states the accompaniment («מלווים אתכם בהגשתו לחברת הביטוח לפי הצורך»). Ask those
+three first: each answer either confirms copy that ships or removes it. §H's two ❌ answers — insurer
+acceptance and market price ranges — are settled; never restore either.
 
 ---
 
@@ -716,6 +839,13 @@ goes straight from `PageHero` to the card grid. An intro explaining how the four
 one camera, one visit, four different questions — would add both depth and anchor text, and is the
 natural place to put the descriptive links into `/locations/` that §9.6 says are missing.
 
+**9.4 ✅ (2026-11-13) Shipped.** `lib/hubs.ts` holds the copy and `app/services/page.tsx` renders it
+around the cards: a trust row and a paragraph that links all four services under descriptive anchors
+and says how they relate — one camera, four questions — then, after the grid, a paragraph linking
+`/pricing/` and `/guides/` that leads into chips for all twelve city pages. The card links read each
+service's H1 instead of «פרטים נוספים». `/services/` now measures 436 unique words (floor 250), and
+every link in the hub copy is checked at build time by `lib/links.ts`. Not deployed yet.
+
 **9.5 ✅ (2026-08-17) Fixed.** The `related.links` hrefs in `lib/services.ts` now carry the trailing
 slash, so no internal link costs a redirect hop under `trailingSlash: true`. Standing rule: write
 internal hrefs with the trailing slash, always.
@@ -737,6 +867,16 @@ fetched. Still open: the service pages' `related.links` point at no city.
 **2026-10-28, with all 12 cities built:** the footer lists all 12 on every page, the `/locations/`
 hub shows 12 cards, every city page links to all four services, and every city page is linked from
 30 other pages. **Still open (LOC-2):** no service page links to a city.
+
+**✅ LOC-2 closed 2026-11-13 (GEO release 1, not yet deployed).** The water-leak and moisture pages
+each link all twelve city pages under the city page's own title (`locationTitle()`, «איתור נזילות
+ב…»), each under a heading of its own; the electrical page links the three whose pages discuss panels
+— חולון, רמת גן, רעננה — under place anchors such as «אזור התעשייה בחולון»; the insurance page links
+none, by design; and `/services/` links all twelve (§9.4). `lib/links.ts` fails the build on an
+unknown city. Measured in a fresh `out/`, counting `<main>` only: every city page is now linked
+in-body from 4–8 other pages — מודיעין 4, the fewest (1 before, by the GEO plan's count), תל אביב and
+חולון 8. The service pages gained guide links in the same pass: water → three guides, moisture → one,
+insurance → two, electrical none until its guide exists.
 
 ---
 
@@ -812,6 +952,14 @@ the page-image plan, on an estimate of about 18 MB raw once installed: the arith
 with the measured figure, and re-run PageSpeed on `/`, one service and one city after the deploy, since
 the hero's `fetchPriority` and every page's first image are new LCP inputs. The size classes, the 12 MB
 `out/images` cap and the per-page caps are enforced by `scripts/images/check-images-out.mjs`.
+
+**10.7 ✅ (2026-11-13) Service copy no longer ships as client JS.** `ContactForm`, a client component,
+imported `lib/services.ts` for its `<select>`, so every service's answers, limits and FAQs went to the
+browser on every page that renders the form. `ContactCTA`, a server component, now passes the titles
+in as `serviceOptions` (`51c884d`), and `ContactForm` imports only `lib/site` and `lib/analytics`.
+Checked in a fresh `out/`: release 1's new service copy (the buyer's checklists) appears in no file
+under `out/_next/static/`. Keep it that way — `lib/links.ts` is likewise imported only by server
+routes.
 
 ---
 
@@ -982,7 +1130,10 @@ prop — 18 distinct values are visible in a fresh `out/` (`hero-*`, `header-cal
 rendered client-side by `Navbar`. **The hooks exist and nothing consumes them** — that is §13.5, not
 this item. One real gap remains here: the `/locations/` pages (three then, twelve since 2026-10-28)
 carry no `location-*` value of their own, so a city-page conversion is indistinguishable from any
-other page's.
+other page's. _(2026-11-13: five more on the homepage hero — `hero-emergency-call` and
+`hero-pick-{water-leak-detection|moisture-detection|electrical-thermography|insurance-reports}`,
+verified in `out/index.html`. The new in-copy links and city chips carry none, and there is still no
+`location-*` value.)_
 
 **13.3 ✅ Roster updated.** The roster now carries the real Search Console verification token, so it
 no longer contradicts `app/layout.tsx`.
@@ -1180,15 +1331,15 @@ the reconciliation opened. For sequencing and gates, see
 
 10. ✅ §3.2 / §6.2 / §6.6 — depth, answer blocks and the honest-limits material.
 11. ⏳ §3.3 — `/about/` reached its floor, but its potential is still gated on §7.3.
-12. ✅ §9.3 — contextual in-copy links on all four service pages. ⏳ §9.4 — `/services/` still goes
-    straight from the hero to the card grid with no hub prose.
+12. ✅ §9.3 — contextual in-copy links on all four service pages. ✅ §9.4 — hub prose on
+    `/services/`, 2026-11-13 (GEO release 1, not yet deployed).
 13. ✅ §1.2 — the sitemap parity assertion. ⏳ §1.3 — the dates are hand-maintained and now stale.
 
 **Phase 4 — expand, carefully** — ✅ shipped
 
 14. ✅ §3.5 — three guides, with real bylines.
 15. ✅ §3.4 / §5.2 — three cities, not twelve. _(2026-10-28: twelve, by owner decision — each through
-    its own doorway test, the nine new ones each with a source register; built, not yet deployed.)_
+    its own doorway test, the nine new ones each with a source register; deployed the same day.)_
 16. ✅ §10.3 (logo `priority` dropped) and §10.4 (never needed at all); §10.2 downgraded to 🔵.
 17. ✅ §12.1 — security headers. ⏳ CSP enforcement, blocked by §12.7 rather than by time.
 
@@ -1204,7 +1355,8 @@ the reconciliation opened. For sequencing and gates, see
 23. §12.7 / §7.8 / §9.6 / §10.1 — a CSP reporting endpoint, the guarantee's reach, the
     service → location edges, and a real export-size assertion **before** a fourth city is even
     considered. _(2026-10-28: the assertion exists — performance-guidelines.md §7 — and all twelve
-    cities are built; the service → location edges are still open, §9.6.)_
+    cities are built; the service → location edges are still open, §9.6. 2026-11-13: closed — LOC-2,
+    §9.6.)_
 24. §14 — and do all of the above with the instruction files updated in the same commit.
 
 **Never:** build 12 thin city pages; invent a review, rating, statistic, credential or byline to

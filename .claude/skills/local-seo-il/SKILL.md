@@ -1,6 +1,6 @@
 ---
 name: local-seo-il
-description: Israeli local-SEO doctrine for טרמוליק — NAP for a service-area business with no premises, the 12 named service areas — all with a page since 2026-10-28 and none yet with a real job reference — the 4×12 matrix and its expansion cap, Hebrew ב+city grammar, sameAs and geo both empty by design until a real GBP lands, Google עסק שלי as the top lever, and the doorway-page policy that gates any city page. Use when planning local coverage or auditing local visibility. Triggers "local SEO", "NAP", "city pages", "Google עסק שלי", "doorway pages", "areaServed", "add a city".
+description: Israeli local-SEO doctrine for טרמוליק — NAP for a service-area business with no premises, the 12 named service areas — all with a page since 2026-10-28 and none yet with a real job reference — the 4×12 matrix and its expansion cap, Hebrew ב+city grammar, the inbound links from the service pages and the /services/ hub (LOC-2 closed 2026-11-13), sameAs and geo both empty by design until a real GBP lands, Google עסק שלי as the top lever, and the doorway-page policy that gates any city page. Use when planning local coverage or auditing local visibility. Triggers "local SEO", "NAP", "city pages", "Google עסק שלי", "doorway pages", "areaServed", "add a city".
 ---
 
 # Local SEO — Israel
@@ -29,6 +29,10 @@ it commits you to three things:
 - Phone and email must be byte-identical everywhere. They currently are, and per the roster manifest
   they are **real fleet values** — `055-660-1006` / `+972556601006` / `info@thermoleak.co.il`. Don't
   "correct" them to the fleet's `055-6601006` display format without checking; the E.164 number matches.
+  One open crack (logged, not fixed, as of 2026-11-13): the twelve city `metaDescription`s in
+  `lib/locations.ts` type `055-660-1006` as a literal instead of reading `site.phone.display`, so a
+  number change would miss them. The service metas interpolate it since 2026-11-13; do the same when
+  you next touch a city meta.
 
 ## 2. Google עסק שלי — the top lever
 
@@ -64,7 +68,7 @@ count:
   cannot supply (business-facts §E).
 - **Every claim is 🔶 until the owner confirms it.** §E lists the weakest, single-source claim per
   city to confirm first.
-- **No service page links to any city** (LOC-2, §8).
+- ✅ **Service pages link the cities since 2026-11-13** (LOC-2 closed, §8) — no longer open work.
 - **No Google Business Profile** (§2) — still the top lever.
 
 ## 4. The doorway policy — non-negotiable
@@ -103,9 +107,15 @@ The shipped model carries that audit trail in the data: each claim is a `Locatio
 
 All twelve are real cities, so `ב{name}` mostly works — with two cautions:
 
-- `תל אביב-יפו` reads badly in a title as `בתל אביב-יפו`. Use `בתל אביב`.
+- `תל אביב-יפו` reads badly in a title as `בתל אביב-יפו`. Use `בתל אביב`. The schema keeps the full
+  name: `areaServedName: "תל אביב-יפו"` makes the city node match `site.serviceAreas` and
+  `LocalBusiness.areaServed` byte for byte (LOC-11, fixed 2026-11-13; `lib/links.ts` checks the
+  pairing), while the visible name stays «תל אביב».
 - Any future **region** entry (השרון, השפלה, גוש דן, צפון) needs `בצפון הארץ` / `באזור השרון`, not a
-  bare preposition.
+  bare preposition. The site-wide region already works this way: `site.address.regionPrefixed` is
+  «בגוש דן והמרכז», written by hand, and the answer blocks and titles use it — never `ב${region}`.
+- Titles and anchors come from `locationTitle(location)` (`איתור נזילות ${prefixed}`), one helper
+  since 2026-11-13 in place of seven hand-typed copies.
 
 The shipped `Location` interface in `lib/locations.ts` already encodes this — don't redesign it:
 
@@ -127,7 +137,8 @@ full interface from the file rather than from any doc, this one included.
 2. Each earns its depth per content-standards §3 before the next one starts.
 3. Only then consider a service × location second tier, and only for services with genuine local
    demand — `water-leak-detection` and `moisture-detection`, not `insurance-reports` (which is a
-   document, not a place).
+   document, not a place). Until such a page exists, no anchor may promise one: the electrical page's
+   city links say «אזור התעשייה בחולון», never «בדיקת לוחות חשמל בחולון» (`docs/keyword-map.md` §6).
 
 A cell exists when there is something true and specific to say in it. Not before.
 
@@ -142,7 +153,7 @@ still 🔶, which is why only the four nearest city pages say "נשתדל להג
 
 ## 8. Internal equity
 
-The mesh shipped **half wired** (LOC-2), and this is the standing local gap:
+The mesh shipped **half wired** (LOC-2) and was completed on 2026-11-13 (release 1, `3492fb8`):
 
 - ✅ `/locations/` is in `navLinks` and in the footer's navigation column, so every page reaches the hub
   and nothing is orphaned.
@@ -150,12 +161,18 @@ The mesh shipped **half wired** (LOC-2), and this is the standing local gap:
   bidirectional — build-enforced since 2026-10-28 (an unknown or one-way slug fails the build).
 - ✅ The footer's `אזורי שירות` list links all twelve cities on every page (since 2026-10-19), and the
   hub shows twelve cards — each city page is linked from 30 other pages. That is chrome, though.
-- ❌ No service page links to any city with a descriptive anchor — the four pages that monetise a local
-  query send no relevance signal to the page targeting it.
+- ✅ The service pages now send that relevance signal. `/services/water-leak-detection/` and
+  `/services/moisture-detection/` link all twelve city pages under each page's own title
+  («איתור נזילות ב…»); `/services/electrical-thermography/` links חולון, רמת גן and רעננה, the three
+  whose pages discuss panels, under place anchors; `/services/insurance-reports/` links none, by
+  design. The `/services/` hub adds all twelve. Counted inside `<main>`, each city now has in-body
+  links from 4–8 other pages (מודיעין 4, up from 1; תל אביב and חולון 8). Mechanism and count command:
+  `/internal-linking` §3 and §6.
 
 Wire the inbound links **in the same commit** as any new city; `/new-city`, the roadmap and
 `docs/keyword-map.md` §6 all say "before it ships", and sprint 3 and the 2026-10-28 batch are the
-counter-examples. See `/internal-linking`.
+counter-examples. A thirteenth city reaches the water, moisture and hub grids automatically (they map
+over `locations`); the electrical list is a per-city decision. See `/internal-linking`.
 
 ## Checklist
 
@@ -165,7 +182,9 @@ counter-examples. See `/internal-linking`.
 - [ ] No `aggregateRating`, no `Review` — unless sourced from a real public profile (§2).
 - [ ] Every location entry has `kind` and `prefixed`; no template interpolates a bare `ב${name}`.
 - [ ] Every location page that ships passes the doorway test.
-- [ ] Location pages emit `Service` + `areaServed` with the correct area type.
+- [ ] Location pages emit `Service` + `areaServed` with the correct area type, and a schema name that
+      matches `site.serviceAreas` (`areaServedName` where the visible name differs).
+- [ ] Every city page has descriptive in-body links from the service pages and the `/services/` hub.
 - [ ] The national coverage claim is confirmed or removed.
 
 ## Gotchas

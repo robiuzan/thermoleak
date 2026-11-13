@@ -7,11 +7,14 @@ import type { NavLink } from "@/lib/site";
 // the same way on other routes, so the content-standards §1 word count can strip it.
 export default function CityChips({
   title,
+  titleClassName = "text-lg font-bold text-brand",
   lead,
   links,
   className = "",
 }: {
   title?: string;
+  // Match the surrounding h2s: text-xl on the service pages and /services/, text-lg on a city page.
+  titleClassName?: string;
   lead?: string;
   links: NavLink[];
   className?: string;
@@ -19,7 +22,7 @@ export default function CityChips({
   if (links.length === 0) return null;
   return (
     <div className={className}>
-      {title ? <h2 className="text-lg font-bold text-brand">{title}</h2> : null}
+      {title ? <h2 className={titleClassName}>{title}</h2> : null}
       {lead ? (
         <p className="mt-2 text-sm leading-relaxed text-ink/75">{lead}</p>
       ) : null}

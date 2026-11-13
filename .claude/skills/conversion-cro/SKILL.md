@@ -1,6 +1,6 @@
 ---
 name: conversion-cro
-description: Lead conversion on thermoleak — click-to-call above the fold, the sticky mobile bar and the footer row it currently covers, the WhatsApp-only contact form and its /thank-you/ handoff, data-cta hooks that exist but that nothing consumes, focus management, the shipped consent line, and the honest-trust-signal gate. Use when conversions are weak, a page is missing its CTAs, or the form needs work. Triggers "improve conversions", "CRO pass", "form validation", "thank you page", "add click-to-call", "why aren't leads tracked".
+description: Lead conversion on thermoleak — click-to-call above the fold, the hero's entity line, out-of-hours call link and four-problem selector (2026-11-13), the sticky mobile bar (its footer overlap fixed in Sprint 4), the WhatsApp-only contact form and its /thank-you/ handoff, data-cta hooks that exist but that nothing consumes, focus management, the shipped consent line, and the honest-trust-signal gate — the credentials row, never the guarantee beside it. Use when conversions are weak, a page is missing its CTAs, or the form needs work. Triggers "improve conversions", "CRO pass", "form validation", "thank you page", "add click-to-call", "why aren't leads tracked".
 ---
 
 # Conversion
@@ -20,7 +20,23 @@ Mobile-specific rules — thumb zone, tap targets, bar height — come from
 
 - `StickyContact` is a fixed bottom bar with call + WhatsApp, mobile-only.
 - Click-to-call is above the fold on every page (navbar + hero), and the service pages carry a sticky
-  sidebar with call + form CTAs.
+  sidebar with call + form CTAs, and since 2026-11-13 a `priceLink` into `/pricing/` under the price.
+- **The hero, rebuilt 2026-11-13 (release 1)**, top to bottom: the eyebrow
+  `{site.stats.years.value} {site.stats.years.label}` — «20+ שנות ניסיון בשטח», and «בשטח» is
+  load-bearing (the founder's field experience; the company was founded 2015) — the slogan H1, the
+  **entity line** `site.pitch` (brand + service + region, visible), call + WhatsApp, an
+  **out-of-hours call link** (`site.emergencyNote` verbatim, the same `telHref`,
+  `data-cta="hero-emergency-call"` — the only wording on file: no response time, no 24/7, no
+  dispatch promise), the guarantee link to `/pricing/#guarantee`, and the **«מה הבעיה?» selector** —
+  four server-rendered `min-h-11` links to the four service pages (`heroPicker` in `lib/services.ts`,
+  `data-cta="hero-pick-{service slug}"`). «זמינות מהירה» and «ללא הרס מיותר» left the hero that day.
+- **Trust row** (`components/TrustRow.tsx`): the three `site.credentials` and «מנפיקים חשבונית מס»,
+  plus the field experience where no tile already shows it — under the hero as `TrustBar`'s second
+  row, under the answer block on every service page, and on `/services/` and `/pricing/`. Plain text
+  with a neutral check: no seals, and **never** `site.guarantee` (EEAT-6) or the electrician licence.
+- `ContactForm` gets its `<select>` options as a `serviceOptions` prop from `ContactCTA` (`51c884d`):
+  a client component no longer imports `lib/services.ts`, so service copy stops shipping as JS. Don't
+  re-add that import.
 - `ContactForm` validation is genuinely good: per-field errors, `aria-invalid`, `aria-describedby`,
   an Israeli phone pattern (`/^0\d{8,9}$/` after stripping dashes and spaces) that accepts what real
   customers type, **and** focus moves to the first invalid field with a `role="status"` error count
@@ -55,18 +71,18 @@ pushed from this component (see `/tracking-analytics`). And the site still has *
 record of a lead**; the roster records `formAccessKey: null` **by design**, so adding a real
 endpoint is a decision for the owner, not a bug fix.
 
-## Gap 2 — the consent line: SHIPPED, but its promise is currently false
+## Gap 2 — the consent line: SHIPPED, and its promise holds since 2026-09-17
 
-`ContactForm.tsx:220-226` renders the line under the button, in `text-ink/70` (the contrast floor —
-see `/responsive-accessibility`), and it links to `/privacy/`. That part is done.
+`ContactForm.tsx` renders the line under the button, in `text-ink/70` (the contrast floor — see
+`/responsive-accessibility`), and it links to `/privacy/`. That part is done.
 
-**The problem is the claim, not the markup.** It tells the visitor
-"הם אינם נשמרים אצלנו" while `/thank-you/` renders the lead's name and phone inside a link href that
-analytics can capture (findings **SEC-3 / AN-2**, open). Until that href is fixed, the line
-overstates. Do not soften the line to cover the defect — fix the defect.
+The line tells the visitor "הם אינם נשמרים אצלנו". It overstated while `/thank-you/` put the lead's
+name and phone in a tagged href analytics could capture (findings **SEC-3 / AN-2**); that was fixed
+2026-09-17 (Gap 6 below), so the claim is true again. Keep it true: never soften the line to cover a
+new leak — fix the leak.
 
-Separately, `/privacy/` still says the site "ייתכן" (may) use Google Analytics. GA4 definitively
-ships. That page is not this skill's to edit, but do not cite it as accurate.
+`/privacy/` no longer says the site "ייתכן" (may) use Google Analytics: it now names Google Tag
+Manager and Google Analytics 4. That page is not this skill's to edit.
 
 ## Gap 3 — /thank-you/: SHIPPED
 
@@ -80,36 +96,41 @@ nothing. See `/tracking-analytics` §"Client-side routing is real here".
 
 ## Gap 4 — focus management: SHIPPED
 
-Focus moves to the first invalid field on a failed submit (`ContactForm.tsx:64-67`) and to the
-`/thank-you/` heading after navigation (`ThankYouContent.tsx:49-53`, `tabIndex={-1}` on the `<h1>`).
+Focus moves to the first invalid field on a failed submit (`ContactForm.tsx`, the `nameRef` /
+`phoneRef` / `areaRef` focus calls) and to the `/thank-you/` heading after navigation
+(`ThankYouContent.tsx`, `headingRef`, `tabIndex={-1}` on the `<h1>`).
 Both matter more on a phone than on a desktop. Don't remove either.
 
-## Gap 5 — the sticky bar covers the footer's legal row on mobile (OPEN, finding cro-1)
+## Gap 5 — the sticky bar over the footer's legal row on mobile: FIXED in Sprint 4 (finding cro-1)
 
-`app/layout.tsx:88` puts `pb-20 md:pb-0` on `<main>` — but `<Footer />` is a **sibling of `<main>`,
-not inside it** (`:91`), so that padding ends before the footer begins and does nothing at the end of
-the document. `StickyContact` is `fixed inset-x-0 bottom-0`, so on mobile it sits on top of the
-footer's bottom row — the הצהרת נגישות and מדיניות פרטיות links — which become unreadable and
-untappable, because a tap there hits the call/WhatsApp buttons instead.
+The spacer used to sit on `<main>` (`pb-20 md:pb-0`) while `<Footer />` is a **sibling of `<main>`,
+not inside it**, so it did nothing at the end of the document, and the fixed `StickyContact` bar
+covered the footer's bottom row — the הצהרת נגישות and מדיניות פרטיות links. That was a compliance
+problem, not a cosmetic one: the accessibility-statement link exists **only** in the footer, and the
+site publishes an IS 5568 statement.
 
-That is a compliance problem, not a cosmetic one: the accessibility-statement link exists **only** in
-the footer, and the site publishes an IS 5568 statement.
-
-The fix is a code change (move the spacer onto the `<footer>`, and add
-`pb-[env(safe-area-inset-bottom)]` to the bar so a notched iPhone's home indicator stops eating the
-CTAs' tap area). Until it lands, **do not describe the spacer as working** — several docs did.
+Now `components/Footer.tsx` carries `pb-20 md:pb-0` on the `<footer>` itself, `app/layout.tsx` has a
+comment saying the spacer belongs there, and `StickyContact` adds `pb-[env(safe-area-inset-bottom)]`
+so a notched iPhone's home indicator no longer eats the CTAs' tap area. Don't move the spacer back.
 
 ## Gap 6 — `data-cta`: the hooks exist, nothing consumes them
 
 The attribute inventory shipped on 2026-08-24 (backlog §13.2). `Navbar`, `Hero`, `StickyContact`,
 `ContactCTA`, `Footer`, `ContactForm` and `ThankYouContent` all carry `data-cta` values, some
-literal and some via `CtaButton`'s `dataCta` prop, following `{location}-{action}`.
+literal and some via `CtaButton`'s `dataCta` prop, following `{location}-{action}`. Release 1
+(2026-11-13) added five, all in the hero: `hero-emergency-call` and
+`hero-pick-{water-leak-detection|moisture-detection|electrical-thermography|insurance-reports}` (the
+last four built from `heroPicker`, so `grep 'data-cta="'` on the source shows a template literal, not
+the four values — read them in `out/index.html`). The new in-copy link blocks (`LinkLead`,
+`LinkedText`, `CityChips`) and the hero's guarantee link carry no `data-cta`: they are navigation, not
+a contact action.
 
 **Do not re-add attributes that already exist, and do not trust any count in a doc.** Re-grep:
 
 ```bash
 grep -rho 'data-cta="[^"]*"' app components | sort -u
-grep -rn 'dataCta="' app components
+grep -rn 'dataCta="\|data-cta={' app components
+grep -rho 'data-cta="[^"]*"' out --include=index.html | sort -u   # the built set, templates expanded
 grep -rn 'telHref\|whatsappHref(\|mailHref' app components | grep -v 'data-cta\|dataCta\|import'
 ```
 
@@ -155,19 +176,30 @@ copy, badges or counters, check `docs/business-facts.md`:
   content is a Google Business Profile (`docs/business-facts.md` §B).
 - **No invented urgency**: no "X customers this month", no countdown timers, no fabricated scarcity.
 - **What you may state as trust signals** is exactly what `lib/site.ts` carries: founded 2015 (hence
-  10+ years), the typical visit length, the non-destructive method, the report, the founder's name,
-  and the guarantee's **confirmed** terms. Nothing else.
+  10+ years — the business's age), «20+ שנות ניסיון בשטח» (the founder's field experience, never the
+  company's age), the three `site.credentials` (the FLIR E8 camera, third-party insurance, a team of
+  two technicians), tax invoices, the non-destructive method, the ₪350 start with `site.visitScope`,
+  the 3-day written-report turnaround, the founder's name, and the guarantee's **confirmed** terms.
+  Nothing else. The report is a written report **ordered separately** — a visit gives the findings
+  verbally — and it is "organised for submission", never "accepted by insurers" (business-facts §H).
+  The electrician licence is stated in text on the panel page only, never as a badge or a trust-row
+  item (§H). The typical visit length «כשעה» is published, but its source is still an open §H row.
 - **The guarantee is now your strongest asset — use the published terms.** `לא מצאנו — לא שילמתם`
   has a confirmed scope, exclusions and a no-call-out-fee clause in `site.guaranteeTerms`, rendered
   by `components/GuaranteeTerms.tsx`. A precisely bounded promise converts better than a vague one.
   Render it from that object; never paraphrase it into marketing copy.
-- **Still unconfirmed — never present as fact:** the ₪450 starting price (`site.priceFrom` carries a
-  `🔶 confirm` marker and is still rendered on `/pricing/`), certifications, insurance, report
-  turnaround, and every other row `docs/business-facts.md` leaves open.
+- **Still unconfirmed — never present as fact:** accepted payment methods, the insurer's name and
+  coverage amount, and the open §H rows — the licence's holder, level and number; whether ₪350 is also
+  the floor for a panel scan or a report; a return visit's price; «ליווי בהגשה»; and the rest of that
+  table. (The ₪350 start, the turnaround and third-party insurance were confirmed 2026-09-17 —
+  re-gating them is as wrong as inventing them.) **Confirmed absent**, never to be filled: a ח.פ. or
+  company registration, a thermography certificate, an accessibility coordinator.
 
 ## Checklist
 
 - [ ] Call and WhatsApp reachable without scrolling on every page, mobile and desktop.
+- [ ] The hero keeps its entity line, the out-of-hours link in `site.emergencyNote`'s exact words and
+      the four-problem selector, every target ≥44 px; the trust row never shows the guarantee.
 - [ ] New routes render `ContactCTA` and carry `data-cta` values (re-grep; don't assume).
 - [ ] No tagged CTA href can contain a visitor's name, phone or message text.
 - [ ] The form still cannot show success when the WhatsApp handoff didn't happen.

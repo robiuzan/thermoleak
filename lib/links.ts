@@ -19,6 +19,7 @@ import {
   services,
   getService,
   methodExplainer,
+  serviceChooser,
   servicePillars,
   type Service,
 } from "./services";
@@ -128,6 +129,10 @@ checkLinks("servicesHub.intro", linksIn(servicesHub.intro));
 checkLinks("servicesHub.more", linksIn(servicesHub.more));
 checkLinks("methodExplainer.more", methodExplainer.more.links);
 checkLinks("servicePillars.areas", servicePillars.areas.links);
+checkLinks(
+  "serviceChooser",
+  serviceChooser.cases.map(({ href, serviceLabel }) => ({ href, label: serviceLabel })),
+);
 
 // Copy that states how many city pages exist must say the real number.
 for (const [where, text] of [
@@ -146,7 +151,10 @@ for (const name of schemaNames) {
     fail(`the city schema name '${name}' is not in site.serviceAreas — set its areaServedName.`);
   }
 }
-if (new Set(schemaNames).size !== site.serviceAreas.length) {
+if (
+  schemaNames.length !== site.serviceAreas.length ||
+  new Set(schemaNames).size !== schemaNames.length
+) {
   fail("lib/locations.ts and site.serviceAreas must name the same cities, one to one.");
 }
 

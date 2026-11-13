@@ -1,6 +1,6 @@
 ---
 name: qa-build-gate
-description: The release gate before any push to main — an out/ freshness guard, clean build and lint, route-count and sitemap parity via npm run check:sitemap, title/canonical/OG/H1/JSON-LD greps, the orphan check, a no-PII-in-tagged-hrefs check, the fabrication stop-ship, and the auditor sweep. Use before every commit to main or when asked whether the site is ready to ship. Triggers "run the build gate", "is this ready to ship", "pre-deploy check", "QA the site", "verify the build".
+description: The release gate before any push to main — an out/ freshness guard, clean build and lint, route-count and sitemap parity via npm run check:sitemap, title/canonical/OG/H1/JSON-LD greps (Offer only on the two priced services), the orphan check, a no-PII-in-tagged-hrefs check, the fabrication stop-ship plus the 2026-11-13 claim greps (no insurer-acceptance wording, the licence only on the panel page), word counts with the shared blocks stripped, and the auditor sweep. Use before every commit to main or when asked whether the site is ready to ship. Triggers "run the build gate", "is this ready to ship", "pre-deploy check", "QA the site", "verify the build".
 ---
 
 # Build gate
@@ -11,7 +11,9 @@ start of this gate, not the end of it.
 Run the sections **in order**. §1 establishes that `out/` is the build you think it is; every
 assertion after it is worthless if that one is skipped. Numbers below were measured 2026-09-06 on a
 clean build at `d712419`, except the route counts, parity output and export weight, re-measured
-2026-10-28 on the local build that added nine city pages. A section that says "expect N" means N
+2026-10-28 on the local build that added nine city pages. The route, parity, schema, title, H1, OG
+and orphan expectations were re-checked 2026-11-13 on the release-1 build (`3492fb8`) and held; §8's
+claim greps and §13's word counts are new from that build. A section that says "expect N" means N
 passed that day — if yours differs, reconcile it, don't quietly adopt it.
 
 Pushing to `main` does **not** deploy (build-only CI); production ships via `/deploy-thermoleak`
@@ -35,7 +37,9 @@ fi
 ```
 
 `STALE` is not a finding about the site — it is a finding about your evidence. Rebuild (§2) and start
-again. Reporting a defect measured on a stale export is how a gate loses its authority, which is the
+again. A build run just **before** `git commit` also reads `STALE` (its files are older than the
+commit), as the 2026-11-13 release-1 build did by about a minute; rebuilding after the commit is the
+clean answer, not reasoning the guard away. Reporting a defect measured on a stale export is how a gate loses its authority, which is the
 same failure shape as the 15-day rsync incident: a green signal that was never looking at the artifact
 it claimed to be checking.
 
@@ -55,7 +59,12 @@ currently prints `sitemap parity OK — 32 routes emitted, 29 indexed, 3 deliber
 
 The build can also fail on the city graph: since 2026-10-28 a module-scope check in
 `lib/locations.ts` rejects an unknown or one-way `nearby` slug. Fix the edge on both cities; never
-remove the check.
+remove the check. Since 2026-11-13 two more files check at module scope: `lib/services.ts` (meta
+description length, `pricing` against `priceModel`, `guides` against `featuredGuides`, no answer or
+checklist sentence on two services, `heroPicker` naming each service once) and `lib/links.ts` (every
+cross-file link resolves to a real route with its trailing slash; the city count in the `/services/`
+and homepage leads; each city's
+schema name in `site.serviceAreas`, one to one). Same rule: fix the data, never the check.
 
 **The `rm -rf .next` matters.** A polluted `.next/` from a `next dev` session can leak dev-only chunks
 into the export. The 2026-09-06 clean build measured **5,910,433 bytes (5.64 MiB), largest JS chunk
@@ -144,8 +153,9 @@ done
 ```
 
 **Both must return empty; a non-empty result is a stop-ship.** This was finding SEO-01, fixed
-2026-09-17 (`b954357`): every indexed route except `/` (which keeps the layout's block) builds its
-tags with `pageOpenGraph()` in `lib/site.ts`. Both checks return empty on the 2026-11-01 build of 32 routes. Before the fix, check
+2026-09-17 (`b954357`): every indexed route builds its tags with `pageOpenGraph()` in `lib/site.ts` —
+`/` too since 2026-11-13, when it gained its own title and description (before that it kept the
+layout's block). Both checks return empty on the 2026-11-01 and 2026-11-13 builds of 32 routes. Before the fix, check
 (a) returned the ten routes that declared their own `openGraph` (four services, three guides, the
 three cities of the day), and check (b) eight hub and static routes whose `og:url` was the homepage.
 A new route that hand-writes its `openGraph` instead of calling the helper is how it comes back.
@@ -166,6 +176,8 @@ Expect no output. Currently clean on all 32 pages.
 ```bash
 grep -rL 'application/ld+json' out --include=index.html      # pages with no schema — expect none
 grep -rl 'BreadcrumbList' out --include=index.html | wc -l   # expect 28 (every PageHero page — all but /, /thank-you/ and the two 404 artifacts)
+grep -rl '"FAQPage"' out --include=index.html | wc -l        # expect 21 (/, 4 services, 3 guides, 12 cities, /pricing/)
+grep -rl '"@type":"Offer"' out --include=index.html          # expect exactly the water-leak and moisture service pages (2026-11-13)
 grep -rl 'aggregateRating' out --include=index.html | wc -l  # MUST be 0 until sourced (removed 2026-08-17)
 grep -rl '"@type":"Review"' out --include=index.html | wc -l # MUST be 0 — same purge
 grep -rl 'sameAs\|GeoCoordinates' out --include=index.html | wc -l  # MUST be 0 until real values exist
@@ -192,6 +204,27 @@ done
 
 Expect no output. Any hit means the 4.9 rating, the 3,000+ job count or the 97% success rate has come
 back into visible copy.
+
+**The 2026-11-13 claim greps (business-facts §H).** The user's answers that day removed every
+insurer-acceptance claim (not documented) and allowed the electrician licence in text on the panel
+page only. Same text-scoped loop:
+
+```bash
+for f in $(find out -name index.html); do
+  t=$(perl -0777 -pe 's{<(script|style)\b.*?</\1>}{}gsi; s{<[^>]*>}{ }gs' "$f")
+  a=$(printf '%s' "$t" | grep -oE 'קביל|(מקובל|מתקבל)[^ ]* ב(חברות|תביעות)' | sort -u | tr '\n' ' ')
+  [ -n "$a" ] && echo "acceptance ${f#out}: $a"
+  printf '%s' "$t" | grep -qE 'רי?שיון' && [ "${f#out}" != "/services/electrical-thermography/index.html" ] \
+    && echo "licence ${f#out}"
+done
+```
+
+Expect no output (verified on the 2026-11-13 build). Don't widen the first pattern to a bare
+`מקובל`: two city claims use the word in its ordinary sense — חולון's «שכבות האיטום המקובלות» and
+ראשון לציון's «בסגנון שהיה מקובל בשנות ה-70» — and the `/locations/` hub repeats one of them, so a bare
+grep reports three false positives. In `lib/` the licence lives only in the electrical entry of
+`lib/services.ts` (its `answer`, `steps[1]` and `checklist`); comments that record the removed
+acceptance wording are expected there and in `lib/site.ts` and `lib/faqs.ts`.
 
 Breadcrumb parity is structural now: `PageHero` itself emits `BreadcrumbList` from the same
 `crumbs` array it renders, so the count equals the number of pages using `PageHero` with crumbs.
@@ -269,12 +302,14 @@ labels `ContactForm` puts in the WhatsApp handoff message. Expect no output; the
 clean today.
 
 **A clean grep here is necessary, not sufficient.** The static HTML only ever carries the generic
-prefill; the leak in finding **SEC-3** appears _after hydration_, when `/thank-you/` rebuilds the
-WhatsApp href from `sessionStorage` and the visitor's name and mobile number land in a live `href`
-that is tagged `data-cta="thankyou-whatsapp"`. That is an open code defect. The only check that sees
-it is the live one, which `docs/implementation-roadmap.md` already mandates and which has never been
-run: **submit the form, land on `/thank-you/`, then inspect the rendered anchor and the Network tab —
-the request, not the config** — and confirm no `/g/collect` call carries the name or the phone.
+prefill; the leak in finding **SEC-3** appeared _after hydration_, when `/thank-you/` rebuilt the
+WhatsApp href from `sessionStorage` and put the visitor's name and mobile number in a live `href`
+tagged `data-cta="thankyou-whatsapp"`. **Fixed 2026-09-17** (CLAUDE.md §12): `ThankYouContent`
+renders the generic `whatsappHref()` and opens the prefilled chat from its click handler, so the
+personal URL never enters the DOM. Only a live check can see post-hydration behaviour, so run it after
+touching `ContactForm` or `ThankYouContent`: **submit the form, land on `/thank-you/`, then inspect
+the rendered anchor and the Network tab — the request, not the config** — and confirm no
+`/g/collect` call carries the name or the phone.
 
 ## 12. Output weight
 
@@ -340,6 +375,37 @@ non-chrome words); the first three now measure 409–461 unique. The footer has 
 every page since then, so the chrome constant has grown too — re-measure it on `/404/` before
 subtracting.
 
+**Since 2026-11-13, measure unique words the `docs/content-standards.md` §1 way, and strip the shared
+blocks.** Release 1 added two lists that render identically on several routes — `TrustRow` (service
+pages, `/services/`, `/pricing/`, the homepage `TrustBar`) and the `CityChips` row (water, moisture,
+`/services/`, every city's «אזורים סמוכים») — and both mark their `<ul>` with `data-shared-block`, so
+they count as chrome. A chip row's heading and lead are per-page copy and stay in.
+
+```bash
+for f in $(find out -name index.html | sort); do
+  w=$(perl -0777 -ne 's{<script.*?</script>}{}gs; s{<style.*?</style>}{}gs;
+        s{<ul\b[^>]*data-shared-block[^>]*>.*?</ul>}{}gs;
+        if (/<main\b.*?>(.*)<\/main>/s) { $m = $1; $m =~ s{<[^>]*>}{ }gs; print $m }' "$f" \
+      | tr -s " \t\n" "\n" | grep -c '[^[:space:]]')
+  printf "%5s  %s\n" "$((w - 112))" "${f#out}"   # minus 112 for ContactCTA (not on /contact/)
+done
+```
+
+The 2026-11-13 release-1 build, unique words by that command, against the §1 floors:
+
+| Route                                | Unique | Floor | Route                                 | Unique | Floor |
+| ------------------------------------ | ------ | ----- | ------------------------------------- | ------ | ----- |
+| `/`                                  | 1180   | 800   | `/pricing/`                           | 556    | 450   |
+| `/services/water-leak-detection/`    | 708    | 450   | `/services/`                          | 438    | 250   |
+| `/services/moisture-detection/`      | 616    | 450   | `/guides/`                            | 150 ❌ | 250   |
+| `/services/electrical-thermography/` | 565    | 450   | `/guides/what-a-thermal-camera-sees/` | 861 ❌ | 900   |
+| `/services/insurance-reports/`       | 562    | 450   | `/guides/find-leak-without-breaking/` | 770 ❌ | 900   |
+|                                      |        |       | `/guides/leak-detection-cost/`        | 753 ❌ | 900   |
+
+The ❌ rows are known and tracked: `/guides/` gets hub prose with the release-2 guides, and the three
+guides were short before release 1 touched them (content-standards §1) — check them, don't fail a
+change that did not shorten them.
+
 ## 14. Auditor sweep
 
 For a substantive change, run the relevant agents against the fresh `out/`:
@@ -380,14 +446,17 @@ previews a fresh build, so it cannot show the refusal). Rebuild clean afterwards
 case-insensitively, because the emitted HTML is camelCase. A page carries it twice, and that is correct: once on
 the `<img>` and once on its preload link.
 
-**Once `gates.minPerContentPage` is 2**, every content route needs two images: a new page needs its plan slots
-and two approved images before it ships.
+**`gates.minPerContentPage` is 2** (the manifest, CLAUDE.md §15), so every content route needs two images: a
+new page needs its plan slots and two approved images before it ships.
 
 ## Stop-ship list
 
 - **`aggregateRating`, `Review`, `sameAs`, `GeoCoordinates`, or a facebook.com/instagram.com link in
   the export** — any of them without a verifiable public source in `docs/business-facts.md` §B/§E.
 - The 4.9 rating, the 3,000+ job count or the 97% success rate back in visible copy (§8).
+- Insurer-acceptance wording («קביל», «מקובל/מתקבל בחברות הביטוח») in visible copy, or the
+  electrician licence outside `/services/electrical-thermography/` (§8, business-facts §H).
+- An `Offer` on a service whose visible price is not `₪{site.priceFrom}` (§8).
 - A `<title>` with the brand zero times or twice.
 - A missing or non-self-referencing canonical.
 - A route with no `og:image`, or an `og:url` that is not its own canonical (§6 — SEO-01 regressing).
@@ -405,10 +474,9 @@ and two approved images before it ships.
 - An article edited without its `dateModified` bumped — `app/sitemap.ts` feeds that date straight to
   the sitemap, so a stale one tells crawlers nothing changed.
 
-Not on this list, deliberately: the **open** defect §11 describes (SEC-3). (SEO-01, which this line
-also named, was fixed 2026-09-17 and §6 is a stop-ship now.) It is tracked, it predates your change,
-and blocking every release on it would only teach the next agent to skip the gate. Confirm it has not
-grown; do not let it stop a shipment it did not cause.
+This paragraph used to exempt two open defects from the list — SEC-3 (§11) and SEO-01 (§6). Both
+were fixed 2026-09-17, so neither is exempt any more: a tagged href carrying a lead's details and a
+route with a broken `og:` block are stop-ships like the rest.
 
 ## Then
 

@@ -131,22 +131,26 @@ routes are currently unique.
 
 ### Where the code does not yet implement these formulas
 
-**The formulas above are the spec. One route type still diverges from them in code — the spec is
-right and the code is wrong.** Do not "reconcile" this section downwards to match what ships.
+**The formulas above are the spec. Both route types that diverged from them are fixed (the last on
+2026-11-13); the record stays so nobody regresses them.** Do not "reconcile" this section downwards
+to match what ships.
 
 - ✅ **Location pages — fixed 2026-09-17 (SEO-02).** They used to emit
   `location.answer.slice(0, 155)`, cut mid-word on all three cities of the day. `Location` now
   carries a required, authored `metaDescription`; all twelve follow the formula above and end in the
-  phone. Do not go back to deriving it from the answer.
-- **Service pages.** `app/services/[slug]/page.tsx:30` feeds `service.summary` straight into
-  `description`. That field is commented `// card description` in `lib/services.ts:37` and is doing
-  two jobs: the four summaries measure **85–92 characters** and none carries a `חייגו` CTA. Same fix
-  shape — split a `metaDescription` off `summary` rather than stretching one string to serve a card
-  blurb and a SERP snippet (finding SEO-03).
+  phone. Do not go back to deriving it from the answer. Still open (not fixed 2026-11-13): the
+  phone is typed as a literal in all twelve, not read from `site.phone.display` as the service metas
+  now do, so it is a NAP literal outside `lib/site.ts` (golden rule 2).
+- ✅ **Service pages — fixed 2026-11-13 (SEO-03).** `app/services/[slug]/page.tsx` used to feed
+  `service.summary`, the card blurb, into `description`: **85–92 characters**, no `חייגו` CTA.
+  `Service` now carries an authored `metaDescription` that ends in `חייגו` + `site.phone.display`,
+  and a check at the bottom of `lib/services.ts` fails the build outside 150–160 characters. The
+  four measure **155–157**. `summary` stays the card blurb.
 
-Measured 2026-10-28: the twelve location pages are the only routes reaching 150–160 (**152–158**,
-authored). The other sixteen run **85–138**. Treat 150–160 as the target to write to, not as a
-description of what ships.
+Measured 2026-11-13: **18 of the 29** indexed routes reach 150–160. They are the twelve location
+pages (**153–158**), the four service pages (**155–157**), `/` (**156**) and `/services/` (**160**).
+The other eleven run **99–138**. Treat 150–160 as the target to write to, not as a description of
+what ships.
 
 Only claim what [business-facts.md](business-facts.md) confirms. Prices, certifications, any rating or
 review count, and job/success-rate figures are all 🔶 — and the specific fabricated stats this site
@@ -177,9 +181,11 @@ owner accepted is recorded in the header of `lib/locations.ts`.
    never saved), fact-checked twice per page and read side by side for the doorway test. Every
    statement's source is in `docs/location-sources/{slug}.md` (the first three have no register
    yet). A new area beyond the 12 goes through `/new-city`.
-3. Each earns its depth and its inbound links before it ships. The footer lists all 12 cities on
-   every page and the `/locations/` hub shows 12 cards; **no service page links to a city yet**
-   (LOC-2, open).
+3. ✅ **Inbound links done 2026-11-13 (LOC-2).** Each earns its depth and its inbound links before
+   it ships. The footer lists all 12 cities on every page and the `/locations/` hub shows 12 cards.
+   Since 2026-11-13 the water-leak and moisture pages and the `/services/` hub link all twelve with
+   descriptive anchors, and the electrical page links three. Counting the hub, each city now has
+   in-body links from 4–8 pages.
 4. Only then consider a service × location second tier, and only for services with genuine local demand
    — `water-leak-detection` and `moisture-detection`. Not `insurance-reports`, which is a document, not
    a place.
@@ -195,7 +201,7 @@ not here, it is not indexed.
 
 | Route                                 | Primary target                                 | Tier |
 | ------------------------------------- | ---------------------------------------------- | ---- |
-| `/`                                   | איתור נזילות · איתור נזילות תרמי               | 1    |
+| `/`                                   | איתור נזילות · איתור נזילות תרמי · + the region (title since 2026-11-13) | 1    |
 | `/services/`                          | שירותי איתור נזילות ורטיבות                    | 1    |
 | `/services/water-leak-detection/`     | איתור נזילות מים · נזילה בקיר                  | 1    |
 | `/services/moisture-detection/`       | איתור רטיבות · בדיקת רטיבות בקיר               | 1    |
@@ -206,7 +212,7 @@ not here, it is not indexed.
 | `/guides/what-a-thermal-camera-sees/` | מה מצלמה תרמית רואה — ומה לא                   | 3    |
 | `/guides/find-leak-without-breaking/` | איך מאתרים נזילה בקיר בלי לשבור                | 3    |
 | `/guides/leak-detection-cost/`        | כמה עולה איתור נזילות (informational)          | 3    |
-| `/locations/`                         | אזורי שירות · איתור נזילות בגוש דן             | 2    |
+| `/locations/`                         | אזורי שירות (the index of the 12 city pages; the region term is led by `/` since 2026-11-13) | 2    |
 | `/locations/tel-aviv/`                | איתור נזילות בתל אביב                          | 2    |
 | `/locations/holon/`                   | איתור נזילות בחולון                            | 2    |
 | `/locations/bat-yam/`                 | איתור נזילות בבת ים                            | 2    |
@@ -242,11 +248,12 @@ on, the guide is the informational answer that earns the AI citation. Keep the s
 explains _what drives_ the price, `/pricing/` states it. If either starts restating the other, merge
 toward `/pricing/`.
 
-**Open gap on that pair:** the guide currently reaches `/pricing/` only through the navbar. There is
-**no in-copy link** from `/guides/leak-detection-cost/` to `/pricing/` — measured in the export, both
-`/pricing/` hrefs on that page carry the generic chrome anchor `מחירון` (`navLinks` in `lib/site.ts`),
-not a descriptive in-copy one. The informational page should hand the ready buyer down to the
-commercial one. Code fix, not a doc fix.
+**The gap on that pair is closed (2026-11-13).** The guide used to reach `/pricing/` only through the
+chrome anchor `מחירון` (`navLinks` in `lib/site.ts`). `/guides/leak-detection-cost/` now carries an
+in-copy `related` block into `/pricing/#visit-scope` («מה כולל ביקור איתור ב-₪350») and
+`/pricing/#guarantee` (the guarantee slogan, verbatim). `/pricing/` links back to the guide as
+«כמה עולה איתור נזילות ומה משפיע על המחיר». The informational page now hands the ready buyer down to
+the commercial one.
 
 **Slug rule:** every route on this site uses **ASCII English path segments** with Hebrew content. Keep
 it that way — introducing Hebrew slugs now would split the taxonomy and add a percent-encoding matcher

@@ -23,8 +23,12 @@ export default function Hero() {
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_15%,rgba(255,106,61,0.28),transparent_55%)]"
       />
-      <Container className="relative grid items-center gap-12 py-16 md:grid-cols-2 md:py-24">
-        <div>
+      {/* Three grid items. On a phone they stack text → image → selector, so the LCP image stays
+          near the top of the first screen (the selector below it); from md the text and the
+          selector share the start column and the image spans both rows. Grid columns follow `dir`,
+          so column 1 is the right-hand column in RTL. */}
+      <Container className="relative grid items-center gap-x-12 gap-y-8 py-16 md:grid-cols-2 md:py-24">
+        <div className="md:col-start-1 md:row-start-1 md:self-end">
           {/* «בשטח» is load-bearing: 20+ is the founder's field experience, not the company's age
               (founded 2015). The eyebrow used to drop it. */}
           <p className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-sm font-semibold text-white">
@@ -79,6 +83,12 @@ export default function Hero() {
                   aria-hidden="true"
                 />
                 {site.emergencyNote}
+                {/* The visible sentence says nothing about dialling; this tells a screen-reader user
+                    the link places a call. The visible words stay inside the name (WCAG 2.5.3). */}
+                <span className="sr-only">
+                  {" "}
+                  — חיוג ל-<span dir="ltr">{site.phone.display}</span>
+                </span>
               </a>
             </li>
             <li>
@@ -96,10 +106,23 @@ export default function Hero() {
               </Link>
             </li>
           </ul>
+        </div>
 
-          {/* The quick selector: four problems → four service pages. Server-rendered links, no
-              client state; each tap target is ≥44 px. */}
-          <p id="hero-pick" className="mt-6 text-sm font-semibold text-white">
+        <div className="relative mx-auto w-full max-w-md md:col-start-2 md:row-span-2 md:row-start-1">
+          {heroImage ? (
+            <Figure
+              image={heroImage}
+              priority
+              bare
+              imageClassName="h-auto w-full rounded-3xl ring-1 ring-white/20"
+            />
+          ) : null}
+        </div>
+
+        {/* The quick selector: four problems → four service pages. Server-rendered links, no
+            client state; each tap target is ≥44 px. */}
+        <div className="md:col-start-1 md:row-start-2 md:self-start">
+          <p id="hero-pick" className="text-sm font-semibold text-white">
             {heroPicker.label}
           </p>
           <ul
@@ -118,16 +141,6 @@ export default function Hero() {
               </li>
             ))}
           </ul>
-        </div>
-        <div className="relative mx-auto w-full max-w-md">
-          {heroImage ? (
-            <Figure
-              image={heroImage}
-              priority
-              bare
-              imageClassName="h-auto w-full rounded-3xl ring-1 ring-white/20"
-            />
-          ) : null}
         </div>
       </Container>
     </section>

@@ -1,6 +1,6 @@
 ---
 name: schema-structured-data
-description: Emit the JSON-LD graph with the lib/jsonld.ts builders — LocalBusiness + WebSite globally, Service per service and per location page (no inLanguage on either), Article per guide with the founder's @id on the author, page nodes on the hubs, BreadcrumbList emitted by PageHero itself, FAQPage matched to visible FAQs and returning null rather than an empty mainEntity, and the standing fabrication gate that keeps aggregateRating, Review, sameAs and geo at zero. Use when wiring or auditing structured data, or before a Rich Results Test. Triggers "add schema", "JSON-LD", "BreadcrumbList", "structured data", "rich results", "aggregateRating".
+description: Emit the JSON-LD graph with the lib/jsonld.ts builders — LocalBusiness + WebSite globally, Service per service and per location page (no inLanguage on either; an Offer with a ₪350 minPrice on the two priced services and each city's areaServed spelled as LocalBusiness spells it, both since 2026-11-13), Article per guide with the founder's @id on the author, page nodes on the hubs, BreadcrumbList emitted by PageHero itself, FAQPage matched to visible FAQs and returning null rather than an empty mainEntity, and the standing fabrication gate that keeps aggregateRating, Review, sameAs and geo at zero. Use when wiring or auditing structured data, or before a Rich Results Test. Triggers "add schema", "JSON-LD", "BreadcrumbList", "structured data", "rich results", "aggregateRating".
 ---
 
 # Structured data
@@ -72,7 +72,7 @@ aspirational. The two globals are on top of everything else on every row.
 | every page (root layout)      | `LocalBusiness`/`HomeAndConstructionBusiness` + `WebSite`             | ✅            |
 | `/`                           | `FAQPage` from `generalFaqs` (no breadcrumb — it _is_ home)           | ✅            |
 | `/services/`                  | `CollectionPage` + `BreadcrumbList`                                   | ✅            |
-| `/services/{slug}/` ×4        | `Service` + `FAQPage` + `BreadcrumbList`                              | ✅            |
+| `/services/{slug}/` ×4        | `Service` (+ `Offer` on water-leak and moisture) + `FAQPage` + `BreadcrumbList` | ✅  |
 | `/guides/`                    | `CollectionPage` + `BreadcrumbList`                                   | ✅            |
 | `/guides/{slug}/` ×3          | `Article` + `FAQPage` + `BreadcrumbList`                              | ✅            |
 | `/locations/`                 | `CollectionPage` + `BreadcrumbList`                                   | ✅            |
@@ -124,7 +124,10 @@ root has no trail), `/thank-you/` and the two 404 artifacts. That is the expecte
 ```ts
 serviceJsonLd(service);
 // name: service.title, serviceType: service.h1, provider: { "@id": "…/#business" },
-// areaServed: { "@type": "AdministrativeArea", name: "גוש דן והמרכז" }
+// areaServed: { "@type": "AdministrativeArea", name: "גוש דן והמרכז" },
+// offers (only when service.pricing === "from"): { "@type": "Offer", url: "…/pricing/",
+//   priceCurrency: "ILS", priceSpecification: { "@type": "PriceSpecification",
+//   minPrice: site.priceFrom, priceCurrency: "ILS" } }
 ```
 
 `AdministrativeArea` is correct for a region. The location silo has landed, and
@@ -132,6 +135,13 @@ serviceJsonLd(service);
 `AdministrativeArea` for a region. All twelve locations are `kind: "city"`, so all twelve emit
 `City`; typing a region as a `City` is a factual error in the graph, which is the entire reason the
 field exists (`/new-city`).
+
+**LOC-11 — fixed 2026-11-13.** A city node's `areaServed.name` is `location.areaServedName ??
+location.name`, so it matches `LocalBusiness.areaServed` (from `site.serviceAreas`) byte for byte:
+`/locations/tel-aviv/` emits «תל אביב-יפו» while the visible name stays «תל אביב». `lib/links.ts`
+fails the build unless the twelve schema names and `site.serviceAreas` pair one to one — a new city
+whose visible name differs from its `serviceAreas` entry sets `areaServedName`. The node's `name` is
+`locationTitle(location)`, the same string as the page title.
 
 **Never emit a `LocalBusiness` node per city.** This business has no premises at all; one node is the
 honest count, and a node per city is a recognised local-spam pattern.
@@ -163,9 +173,14 @@ honest count, and a node per city is a recognised local-spam pattern.
 `AboutPage`, `ContactPage`, `CollectionPage`, `Article` and the `Person` on the business node all
 **ship now** — the founder is confirmed (business-facts §A) and the three guides carry a real byline.
 
-**`Offer` / `PriceSpecification` is the only node type still absent.** It is blocked on the ₪450 entry
-price and the four per-service `priceModel` strings being confirmed (business-facts §C), and
-`lib/jsonld.ts` says so in the comment above the page-node builders. Add the row; never fill the value.
+**`Offer` / `PriceSpecification` shipped 2026-11-13 (backlog §4.5, for the services)** — on the two
+`Service` nodes whose visible `priceModel` states «החל מ-₪350»: water-leak-detection and
+moisture-detection. ₪350 was confirmed 2026-09-17 with what the visit includes (business-facts §C).
+«החל מ» is a floor, so it is a `minPrice`, never a `price`. The other two services are
+`pricing: "quote"` and carry none: whether ₪350 is also the floor for a panel scan or a report is still
+🔶 (business-facts §H). The `pricing` field is checked against the `priceModel` text at build
+(`lib/services.ts`), which keeps gating rule 2 (an Offer equals the visible price) true by
+construction. A page node never carries an Offer, and no Offer ever ships a guessed value.
 
 ## Open defects in the shipped graph
 
@@ -173,12 +188,16 @@ Real, and none of them a fabrication. Describe them as open; cite the id.
 
 | id   | What                                                                                                                                                                                                                                                               | Where           |
 | ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------- |
-| SD-6 | `Article` carries no `image`, which the target graph asks for. The guide pages render no image, and rule 2 above forbids marking up what the reader cannot see — so the fix is a real representative image (`/og.png` is the site's own asset), not an unseen URL. | `articleJsonLd` |
+| SD-6 | `Article` carries no `image`, which the target graph asks for. The guides have rendered AI illustrations since 2026-11-02, but CLAUDE.md §15 keeps every rendering out of JSON-LD, and rule 2 above forbids marking up what the reader cannot see — so the fix is a real representative image (`/og.png` is the site's own asset), not a rendering or an unseen URL. | `articleJsonLd` |
 
 **Closed 2026-10-28 (`e6d4111`) — do not report them as open.** SD-9: `inLanguage` is gone from both
 `Service` builders (it stays on the creative works). SD-8: `faqPageJsonLd` returns `null` for an
 empty list, so neither the guide nor the city route needs a length guard. SD-5: an article author who
 is the founder carries the founder's `@id` (`…/about/#founder`).
+
+**Closed 2026-11-13 (`3492fb8`).** LOC-11: the city `areaServed` names match `LocalBusiness` (above).
+And the "`Offer` blocked on price confirmation" note is gone from `lib/jsonld.ts` — the Offer ships on
+the two priced services.
 
 ## Checklist
 
@@ -197,6 +216,9 @@ is the founder carries the founder's `@id` (`…/about/#founder`).
 grep -rL 'application/ld+json' out --include=index.html          # pages with no schema — expect none
 find out -name index.html | wc -l                                # 32 emitted pages
 grep -rl 'BreadcrumbList' out --include=index.html | wc -l       # expect 28 of the 32
+grep -rl '"FAQPage"' out --include=index.html | wc -l            # expect 21
+grep -rl '"@type":"Offer"' out --include=index.html              # expect exactly the water-leak and moisture pages
+grep -o '"areaServed":{[^}]*}' out/locations/tel-aviv/index.html # expect "City", "תל אביב-יפו"
 grep -rl 'aggregateRating\|"@type":"Review"\|sameAs\|GeoCoordinates' out --include=index.html | wc -l  # expect 0
 ```
 

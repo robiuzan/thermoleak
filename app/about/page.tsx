@@ -99,7 +99,9 @@ const values: AboutValue[] = [
     // (eeat-and-trust §6). The card now renders the slogan and one term verbatim from
     // site.guaranteeTerms — render or link, never paraphrase (content-standards §6).
     title: "התחייבות בתנאים כתובים",
-    desc: `${site.guarantee}. ${site.guaranteeTerms.ifNotFound}`,
+    // ifNotFound WITH its exceptions — without them the card would state an unconditional no-charge
+    // promise (the over-promise lib/faqs.ts warns about).
+    desc: `${site.guarantee}. ${site.guaranteeTerms.ifNotFound} ${site.guaranteeTerms.exceptions}`,
     more: { href: "/pricing/#guarantee", label: "התנאים המלאים של האחריות" },
   },
 ];
@@ -161,7 +163,8 @@ export default function AboutPage() {
         </Container>
       </section>
 
-      <TrustBar />
+      {/* No credentials row here: the page's own «ציוד וכיסוי» card lists them. */}
+      <TrustBar withCredentials={false} />
 
       {/* Founder. Confirmed: the name (business-facts §A), the 2015 founding year, ~20 years in
           the trade and a two-person team (all §A, 2026-09-17). There is no certificate and no

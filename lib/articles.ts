@@ -44,7 +44,7 @@ export const articles: Article[] = [
     description:
       "מצלמה תרמית מצלמת טמפרטורת פני שטח, לא מים. המדריך המלא למה השיטה מזהה, איפה היא מגיעה לגבול שלה, ואיך מאמתים ממצא לפני שקובעים מקור.",
     datePublished: "2026-08-24",
-    dateModified: "2026-11-02", // page images installed 2026-11-02
+    dateModified: "2026-11-13", // callout no longer implies every finding goes into a report (business-facts §H)
     author: "רונן דהן",
     blocks: [
       {
@@ -83,7 +83,7 @@ export const articles: Article[] = [
       {
         kind: "callout",
         tone: "warn",
-        text: "ממצא תרמי לבדו אינו הוכחה. אצלנו כל מוקד חשוד מאומת במכשירי מדידה משלימים — מד לחות ואמצעי איתור נוספים — לפני שנקבע מקור הנזילה ולפני שנכנס לדו״ח.",
+        text: "ממצא תרמי לבדו אינו הוכחה. אצלנו כל מוקד חשוד מאומת במכשירי מדידה משלימים — מד לחות ואמצעי איתור נוספים — לפני שנקבע מקור הנזילה.",
       },
       { kind: "heading", text: "איך קוראים תמונה תרמית נכון" },
       {
@@ -286,7 +286,7 @@ export const articles: Article[] = [
     description:
       "פירוט שקוף של עלות איתור נזילות: ממה מורכב המחיר, מה מייקר ומה לא, מתי נדרש דו״ח לביטוח, ולמה מחיר שנמסר רק בסוף הביקור הוא סימן אזהרה.",
     datePublished: "2026-08-24",
-    dateModified: "2026-11-02", // the answer's price went ₪450 → ₪350 (4beb407); page images installed 2026-11-02
+    dateModified: "2026-11-13", // link to /pricing/; the visit's real scope and no insurer-acceptance claim (business-facts §H)
     author: "רונן דהן",
     blocks: [
       {
@@ -332,7 +332,8 @@ export const articles: Article[] = [
       },
       {
         kind: "paragraph",
-        text: "מה שאינו נכלל: התיקון עצמו. אנחנו מאתרים ומתעדים; את התיקון מבצע בעל מקצוע — אינסטלטור, איטום או חשמלאי, לפי הממצא. ההפרדה הזו מכוונת: מי שגם מאתר וגם מתקן נמצא בניגוד עניינים מובנה לגבי היקף הממצא.",
+        // The exclusions are site.visitScope's, verbatim — owner-approved terms, never retyped.
+        text: `מה שאינו נכלל: ${site.visitScope.excludes.join("; ")}. אנחנו מאתרים ומוסרים את הממצאים; את התיקון מבצע בעל מקצוע — אינסטלטור, איטום או חשמלאי, לפי הממצא. ההפרדה הזו מכוונת: מי שגם מאתר וגם מתקן נמצא בניגוד עניינים מובנה לגבי היקף הממצא.`,
       },
       // The informational page hands the ready buyer down to the commercial one (keyword-map §7:
       // until 2026-11-13 the only link to /pricing/ here was the navbar's). The guarantee is linked by
@@ -375,7 +376,7 @@ export const articles: Article[] = [
         kind: "list",
         items: [
           "מה נמצא בסוף. המחיר נקבע לפי היקף הבדיקה, לא לפי חומרת הממצא.",
-          "כמה יקר יהיה התיקון. אנחנו מאתרים ומתעדים — את התיקון עצמו מבצע בעל מקצוע.",
+          "כמה יקר יהיה התיקון. אנחנו מאתרים ומוסרים את הממצאים — את התיקון עצמו מבצע בעל מקצוע.",
           "האם תבחרו להמשיך איתנו. בדיקה היא שירות שהושלם, לא שלב במכירה.",
         ],
       },
@@ -418,7 +419,8 @@ export const articles: Article[] = [
           },
           {
             q: "הדו״ח לביטוח עולה בנפרד?",
-            a: "כן. הבדיקה והדו״ח הם שתי עבודות: האיתור עצמו, ואז עריכה ותיעוד בפורמט שחברות הביטוח מקבלות. אפשר לבצע את שניהם באותו ביקור.",
+            // Was «…בפורמט שחברות הביטוח מקבלות» — insurer acceptance is not documented (§H).
+            a: "כן. הבדיקה והדו״ח הם שתי עבודות: האיתור עצמו, ואז עריכה ותיעוד של הממצאים בדו״ח מסודר להגשה לחברת הביטוח. אפשר לבצע את שניהם באותו ביקור.",
           },
         ],
       },

@@ -1,6 +1,6 @@
 ---
 name: new-article
-description: Add a Hebrew guide to the knowledge hub at /guides/[slug]/ — appending to the typed block model in lib/articles.ts, the confirmed byline and real dates, Article + BreadcrumbList + FAQPage derived from the blocks, the answer-block opening, and the links into the services. Use when adding editorial content for topical authority and AEO. Triggers "write an article", "blog post", "knowledge hub", "מדריך", "topical authority", "guide".
+description: Add a Hebrew guide to the knowledge hub at /guides/[slug]/ — appending to the typed block model in lib/articles.ts (nine block kinds, including `related` for in-copy links), the confirmed byline and real dates, Article + BreadcrumbList + FAQPage derived from the blocks, the answer-block opening, and the links both ways — relatedServices out, the services' featuredGuides in, all checked at build time by lib/links.ts. Use when adding editorial content for topical authority and AEO. Triggers "write an article", "blog post", "knowledge hub", "מדריך", "topical authority", "guide".
 ---
 
 # Publish an article
@@ -42,7 +42,9 @@ export type Block =
   | { kind: "table"; head: string[]; rows: string[][] }
   | { kind: "answer"; q: string; a: string } // → the AEO block, and the FAQPage
   | { kind: "faq"; items: { q: string; a: string }[] } // → the rest of the FAQPage
-  | { kind: "callout"; tone: "note" | "warn"; text: string };
+  | { kind: "callout"; tone: "note" | "warn"; text: string }
+  | { kind: "figure"; slot: "mid" | "end" } // a manifest image for this guide's route (CLAUDE.md §15)
+  | { kind: "related"; lead: string; links: NavLink[] }; // in-copy links, checked in lib/links.ts
 
 export interface Article {
   slug: string;
@@ -56,10 +58,13 @@ export interface Article {
 }
 ```
 
-**Only these seven kinds render.** `components/ArticleBody.tsx` switches on `kind` and returns `null`
-for anything else, so an invented kind disappears silently and the build stays green. There is no
-`image` block and no `cta` block — the route appends the related-services strip and `ContactCTA`
-itself.
+**Nine kinds, and the renderer is exhaustive** (since 2026-11-13). `components/ArticleBody.tsx`
+switches on `kind` and its `default` assigns the block to `never`, so a kind added to `Block` without a
+`case` is a **type error** — it used to render `null` with the build green. `figure` places the
+guide's own `mid`/`end` image from the manifest (the `lead` image needs no block: `ArticleBody` places
+it after the answer through its `leadSlot` prop); `related`
+renders through `LinkLead` — a lead sentence, then descriptive anchors. FAQ schema skips both. There is
+still no `cta` block — the route appends the related-services strip and `ContactCTA` itself.
 
 Why typed blocks rather than MDX: no new dependency and no second build step in a repo whose build is
 the release gate; strict TS stays meaningful; and — the real reason — **`FAQPage` and the answer block
@@ -80,15 +85,21 @@ the copy as it is edited. That is the same property the `<details>`-based FAQs g
    block only** — a second of either renders on the page but never reaches the schema.
 6. `author`, `datePublished`, `dateModified` — real values, and `dateModified` is a live signal (see
    Steps 5).
-7. Links into the services via `relatedServices`. See the Gotchas: the block model has **no inline-link
-   kind**, so a true contextual link inside a paragraph is not something you can author today.
+7. Links into the services via `relatedServices` (the strip after the body), plus at least one
+   `related` block where the reader is ready to act — into a service, `/pricing/` (its `#visit-scope`,
+   `#guarantee` and `#price-factors` anchors exist), another guide or a city page. The cost guide's is
+   the model: → `/pricing/#visit-scope` and `/pricing/#guarantee`, the guarantee linked by its own
+   slogan `site.guarantee`, never a paraphrase. Every href must be in `knownRoutes` (`lib/links.ts`),
+   trailing slash included, or the build fails.
 
 **900-word floor.** Depth is the point; a 900-word article that repeats a service page is worse than no
 article, because it cannibalises the page that converts. For calibration, measured 2026-09-06 with the
 `docs/content-standards.md` §1 command: the three shipped guides emit 891, 939 and 1,032 raw words;
 site chrome measures 116 words (from `out/404.html`) and the shared `ContactCTA` roughly 113 more. Net
 of both, **none of the three clears 900** — so write the fourth to clear the floor on its own body
-copy, and don't cite the shipped three as proof the bar is already met.
+copy, and don't cite the shipped three as proof the bar is already met. Re-measured 2026-11-13 the
+content-standards §1 way (`<main>`, minus 112 for `ContactCTA`): about 861, 770 and 753 unique words
+(camera, find-leak, cost) — still all three short.
 
 ## Schema
 
@@ -123,6 +134,12 @@ Three of the six high-value openers are written. **Shipped — do not rewrite:**
 - כל כמה זמן צריך בדיקה תרמוגרפית ללוח חשמל — ולמה היא נעשית תחת עומס → links down to
   `/services/electrical-thermography/`.
 
+**Status 2026-11-13 — not shipped, do not mark done.** The GEO plan (`master-geo-linear-bumblebee`,
+release 2, branch `geo-guides`) drafts three guides: `stain-not-above-leak` (the first item),
+`condensation-or-leak`, and `water-damage-insurance-claim` («למה תביעת נזקי מים נדחית או מופחתת?», the
+second item's ground). They wait on six new images and the owner's approvals. The panel guide (the
+third item) is the next wave, so the electrical page features no guide until it exists.
+
 The last two already have **compressed** coverage in the corresponding service's `answer` and `limits`
 blocks. The guide must go materially deeper than that, not restate it — otherwise it cannibalises the
 page that converts. Each should answer the question **better than the service page does**, then link to
@@ -136,31 +153,36 @@ the service page for the commercial action.
    `articleSlugs` and `getArticle()` both derive from the array.
 3. Write to the structure above; every claim either free to state or 🔶 (`docs/content-standards.md`
    §6). Prices, certifications, turnaround times and job counts are **not** free to state.
-4. Set `relatedServices` to real service slugs. `getService()` drops an unknown slug silently, so a
-   typo costs you the link with no error.
+4. Set `relatedServices` to real service slugs. Since 2026-11-13 they resolve through
+   `servicesOfArticle()` in `lib/links.ts`, which **fails the build** on an unknown slug — the old
+   `.filter()` in the route dropped one without a word.
 5. **No sitemap edit.** `app/sitemap.ts` maps over `articles` and uses each article's own
    `dateModified` — which is why that date has to be honest. Bump it when the content meaningfully
    changes, never on a cosmetic edit.
-6. Add an inbound link from a related page. The hub lists the article automatically and `/guides/` is
-   in `navLinks` (so it is in the header and the footer on every route), but **no service page links
-   into a guide today** — that is the mesh gap worth closing while you are here (`/internal-linking`).
+6. **Add the guide to the `featuredGuides` of every service it serves** (`lib/services.ts`, 0–3 slugs
+   in order by the field's convention; resolved by `guidesOf()` in `lib/links.ts`). That is the
+   service → guide edge, and nothing adds it for you: the hub lists the article automatically and
+   `/guides/` is in `navLinks`, but a service page shows only the guides it names. A service whose
+   `featuredGuides` goes from empty to non-empty also needs its `guides` block (`title`, `lead`) — the
+   build fails without it. Water already names three, so a fourth water guide means choosing which
+   three to feature (`/internal-linking`).
 7. `npm run lint && npm run build`, then `npm run check:sitemap`; verify the route exists in `out/` and
    in `out/sitemap.xml`.
 
 ## Gotchas
 
-- **Never restate a price as a literal.** `lib/articles.ts` hardcodes `₪450` in the
-  `leak-detection-cost` FAQ where `lib/pricing.ts` interpolates `site.priceFrom` for the same sentence.
-  That is a live golden-rule-2 defect, **not** the pattern to copy — interpolate from `lib/site.ts`.
-  (And the number itself is still 🔶 unconfirmed: `docs/business-facts.md` §C.)
-- **There is no inline-link block.** `paragraph` renders plain text, so an anchor inside prose is not
-  authorable in the current model. The only links a guide emits are the `relatedServices` strip and the
-  auto-generated "מדריכים נוספים" list. If contextual in-copy links are the goal, that is a renderer
-  change to propose — not something to fake with a bare URL in a `paragraph`.
+- **Never restate a price as a literal.** `lib/articles.ts` carries no ₪ literal today: the cost
+  guide interpolates `site.priceFrom` (₪350, confirmed 2026-09-17, business-facts §C) in its answer
+  and in its `related` anchor. The old `₪450` literal is gone (`4beb407`); keep it that way.
+- **Contextual links go in a `related` block** (since 2026-11-13). `paragraph` still renders plain
+  text, so a link in mid-sentence is not authorable in a guide (`LinkedText` serves hub prose only);
+  never fake one with a bare URL in a `paragraph`. Besides `related` blocks, a guide emits the
+  `relatedServices` strip and the auto-generated "מדריכים נוספים" list.
 - **The "מדריכים נוספים" list is every other article, unfiltered.** At three that is a two-item list;
   as the hub grows it needs relevance and a slice, the same way the service related-strip will.
-- An unrecognised block `kind` renders nothing and the build stays green. If a section vanished from
-  the page, check the `kind` spelling before anything else.
+- A misspelled `kind` is a type error, and a new kind without a `case` in `ArticleBody` fails the
+  `never` check (since 2026-11-13). If a section vanished from the page anyway, check that its block
+  is not after a second `faq` — and that the build you are reading is fresh.
 
 ## Checklist
 
@@ -170,9 +192,11 @@ the service page for the commercial action.
 - [ ] At least one table or comparison worth citing.
 - [ ] Real author, real dates — never invented; `dateModified` reflects actual content change.
 - [ ] One `answer` block and one `faq` block, so the whole FAQ reaches `FAQPage`.
-- [ ] `relatedServices` slugs all resolve; an inbound link added from a related page.
+- [ ] `relatedServices` slugs all resolve (the build fails otherwise); the guide added to the
+      `featuredGuides` of each service it serves.
+- [ ] At least one `related` block into the commercial page; every href passes `lib/links.ts`.
 - [ ] No price, certification or turnaround literal — interpolated or 🔶.
 - [ ] Present in `out/` and `out/sitemap.xml`; `npm run check:sitemap` passes.
 - [ ] Title carries the brand exactly once (the layout template appends it — don't write it).
 
-**Images.** A new guide needs its slots in `content/images/plan.json`. While `gates.minPerContentPage` is `0` it ships without them; once that gate is `2`, it needs two approved images first (the `page-imagery` and `page-images-pipeline` skills).
+**Images.** A new guide needs its slots in `content/images/plan.json` (`lead`, and `mid` through a `figure` block). `gates.minPerContentPage` is `2` in the manifest, so a guide does not ship until two approved images are installed for it (the `page-imagery` and `page-images-pipeline` skills).

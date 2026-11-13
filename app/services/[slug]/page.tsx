@@ -219,7 +219,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
               <ul className="mt-4 space-y-3">
                 {service.checklist.items.map((item) => (
                   <li
-                    key={item.slice(0, 32)}
+                    key={item}
                     className="flex items-start gap-2 text-sm leading-relaxed text-ink/80"
                   >
                     <CheckCircle2
@@ -294,6 +294,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
             {service.cityLinks?.mode === "all" ? (
               <CityChips
                 title={service.cityLinks.title}
+                titleClassName="text-xl font-bold text-brand"
                 lead={service.cityLinks.lead}
                 links={cityLinks}
                 className="mt-10"
@@ -308,10 +309,10 @@ export default async function ServiceDetailPage({ params }: PageProps) {
               <p className="mt-2 text-sm leading-relaxed text-ink/75">
                 {service.priceModel}
               </p>
-              <p className="mt-2 text-sm">
+              <p className="mt-1 text-sm">
                 <Link
                   href={service.priceLink.href}
-                  className="font-semibold text-brand underline underline-offset-2"
+                  className="inline-flex min-h-11 items-center font-semibold text-brand underline underline-offset-2"
                 >
                   {service.priceLink.label}
                 </Link>

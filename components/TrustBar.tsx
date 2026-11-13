@@ -7,7 +7,12 @@ import TrustRow from "./TrustRow";
 // (docs/business-facts.md §D). Do not add a number without a source.
 const stats = [site.stats.years, site.stats.duration, site.stats.method, site.stats.report];
 
-export default function TrustBar() {
+export default function TrustBar({
+  withCredentials = true,
+}: {
+  // /about/ lists the credentials in its own card, so it renders the tiles only.
+  withCredentials?: boolean;
+}) {
   return (
     <section aria-label="נתונים ואמון" className="border-b border-ink/10 bg-paper">
       <Container className="grid grid-cols-2 gap-6 py-8 md:grid-cols-4">
@@ -20,12 +25,14 @@ export default function TrustBar() {
       </Container>
       {/* The confirmed credentials, right under the hero (the framework's trust signals near the
           top) — no guarantee among them (EEAT-6), no seal graphics. */}
-      <Container>
-        <TrustRow
-          withExperience={false}
-          className="justify-center border-t border-ink/10 py-4"
-        />
-      </Container>
+      {withCredentials ? (
+        <Container>
+          <TrustRow
+            withExperience={false}
+            className="justify-center border-t border-ink/10 py-4"
+          />
+        </Container>
+      ) : null}
     </section>
   );
 }

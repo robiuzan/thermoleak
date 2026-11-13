@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { NavLink } from "@/lib/site";
+import type { LinkLead as LinkLeadData } from "@/lib/site";
 
 // A lead sentence followed by descriptive in-copy links: the one rendering of every prose link block
 // (a service's `related`, an article's `related` block, the hub links). Anchors are descriptive Hebrew
@@ -9,12 +9,7 @@ export default function LinkLead({
   links,
   tail,
   className = "",
-}: {
-  lead: string;
-  links: NavLink[];
-  tail?: string;
-  className?: string;
-}) {
+}: LinkLeadData & { className?: string }) {
   return (
     <p className={`leading-relaxed text-ink/80 ${className}`}>
       {lead}{" "}

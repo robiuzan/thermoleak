@@ -37,23 +37,26 @@ the bar.)
 ### Conversion inventory — every page, every state
 
 **The `data-cta` list is maintained in one place:**
-[data-tracking-infrastructure.md](data-tracking-infrastructure.md) §4, which carries all **19**
-values. Do not keep a second copy here — this table drifted to 15 and became the list auditors
-checked pages against. It is now a map of _surfaces_, and the attribute names are the other file's.
+[data-tracking-infrastructure.md](data-tracking-infrastructure.md) §4, which carries all **24**
+values (19 until the hero gained five on 2026-11-13). Do not keep a second copy here — this table
+drifted to 15 and became the list auditors checked pages against. It is now a map of _surfaces_,
+and the attribute names are the other file's.
 
-| Surface                   | Call               | WhatsApp               | Email               | Form              | Status                                                                                |
-| ------------------------- | ------------------ | ---------------------- | ------------------- | ----------------- | ------------------------------------------------------------------------------------- |
-| Navbar (desktop)          | ✅ `header-call`   | —                      | —                   | —                 | shipped                                                                               |
-| Navbar (open mobile menu) | ✅ `menu-call`     | —                      | —                   | —                 | shipped                                                                               |
-| Hero                      | ✅ `hero-call`     | ✅ `hero-whatsapp`     | —                   | —                 | shipped                                                                               |
-| Sticky bar (mobile)       | ✅ `sticky-call`   | ✅ `sticky-whatsapp`   | —                   | —                 | shipped                                                                               |
-| Service sidebar           | ✅ `service-call`  | —                      | —                   | ✅ `service-form` | shipped                                                                               |
-| Pricing CTA band          | ✅ `pricing-call`  | ✅ `pricing-whatsapp`  | —                   | —                 | shipped                                                                               |
-| ContactCTA (page foot)    | ✅ `finalcta-call` | ✅ `finalcta-whatsapp` | ✅ `finalcta-email` | ✅                | shipped                                                                               |
-| The form's submit         | —                  | ✅ `form-whatsapp`     | —                   | ✅                | shipped — but see §3: it fires **before** validation                                  |
-| Footer                    | ✅ `footer-call`   | ✅ `footer-whatsapp`   | ✅ `footer-email`   | —                 | shipped                                                                               |
-| `/thank-you/`             | ✅ `thankyou-call` | ✅ `thankyou-whatsapp` | —                   | —                 | shipped — **PII in the WhatsApp href, §3**                                            |
-| Guarantee terms           | —                  | —                      | —                   | —                 | 🔶 rendered **once**, at the foot of `/pricing/`, with no `id` to link to — see below |
+| Surface                   | Call                     | WhatsApp               | Email               | Form              | Status                                                                                 |
+| ------------------------- | ------------------------ | ---------------------- | ------------------- | ----------------- | -------------------------------------------------------------------------------------- |
+| Navbar (desktop)          | ✅ `header-call`         | —                      | —                   | —                 | shipped                                                                                |
+| Navbar (open mobile menu) | ✅ `menu-call`           | —                      | —                   | —                 | shipped                                                                                |
+| Hero                      | ✅ `hero-call`           | ✅ `hero-whatsapp`     | —                   | —                 | shipped                                                                                |
+| Hero, out-of-hours line   | ✅ `hero-emergency-call` | —                      | —                   | —                 | shipped 2026-11-13 — `site.emergencyNote`, same number as `hero-call`                  |
+| Hero problem selector     | —                        | —                      | —                   | —                 | shipped 2026-11-13 — four links to the service pages, `hero-pick-{slug}`               |
+| Sticky bar (mobile)       | ✅ `sticky-call`         | ✅ `sticky-whatsapp`   | —                   | —                 | shipped                                                                                |
+| Service sidebar           | ✅ `service-call`        | —                      | —                   | ✅ `service-form` | shipped                                                                                |
+| Pricing CTA band          | ✅ `pricing-call`        | ✅ `pricing-whatsapp`  | —                   | —                 | shipped                                                                                |
+| ContactCTA (page foot)    | ✅ `finalcta-call`       | ✅ `finalcta-whatsapp` | ✅ `finalcta-email` | ✅                | shipped                                                                                |
+| The form's submit         | —                        | ✅ `form-whatsapp`     | —                   | ✅                | shipped — but see §3: it fires **before** validation                                   |
+| Footer                    | ✅ `footer-call`         | ✅ `footer-whatsapp`   | ✅ `footer-email`   | —                 | shipped                                                                                |
+| `/thank-you/`             | ✅ `thankyou-call`       | ✅ `thankyou-whatsapp` | —                   | —                 | shipped — **PII in the WhatsApp href, §3**                                             |
+| Guarantee terms           | —                        | —                      | —                   | —                 | ✅ rendered once, at the foot of `/pricing/`, as `#guarantee` (2026-10-28) — see below |
 
 The silos reuse `ContactCTA`, so `/guides/` and `/locations/` introduce no new attributes and need
 no rows.
@@ -76,14 +79,12 @@ makes the click permanently invisible. Any new CTA without one is an incomplete 
 > `dataLayer` push in the repo is the live-kit's: `public/assets/live.js` pushes `surface_view` /
 > `surface_dismiss` when the seasonal card opens and closes — ids only, data-tracking §4.)
 
-**The guarantee is the strongest confirmed fact on the site and it does almost no work.** The bare
-promise renders on the homepage hero, all four service sidebars, `/about/` and `/pricing/`; the
-_terms_ that make it credible render in exactly one place — the bottom of `/pricing/` — in a section
-with no `id`, so nothing can even link to them. A homeowner reading "לא מצאנו — לא שילמתם" in a
-service sidebar has no route to what "מצאנו" means, and service pages do not link to `/pricing/` at
-all. A vague promise reads as a catch; a bounded one converts. Fix (code, not made here): give the
-section an `id`, link the promise to it, or render the terms component on the service pages — the
-copy already comes from `site.guaranteeTerms`, so it costs nothing new.
+**The guarantee's terms are one click from every page that states the promise — resolved
+2026-10-28** (optimization-backlog §7.8). The terms render once, at the foot of `/pricing/`, in
+`GuaranteeTerms` with `id="guarantee"`; the homepage hero, `/about/`, all four service sidebars and
+the cost guide link "לא מצאנו — לא שילמתם" to `/pricing/#guarantee` (re-checked in the 2026-11-13
+build). The reason stays the rule: a vague promise reads as a catch; a bounded one converts. A new
+surface that states `site.guarantee` links its terms too.
 
 ---
 
@@ -198,9 +199,12 @@ the final number is given before the visit; the guarantee terms sit at its foot.
 a trap. Note the entry price itself is **still unconfirmed** (business-facts) — it is published, so
 confirming it is a live obligation, not a tidy-up.
 
-One structural gap: **no service page links to `/pricing/`.** The only route there is the navbar,
-which means the money-intent page is reached by navigation rather than by the pages that create the
-intent.
+**Every service page links to `/pricing/`** (since 2026-10-28; more links since 2026-11-13).
+Each sidebar links the guarantee to `/pricing/#guarantee` and, since 2026-11-13, carries a price link
+(`service.priceLink`): water-leak → `#visit-scope`, moisture → `#price-factors`, electrical and
+insurance → `/pricing/`. The cost guide links `#visit-scope` and `#guarantee`, and `/services/` links
+`/pricing/`. So the money-intent page is now reached from the pages that create the intent, not only
+from the navbar.
 
 ### Honest limits convert
 
@@ -380,7 +384,7 @@ advisory visible.
 **Conversion**
 
 - [ ] Call and WhatsApp reachable without scrolling, every page, mobile and desktop.
-- [ ] Every CTA carries `data-cta="{location}-{action}"` — against the 19-value inventory in
+- [ ] Every CTA carries `data-cta="{location}-{action}"` — against the 24-value inventory in
       [data-tracking-infrastructure.md](data-tracking-infrastructure.md) §4, not against §1's
       surface map.
 - [ ] **A tagged CTA is not a tracked CTA.** Confirm something actually consumes the attribute

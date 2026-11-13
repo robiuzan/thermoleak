@@ -7,7 +7,7 @@ export default function ServiceCard({ service }: { service: Service }) {
 
   return (
     <Link
-      href={`/services/${service.slug}`}
+      href={`/services/${service.slug}/`}
       className="group flex flex-col rounded-2xl border border-ink/10 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-brand/30 hover:shadow-md"
     >
       <span className="inline-flex size-12 items-center justify-center rounded-xl bg-brand/10 text-brand">

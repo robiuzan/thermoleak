@@ -31,6 +31,14 @@ for repeated sentence frames. Statements neither check could confirm were cut or
 in these buildings, and the sentence after each fact — what it means for a leak — is trade reasoning,
 not a sourced fact. Every claim still needs the owner's confirmation ([business-facts.md](../business-facts.md) §E).
 
+**Superseded 2026-11-13 — the "written report" rows.** Several registers (גבעתיים, הרצליה, כפר סבא,
+מודיעין, פתח תקווה, רעננה, ראשון לציון, ראש העין) record an answer, meta or FAQ element as "a written
+report" / «דו״ח מסודר», sourced to the site's own service copy. That copy was wrong: a visit gives the
+findings verbally, on site, and a written report is ordered separately (business-facts §H, the user,
+2026-11-13). The pages now say so, and `site.description` no longer carries «אחריות מלאה». Those rows
+describe wording that no longer ships; they are Business-statement rows, not city claims, so no
+city fact changed. Read them as historical until each register is next touched.
+
 **The three cities that shipped first have no register.** תל אביב, חולון and בת ים went live on
 2026-08-30 from the 2026-08-24 research run, whose source texts were never saved. Their claims were
 adversarially checked then; rebuilding their registers is open work.

@@ -51,14 +51,20 @@ Five tiers, defined in [keyword-map.md](keyword-map.md) §2. This section says *
 pillar with a descriptive Hebrew anchor, and the pillar links _down_ to its strongest children. A
 page with no inbound contextual link is not in the cluster — it is an orphan with a URL.
 
-**Where that stands (2026-10-28).** The guide ring is wired both ways, and every city links across
-to all four services. The missing edge is the return leg on the local ring: **no service page
-carries a descriptive anchor into any city**, so the cities' inbound links are chrome and
-silo-internal — the footer's list of all twelve, the hub's twelve cards and the `nearby` edges, 30
-linking pages per city (open — LOC-2). That keeps them out of orphan status; it does not carry the
-topical relevance that an `איתור נזילות בתל אביב` anchor from `/services/water-leak-detection/`
-would. This said "close it before widening the silo"; the silo widened to twelve on 2026-10-28 with
-it still open, so it is now owed to twelve pages.
+**Where that stands (2026-11-13).** Both rings now carry contextual links in both directions. Until
+2026-11-13 they did not: this line said "the guide ring is wired both ways", but only the guide →
+service leg existed — no service page linked a guide, and none linked a city. Release 1 (`3492fb8`)
+added the return legs, resolved and checked at build time in `lib/links.ts`:
+
+- **Service → guide** (`featuredGuides`): water-leak → all three guides; moisture → the camera
+  guide; insurance → the cost and find-leak guides; electrical → none until a panel guide exists
+  (next wave). So the "2-3 guides" target above holds for two of the four.
+- **Service → city** (LOC-2, closed 2026-11-13): water-leak and moisture link all twelve city pages
+  with `איתור נזילות ב{prefixed}` anchors; electrical links חולון, רמת גן and רעננה through place
+  anchors; insurance links none, on purpose. The `/services/` hub links all twelve too.
+- Every city still links across to all four services. Counting the `/locations/` hub, each city
+  now gets in-body links from 4–8 pages (מודיעין 4, up from 1), on top of the footer's list of all
+  twelve.
 
 ### Cluster ownership — one page per intent, no overlap
 
@@ -96,7 +102,8 @@ carry off-site corroboration — see [eeat-and-trust.md](eeat-and-trust.md) §1.
 Each of the four service pages must clear the 450-word floor with material a competitor cannot
 paste: materials and substrates scanned, what the visit includes, what changes the price, what
 happens after the source is found, and **the honest-limits section**. Status: shipped 2026-08-17
-with answer blocks and limits blocks. Next increment is per-service case evidence
+with answer blocks and limits blocks; since 2026-11-13 each also carries a buyer's checklist and a
+trust row, and all four clear the floor (content-standards §1). Next increment is per-service case evidence
 (see [eeat-and-trust.md](eeat-and-trust.md)).
 
 ### 3c. Location terms — won with pages that are actually local, one per real service area and never templated
@@ -172,12 +179,14 @@ three have run; the fourth stays shut. The 4×12 = 48 cell matrix is a trap; see
    statement's source is in [location-sources/](location-sources/README.md); the first three cities
    have no register yet. The re-check overturned two queued leads: הרצליה's "94 בנייני רכבת ביד
    התשעה" (no source) and רעננה's "קריית שרת 1950s railway buildings" (refuted).
-2. **Wire the inbound mesh before adding a fourth** — **not done** (open — LOC-2, §2 above). The
-   nine landed without it, so the weakness this warned about now spans twelve pages.
+2. **Wire the inbound mesh before adding a fourth** — **done late, 2026-11-13** (LOC-2, §2
+   above). The nine landed without it; release 1 then wired the water-leak and moisture pages and
+   the `/services/` hub into all twelve.
 
-**The open local work:** a Google Business Profile (above); LOC-2; a real job reference
-per city, the doorway item research cannot supply; and owner confirmation of every city claim,
-starting with the single-source ones listed in [business-facts.md](business-facts.md) §E.
+**The open local work:** a Google Business Profile (above); a real job reference per city, the
+doorway item research cannot supply; and owner confirmation of every city claim, starting with the
+single-source ones listed in [business-facts.md](business-facts.md) §E. (LOC-2 left this list on
+2026-11-13.)
 
 ### Hebrew grammar is a ranking detail here
 
@@ -186,10 +195,11 @@ region entry (`השרון`, `צפון`) needs `באזור השרון` or `בצפ
 had to be: the `Location` interface in `lib/locations.ts` carries `kind: "city" | "region"` and a
 hand-written `prefixed`, and no template may ever guess it. Every new entry fills both.
 
-One residue: the visible name and the schema name can diverge. `lib/locations.ts` says `תל אביב`
-while `site.serviceAreas` says `תל אביב-יפו`, so the same page emits both spellings in two
-`areaServed` nodes (open — LOC-11). Minor, but it works against §5 "Entity clarity" below, which
-asks for byte-identical strings.
+The one residue — the visible name and the schema name diverging — is fixed (LOC-11, 2026-11-13).
+`lib/locations.ts` keeps `תל אביב` as the visible name and carries `areaServedName: "תל אביב-יפו"`
+for the schema, and `lib/links.ts` fails the build when a city's schema name is not in
+`site.serviceAreas`. The Tel Aviv page now emits `תל אביב-יפו` in both `areaServed` nodes, the
+byte-identical string §5 "Entity clarity" below asks for.
 
 ---
 
@@ -264,12 +274,18 @@ which is still better than the previous state (links to facebook.com and instagr
 asserting corroboration that did not exist). Name, phone, service area and description must be
 byte-identical across schema, visible copy and every off-site profile once they exist.
 
+**The brand is in the quotable copy since 2026-11-13.** The four service answer blocks and the
+`/pricing/` answer now name the brand and the region, interpolated from `site.nameHe` and
+`site.address.regionPrefixed` («בגוש דן והמרכז»), never retyped, so a quoted answer carries its
+attribution. The homepage hero's entity line (`site.pitch`) does the same. `site.description` (the
+`LocalBusiness` description, and the text meant for a future Business Profile) was rewritten the
+same day without «אחריות מלאה». Still open: none of the twelve city pages names the brand inside
+`<main>`.
+
 **While `sameAs` is legitimately empty, the internal graph is the only corroboration available.**
-That raises the value of one cheap move that needs no new business fact: making the guide byline
-resolve to the founder node. `/about/` already emits a `Person` at `about/#founder`, but each
-`Article` emits a second, anonymous `Person` with the same name and no `@id`, so a parser cannot
-tell they are one human (open — EEAT-5 / AEO-6). Consolidating them is the highest-value
-entity work that is not blocked on the owner.
+The cheap move that needed no new business fact shipped 2026-10-28 (EEAT-5 / AEO-6 closed): each
+`Article.author` carries the `about/#founder` `@id` that `LocalBusiness.founder` uses, so a parser
+sees one human, not two. Verified on the 2026-11-13 build.
 
 ### Freshness and authorship
 
@@ -278,10 +294,12 @@ Shipped 2026-08-24: all three guides carry `datePublished`, `dateModified` and a
 `lastModified` from `article.dateModified` so the two cannot drift apart. That closes the signal
 itself.
 
-Two things still owed. The visible byline is plain text that links nowhere — the rule in
-[eeat-and-trust.md](eeat-and-trust.md) §3 is that a byline which links nowhere is decoration — and
-the author has no credential line behind it, which is blocked on business-facts §B. **Never invent a
-byline or a date; a fabricated author is a worse trust signal than none.**
+One thing still owed. The visible byline has linked to `/about/#founder` since 2026-10-28, on all
+three guides, so it is no longer the decoration [eeat-and-trust.md](eeat-and-trust.md) §3 warns
+about. What is missing is the credential line behind it. The founder's years in the trade (since
+~2005) and the FLIR E8 are confirmed (business-facts §A/§B), but neither the bylines nor the founder
+block on `/about/` shows them. There is no certificate to add: that row is ❌, an answer and not a
+gap. **Never invent a byline or a date; a fabricated author is a worse trust signal than none.**
 
 ### llms.txt
 
@@ -293,7 +311,7 @@ website.
 silos and for two sprints listed only the four services, `/pricing/` and the homepage — no guide URL,
 no location URL, no named human (AEO-1 / LOC-10 / EEAT-8). It now names the founder and lists the
 guides and all twelve city URLs: `npm run check:sitemap` reports "llms.txt 30 URL(s), all live" on
-the 2026-11-01 build. That check proves every listed URL is in the sitemap — it cannot see a route
+the 2026-11-01 build, and again on the 2026-11-13 build. That check proves every listed URL is in the sitemap — it cannot see a route
 **missing** from the file. Keep it in sync with `lib/site.ts`, `lib/articles.ts` **and**
 `lib/locations.ts`: adding a route means updating this file in the same commit.
 

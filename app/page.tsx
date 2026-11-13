@@ -12,22 +12,17 @@ import JsonLd from "@/components/JsonLd";
 import { LiveUpdates } from "@/components/live/Live";
 import { generalFaqs } from "@/lib/faqs";
 import { faqPageJsonLd } from "@/lib/jsonld";
-import { site, pageOpenGraph } from "@/lib/site";
+import { home } from "@/lib/hubs";
+import { pageOpenGraph } from "@/lib/site";
 
-// A layout's title.template does NOT apply to that segment's own page, so this must be the complete
-// rendered title — brand included, exactly once (the live bug fixed 2026-08-17; backlog §2.1). It
-// carries the head term «איתור נזילות» and the region, and stays off «איתור נזילות מים», which the
-// water-leak page owns (docs/seo-geo-aeo-strategy.md §2).
-const title = `איתור נזילות תרמי ורטיבות ${site.address.regionPrefixed} | ${site.nameHe}`;
-// Was «…עם אחריות ודו״ח לחברות הביטוח. חייגו לאיתור מהיר…» — an unqualified guarantee, a report
-// with every visit and a speed claim (business-facts §H).
-const description = `איתור נזילות ורטיבות ${site.address.regionPrefixed}, בלי לשבור קירות: סריקה במצלמה תרמית ואימות במדידה משלימה. ביקור איתור החל מ-₪${site.priceFrom}, והמחיר נמסר מראש. חייגו ${site.phone.display}.`;
-
+// The complete title (the layout template does not apply to the root page) and the description live
+// in lib/hubs.ts with the reasons. The old description promised «עם אחריות ודו״ח לחברות הביטוח» and
+// «איתור מהיר» — an unqualified guarantee, a report with every visit and a speed claim (§H).
 export const metadata: Metadata = {
-  title: { absolute: title },
-  description,
+  title: { absolute: home.title },
+  description: home.description,
   alternates: { canonical: "/" },
-  ...pageOpenGraph({ path: "/", title, description }),
+  ...pageOpenGraph({ path: "/", title: home.title, description: home.description }),
 };
 
 export default function HomePage() {

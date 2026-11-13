@@ -4,6 +4,15 @@
 // Copy only; every link is checked in lib/links.ts. Never quoted by a live register.
 import { site, type LinkedText } from "./site";
 
+// The homepage's own metadata. A layout's title.template does NOT apply to that segment's own page,
+// so this is the complete rendered title — brand included, exactly once (backlog §2.1). It carries the
+// head term «איתור נזילות» and the region and stays off «איתור נזילות מים», which the water-leak page
+// owns; the description is worded apart from that page's snippet so the two do not compete.
+export const home = {
+  title: `איתור נזילות תרמי ורטיבות ${site.address.regionPrefixed} | ${site.nameHe}`,
+  description: `${site.nameHe} מאתרת נזילות ורטיבות ${site.address.regionPrefixed} במצלמה תרמית, ומאמתת כל ממצא במדידה לפני שפותחים קיר. ביקור איתור החל מ-₪${site.priceFrom}, במחיר שנמסר מראש. חייגו ${site.phone.display}.`,
+};
+
 export const servicesHub = {
   // The <title> keeps its keyword phrase; the H1 stays the short label (keyword-map §3–§4).
   title: "שירותים — איתור נזילות, רטיבות ותרמוגרפיה",
@@ -27,6 +36,7 @@ export const servicesHub = {
     { label: "דו״ח תרמוגרפי לביטוח", href: "/services/insurance-reports/" },
     ".",
   ] satisfies LinkedText,
+  moreTitle: "מחיר, מדריכים ואזורי שירות",
   more: [
     `ביקור איתור נזילה או רטיבות מתחיל מ-₪${site.priceFrom}, ובדיקת לוח חשמל ודו״ח לביטוח מתומחרים בנפרד לפי היקף העבודה. הפירוט המלא, כולל מה נכלל בביקור, נמצא בעמוד `,
     { label: "מחירון איתור נזילות", href: "/pricing/" },
@@ -35,8 +45,7 @@ export const servicesHub = {
     " מסבירים מה מצלמה תרמית מזהה ואיפה היא מגיעה לגבול שלה. השירות ניתן בגוש דן והמרכז, ובשאר הארץ בתיאום מראש.",
   ] satisfies LinkedText,
   cities: {
-    title: "אזורי השירות",
     // The count is checked against lib/locations.ts in lib/links.ts.
-    lead: "סוג הבניין משנה את החיפוש אחר נזילה, ולכן ריכזנו עמוד לכל אחת מ-12 ערים באזור:",
+    lead: "סוג הבניין משנה את החיפוש אחר נזילה, ולכן ריכזנו עמוד נפרד ל-12 ערים באזור השירות:",
   },
 };

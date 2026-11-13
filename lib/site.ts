@@ -354,7 +354,8 @@ export function pageOpenGraph({
       url: "/og.png",
       width: 1200,
       height: 630,
-      alt: `${site.nameHe} — ${title}`,
+      // Every caller's title already carries the brand («… | טרמוליק»), so it is not prefixed again.
+      alt: title,
     },
   ];
   return {

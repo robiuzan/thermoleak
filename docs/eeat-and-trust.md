@@ -30,10 +30,10 @@ TODO.
 
 | Letter                | What it means here                                                                                                                | Current state                                                                                                                                    |
 | --------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Experience**        | Someone has personally scanned thousands of walls. Show the work: thermal images, real jobs, what went wrong and how it was found | Founded 2015 (verified). No case studies, no work imagery                                                                                        |
-| **Expertise**         | Thermography is a _credentialed_ discipline. A certificate number and issuing body is worth more than any adjective               | Certification claimed, uncredentialed (§B)                                                                                                       |
+| **Experience**        | Someone has personally scanned thousands of walls. Show the work: thermal images, real jobs, what went wrong and how it was found | Founded 2015 (verified); founder in the trade since ~2005 (§A, 2026-09-17). No case studies, no real job photos — the renderings carry no weight (§5a) |
+| **Expertise**         | Thermography is a _credentialed_ discipline. A certificate number and issuing body is worth more than any adjective               | **No certificate exists** (❌, §B, 2026-09-17) — the claimed one was deleted. FLIR E8 confirmed; an electrician licence is stated in text on the panel page only, never as a badge (§H) |
 | **Authoritativeness** | Other sources corroborate the entity: GBP, reviews, professional bodies, press, insurers who accept the reports                   | **Zero** off-site corroboration. `sameAs` empty                                                                                                  |
-| **Trustworthiness**   | Prices, guarantee scope, a named accountable human, an honest statement of what the method cannot do                              | Limits sections ✅, bounded guarantee ✅, named founder ✅ (all 2026-08-24). Certification number, insurance, ח.פ. and the ₪350 price still open |
+| **Trustworthiness**   | Prices, guarantee scope, a named accountable human, an honest statement of what the method cannot do                              | Limits sections ✅, bounded guarantee ✅, named founder ✅ (all 2026-08-24); ₪350, ביטוח צד ג׳ and tax invoices ✅ (2026-09-17). ח.פ. and certification ❌ — confirmed absent, not open. Still open: payment methods, the insurer's name and amount |
 
 **The weakest link is now Authoritativeness: there is still zero off-site corroboration.** A visitor
 can read who runs this business and exactly what the guarantee covers — but every one of those
@@ -92,23 +92,29 @@ have happened: a `Person` node ships in the graph, all three guides carry a real
 decision a visitor makes at the door — is only half made, because a name with nothing behind it is
 still just a name.
 
-**Two defects stand between the name and the trust it should buy.** Both are code, both are open:
+**Two defects stood between the name and the trust it should buy.** One is closed; the other is now
+a copy gap, no longer an owner block:
 
-- **The byline resolves to nobody** (open — EEAT-5 / AEO-6). Each `Article` emits its own anonymous
-  `Person` with no `@id`, while `/about/` emits the founder at a stable `about/#founder`. Two nodes,
-  one human, no link between them — and on the page the byline is plain text pointing nowhere. This
-  is the rule below being broken by the very pages that introduced it.
+- **The byline resolves to nobody** — ✅ **closed 2026-10-28** (EEAT-5 / AEO-6). Each `Article`
+  used to emit its own anonymous `Person` with no `@id` while `/about/` emitted the founder at
+  `about/#founder`, and the byline was plain text pointing nowhere. Now every `Article.author`
+  carries that `@id`, and all three visible bylines link to `/about/#founder` (verified on the
+  2026-11-13 build).
 - **The credential line is empty.** The bio pattern below has three slots — role and years,
-  certification, equipment — and every one of them is still owner-blocked.
+  certification, equipment. Two are answered (since ~2005, FLIR E8 — 2026-09-17) but not yet shown
+  on the founder block or the bylines. The certification slot stays empty for good: there is none
+  (❌).
 
-**What is still owed on the person** (business-facts §A/§B — record the ask, never the answer):
+**What was owed on the person** (business-facts §A/§B — record the ask, never the answer). Answered
+2026-09-17 unless marked:
 
-- Role and years in the trade
-- Thermography certification: **issuing body + level + certificate number**, not just "certified"
-- Equipment actually used (camera make/model) — specificity is expertise
-- Insurance (ביטוח צד ג׳) and ח.פ. — standard Israeli trade trust signals, currently absent while
-  `legalName` claims בע״מ
-- One real photograph, with permission
+- Role and years in the trade — ✅ in the trade since ~2005 (§A)
+- Thermography certification — ❌ **none held** (§B). An answer, not a gap: never ask again, never
+  fill the slot
+- Equipment actually used — ✅ FLIR E8 (§B)
+- Insurance (ביטוח צד ג׳) and ח.פ. — insurance ✅ held (insurer and amount not supplied); ח.פ. ❌
+  none, so `legalName` is `טרמוליק`, without בע״מ (§A)
+- One real photograph, with permission — 🔶 **still open** (§A)
 
 **Author bio pattern** (for guides):
 
@@ -119,9 +125,14 @@ still just a name.
 → links to /about/#founder
 ```
 
+`{Credential with number.}` stays out on this site: no certificate exists (§B ❌), and the
+electrician licence has no holder, level or number on file (§H 🔶). Never fill the slot with an
+adjective.
+
 Bylines must resolve to a `Person` node with a stable `@id` — here that is the shipped
 `about/#founder` — referenced from each `Article`, and the visible byline should link to the same
-anchor. A byline that links nowhere is decoration. All three guides currently ship decoration.
+anchor. A byline that links nowhere is decoration. All three guides have met this rule since
+2026-10-28.
 
 ### The remaining asks, ranked by value per unit of owner effort
 
@@ -130,19 +141,23 @@ Everything below is an **ask**, not a fact. The intake sheet is
 and none of them may appear on the site before it is answered there. The ranking is a sequencing
 aid: it puts the items that buy the most trust for the least of the owner's time first.
 
+**Status 2026-11-13: eight of the eleven are answered** (all on 2026-09-17). Two of them, 3 and 8,
+came back ❌ (confirmed absent), and that is an answer, not a gap. **Still open: 1, 2 and 10.** The
+numbering is kept so older references still resolve.
+
 | #   | Ask                                                          | Sheet | Why it ranks here                                                                                                                                                             |
 | --- | ------------------------------------------------------------ | ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Google Business Profile URL                                  | §B    | One paste. It is the first non-zero `sameAs`, the map-pack entry, and the precondition for every review-derived asset. Nothing else this cheap moves Authoritativeness at all |
-| 2   | 5–10 real reviews, each with author, date and **source URL** | §B    | Blocked on 1. The only item that does five things at once (§2), and the only legitimate route to star results                                                                 |
-| 3   | Certification: issuing body + level + certificate number     | §B    | Turns an adjective into a verifiable referent (§6), fills the bio's credential line, and is the difference between Expertise claimed and Expertise shown                      |
-| 4   | Owner's role and years in the trade                          | §A    | One sentence, and it completes the author bio the three guides already need. Pairs with 3 — ask for both in the same message                                                  |
-| 5   | Is ₪350 still the starting price?                            | §C    | A yes/no. It either releases the `Offer` node deliberately withheld in `lib/jsonld.ts` or corrects a number already published on five pages                                   |
-| 6   | Camera make and model                                        | §B    | One line, and specificity reads as expertise everywhere it appears                                                                                                            |
-| 7   | Report turnaround, as a number of business days              | §C    | Already promised vaguely in the insurance-reports FAQ; a number is both more useful and more citable                                                                          |
-| 8   | ח.פ. / ע.מ. number                                           | §A    | Standard Israeli trade signal, and `legalName` already claims בע״מ without one                                                                                                |
-| 9   | Insurance (ביטוח צד ג׳)                                      | §B    | Standard trade signal; matters most to ועדי בתים and property managers                                                                                                        |
-| 10  | Permission to publish a photograph of the founder            | §A    | High trust value, but it costs the owner a decision about their own face — hence below the one-line items                                                                     |
-| 11  | Technician count / team shape                                | §A    | Lowest value of the set; "צוות" is implied sitewide and nothing depends on the number                                                                                         |
+| 1   | Google Business Profile URL                                  | §B    | 🔶 **Open.** One paste. It is the first non-zero `sameAs`, the map-pack entry, and the precondition for every review-derived asset. Nothing else this cheap moves Authoritativeness at all |
+| 2   | 5–10 real reviews, each with author, date and **source URL** | §B    | 🔶 **Open.** Blocked on 1. The only item that does five things at once (§2), and the only legitimate route to star results                                                    |
+| 3   | Certification: issuing body + level + certificate number     | §B    | ❌ **Answered: none held.** The unbacked "Level 1" badge was deleted. Never re-ask, never fill                                                                                 |
+| 4   | Owner's role and years in the trade                          | §A    | ✅ **Answered: in the trade since ~2005.** Not yet shown in the founder block or the bylines (above)                                                                         |
+| 5   | Is ₪350 still the starting price?                            | §C    | ✅ **Answered: yes.** The `Offer` shipped 2026-11-13 on the water-leak and moisture `Service` nodes ([schema-graph.md](schema-graph.md) §7a)                                  |
+| 6   | Camera make and model                                        | §B    | ✅ **Answered: FLIR E8**                                                                                                                                                      |
+| 7   | Report turnaround, as a number of business days              | §C    | ✅ **Answered: 3 business days** (`site.reportTurnaroundDays`)                                                                                                               |
+| 8   | ח.פ. / ע.מ. number                                           | §A    | ❌ **Answered: none — not a registered company.** `legalName` dropped בע״מ                                                                                                    |
+| 9   | Insurance (ביטוח צד ג׳)                                      | §B    | ✅ **Answered: held.** The insurer's name and the coverage amount were not supplied, so no figure ships                                                                       |
+| 10  | Permission to publish a photograph of the founder            | §A    | 🔶 **Open.** High trust value, but it costs the owner a decision about their own face — hence below the one-line items                                                        |
+| 11  | Technician count / team shape                                | §A    | ✅ **Answered: two people**                                                                                                                                                   |
 
 Items 1 and 2 are the whole of Authoritativeness. If only one thing gets asked for this quarter,
 ask for the GBP URL.
@@ -242,12 +257,19 @@ certificate number, insurance confirmation, association membership with a member
 processor mark. Unacceptable: generic "100% מקצועי" seals, self-designed shields, star graphics not
 backed by real reviews, "as seen in" without a link.
 
-**There is one live breach of this rule** (open — EEAT-6). `אחריות מלאה ושקיפות מחירים` sits inside
-the `certifications` array in `lib/site.ts` and renders on `/about/` under a `הסמכות וציוד` heading
-with a verification icon beside it. It is not a certification and has no referent, and it borrows
-credibility from the two rows above it. Worse, `מלאה` now contradicts the terms the owner actually
-signed off on, which are explicitly bounded. Fixing it is a copy change, not a fact: the bounded
-wording already exists.
+**EEAT-6 — ✅ closed, in two steps.** The finding: `אחריות מלאה ושקיפות מחירים` sat inside the
+`certifications` array in `lib/site.ts` and rendered on `/about/` under a `הסמכות וציוד` heading with
+a verification icon beside it. It is not a certification and has no referent, it borrowed
+credibility from the rows beside it, and `מלאה` contradicted the terms the owner signed off as
+explicitly bounded.
+
+- **2026-09-17:** the array became `site.credentials`, holding only confirmed capabilities (FLIR E8,
+  ביטוח צד ג׳, a two-person team), with the guarantee removed. The `/about/` heading became
+  `ציוד וכיסוי`.
+- **2026-11-13:** the two remaining «אחריות מלאה» went too. `site.description` (the `LocalBusiness`
+  description) dropped it, and the `/about/` values card is now `התחייבות בתנאים כתובים`. That card
+  renders the slogan plus `site.guaranteeTerms.ifNotFound` verbatim and links `/pricing/#guarantee`.
+  `components/TrustRow.tsx` never renders the guarantee. «אחריות מלאה» is in zero built pages.
 
 ### The guarantee has its scope — now it needs reach
 
@@ -257,6 +279,11 @@ location, what happens on an inconclusive visit, that there is no call-out fee, 
 (`lib/site.ts` `guaranteeTerms`, rendered by `components/GuaranteeTerms.tsx`). The argument this
 section used to make has been won: **a precisely defined guarantee converts better than a vague
 one** — it removes the suspicion of a catch.
+
+**Status: ✅ closed 2026-10-28 (EEAT-4).** On the 2026-11-13 build every page with the promise puts
+the terms one tap away. The homepage chip, the four service sidebars, the `/about/` card and the cost
+guide all link `/pricing/#guarantee`, and the homepage FAQ answers «מה כוללת ההתחייבות ״לא מצאנו — לא
+שילמתם״?», so the terms also reach `FAQPage`. The finding as written:
 
 The problem now is distribution (open — EEAT-4). Eight built pages carry the bare promise; **one**
 carries the terms. On the four service pages the promise sits in the conversion sidebar directly
@@ -273,6 +300,10 @@ marketing copy to tighten.
 Company number, insurance, a clear complaints path, cancellation terms, and honest hours. The
 privacy policy and accessibility statement are real and substantive documents — that is a genuine
 credit and should be maintained, not diluted.
+
+**Status: fixed 2026-09-06.** `/privacy/` now says the site loads Google Tag Manager and Google
+Analytics 4, and that measurement waits for the visitor's consent. The paragraph below is kept as the
+finding and as the standing rule.
 
 **Maintained means kept true, and one of them has fallen behind the site.** `/privacy/` still says
 the site _may_ use analytics tools "כגון Google Analytics"; GTM and GA4 have shipped on every route
@@ -292,9 +323,9 @@ Before adding urgency copy, badges, counters or scarcity to any page, check busi
 - **Banned outright**: countdown timers, "X customers this month", invented scarcity, fake "live
   visitor" counts, and any statistic without a source.
 - The highest-value CRO change available here is not a button colour. The two that need the owner
-  are the GBP and real reviews (§2). The one that does not is putting the **already-confirmed**
-  guarantee terms in front of the visitor at the moment of doubt (§6) — the site has a bounded
-  promise and mostly hides it. Escalate rather than substituting a fabricated signal.
+  are the GBP and real reviews (§2). The one that did not was putting the **already-confirmed**
+  guarantee terms in front of the visitor at the moment of doubt (§6), and that shipped 2026-10-28.
+  Escalate rather than substituting a fabricated signal.
 
 ---
 
@@ -312,7 +343,8 @@ Before adding urgency copy, badges, counters or scarcity to any page, check busi
 - [ ] No rendering is counted as Experience evidence, and no per-image label has crept back in.
 - [ ] The guarantee states scope, exclusions and call-out policy — and every page that makes the
       promise puts those terms one tap away.
-- [ ] Nothing self-issued renders as a credential (`certifications` holds certifications only).
+- [ ] Nothing self-issued renders as a credential (`site.credentials` holds confirmed capabilities
+      only — never the guarantee, never the electrician licence).
 - [ ] `/privacy/` and `/accessibility/` still describe the site as it is today, not as it was.
 - [ ] Every published case study has written consent on file.
 - [ ] No badge without a verifiable referent.

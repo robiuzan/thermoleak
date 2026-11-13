@@ -23,14 +23,14 @@ every width below comes from the code, not from taste.
 | Route         | Slot · ratio · class                        | Where it sits                                                     | At ≥ 1024 px | Note                                                        |
 | ------------- | ------------------------------------------- | ----------------------------------------------------------------- | ------------ | ----------------------------------------------------------- |
 | `/`           | `main` · 5:4 · tile 960 · priority          | the `Hero` image column, `max-w-md`                               | 448 px       | The LCP image: ≤ 120 KB, no caption                         |
-| `/`           | `detail` · 3:2 · half 1200                  | under the two `MethodExplainer` paragraphs                        | 704 px       | People-free: the camera set down, its screen in view        |
+| `/`           | `detail` · 3:2 · half 1200                  | under the two `MethodExplainer` paragraphs and their `/guides/` link | 704 px    | People-free: the camera set down, its screen in view        |
 | `/`           | `supplied` 1–11 · 3:5 720×1200              | the `Gallery` section, five scenes                                | ~330 px      | Scene captions in `lib/gallery.ts`                          |
-| `/services/`  | `pair-1..2` · 4:3 · reuse                   | `FieldStrip cols={2}` under `PageHero`, above the cards           | 440 px       | Two service mains; no render of its own                     |
-| 4 services    | `main` · 4:3 · large 1400 · priority        | under the answer block; the decorative SVG is its fallback        | ~709 px      |                                                             |
+| `/services/`  | `pair-1..2` · 4:3 · reuse                   | `FieldStrip cols={2}` under the trust row and hub intro, above the cards | 440 px | Two service mains; no render of its own                     |
+| 4 services    | `main` · 4:3 · large 1400 · priority        | under the answer block **and the trust row**; the decorative SVG is its fallback | ~709 px |                                                      |
 | 4 services    | `detail` · 3:2 · half                       | after the «איך התהליך עובד» steps                                 | ~709 px      |                                                             |
-| 4 services    | `work` · 3:2 · half                         | after the limits box                                              | ~709 px      |                                                             |
+| 4 services    | `work` · 3:2 · half                         | after the limits box and the buyer's checklist                    | ~709 px      |                                                             |
 | `/pricing/`   | `survey` · 3:2 · half · priority            | after «מה כולל ביקור»                                             | 832 px       | Reused on `/about/`                                         |
-| `/pricing/`   | `layers` · 3:2 · half                       | after the «ממה מושפע המחיר?» factors                              | 832 px       | Reused on the cost guide                                    |
+| `/pricing/`   | `layers` · 3:2 · half                       | after the «ממה מושפע המחיר?» factors and the cost-guide link      | 832 px       | Reused on the cost guide                                    |
 | `/guides/`    | thumbnail 480×360, derived from each `lead` | the start of each card                                            | ~144 px      | First card priority                                         |
 | 3 guides      | `lead` · 4:3 · half · priority              | after the answer box, through `ArticleBody`                       | 704 px       |                                                             |
 | 3 guides      | `mid` · reuse                               | a `{ kind: "figure", slot: "mid" }` block in `lib/articles.ts`    | 704 px       |                                                             |
@@ -46,6 +46,12 @@ every width below comes from the code, not from taste.
 
 Not slots: `PageHero` (a picture there would move the LCP off the `<h1>`), the aside on a service page, the
 founder card, the share card `/og.png`, the logo.
+
+Since 2026-11-13 (release 1) a service page reads H1 → answer block → `TrustRow` → `main`, and the
+`work` image follows the new buyer's checklist; `/pricing/` also gained a `TrustRow` above «מה כולל
+ביקור», so `survey` still follows that section. The widths did not change, and `main` is still the
+page's one `fetchPriority="high"` (verified on the 2026-11-13 build). The trust row is text: never put
+a picture, a seal or a badge in it.
 
 Two facts that are easy to get wrong:
 
